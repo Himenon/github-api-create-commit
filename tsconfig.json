@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedParameters": false,
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "target": "es2019",
+    "lib": ["dom", "es2019"],
+    "rootDir": ".",
+    "outDir": "lib",
+    "strict": true
+  }
+}
