@@ -1,41 +1,26 @@
 {
-  "name": "@himenon/template-js",
+  "name": "@himenon/github-api-create-commit",
   "version": "0.3.0",
-  "description": "node library template",
+  "description": "Create commits via the WEB API.",
   "keywords": [
-    "template",
-    "proxy directory",
-    "typescript"
+    "github",
+    "create commit",
+    "api"
   ],
-  "homepage": "https://github.com/Himenon/template-js#readme",
+  "homepage": "https://github.com/Himenon/github-api-create-commit#readme",
   "bugs": {
-    "url": "https://github.com/Himenon/template-js/issues"
+    "url": "https://github.com/Himenon/github-api-create-commit/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Himenon/template-js.git"
+    "url": "git@github.com:Himenon/github-api-create-commit.git"
   },
   "license": "MIT",
   "author": {
     "name": "Himenon",
-    "email": "k.himeno314@gmail.com",
     "url": "https://github.com/Himenon"
   },
   "sideEffects": false,
-  "exports": {
-    ".": {
-      "node": "./lib/$cjs/index.js",
-      "require": "./lib/$cjs/index.js",
-      "import": "./lib/$esm/index.js",
-      "default": "./lib/$cjs/index.js"
-    },
-    "./sub": {
-      "node": "./lib/$cjs/sub.js",
-      "require": "./lib/$cjs/sub.js",
-      "import": "./lib/$esm/sub.js",
-      "default": "./lib/$cjs/sub.js"
-    }
-  },
   "main": "./lib/$cjs/index.js",
   "module": "./lib/$esm/index.js",
   "types": "./lib/$types/index.d.ts",
@@ -75,6 +60,7 @@
   "devDependencies": {
     "@commitlint/cli": "14.1.0",
     "@commitlint/config-conventional": "14.1.0",
+    "@himenon/openapi-typescript-code-generator": "^0.15.0",
     "@types/jest": "27.0.2",
     "@types/node": "16.11.6",
     "@types/rimraf": "3.0.2",
