@@ -1,4 +1,4 @@
-# @Himenon/template-js
+# @himenon/github-api-create-commit
 
 ## Usage
 
@@ -16,14 +16,6 @@
 | `release:github:registry` | publish github registry                     |
 | `release:npm:registry`    | publish npm registry                        |
 
-## Features
-
-- [Proxy Directory](https://himenon.github.io/docs/javascript/proxy-directory-design-pattern/)
-
-## Release
-
-- Automatic version updates are performed when merged into the `main` branch.
-
 ## LICENCE
 
-[@Himenon/template-js](https://github.com/Himenon/template-js)・MIT
+[@Himenon/github-api-create-commit](https://github.com/Himenon/github-api-create-commit)・MIT
