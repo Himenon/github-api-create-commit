@@ -24,3 +24,5 @@ export const create = (args: InitializeParameter): GitHub => {
   const github = new GitHub(client, args.owner, args.repo);
   return github;
 };
+
+export default create;
