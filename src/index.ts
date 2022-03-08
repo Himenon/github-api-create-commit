@@ -3,7 +3,7 @@ import * as ApiClientImpl from "./ApiClientImpl";
 import { Client, Schemas } from "./api";
 export * from "./types";
 
-export { Schemas };
+export { Schemas, GitHub, Client };
 
 export interface InitializeParameter {
   owner: string;
