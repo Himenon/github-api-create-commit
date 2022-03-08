@@ -2,6 +2,12 @@
 
 Create a Commit to GitHub via WebAPI.
 
+## Install
+
+```bash
+yarn add @himenon/github-api-create-commit
+```
+
 ## Usage
 
 ```ts
