@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.0-alpha.4"></a>
+
+# 1.0.0-alpha.4 (2022-03-08)
+
+### Bug Fixes
+
+- import fetch ([#3](https://github.com/Himenon/github-api-create-commit/issues/3)) ([c398cea](https://github.com/Himenon/github-api-create-commit/commit/c398cea))
+
 <a name="1.0.0-alpha.3"></a>
 
 # 1.0.0-alpha.3 (2022-03-08)
