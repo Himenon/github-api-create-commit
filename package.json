@@ -1,6 +1,6 @@
 {
   "name": "@himenon/github-api-create-commit",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.5",
   "description": "Create a Commit to GitHub via WebAPI",
   "keywords": [
     "github",

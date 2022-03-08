@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.0-alpha.5"></a>
+
+# 1.0.0-alpha.5 (2022-03-08)
+
+### Documentation
+
+- update readme ([#4](https://github.com/Himenon/github-api-create-commit/issues/4)) ([40ffcb0](https://github.com/Himenon/github-api-create-commit/commit/40ffcb0))
+
 <a name="1.0.0-alpha.4"></a>
 
 # 1.0.0-alpha.4 (2022-03-08)
