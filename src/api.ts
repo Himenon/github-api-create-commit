@@ -345,14 +345,17 @@ export namespace Schemas {
     created_at: string;
     updated_at: string;
     /** The set of permissions for the GitHub app */
-    permissions: {
-      issues?: string;
-      checks?: string;
-      metadata?: string;
-      contents?: string;
-      deployments?: string;
-      [key: string]: string;
-    };
+    permissions:
+      | {
+          issues?: string;
+          checks?: string;
+          metadata?: string;
+          contents?: string;
+          deployments?: string;
+        }
+      | {
+          [key: string]: string;
+        };
     /** The list of events for the GitHub app */
     events: string[];
     /** The number of installations associated with the GitHub app */
@@ -935,14 +938,17 @@ export namespace Schemas {
     created_at: string;
     updated_at: string;
     /** The set of permissions for the GitHub app */
-    permissions: {
-      issues?: string;
-      checks?: string;
-      metadata?: string;
-      contents?: string;
-      deployments?: string;
-      [key: string]: string;
-    };
+    permissions:
+      | {
+          issues?: string;
+          checks?: string;
+          metadata?: string;
+          contents?: string;
+          deployments?: string;
+        }
+      | {
+          [key: string]: string;
+        };
     /** The list of events for the GitHub app */
     events: string[];
     /** The number of installations associated with the GitHub app */
