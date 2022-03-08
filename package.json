@@ -92,7 +92,7 @@
   },
   "dependencies": {
     "@himenon/openapi-parameter-formatter": "^0.2.2",
-    "node-fetch": "2"
+    "node-fetch": "2.6.7"
   },
   "devDependencies": {
     "@commitlint/cli": "16.2.1",
