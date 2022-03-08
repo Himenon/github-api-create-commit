@@ -1,20 +1,34 @@
 # @himenon/github-api-create-commit
 
+Create a Commit to GitHub via WebAPI.
+
 ## Usage
 
-| scripts                   | description                                 |
-| :------------------------ | :------------------------------------------ |
-| `build`                   | typescript build and create proxy directory |
-| `clean`                   | clean up                                    |
-| `format:code`             | prettier                                    |
-| `format:yarn:lock`        | yarn.lock deduplicate                       |
-| `lerna:version:up`        | lerna version up                            |
-| `test`                    | execute test:depcruise, test:jest           |
-| `test:depcruise`          | dependency-cruiser's test                   |
-| `test:jest`               | jest test                                   |
-| `ts`                      | execute ts-node                             |
-| `release:github:registry` | publish github registry                     |
-| `release:npm:registry`    | publish npm registry                        |
+```ts
+const github = create({ owner: "Himenon", repo: "github-api-create-commit", accessToken: "" });
+
+await github.createGitCommit({
+  baseBranchName: "master",
+  headBranchName: "develop",
+  commitMessage: "feat: add markdown file",
+  files: [
+    {
+      path: "hello-world.md",
+      content: "# Hello world",
+    },
+  ],
+});
+```
+
+**Shell scripts with the same meaning**
+
+```bash
+git checkout -b develop origin/master
+echo "# Hello world" > hello-world.md
+git add hello-world.md
+git commit -m "feat: add markdown file"
+git push develop
+```
 
 ## LICENCE
 
