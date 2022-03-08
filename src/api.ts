@@ -41,13 +41,17 @@ export namespace Schemas {
     url?: string;
     ping_url?: string;
   }
-  export interface enterprise$public$key {
-    id?: string;
-    key_id?: string;
-    key?: string;
-    user_id?: number | null;
-    repository_id?: number | null;
-    url?: string;
+  export interface public$key$full {
+    id: number;
+    key: string;
+    user_id: number | null;
+    repository_id: number | null;
+    url: string;
+    title: string;
+    read_only: boolean;
+    verified: boolean;
+    created_at: string;
+    last_used: string | null;
   }
   export interface ldap$mapping$team {
     ldap_dn?: string;
@@ -57,33 +61,62 @@ export namespace Schemas {
     html_url?: string;
     name?: string;
     slug?: string;
-    description?: string;
+    description?: string | null;
     privacy?: string;
     permission?: string;
     members_url?: string;
     repositories_url?: string;
     parent?: any | null;
   }
+  /** Ldap Private User */
   export interface ldap$mapping$user {
     ldap_dn?: string;
-    login?: string;
-    id?: number;
-    node_id?: string;
-    avatar_url?: string;
-    gravatar_id?: string;
-    url?: string;
-    html_url?: string;
-    followers_url?: string;
-    following_url?: string;
-    gists_url?: string;
-    starred_url?: string;
-    subscriptions_url?: string;
-    organizations_url?: string;
-    repos_url?: string;
-    events_url?: string;
-    received_events_url?: string;
-    type?: string;
-    site_admin?: boolean;
+    login: string;
+    id: number;
+    node_id: string;
+    avatar_url: string;
+    gravatar_id: string | null;
+    url: string;
+    html_url: string;
+    followers_url: string;
+    following_url: string;
+    gists_url: string;
+    starred_url: string;
+    subscriptions_url: string;
+    organizations_url: string;
+    repos_url: string;
+    events_url: string;
+    received_events_url: string;
+    type: string;
+    site_admin: boolean;
+    name: string | null;
+    company: string | null;
+    blog: string | null;
+    location: string | null;
+    email: string | null;
+    hireable: boolean | null;
+    bio: string | null;
+    twitter_username?: string | null;
+    public_repos: number;
+    public_gists: number;
+    followers: number;
+    following: number;
+    created_at: string;
+    updated_at: string;
+    private_gists: number;
+    total_private_repos: number;
+    owned_private_repos: number;
+    disk_usage: number;
+    collaborators: number;
+    two_factor_authentication: boolean;
+    plan?: {
+      collaborators: number;
+      name: string;
+      space: number;
+      private_repos: number;
+    };
+    suspended_at?: string | null;
+    business_plus?: boolean;
   }
   /** Organization Simple */
   export interface organization$simple {
@@ -152,7 +185,9 @@ export namespace Schemas {
     allow_downstream_configuration?: boolean;
   }
   /** Simple User */
-  export interface simple$user {
+  export interface nullable$simple$user {
+    name?: string | null;
+    email?: string | null;
     login: string;
     id: number;
     node_id: string;
@@ -181,8 +216,6 @@ export namespace Schemas {
     administration?: "read" | "write";
     /** The level of permission to grant the access token for checks on code. Can be one of: `read` or `write`. */
     checks?: "read" | "write";
-    /** The level of permission to grant the access token for notification of content references and creation content attachments. Can be one of: `read` or `write`. */
-    content_references?: "read" | "write";
     /** The level of permission to grant the access token for repository contents, commits, branches, downloads, releases, and merges. Can be one of: `read` or `write`. */
     contents?: "read" | "write";
     /** The level of permission to grant the access token for deployments and deployment statuses. Can be one of: `read` or `write`. */
@@ -213,8 +246,8 @@ export namespace Schemas {
     single_file?: "read" | "write";
     /** The level of permission to grant the access token for commit statuses. Can be one of: `read` or `write`. */
     statuses?: "read" | "write";
-    /** The level of permission to grant the access token to retrieve Dependabot alerts. Can be one of: `read`. */
-    vulnerability_alerts?: "read";
+    /** The level of permission to grant the access token to manage Dependabot alerts. Can be one of: `read` or `write`. */
+    vulnerability_alerts?: "read" | "write";
     /** The level of permission to grant the access token to update GitHub Actions workflow files. Can be one of: `write`. */
     workflows?: "write";
     /** The level of permission to grant the access token for organization teams and members. Can be one of: `read` or `write`. */
@@ -225,8 +258,10 @@ export namespace Schemas {
     organization_hooks?: "read" | "write";
     /** The level of permission to grant the access token for viewing an organization's plan. Can be one of: `read`. */
     organization_plan?: "read";
-    /** The level of permission to grant the access token to manage organization projects, columns, and cards. Can be one of: `read`, `write`, or `admin`. */
+    /** The level of permission to grant the access token to manage organization projects and projects beta (where available). Can be one of: `read`, `write`, or `admin`. */
     organization_projects?: "read" | "write" | "admin";
+    /** The level of permission to grant the access token for organization packages published to GitHub Packages. Can be one of: `read` or `write`. */
+    organization_packages?: "read" | "write";
     /** The level of permission to grant the access token to manage organization secrets. Can be one of: `read` or `write`. */
     organization_secrets?: "read" | "write";
     /** The level of permission to grant the access token to view and manage GitHub Actions self-hosted runners available to an organization. Can be one of: `read` or `write`. */
@@ -235,8 +270,34 @@ export namespace Schemas {
     organization_user_blocking?: "read" | "write";
     /** The level of permission to grant the access token to manage team discussions and related comments. Can be one of: `read` or `write`. */
     team_discussions?: "read" | "write";
+    /** The level of permission to grant the access token for notification of content references and creation content attachments. Can be one of: `read` or `write`. */
+    content_references?: "read" | "write";
   }
-  export interface scoped$installation {
+  /** Simple User */
+  export interface simple$user {
+    name?: string | null;
+    email?: string | null;
+    login: string;
+    id: number;
+    node_id: string;
+    avatar_url: string;
+    gravatar_id: string | null;
+    url: string;
+    html_url: string;
+    followers_url: string;
+    following_url: string;
+    gists_url: string;
+    starred_url: string;
+    subscriptions_url: string;
+    organizations_url: string;
+    repos_url: string;
+    events_url: string;
+    received_events_url: string;
+    type: string;
+    site_admin: boolean;
+    starred_at?: string;
+  }
+  export interface nullable$scoped$installation {
     permissions: Schemas.app$permissions;
     /** Describe whether all repositories have been selected or there's a selection involved */
     repository_selection: "all" | "selected";
@@ -265,17 +326,48 @@ export namespace Schemas {
     updated_at: string;
     created_at: string;
     fingerprint: string | null;
-    user?: Schemas.simple$user | null;
-    installation?: Schemas.scoped$installation | null;
+    user?: Schemas.nullable$simple$user;
+    installation?: Schemas.nullable$scoped$installation;
   }
   /** GitHub apps are a new way to extend GitHub. They can be installed directly on organizations and user accounts and granted access to specific repositories. They come with granular permissions and built-in webhooks. GitHub apps are first class actors within GitHub. */
   export interface integration {
-    [key: string]: {};
+    /** Unique identifier of the GitHub app */
+    id: number;
+    /** The slug name of the GitHub app */
+    slug?: string;
+    node_id: string;
+    owner: Schemas.nullable$simple$user;
+    /** The name of the GitHub app */
+    name: string;
+    description: string | null;
+    external_url: string;
+    html_url: string;
+    created_at: string;
+    updated_at: string;
+    /** The set of permissions for the GitHub app */
+    permissions: {
+      issues?: string;
+      checks?: string;
+      metadata?: string;
+      contents?: string;
+      deployments?: string;
+      [key: string]: string;
+    };
+    /** The list of events for the GitHub app */
+    events: string[];
+    /** The number of installations associated with the GitHub app */
+    installations_count?: number;
+    client_id?: string;
+    client_secret?: string;
+    webhook_secret?: string | null;
+    pem?: string;
   }
   /** Basic Error */
   export interface basic$error {
     message?: string;
     documentation_url?: string;
+    url?: string;
+    status?: string;
   }
   /** Validation Error Simple */
   export interface validation$error$simple {
@@ -289,8 +381,7 @@ export namespace Schemas {
   export type webhook$config$content$type = string;
   /** If provided, the `secret` will be used as the `key` to generate the HMAC hex digest value for [delivery signature headers](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads/#delivery-headers). */
   export type webhook$config$secret = string;
-  /** Determines whether the SSL certificate of the host for `url` will be verified when delivering payloads. Supported values include `0` (verification is performed) and `1` (verification is not performed). The default is `0`. **We strongly recommend not setting this to `1` as you are subject to man-in-the-middle and other attacks.** */
-  export type webhook$config$insecure$ssl = string;
+  export type webhook$config$insecure$ssl = string | number;
   /** Configuration object of the webhook */
   export interface webhook$config {
     url?: Schemas.webhook$config$url;
@@ -330,16 +421,7 @@ export namespace Schemas {
     /** The ID of the user or organization this token is being scoped to. */
     target_id: number;
     target_type: string;
-    permissions: {
-      deployments?: string;
-      checks?: string;
-      metadata?: string;
-      contents?: string;
-      pull_requests?: string;
-      statuses?: string;
-      issues?: string;
-      organization_administration?: string;
-    };
+    permissions: Schemas.app$permissions;
     events: string[];
     created_at: string;
     updated_at: string;
@@ -347,12 +429,12 @@ export namespace Schemas {
     has_multiple_single_files?: boolean;
     single_file_paths?: string[];
     app_slug: string;
-    suspended_by?: Schemas.simple$user | null;
-    suspended_at?: string | null;
+    suspended_by: Schemas.nullable$simple$user;
+    suspended_at: string | null;
     contact_email?: string | null;
   }
   /** License Simple */
-  export interface license$simple {
+  export interface nullable$license$simple {
     key: string;
     name: string;
     url: string | null;
@@ -368,7 +450,8 @@ export namespace Schemas {
     /** The name of the repository. */
     name: string;
     full_name: string;
-    license: Schemas.license$simple | null;
+    license: Schemas.nullable$license$simple;
+    organization?: Schemas.nullable$simple$user;
     forks: number;
     permissions?: {
       admin: boolean;
@@ -377,7 +460,7 @@ export namespace Schemas {
       push: boolean;
       maintain?: boolean;
     };
-    owner: Schemas.simple$user | null;
+    owner: Schemas.simple$user;
     /** Whether the repository is private or public. */
     private: boolean;
     html_url: string;
@@ -551,13 +634,16 @@ export namespace Schemas {
       updated_at?: string;
       permissions?: {
         admin?: boolean;
+        maintain?: boolean;
         push?: boolean;
+        triage?: boolean;
         pull?: boolean;
       };
       allow_rebase_merge?: boolean;
       temp_clone_token?: string;
       allow_squash_merge?: boolean;
       delete_branch_on_merge?: boolean;
+      allow_update_branch?: boolean;
       allow_merge_commit?: boolean;
       subscribers_count?: number;
       network_count?: number;
@@ -569,6 +655,8 @@ export namespace Schemas {
     delete_branch_on_merge?: boolean;
     /** Whether to allow merge commits for pull requests. */
     allow_merge_commit?: boolean;
+    /** Whether to allow forking this repo */
+    allow_forking?: boolean;
     subscribers_count?: number;
     network_count?: number;
     open_issues: number;
@@ -580,12 +668,7 @@ export namespace Schemas {
   export interface installation$token {
     token: string;
     expires_at: string;
-    permissions?: {
-      issues?: string;
-      contents?: string;
-      metadata?: string;
-      single_file?: string;
-    };
+    permissions?: Schemas.app$permissions;
     repository_selection?: "all" | "selected";
     repositories?: Schemas.repository[];
     single_file?: string;
@@ -617,7 +700,29 @@ export namespace Schemas {
     created_at: string;
     updated_at: string;
     scopes: string[];
-    user?: Schemas.simple$user | null;
+    user?: Schemas.nullable$simple$user;
+  }
+  /** The authorization for an OAuth app, GitHub App, or a Personal Access Token. */
+  export interface nullable$authorization {
+    id: number;
+    url: string;
+    /** A list of scopes that this authorization is in. */
+    scopes: string[] | null;
+    token: string;
+    token_last_eight: string | null;
+    hashed_token: string | null;
+    app: {
+      client_id: string;
+      name: string;
+      url: string;
+    };
+    note: string | null;
+    note_url: string | null;
+    updated_at: string;
+    created_at: string;
+    fingerprint: string | null;
+    user?: Schemas.nullable$simple$user;
+    installation?: Schemas.nullable$scoped$installation;
   }
   /** Code Of Conduct */
   export interface code$of$conduct {
@@ -627,18 +732,7 @@ export namespace Schemas {
     body?: string;
     html_url: string | null;
   }
-  /** Content Reference attachments allow you to provide context around URLs posted in comments */
-  export interface content$reference$attachment {
-    /** The ID of the attachment */
-    id: number;
-    /** The title of the attachment */
-    title: string;
-    /** The body of the attachment */
-    body: string;
-    /** The node_id of the content attachment */
-    node_id?: string;
-  }
-  /** The announcement text in GitHub Flavored Markdown. For more information about GitHub Flavored Markdown, see "[Mastering markdown](https://guides.github.com/features/mastering-markdown/)." */
+  /** The announcement text in GitHub Flavored Markdown. For more information about GitHub Flavored Markdown, see "[Basic writing and formatting syntax](https://docs.github.com/enterprise-server@3.0/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)." */
   export type announcement$message = string;
   /** The time at which the announcement expires. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. To set an announcement that never expires, omit this parameter, set it to `null`, or set it to an empty string. */
   export type announcement$expiration = string;
@@ -648,68 +742,78 @@ export namespace Schemas {
     expires_at?: Schemas.announcement$expiration;
   }
   export interface license$info {
-    seats?: number;
+    seats?: string | number;
     seats_used?: number;
-    seats_available?: number;
+    seats_available?: string | number;
     kind?: string;
     days_until_expiration?: number;
     expire_at?: string;
   }
+  export interface enterprise$repository$overview {
+    total_repos: number;
+    root_repos: number;
+    fork_repos: number;
+    org_repos: number;
+    total_pushes: number;
+    total_wikis: number;
+  }
+  export interface enterprise$hook$overview {
+    total_hooks: number;
+    active_hooks: number;
+    inactive_hooks: number;
+  }
+  export interface enterprise$page$overview {
+    total_pages: number;
+  }
+  export interface enterprise$organization$overview {
+    total_orgs: number;
+    disabled_orgs: number;
+    total_teams: number;
+    total_team_members: number;
+  }
+  export interface enterprise$user$overview {
+    total_users: number;
+    admin_users: number;
+    suspended_users: number;
+  }
+  export interface enterprise$pull$request$overview {
+    total_pulls: number;
+    merged_pulls: number;
+    mergeable_pulls: number;
+    unmergeable_pulls: number;
+  }
+  export interface enterprise$issue$overview {
+    total_issues: number;
+    open_issues: number;
+    closed_issues: number;
+  }
+  export interface enterprise$milestone$overview {
+    total_milestones: number;
+    open_milestones: number;
+    closed_milestones: number;
+  }
+  export interface enterprise$gist$overview {
+    total_gists: number;
+    private_gists: number;
+    public_gists: number;
+  }
+  export interface enterprise$comment$overview {
+    total_commit_comments: number;
+    total_gist_comments: number;
+    total_issue_comments: number;
+    total_pull_request_comments: number;
+  }
   export interface enterprise$overview {
-    repos?: {
-      total_repos?: number;
-      root_repos?: number;
-      fork_repos?: number;
-      org_repos?: number;
-      total_pushes?: number;
-      total_wikis?: number;
-    };
-    hooks?: {
-      total_hooks?: number;
-      active_hooks?: number;
-      inactive_hooks?: number;
-    };
-    pages?: {
-      total_pages?: number;
-    };
-    orgs?: {
-      total_orgs?: number;
-      disabled_orgs?: number;
-      total_teams?: number;
-      total_team_members?: number;
-    };
-    users?: {
-      total_users?: number;
-      admin_users?: number;
-      suspended_users?: number;
-    };
-    pulls?: {
-      total_pulls?: number;
-      merged_pulls?: number;
-      mergeable_pulls?: number;
-      unmergeable_pulls?: number;
-    };
-    issues?: {
-      total_issues?: number;
-      open_issues?: number;
-      closed_issues?: number;
-    };
-    milestones?: {
-      total_milestones?: number;
-      open_milestones?: number;
-      closed_milestones?: number;
-    };
-    gists?: {
-      total_gists?: number;
-      private_gists?: number;
-      public_gists?: number;
-    };
-    comments?: {
-      total_commit_comments?: number;
-      total_gist_comments?: number;
-      total_issue_comments?: number;
-      total_pull_request_comments?: number;
-    };
+    repos?: Schemas.enterprise$repository$overview;
+    hooks?: Schemas.enterprise$hook$overview;
+    pages?: Schemas.enterprise$page$overview;
+    orgs?: Schemas.enterprise$organization$overview;
+    users?: Schemas.enterprise$user$overview;
+    pulls?: Schemas.enterprise$pull$request$overview;
+    issues?: Schemas.enterprise$issue$overview;
+    milestones?: Schemas.enterprise$milestone$overview;
+    gists?: Schemas.enterprise$gist$overview;
+    comments?: Schemas.enterprise$comment$overview;
   }
   /** The policy that controls the organizations in the enterprise that are allowed to run GitHub Actions. Can be one of: `all`, `none`, or `selected`. */
   export type enabled$organizations = "all" | "none" | "selected";
@@ -721,7 +825,7 @@ export namespace Schemas {
     enabled_organizations: Schemas.enabled$organizations;
     /** The API URL to use to get or set the selected organizations that are allowed to run GitHub Actions, when `enabled_organizations` is set to `selected`. */
     selected_organizations_url?: string;
-    allowed_actions: Schemas.allowed$actions;
+    allowed_actions?: Schemas.allowed$actions;
     selected_actions_url?: Schemas.selected$actions$url;
   }
   export interface selected$actions {
@@ -739,6 +843,15 @@ export namespace Schemas {
     runners_url: string;
     allows_public_repositories: boolean;
   }
+  /** A label for a self hosted runner */
+  export interface runner$label {
+    /** Unique identifier of the label. */
+    id?: number;
+    /** Name of the label. */
+    name: string;
+    /** The type of label. Read-only labels are applied automatically when the runner is configured. */
+    type?: "read-only" | "custom";
+  }
   /** A self hosted runner */
   export interface runner {
     /** The id of the runner. */
@@ -750,14 +863,7 @@ export namespace Schemas {
     /** The status of the runner. */
     status: string;
     busy: boolean;
-    labels: {
-      /** Unique identifier of the label. */
-      id?: number;
-      /** Name of the label. */
-      name?: string;
-      /** The type of label. Read-only labels are applied automatically when the runner is configured. */
-      type?: "read-only" | "custom";
-    }[];
+    labels: Schemas.runner$label[];
   }
   /** Runner Application */
   export interface runner$application {
@@ -765,6 +871,9 @@ export namespace Schemas {
     architecture: string;
     download_url: string;
     filename: string;
+    /** A short lived bearer token used to download the runner, if needed. */
+    temp_download_token?: string;
+    sha256_checksum?: string;
   }
   /** Authentication Token */
   export interface authentication$token {
@@ -788,21 +897,8 @@ export namespace Schemas {
     url: string;
     avatar_url: string;
   }
-  /** Color-coded labels help you categorize and filter your issues (just like labels in Gmail). */
-  export interface label {
-    id: number;
-    node_id: string;
-    /** URL for the label */
-    url: string;
-    /** The name of the label. */
-    name: string;
-    description: string | null;
-    /** 6-character hex code, without the leading #, identifying the color */
-    color: string;
-    default: boolean;
-  }
   /** A collection of related issues and pull requests. */
-  export interface milestone {
+  export interface nullable$milestone {
     url: string;
     html_url: string;
     labels_url: string;
@@ -815,13 +911,46 @@ export namespace Schemas {
     /** The title of the milestone. */
     title: string;
     description: string | null;
-    creator: Schemas.simple$user | null;
+    creator: Schemas.nullable$simple$user;
     open_issues: number;
     closed_issues: number;
     created_at: string;
     updated_at: string;
     closed_at: string | null;
     due_on: string | null;
+  }
+  /** GitHub apps are a new way to extend GitHub. They can be installed directly on organizations and user accounts and granted access to specific repositories. They come with granular permissions and built-in webhooks. GitHub apps are first class actors within GitHub. */
+  export interface nullable$integration {
+    /** Unique identifier of the GitHub app */
+    id: number;
+    /** The slug name of the GitHub app */
+    slug?: string;
+    node_id: string;
+    owner: Schemas.nullable$simple$user;
+    /** The name of the GitHub app */
+    name: string;
+    description: string | null;
+    external_url: string;
+    html_url: string;
+    created_at: string;
+    updated_at: string;
+    /** The set of permissions for the GitHub app */
+    permissions: {
+      issues?: string;
+      checks?: string;
+      metadata?: string;
+      contents?: string;
+      deployments?: string;
+      [key: string]: string;
+    };
+    /** The list of events for the GitHub app */
+    events: string[];
+    /** The number of installations associated with the GitHub app */
+    installations_count?: number;
+    client_id?: string;
+    client_secret?: string;
+    webhook_secret?: string | null;
+    pem?: string;
   }
   /** How the author is associated with the repository. */
   export type author_association =
@@ -833,25 +962,54 @@ export namespace Schemas {
     | "MEMBER"
     | "NONE"
     | "OWNER";
-  /** Issue Simple */
-  export interface issue$simple {
+  export interface reaction$rollup {
+    url: string;
+    total_count: number;
+    "+1": number;
+    "-1": number;
+    laugh: number;
+    confused: number;
+    heart: number;
+    hooray: number;
+    eyes: number;
+    rocket: number;
+  }
+  /** Issues are a great way to keep track of tasks, enhancements, and bugs for your projects. */
+  export interface issue {
     id: number;
     node_id: string;
+    /** URL for the issue */
     url: string;
     repository_url: string;
     labels_url: string;
     comments_url: string;
     events_url: string;
     html_url: string;
+    /** Number uniquely identifying the issue within its repository */
     number: number;
+    /** State of the issue; either 'open' or 'closed' */
     state: string;
+    /** Title of the issue */
     title: string;
-    body?: string;
-    user: Schemas.simple$user | null;
-    labels: Schemas.label[];
-    assignee: Schemas.simple$user | null;
+    /** Contents of the issue */
+    body?: string | null;
+    user: Schemas.nullable$simple$user;
+    /** Labels to associate with this issue; pass one or more label names to replace the set of labels on this issue; send an empty array to clear all labels from the issue; note that the labels are silently dropped for users without push access to the repository */
+    labels: (
+      | string
+      | {
+          id?: number;
+          node_id?: string;
+          url?: string;
+          name?: string;
+          description?: string | null;
+          color?: string | null;
+          default?: boolean;
+        }
+    )[];
+    assignee: Schemas.nullable$simple$user;
     assignees?: Schemas.simple$user[] | null;
-    milestone: Schemas.milestone | null;
+    milestone: Schemas.nullable$milestone;
     locked: boolean;
     active_lock_reason?: string | null;
     comments: number;
@@ -865,24 +1023,15 @@ export namespace Schemas {
     closed_at: string | null;
     created_at: string;
     updated_at: string;
-    author_association: Schemas.author_association;
+    draft?: boolean;
+    closed_by?: Schemas.nullable$simple$user;
     body_html?: string;
     body_text?: string;
     timeline_url?: string;
     repository?: Schemas.repository;
-    performed_via_github_app?: Schemas.integration | null;
-  }
-  export interface reaction$rollup {
-    url: string;
-    total_count: number;
-    "+1": number;
-    "-1": number;
-    laugh: number;
-    confused: number;
-    heart: number;
-    hooray: number;
-    eyes: number;
-    rocket: number;
+    performed_via_github_app?: Schemas.nullable$integration;
+    author_association: Schemas.author_association;
+    reactions?: Schemas.reaction$rollup;
   }
   /** Comments provide a way for people to collaborate on an issue. */
   export interface issue$comment {
@@ -896,12 +1045,12 @@ export namespace Schemas {
     body_text?: string;
     body_html?: string;
     html_url: string;
-    user: Schemas.simple$user | null;
+    user: Schemas.nullable$simple$user;
     created_at: string;
     updated_at: string;
     issue_url: string;
     author_association: Schemas.author_association;
-    performed_via_github_app?: Schemas.integration | null;
+    performed_via_github_app?: Schemas.nullable$integration;
     reactions?: Schemas.reaction$rollup;
   }
   /** Event */
@@ -916,8 +1065,8 @@ export namespace Schemas {
     };
     org?: Schemas.actor;
     payload: {
-      action: string;
-      issue?: Schemas.issue$simple;
+      action?: string;
+      issue?: Schemas.issue;
       comment?: Schemas.issue$comment;
       pages?: {
         page_name?: string;
@@ -980,15 +1129,114 @@ export namespace Schemas {
     updated_at: string;
     description: string | null;
     comments: number;
-    user: Schemas.simple$user | null;
+    user: Schemas.nullable$simple$user;
     comments_url: string;
-    owner?: Schemas.simple$user | null;
+    owner?: Schemas.simple$user;
     truncated?: boolean;
     forks?: {}[];
     history?: {}[];
   }
+  /** Public User */
+  export interface public$user {
+    login: string;
+    id: number;
+    node_id: string;
+    avatar_url: string;
+    gravatar_id: string | null;
+    url: string;
+    html_url: string;
+    followers_url: string;
+    following_url: string;
+    gists_url: string;
+    starred_url: string;
+    subscriptions_url: string;
+    organizations_url: string;
+    repos_url: string;
+    events_url: string;
+    received_events_url: string;
+    type: string;
+    site_admin: boolean;
+    name: string | null;
+    company: string | null;
+    blog: string | null;
+    location: string | null;
+    email: string | null;
+    hireable: boolean | null;
+    bio: string | null;
+    public_repos: number;
+    public_gists: number;
+    followers: number;
+    following: number;
+    created_at: string;
+    updated_at: string;
+    plan?: {
+      collaborators: number;
+      name: string;
+      space: number;
+      private_repos: number;
+    };
+    suspended_at?: string | null;
+    private_gists?: number;
+    total_private_repos?: number;
+    owned_private_repos?: number;
+    disk_usage?: number;
+    collaborators?: number;
+  }
+  /** Gist History */
+  export interface gist$history {
+    user?: Schemas.nullable$simple$user;
+    version?: string;
+    committed_at?: string;
+    change_status?: {
+      total?: number;
+      additions?: number;
+      deletions?: number;
+    };
+    url?: string;
+  }
   /** Gist Simple */
   export interface gist$simple {
+    forks?:
+      | {
+          id?: string;
+          url?: string;
+          user?: Schemas.public$user;
+          created_at?: string;
+          updated_at?: string;
+        }[]
+      | null;
+    history?: Schemas.gist$history[] | null;
+    /** Gist */
+    fork_of?: {
+      url: string;
+      forks_url: string;
+      commits_url: string;
+      id: string;
+      node_id: string;
+      git_pull_url: string;
+      git_push_url: string;
+      html_url: string;
+      files: {
+        [key: string]: {
+          filename?: string;
+          type?: string;
+          language?: string;
+          raw_url?: string;
+          size?: number;
+        };
+      };
+      public: boolean;
+      created_at: string;
+      updated_at: string;
+      description: string | null;
+      comments: number;
+      user: Schemas.nullable$simple$user;
+      comments_url: string;
+      owner?: Schemas.nullable$simple$user;
+      truncated?: boolean;
+      forks?: {}[];
+      history?: {}[];
+    } | null;
     url?: string;
     forks_url?: string;
     commits_url?: string;
@@ -1025,7 +1273,7 @@ export namespace Schemas {
     url: string;
     /** The comment text. */
     body: string;
-    user: Schemas.simple$user | null;
+    user: Schemas.nullable$simple$user;
     created_at: string;
     updated_at: string;
     author_association: Schemas.author_association;
@@ -1034,7 +1282,7 @@ export namespace Schemas {
   export interface gist$commit {
     url: string;
     version: string;
-    user: Schemas.simple$user | null;
+    user: Schemas.nullable$simple$user;
     change_status: {
       total?: number;
       additions?: number;
@@ -1047,63 +1295,14 @@ export namespace Schemas {
     name: string;
     source: string;
   }
-  /** Issues are a great way to keep track of tasks, enhancements, and bugs for your projects. */
-  export interface issue {
-    id: number;
+  /** License Simple */
+  export interface license$simple {
+    key: string;
+    name: string;
+    url: string | null;
+    spdx_id: string | null;
     node_id: string;
-    /** URL for the issue */
-    url: string;
-    repository_url: string;
-    labels_url: string;
-    comments_url: string;
-    events_url: string;
-    html_url: string;
-    /** Number uniquely identifying the issue within its repository */
-    number: number;
-    /** State of the issue; either 'open' or 'closed' */
-    state: string;
-    /** Title of the issue */
-    title: string;
-    /** Contents of the issue */
-    body?: string;
-    user: Schemas.simple$user | null;
-    /** Labels to associate with this issue; pass one or more label names to replace the set of labels on this issue; send an empty array to clear all labels from the issue; note that the labels are silently dropped for users without push access to the repository */
-    labels: (
-      | string
-      | {
-          id?: number;
-          node_id?: string;
-          url?: string;
-          name?: string;
-          description?: string | null;
-          color?: string | null;
-          default?: boolean;
-        }
-    )[];
-    assignee: Schemas.simple$user | null;
-    assignees?: Schemas.simple$user[] | null;
-    milestone: Schemas.milestone | null;
-    locked: boolean;
-    active_lock_reason?: string | null;
-    comments: number;
-    pull_request?: {
-      merged_at?: string | null;
-      diff_url: string | null;
-      html_url: string | null;
-      patch_url: string | null;
-      url: string | null;
-    };
-    closed_at: string | null;
-    created_at: string;
-    updated_at: string;
-    closed_by?: Schemas.simple$user | null;
-    body_html?: string;
-    body_text?: string;
-    timeline_url?: string;
-    repository?: Schemas.repository;
-    performed_via_github_app?: Schemas.integration | null;
-    author_association: Schemas.author_association;
-    reactions?: Schemas.reaction$rollup;
+    html_url?: string;
   }
   /** License */
   export interface license {
@@ -1124,445 +1323,20 @@ export namespace Schemas {
   /** Api Overview */
   export interface api$overview {
     verifiable_password_authentication: boolean;
+    packages?: string[];
+    dependabot?: string[];
     installed_version?: string;
   }
-  /** Minimal Repository */
-  export interface minimal$repository {
-    id: number;
-    node_id: string;
-    name: string;
-    full_name: string;
-    owner: Schemas.simple$user | null;
-    private: boolean;
-    html_url: string;
-    description: string | null;
-    fork: boolean;
-    url: string;
-    archive_url: string;
-    assignees_url: string;
-    blobs_url: string;
-    branches_url: string;
-    collaborators_url: string;
-    comments_url: string;
-    commits_url: string;
-    compare_url: string;
-    contents_url: string;
-    contributors_url: string;
-    deployments_url: string;
-    downloads_url: string;
-    events_url: string;
-    forks_url: string;
-    git_commits_url: string;
-    git_refs_url: string;
-    git_tags_url: string;
-    git_url?: string;
-    issue_comment_url: string;
-    issue_events_url: string;
-    issues_url: string;
-    keys_url: string;
-    labels_url: string;
-    languages_url: string;
-    merges_url: string;
-    milestones_url: string;
-    notifications_url: string;
-    pulls_url: string;
-    releases_url: string;
-    ssh_url?: string;
-    stargazers_url: string;
-    statuses_url: string;
-    subscribers_url: string;
-    subscription_url: string;
-    tags_url: string;
-    teams_url: string;
-    trees_url: string;
-    clone_url?: string;
-    mirror_url?: string | null;
-    hooks_url: string;
-    svn_url?: string;
-    homepage?: string | null;
-    language?: string | null;
-    forks_count?: number;
-    stargazers_count?: number;
-    watchers_count?: number;
-    size?: number;
-    default_branch?: string;
-    open_issues_count?: number;
-    is_template?: boolean;
-    topics?: string[];
-    has_issues?: boolean;
-    has_projects?: boolean;
-    has_wiki?: boolean;
-    has_pages?: boolean;
-    has_downloads?: boolean;
-    archived?: boolean;
-    disabled?: boolean;
-    visibility?: string;
-    pushed_at?: string | null;
-    created_at?: string | null;
-    updated_at?: string | null;
-    permissions?: {
-      admin?: boolean;
-      push?: boolean;
-      pull?: boolean;
-    };
-    template_repository?: Schemas.repository | null;
-    temp_clone_token?: string;
-    delete_branch_on_merge?: boolean;
-    subscribers_count?: number;
-    network_count?: number;
-    license?: {
-      key?: string;
-      name?: string;
-      spdx_id?: string;
-      url?: string;
-      node_id?: string;
-    } | null;
-    forks?: number;
-    open_issues?: number;
-    watchers?: number;
-  }
-  /** Thread */
-  export interface thread {
-    id: string;
-    repository: Schemas.minimal$repository;
-    subject: {
-      title: string;
-      url: string;
-      latest_comment_url: string;
-      type: string;
-    };
-    reason: string;
-    unread: boolean;
-    updated_at: string;
-    last_read_at: string | null;
-    url: string;
-    subscription_url: string;
-  }
-  /** Thread Subscription */
-  export interface thread$subscription {
-    subscribed: boolean;
-    ignored: boolean;
-    reason: string | null;
-    created_at: string | null;
-    url: string;
-    thread_url?: string;
-    repository_url?: string;
-  }
-  /** Organization Full */
-  export interface organization$full {
-    login: string;
-    id: number;
-    node_id: string;
-    url: string;
-    repos_url: string;
-    events_url: string;
-    hooks_url: string;
-    issues_url: string;
-    members_url: string;
-    public_members_url: string;
-    avatar_url: string;
-    description: string | null;
-    name?: string;
-    company?: string;
-    blog?: string;
-    location?: string;
-    email?: string;
-    twitter_username?: string | null;
-    is_verified?: boolean;
-    has_organization_projects: boolean;
-    has_repository_projects: boolean;
-    public_repos: number;
-    public_gists: number;
-    followers: number;
-    following: number;
-    html_url: string;
-    created_at: string;
-    type: string;
-    total_private_repos?: number;
-    owned_private_repos?: number;
-    private_gists?: number | null;
-    disk_usage?: number | null;
-    collaborators?: number | null;
-    billing_email?: string | null;
-    plan?: {
-      name: string;
-      space: number;
-      private_repos: number;
-      filled_seats?: number;
-      seats?: number;
-    };
-    default_repository_permission?: string | null;
-    members_can_create_repositories?: boolean | null;
-    two_factor_requirement_enabled?: boolean | null;
-    members_allowed_repository_creation_type?: string;
-    members_can_create_public_repositories?: boolean;
-    members_can_create_private_repositories?: boolean;
-    members_can_create_internal_repositories?: boolean;
-    members_can_create_pages?: boolean;
-    updated_at: string;
-  }
-  /** The policy that controls the repositories in the organization that are allowed to run GitHub Actions. Can be one of: `all`, `none`, or `selected`. */
-  export type enabled$repositories = "all" | "none" | "selected";
-  export interface actions$organization$permissions {
-    enabled_repositories: Schemas.enabled$repositories;
-    /** The API URL to use to get or set the selected repositories that are allowed to run GitHub Actions, when `enabled_repositories` is set to `selected`. */
-    selected_repositories_url?: string;
-    allowed_actions: Schemas.allowed$actions;
-    selected_actions_url?: Schemas.selected$actions$url;
-  }
-  export interface runner$groups$org {
-    id: number;
-    name: string;
-    visibility: string;
-    default: boolean;
-    /** Link to the selected repositories resource for this runner group. Not present unless visibility was set to `selected` */
-    selected_repositories_url?: string;
-    runners_url: string;
-    inherited: boolean;
-    inherited_allows_public_repositories?: boolean;
-    allows_public_repositories: boolean;
-  }
-  /** Secrets for GitHub Actions for an organization. */
-  export interface organization$actions$secret {
-    /** The name of the secret. */
-    name: string;
-    created_at: string;
-    updated_at: string;
-    /** Visibility of a secret */
-    visibility: "all" | "private" | "selected";
-    selected_repositories_url?: string;
-  }
-  /** The public key used for setting Actions Secrets. */
-  export interface actions$public$key {
-    /** The identifier for the key. */
-    key_id: string;
-    /** The Base64 encoded public key. */
-    key: string;
-    id?: number;
-    url?: string;
-    title?: string;
-    created_at?: string;
-  }
-  /** Org Hook */
-  export interface org$hook {
-    id: number;
-    url: string;
-    ping_url: string;
-    name: string;
-    events: string[];
-    active: boolean;
-    config: {
-      url?: string;
-      insecure_ssl?: string;
-      content_type?: string;
-      secret?: string;
-    };
-    updated_at: string;
-    created_at: string;
-    type: string;
-  }
-  /** Org Membership */
-  export interface org$membership {
-    url: string;
-    state: string;
-    role: string;
-    organization_url: string;
-    organization: Schemas.organization$simple;
-    user: Schemas.simple$user | null;
-    permissions?: {
-      can_create_repository: boolean;
-    };
-  }
-  export interface org$pre$receive$hook {
-    id?: number;
-    name?: string;
-    enforcement?: string;
-    configuration_url?: string;
-    allow_downstream_configuration?: boolean;
-  }
-  /** Projects are a way to organize columns and cards of work. */
-  export interface project {
-    owner_url: string;
-    url: string;
-    html_url: string;
-    columns_url: string;
-    id: number;
-    node_id: string;
-    /** Name of the project */
-    name: string;
-    /** Body of the project */
-    body: string | null;
-    number: number;
-    /** State of the project; either 'open' or 'closed' */
-    state: string;
-    creator: Schemas.simple$user | null;
-    created_at: string;
-    updated_at: string;
-    /** The baseline permission that all organization members have on this project. Only present if owner is an organization. */
-    organization_permission?: "read" | "write" | "admin" | "none";
-    /** Whether or not this project can be seen by everyone. Only present if owner is an organization. */
-    private?: boolean;
-  }
-  /** Groups of organization members that gives permissions on specified repositories. */
-  export interface team$simple {
-    /** Unique identifier of the team */
-    id: number;
-    node_id: string;
-    /** URL for the team */
-    url: string;
-    members_url: string;
-    /** Name of the team */
-    name: string;
-    /** Description of the team */
-    description: string | null;
-    /** Permission that the team will have for its repositories */
-    permission: string;
-    /** The level of privacy this team should have */
-    privacy?: string;
-    html_url: string;
-    repositories_url: string;
-    slug: string;
-    /** Distinguished Name (DN) that team maps to within LDAP environment */
-    ldap_dn?: string;
-  }
-  /** Groups of organization members that gives permissions on specified repositories. */
-  export interface team {
-    id: number;
-    node_id: string;
-    name: string;
-    slug: string;
-    description: string | null;
-    privacy?: string;
-    permission: string;
-    url: string;
-    html_url: string;
-    members_url: string;
-    repositories_url: string;
-    parent?: Schemas.team$simple | null;
-  }
-  /** Groups of organization members that gives permissions on specified repositories. */
-  export interface team$full {
-    /** Unique identifier of the team */
-    id: number;
-    node_id: string;
-    /** URL for the team */
-    url: string;
-    html_url: string;
-    /** Name of the team */
-    name: string;
-    slug: string;
-    description: string | null;
-    /** The level of privacy this team should have */
-    privacy?: "closed" | "secret";
-    /** Permission that the team will have for its repositories */
-    permission: string;
-    members_url: string;
-    repositories_url: string;
-    parent?: Schemas.team$simple | null;
-    members_count: number;
-    repos_count: number;
-    created_at: string;
-    updated_at: string;
-    organization: Schemas.organization$full;
-    /** Distinguished Name (DN) that team maps to within LDAP environment */
-    ldap_dn?: string;
-  }
-  /** A team discussion is a persistent record of a free-form conversation within a team. */
-  export interface team$discussion {
-    author: Schemas.simple$user | null;
-    /** The main text of the discussion. */
-    body: string;
-    body_html: string;
-    /** The current version of the body content. If provided, this update operation will be rejected if the given version does not match the latest version on the server. */
-    body_version: string;
-    comments_count: number;
-    comments_url: string;
-    created_at: string;
-    last_edited_at: string | null;
-    html_url: string;
-    node_id: string;
-    /** The unique sequence number of a team discussion. */
-    number: number;
-    /** Whether or not this discussion should be pinned for easy retrieval. */
-    pinned: boolean;
-    /** Whether or not this discussion should be restricted to team members and organization administrators. */
-    private: boolean;
-    team_url: string;
-    /** The title of the discussion. */
-    title: string;
-    updated_at: string;
-    url: string;
-    reactions?: Schemas.reaction$rollup;
-  }
-  /** A reply to a discussion within a team. */
-  export interface team$discussion$comment {
-    author: Schemas.simple$user | null;
-    /** The main text of the comment. */
-    body: string;
-    body_html: string;
-    /** The current version of the body content. If provided, this update operation will be rejected if the given version does not match the latest version on the server. */
-    body_version: string;
-    created_at: string;
-    last_edited_at: string | null;
-    discussion_url: string;
-    html_url: string;
-    node_id: string;
-    /** The unique sequence number of a team discussion comment. */
-    number: number;
-    updated_at: string;
-    url: string;
-    reactions?: Schemas.reaction$rollup;
-  }
-  /** Reactions to conversations provide a way to help people express their feelings more simply and effectively. */
-  export interface reaction {
-    id: number;
-    node_id: string;
-    user: Schemas.simple$user | null;
-    /** The reaction to use */
-    content: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
-    created_at: string;
-  }
-  /** Team Membership */
-  export interface team$membership {
-    url: string;
-    /** The role of the user in the team. */
-    role: "member" | "maintainer";
-    state: string;
-  }
-  /** A team's access to a project. */
-  export interface team$project {
-    owner_url: string;
-    url: string;
-    html_url: string;
-    columns_url: string;
-    id: number;
-    node_id: string;
-    name: string;
-    body: string | null;
-    number: number;
-    state: string;
-    creator: Schemas.simple$user;
-    created_at: string;
-    updated_at: string;
-    /** The organization permission for this project. Only present when owner is an organization. */
-    organization_permission?: string;
-    /** Whether the project is private or not. Only present when owner is an organization. */
-    private?: boolean;
-    permissions: {
-      read: boolean;
-      write: boolean;
-      admin: boolean;
-    };
-  }
-  /** A team's access to a repository. */
-  export interface team$repository {
+  /** A git repository */
+  export interface nullable$repository {
     /** Unique identifier of the repository */
     id: number;
     node_id: string;
     /** The name of the repository. */
     name: string;
     full_name: string;
-    license: Schemas.license$simple | null;
+    license: Schemas.nullable$license$simple;
+    organization?: Schemas.nullable$simple$user;
     forks: number;
     permissions?: {
       admin: boolean;
@@ -1571,7 +1345,7 @@ export namespace Schemas {
       push: boolean;
       maintain?: boolean;
     };
-    owner: Schemas.simple$user | null;
+    owner: Schemas.simple$user;
     /** Whether the repository is private or public. */
     private: boolean;
     html_url: string;
@@ -1651,7 +1425,114 @@ export namespace Schemas {
     updated_at: string | null;
     /** Whether to allow rebase merges for pull requests. */
     allow_rebase_merge?: boolean;
-    template_repository?: Schemas.repository | null;
+    template_repository?: {
+      id?: number;
+      node_id?: string;
+      name?: string;
+      full_name?: string;
+      owner?: {
+        login?: string;
+        id?: number;
+        node_id?: string;
+        avatar_url?: string;
+        gravatar_id?: string;
+        url?: string;
+        html_url?: string;
+        followers_url?: string;
+        following_url?: string;
+        gists_url?: string;
+        starred_url?: string;
+        subscriptions_url?: string;
+        organizations_url?: string;
+        repos_url?: string;
+        events_url?: string;
+        received_events_url?: string;
+        type?: string;
+        site_admin?: boolean;
+      };
+      private?: boolean;
+      html_url?: string;
+      description?: string;
+      fork?: boolean;
+      url?: string;
+      archive_url?: string;
+      assignees_url?: string;
+      blobs_url?: string;
+      branches_url?: string;
+      collaborators_url?: string;
+      comments_url?: string;
+      commits_url?: string;
+      compare_url?: string;
+      contents_url?: string;
+      contributors_url?: string;
+      deployments_url?: string;
+      downloads_url?: string;
+      events_url?: string;
+      forks_url?: string;
+      git_commits_url?: string;
+      git_refs_url?: string;
+      git_tags_url?: string;
+      git_url?: string;
+      issue_comment_url?: string;
+      issue_events_url?: string;
+      issues_url?: string;
+      keys_url?: string;
+      labels_url?: string;
+      languages_url?: string;
+      merges_url?: string;
+      milestones_url?: string;
+      notifications_url?: string;
+      pulls_url?: string;
+      releases_url?: string;
+      ssh_url?: string;
+      stargazers_url?: string;
+      statuses_url?: string;
+      subscribers_url?: string;
+      subscription_url?: string;
+      tags_url?: string;
+      teams_url?: string;
+      trees_url?: string;
+      clone_url?: string;
+      mirror_url?: string;
+      hooks_url?: string;
+      svn_url?: string;
+      homepage?: string;
+      language?: string;
+      forks_count?: number;
+      stargazers_count?: number;
+      watchers_count?: number;
+      size?: number;
+      default_branch?: string;
+      open_issues_count?: number;
+      is_template?: boolean;
+      topics?: string[];
+      has_issues?: boolean;
+      has_projects?: boolean;
+      has_wiki?: boolean;
+      has_pages?: boolean;
+      has_downloads?: boolean;
+      archived?: boolean;
+      disabled?: boolean;
+      visibility?: string;
+      pushed_at?: string;
+      created_at?: string;
+      updated_at?: string;
+      permissions?: {
+        admin?: boolean;
+        maintain?: boolean;
+        push?: boolean;
+        triage?: boolean;
+        pull?: boolean;
+      };
+      allow_rebase_merge?: boolean;
+      temp_clone_token?: string;
+      allow_squash_merge?: boolean;
+      delete_branch_on_merge?: boolean;
+      allow_update_branch?: boolean;
+      allow_merge_commit?: boolean;
+      subscribers_count?: number;
+      network_count?: number;
+    } | null;
     temp_clone_token?: string;
     /** Whether to allow squash merges for pull requests. */
     allow_squash_merge?: boolean;
@@ -1659,6 +1540,569 @@ export namespace Schemas {
     delete_branch_on_merge?: boolean;
     /** Whether to allow merge commits for pull requests. */
     allow_merge_commit?: boolean;
+    /** Whether to allow forking this repo */
+    allow_forking?: boolean;
+    subscribers_count?: number;
+    network_count?: number;
+    open_issues: number;
+    watchers: number;
+    master_branch?: string;
+    starred_at?: string;
+  }
+  /** Minimal Repository */
+  export interface minimal$repository {
+    id: number;
+    node_id: string;
+    name: string;
+    full_name: string;
+    owner: Schemas.simple$user;
+    private: boolean;
+    html_url: string;
+    description: string | null;
+    fork: boolean;
+    url: string;
+    archive_url: string;
+    assignees_url: string;
+    blobs_url: string;
+    branches_url: string;
+    collaborators_url: string;
+    comments_url: string;
+    commits_url: string;
+    compare_url: string;
+    contents_url: string;
+    contributors_url: string;
+    deployments_url: string;
+    downloads_url: string;
+    events_url: string;
+    forks_url: string;
+    git_commits_url: string;
+    git_refs_url: string;
+    git_tags_url: string;
+    git_url?: string;
+    issue_comment_url: string;
+    issue_events_url: string;
+    issues_url: string;
+    keys_url: string;
+    labels_url: string;
+    languages_url: string;
+    merges_url: string;
+    milestones_url: string;
+    notifications_url: string;
+    pulls_url: string;
+    releases_url: string;
+    ssh_url?: string;
+    stargazers_url: string;
+    statuses_url: string;
+    subscribers_url: string;
+    subscription_url: string;
+    tags_url: string;
+    teams_url: string;
+    trees_url: string;
+    clone_url?: string;
+    mirror_url?: string | null;
+    hooks_url: string;
+    svn_url?: string;
+    homepage?: string | null;
+    language?: string | null;
+    forks_count?: number;
+    stargazers_count?: number;
+    watchers_count?: number;
+    size?: number;
+    default_branch?: string;
+    open_issues_count?: number;
+    is_template?: boolean;
+    topics?: string[];
+    has_issues?: boolean;
+    has_projects?: boolean;
+    has_wiki?: boolean;
+    has_pages?: boolean;
+    has_downloads?: boolean;
+    archived?: boolean;
+    disabled?: boolean;
+    visibility?: string;
+    pushed_at?: string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
+    permissions?: {
+      admin?: boolean;
+      maintain?: boolean;
+      push?: boolean;
+      triage?: boolean;
+      pull?: boolean;
+    };
+    template_repository?: Schemas.nullable$repository;
+    temp_clone_token?: string;
+    delete_branch_on_merge?: boolean;
+    subscribers_count?: number;
+    network_count?: number;
+    code_of_conduct?: Schemas.code$of$conduct;
+    license?: {
+      key?: string;
+      name?: string;
+      spdx_id?: string;
+      url?: string;
+      node_id?: string;
+    } | null;
+    forks?: number;
+    open_issues?: number;
+    watchers?: number;
+    allow_forking?: boolean;
+  }
+  /** Thread */
+  export interface thread {
+    id: string;
+    repository: Schemas.minimal$repository;
+    subject: {
+      title: string;
+      url: string;
+      latest_comment_url: string;
+      type: string;
+    };
+    reason: string;
+    unread: boolean;
+    updated_at: string;
+    last_read_at: string | null;
+    url: string;
+    subscription_url: string;
+  }
+  /** Thread Subscription */
+  export interface thread$subscription {
+    subscribed: boolean;
+    ignored: boolean;
+    reason: string | null;
+    created_at: string | null;
+    url: string;
+    thread_url?: string;
+    repository_url?: string;
+  }
+  /** Organization Full */
+  export interface organization$full {
+    login: string;
+    id: number;
+    node_id: string;
+    url: string;
+    repos_url: string;
+    events_url: string;
+    hooks_url: string;
+    issues_url: string;
+    members_url: string;
+    public_members_url: string;
+    avatar_url: string;
+    description: string | null;
+    name?: string;
+    company?: string;
+    blog?: string;
+    location?: string;
+    email?: string;
+    twitter_username?: string | null;
+    is_verified?: boolean;
+    has_organization_projects: boolean;
+    has_repository_projects: boolean;
+    public_repos: number;
+    public_gists: number;
+    followers: number;
+    following: number;
+    html_url: string;
+    created_at: string;
+    type: string;
+    total_private_repos?: number;
+    owned_private_repos?: number;
+    private_gists?: number | null;
+    disk_usage?: number | null;
+    collaborators?: number | null;
+    billing_email?: string | null;
+    plan?: {
+      name: string;
+      space: number;
+      private_repos: number;
+      filled_seats?: number;
+      seats?: number;
+    };
+    default_repository_permission?: string | null;
+    members_can_create_repositories?: boolean | null;
+    two_factor_requirement_enabled?: boolean | null;
+    members_allowed_repository_creation_type?: string;
+    members_can_create_public_repositories?: boolean;
+    members_can_create_private_repositories?: boolean;
+    members_can_create_internal_repositories?: boolean;
+    members_can_create_pages?: boolean;
+    members_can_create_public_pages?: boolean;
+    members_can_create_private_pages?: boolean;
+    members_can_fork_private_repositories?: boolean | null;
+    updated_at: string;
+  }
+  /** The policy that controls the repositories in the organization that are allowed to run GitHub Actions. Can be one of: `all`, `none`, or `selected`. */
+  export type enabled$repositories = "all" | "none" | "selected";
+  export interface actions$organization$permissions {
+    enabled_repositories: Schemas.enabled$repositories;
+    /** The API URL to use to get or set the selected repositories that are allowed to run GitHub Actions, when `enabled_repositories` is set to `selected`. */
+    selected_repositories_url?: string;
+    allowed_actions?: Schemas.allowed$actions;
+    selected_actions_url?: Schemas.selected$actions$url;
+  }
+  export interface runner$groups$org {
+    id: number;
+    name: string;
+    visibility: string;
+    default: boolean;
+    /** Link to the selected repositories resource for this runner group. Not present unless visibility was set to `selected` */
+    selected_repositories_url?: string;
+    runners_url: string;
+    inherited: boolean;
+    inherited_allows_public_repositories?: boolean;
+    allows_public_repositories: boolean;
+  }
+  /** Secrets for GitHub Actions for an organization. */
+  export interface organization$actions$secret {
+    /** The name of the secret. */
+    name: string;
+    created_at: string;
+    updated_at: string;
+    /** Visibility of a secret */
+    visibility: "all" | "private" | "selected";
+    selected_repositories_url?: string;
+  }
+  /** The public key used for setting Actions Secrets. */
+  export interface actions$public$key {
+    /** The identifier for the key. */
+    key_id: string;
+    /** The Base64 encoded public key. */
+    key: string;
+    id?: number;
+    url?: string;
+    title?: string;
+    created_at?: string;
+  }
+  /** An object without any properties. */
+  export interface empty$object {}
+  /** Org Hook */
+  export interface org$hook {
+    id: number;
+    url: string;
+    ping_url: string;
+    name: string;
+    events: string[];
+    active: boolean;
+    config: {
+      url?: string;
+      insecure_ssl?: string;
+      content_type?: string;
+      secret?: string;
+    };
+    updated_at: string;
+    created_at: string;
+    type: string;
+  }
+  /** Org Membership */
+  export interface org$membership {
+    url: string;
+    /** The state of the member in the organization. The `pending` state indicates the user has not yet accepted an invitation. */
+    state: "active" | "pending";
+    /** The user's membership type in the organization. */
+    role: "admin" | "member" | "billing_manager";
+    organization_url: string;
+    organization: Schemas.organization$simple;
+    user: Schemas.nullable$simple$user;
+    permissions?: {
+      can_create_repository: boolean;
+    };
+  }
+  export interface org$pre$receive$hook {
+    id?: number;
+    name?: string;
+    enforcement?: string;
+    configuration_url?: string;
+    allow_downstream_configuration?: boolean;
+  }
+  /** Projects are a way to organize columns and cards of work. */
+  export interface project {
+    owner_url: string;
+    url: string;
+    html_url: string;
+    columns_url: string;
+    id: number;
+    node_id: string;
+    /** Name of the project */
+    name: string;
+    /** Body of the project */
+    body: string | null;
+    number: number;
+    /** State of the project; either 'open' or 'closed' */
+    state: string;
+    creator: Schemas.nullable$simple$user;
+    created_at: string;
+    updated_at: string;
+    /** The baseline permission that all organization members have on this project. Only present if owner is an organization. */
+    organization_permission?: "read" | "write" | "admin" | "none";
+    /** Whether or not this project can be seen by everyone. Only present if owner is an organization. */
+    private?: boolean;
+  }
+  /** Groups of organization members that gives permissions on specified repositories. */
+  export interface nullable$team$simple {
+    /** Unique identifier of the team */
+    id: number;
+    node_id: string;
+    /** URL for the team */
+    url: string;
+    members_url: string;
+    /** Name of the team */
+    name: string;
+    /** Description of the team */
+    description: string | null;
+    /** Permission that the team will have for its repositories */
+    permission: string;
+    /** The level of privacy this team should have */
+    privacy?: string;
+    html_url: string;
+    repositories_url: string;
+    slug: string;
+    /** Distinguished Name (DN) that team maps to within LDAP environment */
+    ldap_dn?: string;
+  }
+  /** Groups of organization members that gives permissions on specified repositories. */
+  export interface team {
+    id: number;
+    node_id: string;
+    name: string;
+    slug: string;
+    description: string | null;
+    privacy?: string;
+    permission: string;
+    permissions?: {
+      pull: boolean;
+      triage: boolean;
+      push: boolean;
+      maintain: boolean;
+      admin: boolean;
+    };
+    url: string;
+    html_url: string;
+    members_url: string;
+    repositories_url: string;
+    parent: Schemas.nullable$team$simple;
+  }
+  /** Groups of organization members that gives permissions on specified repositories. */
+  export interface team$full {
+    /** Unique identifier of the team */
+    id: number;
+    node_id: string;
+    /** URL for the team */
+    url: string;
+    html_url: string;
+    /** Name of the team */
+    name: string;
+    slug: string;
+    description: string | null;
+    /** The level of privacy this team should have */
+    privacy?: "closed" | "secret";
+    /** Permission that the team will have for its repositories */
+    permission: string;
+    members_url: string;
+    repositories_url: string;
+    parent?: Schemas.nullable$team$simple;
+    members_count: number;
+    repos_count: number;
+    created_at: string;
+    updated_at: string;
+    organization: Schemas.organization$full;
+    /** Distinguished Name (DN) that team maps to within LDAP environment */
+    ldap_dn?: string;
+  }
+  /** A team discussion is a persistent record of a free-form conversation within a team. */
+  export interface team$discussion {
+    author: Schemas.nullable$simple$user;
+    /** The main text of the discussion. */
+    body: string;
+    body_html: string;
+    /** The current version of the body content. If provided, this update operation will be rejected if the given version does not match the latest version on the server. */
+    body_version: string;
+    comments_count: number;
+    comments_url: string;
+    created_at: string;
+    last_edited_at: string | null;
+    html_url: string;
+    node_id: string;
+    /** The unique sequence number of a team discussion. */
+    number: number;
+    /** Whether or not this discussion should be pinned for easy retrieval. */
+    pinned: boolean;
+    /** Whether or not this discussion should be restricted to team members and organization administrators. */
+    private: boolean;
+    team_url: string;
+    /** The title of the discussion. */
+    title: string;
+    updated_at: string;
+    url: string;
+    reactions?: Schemas.reaction$rollup;
+  }
+  /** A reply to a discussion within a team. */
+  export interface team$discussion$comment {
+    author: Schemas.nullable$simple$user;
+    /** The main text of the comment. */
+    body: string;
+    body_html: string;
+    /** The current version of the body content. If provided, this update operation will be rejected if the given version does not match the latest version on the server. */
+    body_version: string;
+    created_at: string;
+    last_edited_at: string | null;
+    discussion_url: string;
+    html_url: string;
+    node_id: string;
+    /** The unique sequence number of a team discussion comment. */
+    number: number;
+    updated_at: string;
+    url: string;
+    reactions?: Schemas.reaction$rollup;
+  }
+  /** Reactions to conversations provide a way to help people express their feelings more simply and effectively. */
+  export interface reaction {
+    id: number;
+    node_id: string;
+    user: Schemas.nullable$simple$user;
+    /** The reaction to use */
+    content: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
+    created_at: string;
+  }
+  /** Team Membership */
+  export interface team$membership {
+    url: string;
+    /** The role of the user in the team. */
+    role: "member" | "maintainer";
+    /** The state of the user's membership in the team. */
+    state: "active" | "pending";
+  }
+  /** A team's access to a project. */
+  export interface team$project {
+    owner_url: string;
+    url: string;
+    html_url: string;
+    columns_url: string;
+    id: number;
+    node_id: string;
+    name: string;
+    body: string | null;
+    number: number;
+    state: string;
+    creator: Schemas.simple$user;
+    created_at: string;
+    updated_at: string;
+    /** The organization permission for this project. Only present when owner is an organization. */
+    organization_permission?: string;
+    /** Whether the project is private or not. Only present when owner is an organization. */
+    private?: boolean;
+    permissions: {
+      read: boolean;
+      write: boolean;
+      admin: boolean;
+    };
+  }
+  /** A team's access to a repository. */
+  export interface team$repository {
+    /** Unique identifier of the repository */
+    id: number;
+    node_id: string;
+    /** The name of the repository. */
+    name: string;
+    full_name: string;
+    license: Schemas.nullable$license$simple;
+    forks: number;
+    permissions?: {
+      admin: boolean;
+      pull: boolean;
+      triage?: boolean;
+      push: boolean;
+      maintain?: boolean;
+    };
+    owner: Schemas.nullable$simple$user;
+    /** Whether the repository is private or public. */
+    private: boolean;
+    html_url: string;
+    description: string | null;
+    fork: boolean;
+    url: string;
+    archive_url: string;
+    assignees_url: string;
+    blobs_url: string;
+    branches_url: string;
+    collaborators_url: string;
+    comments_url: string;
+    commits_url: string;
+    compare_url: string;
+    contents_url: string;
+    contributors_url: string;
+    deployments_url: string;
+    downloads_url: string;
+    events_url: string;
+    forks_url: string;
+    git_commits_url: string;
+    git_refs_url: string;
+    git_tags_url: string;
+    git_url: string;
+    issue_comment_url: string;
+    issue_events_url: string;
+    issues_url: string;
+    keys_url: string;
+    labels_url: string;
+    languages_url: string;
+    merges_url: string;
+    milestones_url: string;
+    notifications_url: string;
+    pulls_url: string;
+    releases_url: string;
+    ssh_url: string;
+    stargazers_url: string;
+    statuses_url: string;
+    subscribers_url: string;
+    subscription_url: string;
+    tags_url: string;
+    teams_url: string;
+    trees_url: string;
+    clone_url: string;
+    mirror_url: string | null;
+    hooks_url: string;
+    svn_url: string;
+    homepage: string | null;
+    language: string | null;
+    forks_count: number;
+    stargazers_count: number;
+    watchers_count: number;
+    size: number;
+    /** The default branch of the repository. */
+    default_branch: string;
+    open_issues_count: number;
+    /** Whether this repository acts as a template that can be used to generate new repositories. */
+    is_template?: boolean;
+    topics?: string[];
+    /** Whether issues are enabled. */
+    has_issues: boolean;
+    /** Whether projects are enabled. */
+    has_projects: boolean;
+    /** Whether the wiki is enabled. */
+    has_wiki: boolean;
+    has_pages: boolean;
+    /** Whether downloads are enabled. */
+    has_downloads: boolean;
+    /** Whether the repository is archived. */
+    archived: boolean;
+    /** Returns whether or not this repository disabled. */
+    disabled: boolean;
+    /** The repository visibility: public, private, or internal. */
+    visibility?: string;
+    pushed_at: string | null;
+    created_at: string | null;
+    updated_at: string | null;
+    /** Whether to allow rebase merges for pull requests. */
+    allow_rebase_merge?: boolean;
+    template_repository?: Schemas.nullable$repository;
+    temp_clone_token?: string;
+    /** Whether to allow squash merges for pull requests. */
+    allow_squash_merge?: boolean;
+    /** Whether to delete head branches when pull requests are merged */
+    delete_branch_on_merge?: boolean;
+    /** Whether to allow merge commits for pull requests. */
+    allow_merge_commit?: boolean;
+    /** Whether to allow forking this repo */
+    allow_forking?: boolean;
     subscribers_count?: number;
     network_count?: number;
     open_issues: number;
@@ -1672,11 +2116,13 @@ export namespace Schemas {
     id: number;
     node_id: string;
     note: string | null;
-    creator: Schemas.simple$user | null;
+    creator: Schemas.nullable$simple$user;
     created_at: string;
     updated_at: string;
     /** Whether or not the card is archived */
     archived?: boolean;
+    column_name?: string;
+    project_id?: string;
     column_url: string;
     content_url?: string;
     project_url: string;
@@ -1694,15 +2140,16 @@ export namespace Schemas {
     created_at: string;
     updated_at: string;
   }
-  /** Repository Collaborator Permission */
-  export interface repository$collaborator$permission {
+  /** Project Collaborator Permission */
+  export interface project$collaborator$permission {
     permission: string;
-    user: Schemas.simple$user | null;
+    user: Schemas.nullable$simple$user;
   }
   export interface rate$limit {
     limit: number;
     remaining: number;
     reset: number;
+    used: number;
   }
   /** Rate Limit Overview */
   export interface rate$limit$overview {
@@ -1713,8 +2160,17 @@ export namespace Schemas {
       source_import?: Schemas.rate$limit;
       integration_manifest?: Schemas.rate$limit;
       code_scanning_upload?: Schemas.rate$limit;
+      actions_runner_registration?: Schemas.rate$limit;
+      scim?: Schemas.rate$limit;
     };
     rate: Schemas.rate$limit;
+  }
+  /** Code of Conduct Simple */
+  export interface code$of$conduct$simple {
+    url: string;
+    key: string;
+    name: string;
+    html_url: string | null;
   }
   /** Full Repository */
   export interface full$repository {
@@ -1722,7 +2178,7 @@ export namespace Schemas {
     node_id: string;
     name: string;
     full_name: string;
-    owner: Schemas.simple$user | null;
+    owner: Schemas.simple$user;
     private: boolean;
     html_url: string;
     description: string | null;
@@ -1794,19 +2250,22 @@ export namespace Schemas {
     updated_at: string;
     permissions?: {
       admin: boolean;
-      pull: boolean;
+      maintain?: boolean;
       push: boolean;
+      triage?: boolean;
+      pull: boolean;
     };
     allow_rebase_merge?: boolean;
-    template_repository?: Schemas.repository | null;
+    template_repository?: Schemas.nullable$repository;
     temp_clone_token?: string | null;
     allow_squash_merge?: boolean;
     delete_branch_on_merge?: boolean;
     allow_merge_commit?: boolean;
+    allow_forking?: boolean;
     subscribers_count: number;
     network_count: number;
-    license: Schemas.license$simple | null;
-    organization?: Schemas.simple$user | null;
+    license: Schemas.nullable$license$simple;
+    organization?: Schemas.nullable$simple$user;
     parent?: Schemas.repository;
     source?: Schemas.repository;
     forks: number;
@@ -1815,6 +2274,7 @@ export namespace Schemas {
     watchers: number;
     /** Whether anonymous git access is allowed. */
     anonymous_access_enabled?: boolean;
+    code_of_conduct?: Schemas.code$of$conduct$simple;
   }
   /** An artifact */
   export interface artifact {
@@ -1829,7 +2289,7 @@ export namespace Schemas {
     /** Whether or not the artifact has expired. */
     expired: boolean;
     created_at: string | null;
-    expires_at: string;
+    expires_at: string | null;
     updated_at: string | null;
   }
   /** Information of a job execution in a workflow run */
@@ -1839,6 +2299,8 @@ export namespace Schemas {
     /** The id of the associated workflow run. */
     run_id: number;
     run_url: string;
+    /** Attempt number of the associated workflow run, 1 for first attempt and higher if the workflow was re-run. */
+    run_attempt?: number;
     node_id: string;
     /** The SHA of the commit that is being run. */
     head_sha: string;
@@ -1874,7 +2336,7 @@ export namespace Schemas {
   export type actions$enabled = boolean;
   export interface actions$repository$permissions {
     enabled: Schemas.actions$enabled;
-    allowed_actions: Schemas.allowed$actions;
+    allowed_actions?: Schemas.allowed$actions;
     selected_actions_url?: Schemas.selected$actions$url;
   }
   export interface pull$request$minimal {
@@ -1901,7 +2363,7 @@ export namespace Schemas {
     };
   }
   /** Simple Commit */
-  export interface simple$commit {
+  export interface nullable$simple$commit {
     id: string;
     tree_id: string;
     message: string;
@@ -1920,13 +2382,19 @@ export namespace Schemas {
     /** The ID of the workflow run. */
     id: number;
     /** The name of the workflow run. */
-    name?: string;
+    name?: string | null;
     node_id: string;
+    /** The ID of the associated check suite. */
+    check_suite_id?: number;
+    /** The node ID of the associated check suite. */
+    check_suite_node_id?: string;
     head_branch: string | null;
-    /** The SHA of the head commit that points to the version of the worflow being run. */
+    /** The SHA of the head commit that points to the version of the workflow being run. */
     head_sha: string;
     /** The auto incrementing run number for the workflow run. */
     run_number: number;
+    /** Attempt number of the run, 1 for first attempt and higher if the workflow was re-run. */
+    run_attempt?: number;
     event: string;
     status: string | null;
     conclusion: string | null;
@@ -1938,6 +2406,8 @@ export namespace Schemas {
     pull_requests: Schemas.pull$request$minimal[] | null;
     created_at: string;
     updated_at: string;
+    /** The start time of the latest run. Resets on re-run. */
+    run_started_at?: string;
     /** The URL to the jobs for the workflow run. */
     jobs_url: string;
     /** The URL to download the logs for the workflow run. */
@@ -1950,9 +2420,11 @@ export namespace Schemas {
     cancel_url: string;
     /** The URL to rerun the workflow run. */
     rerun_url: string;
+    /** The URL to the previous attempted run of this workflow, if one exists. */
+    previous_attempt_url?: string | null;
     /** The URL to the workflow. */
     workflow_url: string;
-    head_commit: Schemas.simple$commit;
+    head_commit: Schemas.nullable$simple$commit;
     repository: Schemas.minimal$repository;
     head_repository: Schemas.minimal$repository;
     head_repository_id?: number;
@@ -1970,13 +2442,21 @@ export namespace Schemas {
     node_id: string;
     name: string;
     path: string;
-    state: "active" | "deleted";
+    state: "active" | "deleted" | "disabled_fork" | "disabled_inactivity" | "disabled_manually";
     created_at: string;
     updated_at: string;
     url: string;
     html_url: string;
     badge_url: string;
     deleted_at?: string;
+  }
+  /** Protected Branch Required Status Check */
+  export interface protected$branch$required$status$check {
+    url?: string;
+    enforcement_level?: string;
+    contexts: string[];
+    contexts_url?: string;
+    strict?: boolean;
   }
   /** Protected Branch Admin Enforced */
   export interface protected$branch$admin$enforced {
@@ -2066,6 +2546,7 @@ export namespace Schemas {
         organizations_url?: string;
         received_events_url?: string;
         type?: string;
+        site_admin?: boolean;
       };
       name?: string;
       description?: string;
@@ -2085,12 +2566,8 @@ export namespace Schemas {
   /** Branch Protection */
   export interface branch$protection {
     url?: string;
-    required_status_checks: {
-      url?: string;
-      enforcement_level: string;
-      contexts: string[];
-      contexts_url?: string;
-    };
+    enabled?: boolean;
+    required_status_checks?: Schemas.protected$branch$required$status$check;
     enforce_admins?: Schemas.protected$branch$admin$enforced;
     required_pull_request_reviews?: Schemas.protected$branch$pull$request$review;
     restrictions?: Schemas.branch$restriction$policy;
@@ -2103,9 +2580,15 @@ export namespace Schemas {
     allow_deletions?: {
       enabled?: boolean;
     };
-    enabled: boolean;
+    required_conversation_resolution?: {
+      enabled?: boolean;
+    };
     name?: string;
     protection_url?: string;
+    required_signatures?: {
+      url: string;
+      enabled: boolean;
+    };
   }
   /** Short Branch */
   export interface short$branch {
@@ -2119,7 +2602,7 @@ export namespace Schemas {
     protection_url?: string;
   }
   /** Metaproperties for Git author/committer information. */
-  export interface git$user {
+  export interface nullable$git$user {
     name?: string;
     email?: string;
     date?: string;
@@ -2130,6 +2613,20 @@ export namespace Schemas {
     payload: string | null;
     signature: string | null;
   }
+  /** Diff Entry */
+  export interface diff$entry {
+    sha: string;
+    filename: string;
+    status: "added" | "removed" | "modified" | "renamed" | "copied" | "changed" | "unchanged";
+    additions: number;
+    deletions: number;
+    changes: number;
+    blob_url: string;
+    raw_url: string;
+    contents_url: string;
+    patch?: string;
+    previous_filename?: string;
+  }
   /** Commit */
   export interface commit {
     url: string;
@@ -2139,8 +2636,8 @@ export namespace Schemas {
     comments_url: string;
     commit: {
       url: string;
-      author: Schemas.git$user | null;
-      committer: Schemas.git$user | null;
+      author: Schemas.nullable$git$user;
+      committer: Schemas.nullable$git$user;
       message: string;
       comment_count: number;
       tree: {
@@ -2149,8 +2646,8 @@ export namespace Schemas {
       };
       verification?: Schemas.verification;
     };
-    author: Schemas.simple$user | null;
-    committer: Schemas.simple$user | null;
+    author: Schemas.nullable$simple$user;
+    committer: Schemas.nullable$simple$user;
     parents: {
       sha: string;
       url: string;
@@ -2161,19 +2658,7 @@ export namespace Schemas {
       deletions?: number;
       total?: number;
     };
-    files?: {
-      filename?: string;
-      additions?: number;
-      deletions?: number;
-      changes?: number;
-      status?: string;
-      raw_url?: string;
-      blob_url?: string;
-      patch?: string;
-      sha?: string;
-      contents_url?: string;
-      previous_filename?: string;
-    }[];
+    files?: Schemas.diff$entry[];
   }
   /** Branch With Protection */
   export interface branch$with$protection {
@@ -2231,6 +2716,31 @@ export namespace Schemas {
       enabled: boolean;
     };
     restrictions?: Schemas.branch$restriction$policy;
+    required_conversation_resolution?: {
+      enabled?: boolean;
+    };
+  }
+  /** A deployment created as the result of an Actions check run from a workflow that references an environment */
+  export interface deployment$simple {
+    url: string;
+    /** Unique identifier of the deployment */
+    id: number;
+    node_id: string;
+    /** Parameter to specify a task to execute */
+    task: string;
+    original_environment?: string;
+    /** Name for the target deployment environment. */
+    environment: string;
+    description: string | null;
+    created_at: string;
+    updated_at: string;
+    statuses_url: string;
+    repository_url: string;
+    /** Specifies if the given environment is will no longer exist at some point in the future. Default: false. */
+    transient_environment?: boolean;
+    /** Specifies if the given environment is one that end-users directly interact with. Default: false. */
+    production_environment?: boolean;
+    performed_via_github_app?: Schemas.nullable$integration;
   }
   /** A check performed on the code of a given code change */
   export interface check$run {
@@ -2260,8 +2770,9 @@ export namespace Schemas {
     check_suite: {
       id: number;
     } | null;
-    app: Schemas.integration | null;
+    app: Schemas.nullable$integration;
     pull_requests: Schemas.pull$request$minimal[];
+    deployment?: Schemas.deployment$simple;
   }
   /** Check Annotation */
   export interface check$annotation {
@@ -2276,6 +2787,21 @@ export namespace Schemas {
     raw_details: string | null;
     blob_href: string;
   }
+  /** Simple Commit */
+  export interface simple$commit {
+    id: string;
+    tree_id: string;
+    message: string;
+    timestamp: string;
+    author: {
+      name: string;
+      email: string;
+    } | null;
+    committer: {
+      name: string;
+      email: string;
+    } | null;
+  }
   /** A suite of checks performed on the code of a given code change */
   export interface check$suite {
     id: number;
@@ -2289,13 +2815,15 @@ export namespace Schemas {
     before: string | null;
     after: string | null;
     pull_requests: Schemas.pull$request$minimal[] | null;
-    app: Schemas.integration | null;
+    app: Schemas.nullable$integration;
     repository: Schemas.minimal$repository;
     created_at: string | null;
     updated_at: string | null;
     head_commit: Schemas.simple$commit;
     latest_check_runs_count: number;
     check_runs_url: string;
+    rerequestable?: boolean;
+    runs_rerequestable?: boolean;
   }
   /** Check suite configuration preferences for a repository. */
   export interface check$suite$preference {
@@ -2305,12 +2833,19 @@ export namespace Schemas {
         setting: boolean;
       }[];
     };
-    repository: Schemas.repository;
+    repository: Schemas.minimal$repository;
   }
+  /** The name of the tool used to generate the code scanning analysis. */
+  export type code$scanning$analysis$tool$name = string;
+  /** The GUID of the tool used to generate the code scanning analysis, if provided in the uploaded SARIF data. */
+  export type code$scanning$analysis$tool$guid = string;
+  /**
+   * The full Git reference, formatted as `refs/heads/<branch name>`,
+   * `refs/pull/<number>/merge`, or `refs/pull/<number>/head`.
+   */
+  export type code$scanning$ref = string;
   /** State of a code scanning alert. */
-  export type code$scanning$alert$state = "open" | "dismissed" | "fixed";
-  /** The full Git reference, formatted as `refs/heads/<branch name>`. */
-  export type code$scanning$alert$ref = string;
+  export type code$scanning$alert$state = "open" | "closed" | "dismissed" | "fixed";
   /** The security alert number. */
   export type alert$number = number;
   /** The time that the alert was created in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
@@ -2319,87 +2854,155 @@ export namespace Schemas {
   export type alert$url = string;
   /** The GitHub URL of the alert resource. */
   export type alert$html$url = string;
+  /** The REST API URL for fetching the list of instances for an alert. */
+  export type alert$instances$url = string;
   /** The time that the alert was dismissed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
   export type code$scanning$alert$dismissed$at = string;
-  export type code$scanning$alert$dismissed$reason = ("false positive" | "won't fix" | "used in tests") | string;
-  export interface code$scanning$alert$rule {
+  /** **Required when the state is dismissed.** The reason for dismissing or closing the alert. Can be one of: `false positive`, `won't fix`, and `used in tests`. */
+  export type code$scanning$alert$dismissed$reason = string;
+  export interface code$scanning$alert$rule$summary {
     /** A unique identifier for the rule used to detect the alert. */
     id?: string | null;
+    /** The name of the rule used to detect the alert. */
+    name?: string;
     /** The severity of the alert. */
     severity?: ("none" | "note" | "warning" | "error") | null;
     /** A short description of the rule used to detect the alert. */
     description?: string;
   }
-  /** The name of the tool used to generate the code scanning analysis alert. */
-  export type code$scanning$analysis$tool$name = string;
+  /** The version of the tool used to generate the code scanning analysis. */
+  export type code$scanning$analysis$tool$version = string;
   export interface code$scanning$analysis$tool {
     name?: Schemas.code$scanning$analysis$tool$name;
-    /** The version of the tool used to detect the alert. */
-    version?: string | null;
-  }
-  export interface code$scanning$alert$code$scanning$alert$items {
-    number: Schemas.alert$number;
-    created_at: Schemas.alert$created$at;
-    url: Schemas.alert$url;
-    html_url: Schemas.alert$html$url;
-    state: Schemas.code$scanning$alert$state;
-    dismissed_by: Schemas.simple$user;
-    dismissed_at: Schemas.code$scanning$alert$dismissed$at;
-    dismissed_reason: Schemas.code$scanning$alert$dismissed$reason;
-    rule: Schemas.code$scanning$alert$rule;
-    tool: Schemas.code$scanning$analysis$tool;
+    version?: Schemas.code$scanning$analysis$tool$version;
+    guid?: Schemas.code$scanning$analysis$tool$guid;
   }
   /** Identifies the configuration under which the analysis was executed. For example, in GitHub Actions this includes the workflow filename and job name. */
   export type code$scanning$analysis$analysis$key = string;
   /** Identifies the variable values associated with the environment in which the analysis that generated this alert instance was performed, such as the language that was analyzed. */
   export type code$scanning$alert$environment = string;
-  export type code$scanning$alert$instances =
-    | {
-        ref?: Schemas.code$scanning$alert$ref;
-        analysis_key?: Schemas.code$scanning$analysis$analysis$key;
-        environment?: Schemas.code$scanning$alert$environment;
-        matrix_vars?: string | null;
-        state?: Schemas.code$scanning$alert$state;
-      }[]
-    | null;
-  export interface code$scanning$alert$code$scanning$alert {
+  /** Identifies the configuration under which the analysis was executed. Used to distinguish between multiple analyses for the same tool and commit, but performed on different languages or different parts of the code. */
+  export type code$scanning$analysis$category = string;
+  /** Describe a region within a file for the alert. */
+  export interface code$scanning$alert$location {
+    path?: string;
+    start_line?: number;
+    end_line?: number;
+    start_column?: number;
+    end_column?: number;
+  }
+  /** A classification of the file. For example to identify it as generated. */
+  export type code$scanning$alert$classification = "source" | "generated" | "test" | "library";
+  export interface code$scanning$alert$instance {
+    ref?: Schemas.code$scanning$ref;
+    analysis_key?: Schemas.code$scanning$analysis$analysis$key;
+    environment?: Schemas.code$scanning$alert$environment;
+    category?: Schemas.code$scanning$analysis$category;
+    state?: Schemas.code$scanning$alert$state;
+    commit_sha?: string;
+    message?: {
+      text?: string;
+    };
+    location?: Schemas.code$scanning$alert$location;
+    html_url?: string;
+    /**
+     * Classifications that have been applied to the file that triggered the alert.
+     * For example identifying it as documentation, or a generated file.
+     */
+    classifications?: Schemas.code$scanning$alert$classification[];
+  }
+  export interface code$scanning$alert$items {
     number: Schemas.alert$number;
     created_at: Schemas.alert$created$at;
     url: Schemas.alert$url;
     html_url: Schemas.alert$html$url;
-    instances: Schemas.code$scanning$alert$instances;
+    instances_url: Schemas.alert$instances$url;
     state: Schemas.code$scanning$alert$state;
-    dismissed_by: Schemas.simple$user;
+    dismissed_by: Schemas.nullable$simple$user;
+    dismissed_at: Schemas.code$scanning$alert$dismissed$at;
+    dismissed_reason: Schemas.code$scanning$alert$dismissed$reason;
+    rule: Schemas.code$scanning$alert$rule$summary;
+    tool: Schemas.code$scanning$analysis$tool;
+    most_recent_instance: Schemas.code$scanning$alert$instance;
+  }
+  export interface code$scanning$alert$rule {
+    /** A unique identifier for the rule used to detect the alert. */
+    id?: string | null;
+    /** The name of the rule used to detect the alert. */
+    name?: string;
+    /** The severity of the alert. */
+    severity?: ("none" | "note" | "warning" | "error") | null;
+    /** A short description of the rule used to detect the alert. */
+    description?: string;
+    /** description of the rule used to detect the alert. */
+    full_description?: string;
+    /** A set of tags applicable for the rule. */
+    tags?: string[] | null;
+    /** Detailed documentation for the rule as GitHub Flavored Markdown. */
+    help?: string | null;
+  }
+  export interface code$scanning$alert {
+    number: Schemas.alert$number;
+    created_at: Schemas.alert$created$at;
+    url: Schemas.alert$url;
+    html_url: Schemas.alert$html$url;
+    instances_url: Schemas.alert$instances$url;
+    state: Schemas.code$scanning$alert$state;
+    dismissed_by: Schemas.nullable$simple$user;
     dismissed_at: Schemas.code$scanning$alert$dismissed$at;
     dismissed_reason: Schemas.code$scanning$alert$dismissed$reason;
     rule: Schemas.code$scanning$alert$rule;
     tool: Schemas.code$scanning$analysis$tool;
+    most_recent_instance: Schemas.code$scanning$alert$instance;
+    instances?: any;
   }
   /** Sets the state of the code scanning alert. Can be one of `open` or `dismissed`. You must provide `dismissed_reason` when you set the state to `dismissed`. */
   export type code$scanning$alert$set$state = "open" | "dismissed";
-  /** The full Git reference of the code scanning analysis file, formatted as `refs/heads/<branch name>`. */
-  export type code$scanning$analysis$ref = string;
-  /** The commit SHA of the code scanning analysis file. */
+  /** An identifier for the upload. */
+  export type code$scanning$analysis$sarif$id = string;
+  /** The SHA of the commit to which the analysis you are uploading relates. */
   export type code$scanning$analysis$commit$sha = string;
-  /** The time that the analysis was created in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
-  export type code$scanning$analysis$created$at = string;
   /** Identifies the variable values associated with the environment in which this analysis was performed. */
   export type code$scanning$analysis$environment = string;
-  export interface code$scanning$analysis$code$scanning$analysis {
+  /** The time that the analysis was created in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
+  export type code$scanning$analysis$created$at = string;
+  /** The REST API URL of the analysis resource. */
+  export type code$scanning$analysis$url = string;
+  export interface code$scanning$analysis {
+    ref: Schemas.code$scanning$ref;
     commit_sha: Schemas.code$scanning$analysis$commit$sha;
-    ref: Schemas.code$scanning$analysis$ref;
     analysis_key: Schemas.code$scanning$analysis$analysis$key;
-    created_at: Schemas.code$scanning$analysis$created$at;
-    tool_name: Schemas.code$scanning$analysis$tool$name;
-    error: string;
     environment: Schemas.code$scanning$analysis$environment;
+    category?: Schemas.code$scanning$analysis$category;
+    error: string;
+    created_at: Schemas.code$scanning$analysis$created$at;
+    /** The total number of results in the analysis. */
+    results_count: number;
+    /** The total number of rules used in the analysis. */
+    rules_count: number;
+    /** Unique identifier for this analysis. */
+    id: number;
+    url: Schemas.code$scanning$analysis$url;
+    sarif_id: Schemas.code$scanning$analysis$sarif$id;
+    tool: Schemas.code$scanning$analysis$tool;
+    deletable: boolean;
+    /** Warning generated when processing the analysis */
+    warning: string;
+    tool_name?: string;
   }
-  /** A Base64 string representing the SARIF file to upload. You must first compress your SARIF file using [`gzip`](http://www.gnu.org/software/gzip/manual/gzip.html) and then translate the contents of the file into a Base64 encoding string. */
+  /** A Base64 string representing the SARIF file to upload. You must first compress your SARIF file using [`gzip`](http://www.gnu.org/software/gzip/manual/gzip.html) and then translate the contents of the file into a Base64 encoding string. For more information, see "[SARIF support for code scanning](https://docs.github.com/enterprise-server@3.0/code-security/secure-coding/sarif-support-for-code-scanning)." */
   export type code$scanning$analysis$sarif$file = string;
+  export interface code$scanning$sarifs$receipt {
+    id?: Schemas.code$scanning$analysis$sarif$id;
+    /** The REST API URL for checking the status of the upload. */
+    url?: string;
+  }
   /** Collaborator */
   export interface collaborator {
     login: string;
     id: number;
+    email?: string | null;
+    name?: string | null;
     node_id: string;
     avatar_url: string;
     gravatar_id: string | null;
@@ -2418,7 +3021,9 @@ export namespace Schemas {
     site_admin: boolean;
     permissions?: {
       pull: boolean;
+      triage?: boolean;
       push: boolean;
+      maintain?: boolean;
       admin: boolean;
     };
   }
@@ -2427,10 +3032,10 @@ export namespace Schemas {
     /** Unique identifier of the repository invitation. */
     id: number;
     repository: Schemas.minimal$repository;
-    invitee: Schemas.simple$user | null;
-    inviter: Schemas.simple$user | null;
+    invitee: Schemas.nullable$simple$user;
+    inviter: Schemas.nullable$simple$user;
     /** The permission associated with the invitation. */
-    permissions: "read" | "write" | "admin";
+    permissions: "read" | "write" | "admin" | "triage" | "maintain";
     created_at: string;
     /** Whether or not the invitation has expired */
     expired?: boolean;
@@ -2438,6 +3043,41 @@ export namespace Schemas {
     url: string;
     html_url: string;
     node_id: string;
+  }
+  /** Collaborator */
+  export interface nullable$collaborator {
+    login: string;
+    id: number;
+    email?: string | null;
+    name?: string | null;
+    node_id: string;
+    avatar_url: string;
+    gravatar_id: string | null;
+    url: string;
+    html_url: string;
+    followers_url: string;
+    following_url: string;
+    gists_url: string;
+    starred_url: string;
+    subscriptions_url: string;
+    organizations_url: string;
+    repos_url: string;
+    events_url: string;
+    received_events_url: string;
+    type: string;
+    site_admin: boolean;
+    permissions?: {
+      pull: boolean;
+      triage?: boolean;
+      push: boolean;
+      maintain?: boolean;
+      admin: boolean;
+    };
+  }
+  /** Repository Collaborator Permission */
+  export interface repository$collaborator$permission {
+    permission: string;
+    user: Schemas.nullable$collaborator;
   }
   /** Commit Comment */
   export interface commit$comment {
@@ -2450,7 +3090,7 @@ export namespace Schemas {
     position: number | null;
     line: number | null;
     commit_id: string;
-    user: Schemas.simple$user | null;
+    user: Schemas.nullable$simple$user;
     created_at: string;
     updated_at: string;
     author_association: Schemas.author_association;
@@ -2496,41 +3136,41 @@ export namespace Schemas {
     state: string;
     locked: boolean;
     title: string;
-    user: Schemas.simple$user | null;
+    user: Schemas.nullable$simple$user;
     body: string | null;
     labels: {
-      id?: number;
-      node_id?: string;
-      url?: string;
-      name?: string;
-      description?: string;
-      color?: string;
-      default?: boolean;
+      id: number;
+      node_id: string;
+      url: string;
+      name: string;
+      description: string;
+      color: string;
+      default: boolean;
     }[];
-    milestone: Schemas.milestone | null;
+    milestone: Schemas.nullable$milestone;
     active_lock_reason?: string | null;
     created_at: string;
     updated_at: string;
     closed_at: string | null;
     merged_at: string | null;
     merge_commit_sha: string | null;
-    assignee: Schemas.simple$user | null;
+    assignee: Schemas.nullable$simple$user;
     assignees?: Schemas.simple$user[] | null;
     requested_reviewers?: Schemas.simple$user[] | null;
-    requested_teams?: Schemas.team$simple[] | null;
+    requested_teams?: Schemas.team[] | null;
     head: {
       label: string;
       ref: string;
       repo: Schemas.repository;
       sha: string;
-      user: Schemas.simple$user | null;
+      user: Schemas.nullable$simple$user;
     };
     base: {
       label: string;
       ref: string;
       repo: Schemas.repository;
       sha: string;
-      user: Schemas.simple$user | null;
+      user: Schemas.nullable$simple$user;
     };
     _links: {
       comments: Schemas.link;
@@ -2581,21 +3221,7 @@ export namespace Schemas {
     context: string;
     created_at: string;
     updated_at: string;
-    creator: Schemas.simple$user;
-  }
-  /** Diff Entry */
-  export interface diff$entry {
-    sha: string;
-    filename: string;
-    status: string;
-    additions: number;
-    deletions: number;
-    changes: number;
-    blob_url: string;
-    raw_url: string;
-    contents_url: string;
-    patch?: string;
-    previous_filename?: string;
+    creator: Schemas.nullable$simple$user;
   }
   /** Commit Comparison */
   export interface commit$comparison {
@@ -2611,7 +3237,18 @@ export namespace Schemas {
     behind_by: number;
     total_commits: number;
     commits: Schemas.commit[];
-    files: Schemas.diff$entry[];
+    files?: Schemas.diff$entry[];
+  }
+  /** Content Reference attachments allow you to provide context around URLs posted in comments */
+  export interface content$reference$attachment {
+    /** The ID of the attachment */
+    id: number;
+    /** The title of the attachment */
+    title: string;
+    /** The body of the attachment */
+    body: string;
+    /** The node_id of the content attachment */
+    node_id?: string;
   }
   /** Content Tree */
   export interface content$tree {
@@ -2808,12 +3445,12 @@ export namespace Schemas {
     ref: string;
     /** Parameter to specify a task to execute */
     task: string;
-    payload: {};
+    payload: {} | string;
     original_environment?: string;
     /** Name for the target deployment environment. */
     environment: string;
     description: string | null;
-    creator: Schemas.simple$user | null;
+    creator: Schemas.nullable$simple$user;
     created_at: string;
     updated_at: string;
     statuses_url: string;
@@ -2822,7 +3459,7 @@ export namespace Schemas {
     transient_environment?: boolean;
     /** Specifies if the given environment is one that end-users directly interact with. Default: false. */
     production_environment?: boolean;
-    performed_via_github_app?: Schemas.integration | null;
+    performed_via_github_app?: Schemas.nullable$integration;
   }
   /** The status of a deployment. */
   export interface deployment$status {
@@ -2831,7 +3468,7 @@ export namespace Schemas {
     node_id: string;
     /** The state of the status. */
     state: "error" | "failure" | "inactive" | "pending" | "success" | "queued" | "in_progress";
-    creator: Schemas.simple$user | null;
+    creator: Schemas.nullable$simple$user;
     /** A short description of the status. */
     description: string;
     /** The environment of the deployment that the status is for. */
@@ -2846,7 +3483,7 @@ export namespace Schemas {
     environment_url?: string;
     /** The URL to associate with this status. */
     log_url?: string;
-    performed_via_github_app?: Schemas.integration | null;
+    performed_via_github_app?: Schemas.nullable$integration;
   }
   /** Short Blob */
   export interface short$blob {
@@ -2992,6 +3629,65 @@ export namespace Schemas {
     ping_url: string;
     last_response: Schemas.hook$response;
   }
+  /** Issues are a great way to keep track of tasks, enhancements, and bugs for your projects. */
+  export interface nullable$issue {
+    id: number;
+    node_id: string;
+    /** URL for the issue */
+    url: string;
+    repository_url: string;
+    labels_url: string;
+    comments_url: string;
+    events_url: string;
+    html_url: string;
+    /** Number uniquely identifying the issue within its repository */
+    number: number;
+    /** State of the issue; either 'open' or 'closed' */
+    state: string;
+    /** Title of the issue */
+    title: string;
+    /** Contents of the issue */
+    body?: string | null;
+    user: Schemas.nullable$simple$user;
+    /** Labels to associate with this issue; pass one or more label names to replace the set of labels on this issue; send an empty array to clear all labels from the issue; note that the labels are silently dropped for users without push access to the repository */
+    labels: (
+      | string
+      | {
+          id?: number;
+          node_id?: string;
+          url?: string;
+          name?: string;
+          description?: string | null;
+          color?: string | null;
+          default?: boolean;
+        }
+    )[];
+    assignee: Schemas.nullable$simple$user;
+    assignees?: Schemas.simple$user[] | null;
+    milestone: Schemas.nullable$milestone;
+    locked: boolean;
+    active_lock_reason?: string | null;
+    comments: number;
+    pull_request?: {
+      merged_at?: string | null;
+      diff_url: string | null;
+      html_url: string | null;
+      patch_url: string | null;
+      url: string | null;
+    };
+    closed_at: string | null;
+    created_at: string;
+    updated_at: string;
+    draft?: boolean;
+    closed_by?: Schemas.nullable$simple$user;
+    body_html?: string;
+    body_text?: string;
+    timeline_url?: string;
+    repository?: Schemas.repository;
+    performed_via_github_app?: Schemas.nullable$integration;
+    author_association: Schemas.author_association;
+    reactions?: Schemas.reaction$rollup;
+  }
   /** Issue Event Label */
   export interface issue$event$label {
     name: string | null;
@@ -3026,17 +3722,17 @@ export namespace Schemas {
     id: number;
     node_id: string;
     url: string;
-    actor: Schemas.simple$user | null;
+    actor: Schemas.nullable$simple$user;
     event: string;
     commit_id: string | null;
     commit_url: string | null;
     created_at: string;
-    issue?: Schemas.issue$simple;
+    issue?: Schemas.nullable$issue;
     label?: Schemas.issue$event$label;
-    assignee?: Schemas.simple$user | null;
-    assigner?: Schemas.simple$user | null;
-    review_requester?: Schemas.simple$user | null;
-    requested_reviewer?: Schemas.simple$user | null;
+    assignee?: Schemas.nullable$simple$user;
+    assigner?: Schemas.nullable$simple$user;
+    review_requester?: Schemas.nullable$simple$user;
+    requested_reviewer?: Schemas.nullable$simple$user;
     requested_team?: Schemas.team;
     dismissed_review?: Schemas.issue$event$dismissed$review;
     milestone?: Schemas.issue$event$milestone;
@@ -3044,31 +3740,525 @@ export namespace Schemas {
     rename?: Schemas.issue$event$rename;
     author_association?: Schemas.author_association;
     lock_reason?: string | null;
+    performed_via_github_app?: Schemas.nullable$integration;
   }
-  /** Issue Event for Issue */
-  export interface issue$event$for$issue {
-    id?: number;
-    node_id?: string;
-    url?: string;
-    actor?: Schemas.simple$user;
-    event?: string;
-    commit_id?: string | null;
-    commit_url?: string | null;
-    created_at?: string;
-    sha?: string;
-    html_url?: string;
-    message?: string;
-    issue_url?: string;
-    updated_at?: string;
-    author_association?: Schemas.author_association;
+  /** Labeled Issue Event */
+  export interface labeled$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+    label: {
+      name: string;
+      color: string;
+    };
+  }
+  /** Unlabeled Issue Event */
+  export interface unlabeled$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+    label: {
+      name: string;
+      color: string;
+    };
+  }
+  /** Assigned Issue Event */
+  export interface assigned$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.integration;
+    assignee: Schemas.simple$user;
+    assigner: Schemas.simple$user;
+  }
+  /** Unassigned Issue Event */
+  export interface unassigned$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+    assignee: Schemas.simple$user;
+    assigner: Schemas.simple$user;
+  }
+  /** Milestoned Issue Event */
+  export interface milestoned$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+    milestone: {
+      title: string;
+    };
+  }
+  /** Demilestoned Issue Event */
+  export interface demilestoned$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+    milestone: {
+      title: string;
+    };
+  }
+  /** Renamed Issue Event */
+  export interface renamed$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+    rename: {
+      from: string;
+      to: string;
+    };
+  }
+  /** Review Requested Issue Event */
+  export interface review$requested$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+    review_requester: Schemas.simple$user;
+    requested_team?: Schemas.team;
+    requested_reviewer?: Schemas.simple$user;
+  }
+  /** Review Request Removed Issue Event */
+  export interface review$request$removed$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+    review_requester: Schemas.simple$user;
+    requested_team?: Schemas.team;
+    requested_reviewer?: Schemas.simple$user;
+  }
+  /** Review Dismissed Issue Event */
+  export interface review$dismissed$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+    dismissed_review: {
+      state: string;
+      review_id: number;
+      dismissal_message: string | null;
+      dismissal_commit_id?: string;
+    };
+  }
+  /** Locked Issue Event */
+  export interface locked$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+    lock_reason: string | null;
+  }
+  /** Added to Project Issue Event */
+  export interface added$to$project$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+    project_card?: {
+      id: number;
+      url: string;
+      project_id: number;
+      project_url: string;
+      column_name: string;
+      previous_column_name?: string;
+    };
+  }
+  /** Moved Column in Project Issue Event */
+  export interface moved$column$in$project$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+    project_card?: {
+      id: number;
+      url: string;
+      project_id: number;
+      project_url: string;
+      column_name: string;
+      previous_column_name?: string;
+    };
+  }
+  /** Removed from Project Issue Event */
+  export interface removed$from$project$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+    project_card?: {
+      id: number;
+      url: string;
+      project_id: number;
+      project_url: string;
+      column_name: string;
+      previous_column_name?: string;
+    };
+  }
+  /** Converted Note to Issue Issue Event */
+  export interface converted$note$to$issue$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.integration;
+    project_card?: {
+      id: number;
+      url: string;
+      project_id: number;
+      project_url: string;
+      column_name: string;
+      previous_column_name?: string;
+    };
+  }
+  export type issue$event$for$issue =
+    | Schemas.labeled$issue$event
+    | Schemas.unlabeled$issue$event
+    | Schemas.assigned$issue$event
+    | Schemas.unassigned$issue$event
+    | Schemas.milestoned$issue$event
+    | Schemas.demilestoned$issue$event
+    | Schemas.renamed$issue$event
+    | Schemas.review$requested$issue$event
+    | Schemas.review$request$removed$issue$event
+    | Schemas.review$dismissed$issue$event
+    | Schemas.locked$issue$event
+    | Schemas.added$to$project$issue$event
+    | Schemas.moved$column$in$project$issue$event
+    | Schemas.removed$from$project$issue$event
+    | Schemas.converted$note$to$issue$issue$event;
+  /** Color-coded labels help you categorize and filter your issues (just like labels in Gmail). */
+  export interface label {
+    id: number;
+    node_id: string;
+    /** URL for the label */
+    url: string;
+    /** The name of the label. */
+    name: string;
+    description: string | null;
+    /** 6-character hex code, without the leading #, identifying the color */
+    color: string;
+    default: boolean;
+  }
+  /** Timeline Comment Event */
+  export interface timeline$comment$event {
+    event: string;
+    actor: Schemas.simple$user;
+    /** Unique identifier of the issue comment */
+    id: number;
+    node_id: string;
+    /** URL for the issue comment */
+    url: string;
+    /** Contents of the issue comment */
     body?: string;
-    lock_reason?: string;
+    body_text?: string;
+    body_html?: string;
+    html_url: string;
+    user: Schemas.simple$user;
+    created_at: string;
+    updated_at: string;
+    issue_url: string;
+    author_association: Schemas.author_association;
+    performed_via_github_app?: Schemas.nullable$integration;
+    reactions?: Schemas.reaction$rollup;
+  }
+  /** Timeline Cross Referenced Event */
+  export interface timeline$cross$referenced$event {
+    event: string;
+    actor?: Schemas.simple$user;
+    created_at: string;
+    updated_at: string;
+    source: {
+      type?: string;
+      issue?: Schemas.issue;
+    };
+  }
+  /** Timeline Committed Event */
+  export interface timeline$committed$event {
+    event?: string;
+    /** SHA for the commit */
+    sha: string;
+    node_id: string;
+    url: string;
+    /** Identifying information for the git-user */
+    author: {
+      /** Timestamp of the commit */
+      date: string;
+      /** Git email address of the user */
+      email: string;
+      /** Name of the git user */
+      name: string;
+    };
+    /** Identifying information for the git-user */
+    committer: {
+      /** Timestamp of the commit */
+      date: string;
+      /** Git email address of the user */
+      email: string;
+      /** Name of the git user */
+      name: string;
+    };
+    /** Message describing the purpose of the commit */
+    message: string;
+    tree: {
+      /** SHA for the commit */
+      sha: string;
+      url: string;
+    };
+    parents: {
+      /** SHA for the commit */
+      sha: string;
+      url: string;
+      html_url: string;
+    }[];
+    verification: {
+      verified: boolean;
+      reason: string;
+      signature: string | null;
+      payload: string | null;
+    };
+    html_url: string;
+  }
+  /** Timeline Reviewed Event */
+  export interface timeline$reviewed$event {
+    event: string;
+    /** Unique identifier of the review */
+    id: number;
+    node_id: string;
+    user: Schemas.simple$user;
+    /** The text of the review. */
+    body: string | null;
+    state: string;
+    html_url: string;
+    pull_request_url: string;
+    _links: {
+      html: {
+        href: string;
+      };
+      pull_request: {
+        href: string;
+      };
+    };
     submitted_at?: string;
-    state?: string;
-    pull_request_url?: string;
+    /** A commit SHA for the review. */
+    commit_id: string;
+    body_html?: string;
+    body_text?: string;
+    author_association: Schemas.author_association;
+  }
+  /** Pull Request Review Comments are comments on a portion of the Pull Request's diff. */
+  export interface pull$request$review$comment {
+    /** URL for the pull request review comment */
+    url: string;
+    /** The ID of the pull request review to which the comment belongs. */
+    pull_request_review_id: number | null;
+    /** The ID of the pull request review comment. */
+    id: number;
+    /** The node ID of the pull request review comment. */
+    node_id: string;
+    /** The diff of the line that the comment refers to. */
+    diff_hunk: string;
+    /** The relative path of the file to which the comment applies. */
+    path: string;
+    /** The line index in the diff to which the comment applies. */
+    position: number;
+    /** The index of the original line in the diff to which the comment applies. */
+    original_position: number;
+    /** The SHA of the commit to which the comment applies. */
+    commit_id: string;
+    /** The SHA of the original commit to which the comment applies. */
+    original_commit_id: string;
+    /** The comment ID to reply to. */
+    in_reply_to_id?: number;
+    user: Schemas.simple$user;
+    /** The text of the comment. */
+    body: string;
+    created_at: string;
+    updated_at: string;
+    /** HTML URL for the pull request review comment. */
+    html_url: string;
+    /** URL for the pull request that the review comment belongs to. */
+    pull_request_url: string;
+    author_association: Schemas.author_association;
+    _links: {
+      self: {
+        href: string;
+      };
+      html: {
+        href: string;
+      };
+      pull_request: {
+        href: string;
+      };
+    };
+    /** The first line of the range for a multi-line comment. */
+    start_line?: number | null;
+    /** The first line of the range for a multi-line comment. */
+    original_start_line?: number | null;
+    /** The side of the first line of the range for a multi-line comment. */
+    start_side?: ("LEFT" | "RIGHT") | null;
+    /** The line of the blob to which the comment applies. The last line of the range for a multi-line comment */
+    line?: number;
+    /** The line of the blob to which the comment applies. The last line of the range for a multi-line comment */
+    original_line?: number;
+    /** The side of the diff to which the comment applies. The side of the last line of the range for a multi-line comment */
+    side?: "LEFT" | "RIGHT";
+    reactions?: Schemas.reaction$rollup;
     body_html?: string;
     body_text?: string;
   }
+  /** Timeline Line Commented Event */
+  export interface timeline$line$commented$event {
+    event?: string;
+    node_id?: string;
+    comments?: Schemas.pull$request$review$comment[];
+  }
+  /** Timeline Commit Commented Event */
+  export interface timeline$commit$commented$event {
+    event?: string;
+    node_id?: string;
+    commit_id?: string;
+    comments?: Schemas.commit$comment[];
+  }
+  /** Timeline Assigned Issue Event */
+  export interface timeline$assigned$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+    assignee: Schemas.simple$user;
+  }
+  /** Timeline Unassigned Issue Event */
+  export interface timeline$unassigned$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+    assignee: Schemas.simple$user;
+  }
+  /** State Change Issue Event */
+  export interface state$change$issue$event {
+    id: number;
+    node_id: string;
+    url: string;
+    actor: Schemas.simple$user;
+    event: string;
+    commit_id: string | null;
+    commit_url: string | null;
+    created_at: string;
+    performed_via_github_app: Schemas.nullable$integration;
+  }
+  export type timeline$issue$events =
+    | Schemas.labeled$issue$event
+    | Schemas.unlabeled$issue$event
+    | Schemas.milestoned$issue$event
+    | Schemas.demilestoned$issue$event
+    | Schemas.renamed$issue$event
+    | Schemas.review$requested$issue$event
+    | Schemas.review$request$removed$issue$event
+    | Schemas.review$dismissed$issue$event
+    | Schemas.locked$issue$event
+    | Schemas.added$to$project$issue$event
+    | Schemas.moved$column$in$project$issue$event
+    | Schemas.removed$from$project$issue$event
+    | Schemas.converted$note$to$issue$issue$event
+    | Schemas.timeline$comment$event
+    | Schemas.timeline$cross$referenced$event
+    | Schemas.timeline$committed$event
+    | Schemas.timeline$reviewed$event
+    | Schemas.timeline$line$commented$event
+    | Schemas.timeline$commit$commented$event
+    | Schemas.timeline$assigned$issue$event
+    | Schemas.timeline$unassigned$issue$event
+    | Schemas.state$change$issue$event;
   /** An SSH key granting access to a single repository. */
   export interface deploy$key {
     id: number;
@@ -3101,11 +4291,52 @@ export namespace Schemas {
       html: string | null;
       self: string;
     };
-    license: Schemas.license$simple | null;
+    license: Schemas.nullable$license$simple;
+  }
+  /** A collection of related issues and pull requests. */
+  export interface milestone {
+    url: string;
+    html_url: string;
+    labels_url: string;
+    id: number;
+    node_id: string;
+    /** The number of the milestone. */
+    number: number;
+    /** The state of the milestone. */
+    state: "open" | "closed";
+    /** The title of the milestone. */
+    title: string;
+    description: string | null;
+    creator: Schemas.nullable$simple$user;
+    open_issues: number;
+    closed_issues: number;
+    created_at: string;
+    updated_at: string;
+    closed_at: string | null;
+    due_on: string | null;
   }
   export interface pages$source$hash {
     branch: string;
     path: string;
+  }
+  export interface pages$https$certificate {
+    state:
+      | "new"
+      | "authorization_created"
+      | "authorization_pending"
+      | "authorized"
+      | "authorization_revoked"
+      | "issued"
+      | "uploaded"
+      | "approved"
+      | "errored"
+      | "bad_authz"
+      | "destroy_pending"
+      | "dns_changed";
+    description: string;
+    /** Array of the domain set and its alternate name (if it is configured) */
+    domains: string[];
+    expires_at?: string;
   }
   /** The configuration for GitHub Pages for a repository. */
   export interface page {
@@ -3115,6 +4346,10 @@ export namespace Schemas {
     status: ("built" | "building" | "errored") | null;
     /** The Pages site's custom domain */
     cname: string | null;
+    /** The state if the domain is verified */
+    protected_domain_state?: ("pending" | "verified" | "unverified") | null;
+    /** The timestamp when a pending domain becomes unverified. */
+    pending_domain_unverified_at?: string | null;
     /** Whether the Page has a custom 404 page. */
     custom_404: boolean;
     /** The web address the Page can be accessed from. */
@@ -3122,6 +4357,9 @@ export namespace Schemas {
     source?: Schemas.pages$source$hash;
     /** Whether the GitHub Pages site is publicly visible. If set to `true`, the site is accessible to anyone on the internet. If set to `false`, the site will only be accessible to users who have at least `read` access to the repository that published the site. */
     public: boolean;
+    https_certificate?: Schemas.pages$https$certificate;
+    /** Whether https is enabled on the domain */
+    https_enforced?: boolean;
   }
   /** Page Build */
   export interface page$build {
@@ -3130,7 +4368,7 @@ export namespace Schemas {
     error: {
       message: string | null;
     };
-    pusher: Schemas.simple$user | null;
+    pusher: Schemas.nullable$simple$user;
     commit: string;
     duration: number;
     created_at: string;
@@ -3146,6 +4384,28 @@ export namespace Schemas {
     name?: string;
     enforcement?: string;
     configuration_url?: string;
+  }
+  /** Groups of organization members that gives permissions on specified repositories. */
+  export interface team$simple {
+    /** Unique identifier of the team */
+    id: number;
+    node_id: string;
+    /** URL for the team */
+    url: string;
+    members_url: string;
+    /** Name of the team */
+    name: string;
+    /** Description of the team */
+    description: string | null;
+    /** Permission that the team will have for its repositories */
+    permission: string;
+    /** The level of privacy this team should have */
+    privacy?: string;
+    html_url: string;
+    repositories_url: string;
+    slug: string;
+    /** Distinguished Name (DN) that team maps to within LDAP environment */
+    ldap_dn?: string;
   }
   /** Pull requests let you tell others about changes you've pushed to a repository on GitHub. Once a pull request is sent, interested parties can review the set of changes, discuss potential modifications, and even push follow-up commits if necessary. */
   export interface pull$request {
@@ -3168,25 +4428,25 @@ export namespace Schemas {
     locked: boolean;
     /** The title of the pull request. */
     title: string;
-    user: Schemas.simple$user | null;
+    user: Schemas.nullable$simple$user;
     body: string | null;
     labels: {
-      id?: number;
-      node_id?: string;
-      url?: string;
-      name?: string;
-      description?: string | null;
-      color?: string;
-      default?: boolean;
+      id: number;
+      node_id: string;
+      url: string;
+      name: string;
+      description: string | null;
+      color: string;
+      default: boolean;
     }[];
-    milestone: Schemas.milestone | null;
+    milestone: Schemas.nullable$milestone;
     active_lock_reason?: string | null;
     created_at: string;
     updated_at: string;
     closed_at: string | null;
     merged_at: string | null;
     merge_commit_sha: string | null;
-    assignee: Schemas.simple$user | null;
+    assignee: Schemas.nullable$simple$user;
     assignees?: Schemas.simple$user[] | null;
     requested_reviewers?: Schemas.simple$user[] | null;
     requested_teams?: Schemas.team$simple[] | null;
@@ -3274,13 +4534,17 @@ export namespace Schemas {
         master_branch?: string;
         archived: boolean;
         disabled: boolean;
+        /** The repository visibility: public, private, or internal. */
+        visibility?: string;
         mirror_url: string | null;
         open_issues: number;
         open_issues_count: number;
         permissions?: {
           admin: boolean;
-          pull: boolean;
+          maintain?: boolean;
           push: boolean;
+          triage?: boolean;
+          pull: boolean;
         };
         temp_clone_token?: string;
         allow_merge_commit?: boolean;
@@ -3303,7 +4567,9 @@ export namespace Schemas {
         watchers_count: number;
         created_at: string;
         updated_at: string;
-      };
+        allow_forking?: boolean;
+        is_template?: boolean;
+      } | null;
       sha: string;
       user: {
         avatar_url: string;
@@ -3353,6 +4619,7 @@ export namespace Schemas {
         hooks_url: string;
         html_url: string;
         id: number;
+        is_template?: boolean;
         node_id: string;
         issue_comment_url: string;
         issue_events_url: string;
@@ -3410,19 +4677,23 @@ export namespace Schemas {
         master_branch?: string;
         archived: boolean;
         disabled: boolean;
+        /** The repository visibility: public, private, or internal. */
+        visibility?: string;
         mirror_url: string | null;
         open_issues: number;
         open_issues_count: number;
         permissions?: {
           admin: boolean;
-          pull: boolean;
+          maintain?: boolean;
           push: boolean;
+          triage?: boolean;
+          pull: boolean;
         };
         temp_clone_token?: string;
         allow_merge_commit?: boolean;
         allow_squash_merge?: boolean;
         allow_rebase_merge?: boolean;
-        license: Schemas.license$simple | null;
+        license: Schemas.nullable$license$simple;
         pushed_at: string;
         size: number;
         ssh_url: string;
@@ -3433,6 +4704,7 @@ export namespace Schemas {
         watchers_count: number;
         created_at: string;
         updated_at: string;
+        allow_forking?: boolean;
       };
       sha: string;
       user: {
@@ -3473,7 +4745,7 @@ export namespace Schemas {
     mergeable: boolean | null;
     rebaseable?: boolean | null;
     mergeable_state: string;
-    merged_by: Schemas.simple$user | null;
+    merged_by: Schemas.nullable$simple$user;
     comments: number;
     review_comments: number;
     /** Indicates whether maintainers can modify the pull request. */
@@ -3482,67 +4754,6 @@ export namespace Schemas {
     additions: number;
     deletions: number;
     changed_files: number;
-  }
-  /** Pull Request Review Comments are comments on a portion of the Pull Request's diff. */
-  export interface pull$request$review$comment {
-    /** URL for the pull request review comment */
-    url: string;
-    /** The ID of the pull request review to which the comment belongs. */
-    pull_request_review_id: number | null;
-    /** The ID of the pull request review comment. */
-    id: number;
-    /** The node ID of the pull request review comment. */
-    node_id: string;
-    /** The diff of the line that the comment refers to. */
-    diff_hunk: string;
-    /** The relative path of the file to which the comment applies. */
-    path: string;
-    /** The line index in the diff to which the comment applies. */
-    position: number;
-    /** The index of the original line in the diff to which the comment applies. */
-    original_position: number;
-    /** The SHA of the commit to which the comment applies. */
-    commit_id: string;
-    /** The SHA of the original commit to which the comment applies. */
-    original_commit_id: string;
-    /** The comment ID to reply to. */
-    in_reply_to_id?: number;
-    user: Schemas.simple$user;
-    /** The text of the comment. */
-    body: string;
-    created_at: string;
-    updated_at: string;
-    /** HTML URL for the pull request review comment. */
-    html_url: string;
-    /** URL for the pull request that the review comment belongs to. */
-    pull_request_url: string;
-    author_association: Schemas.author_association;
-    _links: {
-      self: {
-        href: string;
-      };
-      html: {
-        href: string;
-      };
-      pull_request: {
-        href: string;
-      };
-    };
-    /** The first line of the range for a multi-line comment. */
-    start_line?: number | null;
-    /** The first line of the range for a multi-line comment. */
-    original_start_line?: number | null;
-    /** The side of the first line of the range for a multi-line comment. */
-    start_side?: ("LEFT" | "RIGHT") | null;
-    /** The line of the blob to which the comment applies. The last line of the range for a multi-line comment */
-    line?: number;
-    /** The line of the blob to which the comment applies. The last line of the range for a multi-line comment */
-    original_line?: number;
-    /** The side of the diff to which the comment applies. The side of the last line of the range for a multi-line comment */
-    side?: "LEFT" | "RIGHT";
-    reactions?: Schemas.reaction$rollup;
-    body_html?: string;
-    body_text?: string;
   }
   /** Pull Request Merge Result */
   export interface pull$request$merge$result {
@@ -3553,14 +4764,14 @@ export namespace Schemas {
   /** Pull Request Review Request */
   export interface pull$request$review$request {
     users: Schemas.simple$user[];
-    teams: Schemas.team$simple[];
+    teams: Schemas.team[];
   }
   /** Pull Request Reviews are reviews on pull requests. */
   export interface pull$request$review {
     /** Unique identifier of the review */
     id: number;
     node_id: string;
-    user: Schemas.simple$user | null;
+    user: Schemas.nullable$simple$user;
     /** The text of the review. */
     body: string;
     state: string;
@@ -3594,7 +4805,7 @@ export namespace Schemas {
     commit_id: string;
     original_commit_id: string;
     in_reply_to_id?: number;
-    user: Schemas.simple$user | null;
+    user: Schemas.nullable$simple$user;
     body: string;
     created_at: string;
     updated_at: string;
@@ -3608,6 +4819,7 @@ export namespace Schemas {
     };
     body_text?: string;
     body_html?: string;
+    reactions?: Schemas.reaction$rollup;
     /** The side of the first line of the range for a multi-line comment. */
     side?: "LEFT" | "RIGHT";
     /** The side of the first line of the range for a multi-line comment. */
@@ -3637,7 +4849,7 @@ export namespace Schemas {
     download_count: number;
     created_at: string;
     updated_at: string;
-    uploader: Schemas.simple$user | null;
+    uploader: Schemas.nullable$simple$user;
   }
   /** A release. */
   export interface release {
@@ -3665,11 +4877,12 @@ export namespace Schemas {
     assets: Schemas.release$asset[];
     body_html?: string;
     body_text?: string;
+    reactions?: Schemas.reaction$rollup;
   }
   /** Stargazer */
   export interface stargazer {
     starred_at: string;
-    user: Schemas.simple$user | null;
+    user: Schemas.nullable$simple$user;
   }
   /** Code Frequency Stat */
   export type code$frequency$stat = number[];
@@ -3681,10 +4894,10 @@ export namespace Schemas {
   }
   /** Contributor Activity */
   export interface contributor$activity {
-    author: Schemas.simple$user | null;
+    author: Schemas.nullable$simple$user;
     total: number;
     weeks: {
-      w?: string;
+      w?: number;
       a?: number;
       d?: number;
       c?: number;
@@ -3758,7 +4971,7 @@ export namespace Schemas {
         email: string;
         date: string;
       };
-      committer: Schemas.git$user | null;
+      committer: Schemas.nullable$git$user;
       comment_count: number;
       message: string;
       tree: {
@@ -3768,8 +4981,8 @@ export namespace Schemas {
       url: string;
       verification?: Schemas.verification;
     };
-    author: Schemas.simple$user | null;
-    committer: Schemas.git$user | null;
+    author: Schemas.nullable$simple$user;
+    committer: Schemas.nullable$git$user;
     parents: {
       url?: string;
       html_url?: string;
@@ -3795,7 +5008,7 @@ export namespace Schemas {
     locked: boolean;
     active_lock_reason?: string | null;
     assignees?: Schemas.simple$user[] | null;
-    user: Schemas.simple$user | null;
+    user: Schemas.nullable$simple$user;
     labels: {
       id?: number;
       node_id?: string;
@@ -3806,8 +5019,8 @@ export namespace Schemas {
       description?: string | null;
     }[];
     state: string;
-    assignee: Schemas.simple$user | null;
-    milestone: Schemas.milestone | null;
+    assignee: Schemas.nullable$simple$user;
+    milestone: Schemas.nullable$milestone;
     comments: number;
     created_at: string;
     updated_at: string;
@@ -3828,7 +5041,8 @@ export namespace Schemas {
     body_html?: string;
     body_text?: string;
     timeline_url?: string;
-    performed_via_github_app?: Schemas.integration | null;
+    performed_via_github_app?: Schemas.nullable$integration;
+    reactions?: Schemas.reaction$rollup;
   }
   /** Label Search Result Item */
   export interface label$search$result$item {
@@ -3848,7 +5062,7 @@ export namespace Schemas {
     node_id: string;
     name: string;
     full_name: string;
-    owner: Schemas.simple$user | null;
+    owner: Schemas.nullable$simple$user;
     private: boolean;
     html_url: string;
     description: string | null;
@@ -3920,11 +5134,15 @@ export namespace Schemas {
     archived: boolean;
     /** Returns whether or not this repository disabled. */
     disabled: boolean;
-    license: Schemas.license$simple | null;
+    /** The repository visibility: public, private, or internal. */
+    visibility?: string;
+    license: Schemas.nullable$license$simple;
     permissions?: {
       admin: boolean;
-      pull: boolean;
+      maintain?: boolean;
       push: boolean;
+      triage?: boolean;
+      pull: boolean;
     };
     text_matches?: Schemas.search$result$text$matches;
     temp_clone_token?: string;
@@ -3932,6 +5150,8 @@ export namespace Schemas {
     allow_squash_merge?: boolean;
     allow_rebase_merge?: boolean;
     delete_branch_on_merge?: boolean;
+    allow_forking?: boolean;
+    is_template?: boolean;
   }
   /** Topic Search Result Item */
   export interface topic$search$result$item {
@@ -4213,60 +5433,13 @@ export namespace Schemas {
     business_plus?: boolean;
     ldap_dn?: string;
   }
-  /** Public User */
-  export interface public$user {
-    login: string;
-    id: number;
-    node_id: string;
-    avatar_url: string;
-    gravatar_id: string | null;
-    url: string;
-    html_url: string;
-    followers_url: string;
-    following_url: string;
-    gists_url: string;
-    starred_url: string;
-    subscriptions_url: string;
-    organizations_url: string;
-    repos_url: string;
-    events_url: string;
-    received_events_url: string;
-    type: string;
-    site_admin: boolean;
-    name: string | null;
-    company: string | null;
-    blog: string | null;
-    location: string | null;
-    email: string | null;
-    hireable: boolean | null;
-    bio: string | null;
-    public_repos: number;
-    public_gists: number;
-    followers: number;
-    following: number;
-    created_at: string;
-    updated_at: string;
-    plan?: {
-      collaborators: number;
-      name: string;
-      space: number;
-      private_repos: number;
-    };
-    suspended_at?: string | null;
-    private_gists?: number;
-    total_private_repos?: number;
-    owned_private_repos?: number;
-    disk_usage?: number;
-    collaborators?: number;
+  /** Email */
+  export interface email {
+    email: string;
+    primary: boolean;
+    verified: boolean;
+    visibility: string | null;
   }
-  export type email =
-    | {
-        email: string;
-        primary: boolean;
-        verified: boolean;
-        visibility: string | null;
-      }
-    | string;
   /** A unique encryption key */
   export interface gpg$key {
     id: number;
@@ -4302,7 +5475,6 @@ export namespace Schemas {
   }
   /** Key */
   export interface key {
-    key_id: string;
     key: string;
     id: number;
     url: string;
@@ -4339,19 +5511,19 @@ export namespace Headers {
   export type location = string;
 }
 export namespace Responses {
-  /** Resource Not Found */
+  /** Resource not found */
   export namespace not_found {
     export interface Content {
       "application/json": Schemas.basic$error;
     }
   }
-  /** Validation Failed */
+  /** Validation failed */
   export namespace validation_failed_simple {
     export interface Content {
       "application/json": Schemas.validation$error$simple;
     }
   }
-  /** Preview Header Missing */
+  /** Preview header missing */
   export namespace preview_header_missing {
     export interface Content {
       "application/json": {
@@ -4366,19 +5538,19 @@ export namespace Responses {
       "application/json": Schemas.basic$error;
     }
   }
-  /** Requires Authentication */
+  /** Requires authentication */
   export namespace requires_authentication {
     export interface Content {
       "application/json": Schemas.basic$error;
     }
   }
-  /** Validation Failed */
+  /** Validation failed */
   export namespace validation_failed {
     export interface Content {
       "application/json": Schemas.validation$error;
     }
   }
-  /** Not Modified */
+  /** Not modified */
   export namespace not_modified {}
   /** Gone */
   export namespace gone {
@@ -4386,7 +5558,7 @@ export namespace Responses {
       "application/json": Schemas.basic$error;
     }
   }
-  /** Service Unavailable */
+  /** Service unavailable */
   export namespace service_unavailable {
     export interface Content {
       "application/json": {
@@ -4410,16 +5582,38 @@ export namespace Responses {
       };
     }
   }
-  /** Moved Permanently */
-  export namespace moved_permanently {}
+  /** Moved permanently */
+  export namespace moved_permanently {
+    export interface Content {
+      "application/json": Schemas.basic$error;
+    }
+  }
   /** Conflict */
   export namespace conflict {
     export interface Content {
       "application/json": Schemas.basic$error;
     }
   }
+  /** Temporary Redirect */
+  export namespace temporary_redirect {
+    export interface Content {
+      "application/json": Schemas.basic$error;
+    }
+  }
   /** Internal Error */
   export namespace internal_error {
+    export interface Content {
+      "application/json": Schemas.basic$error;
+    }
+  }
+  /** Response if GitHub Advanced Security is not enabled for this repository */
+  export namespace code_scanning_forbidden_read {
+    export interface Content {
+      "application/json": Schemas.basic$error;
+    }
+  }
+  /** Response if the repository is archived or if github advanced security is not enabled for this repository */
+  export namespace code_scanning_forbidden_write {
     export interface Content {
       "application/json": Schemas.basic$error;
     }
@@ -4433,6 +5627,14 @@ export namespace Responses {
   }
   /** Found */
   export namespace found {}
+  /** Accepted */
+  export namespace accepted {
+    export interface Content {
+      "application/json": {};
+    }
+  }
+  /** A header with no content is returned. */
+  export namespace no_content {}
 }
 export namespace Parameters {
   /** Results per page (max 100) */
@@ -4440,43 +5642,42 @@ export namespace Parameters {
   /** Page number of the results to fetch. */
   export type page = number;
   export type hook$id = number;
+  /** One of `asc` (ascending) or `desc` (descending). */
+  export type direction = "asc" | "desc";
   export type key$ids = string;
   export type team$id = number;
   export type username = string;
   export type org = string;
   export type pre$receive$environment$id = number;
+  /** pre_receive_hook_id parameter */
   export type pre$receive$hook$id = number;
   export type token$id = number;
-  /** Results per page (max 100) */
-  export type per_page = number;
   /** Only show notifications updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   export type since = string;
   /** installation_id parameter */
-  export type installation_id = number;
+  export type installation$id = number;
   /** grant_id parameter */
-  export type grant_id = number;
+  export type grant$id = number;
   /** The client ID of your GitHub app. */
   export type client$id = string;
   export type access$token = string;
-  export type app_slug = string;
+  export type app$slug = string;
   /** authorization_id parameter */
-  export type authorization_id = number;
+  export type authorization$id = number;
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   export type enterprise = string;
   /** Unique identifier of an organization. */
-  export type org_id = number;
+  export type org$id = number;
   /** Unique identifier of the self-hosted runner group. */
-  export type runner_group_id = number;
+  export type runner$group$id = number;
   /** Unique identifier of the self-hosted runner. */
-  export type runner_id = number;
+  export type runner$id = number;
   /** gist_id parameter */
-  export type gist_id = string;
+  export type gist$id = string;
   /** comment_id parameter */
-  export type comment_id = number;
+  export type comment$id = number;
   /** A list of comma separated label names. Example: `bug,ui,@high` */
   export type labels = string;
-  /** One of `asc` (ascending) or `desc` (descending). */
-  export type direction = "asc" | "desc";
   export type owner = string;
   export type repo = string;
   /** If `true`, show notifications marked as read. */
@@ -4486,76 +5687,100 @@ export namespace Parameters {
   /** Only show notifications updated before the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   export type before = string;
   /** thread_id parameter */
-  export type thread_id = number;
+  export type thread$id = number;
   /** An organization ID. Only return organizations with an ID greater than this ID. */
   export type since$org = number;
-  export type repository_id = number;
+  export type repository$id = number;
   /** secret_name parameter */
-  export type secret_name = string;
+  export type secret$name = string;
   /** team_slug parameter */
-  export type team_slug = string;
+  export type team$slug = string;
   export type discussion$number = number;
   export type comment$number = number;
   export type reaction$id = number;
   export type project$id = number;
   /** card_id parameter */
-  export type card_id = number;
+  export type card$id = number;
   /** column_id parameter */
-  export type column_id = number;
+  export type column$id = number;
   /** artifact_id parameter */
-  export type artifact_id = number;
+  export type artifact$id = number;
   /** job_id parameter */
-  export type job_id = number;
+  export type job$id = number;
   /** Returns someone's workflow runs. Use the login for the user who created the `push` associated with the check suite or workflow run. */
   export type actor = string;
   /** Returns workflow runs associated with a branch. Use the name of the branch of the `push`. */
   export type workflow$run$branch = string;
-  /** Returns workflow run triggered by the event you specify. For example, `push`, `pull_request` or `issue`. For more information, see "[Events that trigger workflows](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows)." */
+  /** Returns workflow run triggered by the event you specify. For example, `push`, `pull_request` or `issue`. For more information, see "[Events that trigger workflows](https://docs.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows)." */
   export type event = string;
-  /** Returns workflow runs associated with the check run `status` or `conclusion` you specify. For example, a conclusion can be `success` or a status can be `completed`. For more information, see the `status` and `conclusion` options available in "[Create a check run](https://docs.github.com/enterprise-server@3.0/rest/reference/checks#create-a-check-run)." */
-  export type workflow$run$status = "completed" | "status" | "conclusion";
+  /** Returns workflow runs with the check run `status` or `conclusion` that you specify. For example, a conclusion can be `success` or a status can be `in_progress`. Only GitHub can set a status of `waiting` or `requested`. For a list of the possible `status` and `conclusion` options, see "[Create a check run](https://docs.github.com/enterprise-server@3.0/rest/reference/checks#create-a-check-run)." */
+  export type workflow$run$status =
+    | "completed"
+    | "action_required"
+    | "cancelled"
+    | "failure"
+    | "neutral"
+    | "skipped"
+    | "stale"
+    | "success"
+    | "timed_out"
+    | "in_progress"
+    | "queued"
+    | "requested"
+    | "waiting";
+  /** Returns workflow runs created within the given date-time range. For more information on the syntax, see "[Understanding the search syntax](https://docs.github.com/enterprise-server@3.0/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)." */
+  export type created = string;
+  /** If `true` pull requests are omitted from the response (empty array). */
+  export type exclude$pull$requests = boolean;
+  /** The id of the workflow run. */
   export type run$id = number;
   /** The ID of the workflow. You can also pass the workflow file name as a string. */
   export type workflow$id = number | string;
   /** The name of the branch. */
   export type branch = string;
   /** check_run_id parameter */
-  export type check_run_id = number;
+  export type check$run$id = number;
   /** check_suite_id parameter */
-  export type check_suite_id = number;
+  export type check$suite$id = number;
   /** Returns check runs with the specified `name`. */
-  export type check_name = string;
+  export type check$name = string;
   /** Returns check runs with the specified `status`. Can be one of `queued`, `in_progress`, or `completed`. */
   export type status = "queued" | "in_progress" | "completed";
-  /** The security alert number, found at the end of the security alert's URL. */
-  export type alert_number = Schemas.alert$number;
+  /** The name of a code scanning tool. Only results by this tool will be listed. You can specify the tool by using either `tool_name` or `tool_guid`, but not both. */
+  export type tool$name = Schemas.code$scanning$analysis$tool$name;
+  /** The GUID of a code scanning tool. Only results by this tool will be listed. Note that some code scanning tools may not include a GUID in their analysis data. You can specify the tool by using either `tool_guid` or `tool_name`, but not both. */
+  export type tool$guid = Schemas.code$scanning$analysis$tool$guid;
+  /** The Git reference for the results you want to list. The `ref` for a branch can be formatted either as `refs/heads/<branch name>` or simply `<branch name>`. To reference a pull request use `refs/pull/<number>/merge`. */
+  export type git$ref = Schemas.code$scanning$ref;
+  /** The number that identifies an alert. You can find this at the end of the URL for a code scanning alert within GitHub, and in the `number` field in the response from the `GET /repos/{owner}/{repo}/code-scanning/alerts` operation. */
+  export type alert$number = Schemas.alert$number;
   /** commit_sha parameter */
-  export type commit_sha = string;
+  export type commit$sha = string;
   /** deployment_id parameter */
-  export type deployment_id = number;
+  export type deployment$id = number;
   /** invitation_id parameter */
-  export type invitation_id = number;
+  export type invitation$id = number;
   /** One of `created` (when the repository was starred) or `updated` (when it was last pushed to). */
   export type sort = "created" | "updated";
   /** issue_number parameter */
-  export type issue_number = number;
+  export type issue$number = number;
   /** key_id parameter */
-  export type key_id = number;
+  export type key$id = number;
   /** milestone_number parameter */
-  export type milestone_number = number;
+  export type milestone$number = number;
   export type pull$number = number;
   /** review_id parameter */
-  export type review_id = number;
+  export type review$id = number;
   /** asset_id parameter */
-  export type asset_id = number;
+  export type asset$id = number;
   /** release_id parameter */
-  export type release_id = number;
+  export type release$id = number;
   /** A repository ID. Only return repositories with an ID greater than this ID. */
   export type since$repo = number;
   /** Determines whether the first search result returned is the highest number of matches (`desc`) or lowest number of matches (`asc`). This parameter is ignored unless you provide `sort`. */
   export type order = "desc" | "asc";
   /** gpg_key_id parameter */
-  export type gpg_key_id = number;
+  export type gpg$key$id = number;
   /** A user ID. Only return users with an ID greater than this ID. */
   export type since$user = number;
 }
@@ -4685,9 +5910,14 @@ export interface Parameter$enterprise$admin$list$public$keys {
   per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
+  /** One of `asc` (ascending) or `desc` (descending). */
+  direction?: Parameters.direction;
+  sort?: "created" | "updated" | "accessed";
+  /** Only show public keys accessed after the given time. */
+  since?: string;
 }
 export interface Response$enterprise$admin$list$public$keys$Status$200 {
-  "application/json": Schemas.enterprise$public$key[];
+  "application/json": Schemas.public$key$full[];
 }
 export interface Parameter$enterprise$admin$delete$public$key {
   key_ids: Parameters.key$ids;
@@ -4698,7 +5928,7 @@ export interface Parameter$enterprise$admin$update$ldap$mapping$for$team {
 export interface RequestBody$enterprise$admin$update$ldap$mapping$for$team {
   "application/json": {
     /** The [distinguished name](https://www.ldap.com/ldap-dns-and-rdns) (DN) of the LDAP entry to map to a team. */
-    ldap_dn?: string;
+    ldap_dn: string;
   };
 }
 export interface Response$enterprise$admin$update$ldap$mapping$for$team$Status$200 {
@@ -4718,7 +5948,7 @@ export interface Parameter$enterprise$admin$update$ldap$mapping$for$user {
 export interface RequestBody$enterprise$admin$update$ldap$mapping$for$user {
   "application/json": {
     /** The [distinguished name](https://www.ldap.com/ldap-dns-and-rdns) (DN) of the LDAP entry to map to a team. */
-    ldap_dn?: string;
+    ldap_dn: string;
   };
 }
 export interface Response$enterprise$admin$update$ldap$mapping$for$user$Status$200 {
@@ -4765,6 +5995,9 @@ export interface Parameter$enterprise$admin$list$pre$receive$environments {
   per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
+  /** One of `asc` (ascending) or `desc` (descending). */
+  direction?: Parameters.direction;
+  sort?: "created" | "updated" | "name";
 }
 export interface Response$enterprise$admin$list$pre$receive$environments$Status$200 {
   "application/json": Schemas.pre$receive$environment[];
@@ -4850,6 +6083,10 @@ export interface Parameter$enterprise$admin$list$pre$receive$hooks {
   per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
+  /** One of `asc` (ascending) or `desc` (descending). */
+  direction?: Parameters.direction;
+  /** One of `created` (when the repository was starred) or `updated` (when it was last pushed to) or `name`. */
+  sort?: "created" | "updated" | "name";
 }
 export interface Response$enterprise$admin$list$pre$receive$hooks$Status$200 {
   "application/json": Schemas.pre$receive$hook[];
@@ -4874,15 +6111,18 @@ export interface Response$enterprise$admin$create$pre$receive$hook$Status$201 {
   "application/json": Schemas.pre$receive$hook;
 }
 export interface Parameter$enterprise$admin$get$pre$receive$hook {
+  /** pre_receive_hook_id parameter */
   pre_receive_hook_id: Parameters.pre$receive$hook$id;
 }
 export interface Response$enterprise$admin$get$pre$receive$hook$Status$200 {
   "application/json": Schemas.pre$receive$hook;
 }
 export interface Parameter$enterprise$admin$delete$pre$receive$hook {
+  /** pre_receive_hook_id parameter */
   pre_receive_hook_id: Parameters.pre$receive$hook$id;
 }
 export interface Parameter$enterprise$admin$update$pre$receive$hook {
+  /** pre_receive_hook_id parameter */
   pre_receive_hook_id: Parameters.pre$receive$hook$id;
 }
 export interface RequestBody$enterprise$admin$update$pre$receive$hook {
@@ -4920,7 +6160,7 @@ export interface RequestBody$enterprise$admin$create$user {
   "application/json": {
     /** The user's username. */
     login: string;
-    /** **Required for built-in authentication.** The user's email address. This parameter can be omitted when using CAS, LDAP, or SAML. For details on built-in and centrally-managed authentication, see the the [GitHub authentication guide](https://help.github.com/enterprise/2.18/admin/guides/user-management/authenticating-users-for-your-github-enterprise-server-instance/). */
+    /** **Required for built-in authentication.** The user's email address. This parameter can be omitted when using CAS, LDAP, or SAML. For details on built-in and centrally-managed authentication, see the the [GitHub authentication guide](https://docs.github.com/enterprise/2.18/admin/guides/user-management/authenticating-users-for-your-github-enterprise-server-instance/). */
     email?: string;
   };
 }
@@ -4966,6 +6206,9 @@ export interface Response$apps$get$authenticated$Status$200 {
 export interface Parameter$apps$create$from$manifest {
   code: string;
 }
+export interface RequestBody$apps$create$from$manifest {
+  "application/json": {};
+}
 export interface Response$apps$create$from$manifest$Status$201 {
   "application/json": Schemas.integration & {};
 }
@@ -4987,7 +6230,7 @@ export interface Response$apps$update$webhook$config$for$app$Status$200 {
 }
 export interface Parameter$apps$list$installations {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
   /** Only show notifications updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
@@ -4999,7 +6242,7 @@ export interface Response$apps$list$installations$Status$200 {
 }
 export interface Parameter$apps$get$installation {
   /** installation_id parameter */
-  installation_id: Parameters.installation_id;
+  installation_id: Parameters.installation$id;
 }
 export interface Response$apps$get$installation$Status$200 {
   "application/json": Schemas.installation;
@@ -5008,12 +6251,12 @@ export type Response$apps$get$installation$Status$404 = Responses.not_found.Cont
 export type Response$apps$get$installation$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$apps$delete$installation {
   /** installation_id parameter */
-  installation_id: Parameters.installation_id;
+  installation_id: Parameters.installation$id;
 }
 export type Response$apps$delete$installation$Status$404 = Responses.not_found.Content;
 export interface Parameter$apps$create$installation$access$token {
   /** installation_id parameter */
-  installation_id: Parameters.installation_id;
+  installation_id: Parameters.installation$id;
 }
 export interface RequestBody$apps$create$installation$access$token {
   "application/json": {
@@ -5032,11 +6275,23 @@ export type Response$apps$create$installation$access$token$Status$403 = Response
 export type Response$apps$create$installation$access$token$Status$404 = Responses.not_found.Content;
 export type Response$apps$create$installation$access$token$Status$415 = Responses.preview_header_missing.Content;
 export type Response$apps$create$installation$access$token$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$apps$suspend$installation {
+  /** installation_id parameter */
+  installation_id: Parameters.installation$id;
+}
+export type Response$apps$suspend$installation$Status$404 = Responses.not_found.Content;
+export interface Parameter$apps$unsuspend$installation {
+  /** installation_id parameter */
+  installation_id: Parameters.installation$id;
+}
+export type Response$apps$unsuspend$installation$Status$404 = Responses.not_found.Content;
 export interface Parameter$oauth$authorizations$list$grants {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
+  /** The client ID of your GitHub app. */
+  client_id?: string;
 }
 export interface Response$oauth$authorizations$list$grants$Status$200 {
   "application/json": Schemas.application$grant[];
@@ -5046,7 +6301,7 @@ export type Response$oauth$authorizations$list$grants$Status$403 = Responses.for
 export type Response$oauth$authorizations$list$grants$Status$404 = Responses.not_found.Content;
 export interface Parameter$oauth$authorizations$get$grant {
   /** grant_id parameter */
-  grant_id: Parameters.grant_id;
+  grant_id: Parameters.grant$id;
 }
 export interface Response$oauth$authorizations$get$grant$Status$200 {
   "application/json": Schemas.application$grant;
@@ -5055,7 +6310,7 @@ export type Response$oauth$authorizations$get$grant$Status$401 = Responses.requi
 export type Response$oauth$authorizations$get$grant$Status$403 = Responses.forbidden.Content;
 export interface Parameter$oauth$authorizations$delete$grant {
   /** grant_id parameter */
-  grant_id: Parameters.grant_id;
+  grant_id: Parameters.grant$id;
 }
 export type Response$oauth$authorizations$delete$grant$Status$401 = Responses.requires_authentication.Content;
 export type Response$oauth$authorizations$delete$grant$Status$403 = Responses.forbidden.Content;
@@ -5066,7 +6321,7 @@ export interface Parameter$apps$delete$authorization {
 export interface RequestBody$apps$delete$authorization {
   "application/json": {
     /** The OAuth access token used to authenticate to the GitHub API. */
-    access_token?: string;
+    access_token: string;
   };
 }
 export type Response$apps$delete$authorization$Status$422 = Responses.validation_failed.Content;
@@ -5097,7 +6352,7 @@ export interface Parameter$apps$delete$token {
 export interface RequestBody$apps$delete$token {
   "application/json": {
     /** The OAuth access token used to authenticate to the GitHub API. */
-    access_token?: string;
+    access_token: string;
   };
 }
 export type Response$apps$delete$token$Status$422 = Responses.validation_failed.Content;
@@ -5121,15 +6376,15 @@ export interface Parameter$apps$scope$token {
 }
 export interface RequestBody$apps$scope$token {
   "application/json": {
-    /** **Required.** The OAuth access token used to authenticate to the GitHub API. */
-    access_token?: string;
+    /** The OAuth access token used to authenticate to the GitHub API. */
+    access_token: string;
     /** The name of the user or organization to scope the user-to-server access token to. **Required** unless `target_id` is specified. */
     target?: string;
     /** The ID of the user or organization to scope the user-to-server access token to. **Required** unless `target` is specified. */
     target_id?: number;
-    /** The list of repository IDs to scope the user-to-server access token to. `repositories` may not be specified if `repository_ids` is specified. */
+    /** The list of repository names to scope the user-to-server access token to. `repositories` may not be specified if `repository_ids` is specified. */
     repositories?: string[];
-    /** The list of repository names to scope the user-to-server access token to. `repository_ids` may not be specified if `repositories` is specified. */
+    /** The list of repository IDs to scope the user-to-server access token to. `repository_ids` may not be specified if `repositories` is specified. */
     repository_ids?: number[];
     permissions?: Schemas.app$permissions;
   };
@@ -5147,7 +6402,7 @@ export interface Parameter$apps$check$authorization {
   access_token: Parameters.access$token;
 }
 export interface Response$apps$check$authorization$Status$200 {
-  "application/json": Schemas.authorization | null;
+  "application/json": Schemas.nullable$authorization;
 }
 export type Response$apps$check$authorization$Status$404 = Responses.not_found.Content;
 export interface Parameter$apps$reset$authorization {
@@ -5164,7 +6419,7 @@ export interface Parameter$apps$revoke$authorization$for$application {
   access_token: Parameters.access$token;
 }
 export interface Parameter$apps$get$by$slug {
-  app_slug: Parameters.app_slug;
+  app_slug: Parameters.app$slug;
 }
 export interface Response$apps$get$by$slug$Status$200 {
   "application/json": Schemas.integration;
@@ -5174,9 +6429,11 @@ export type Response$apps$get$by$slug$Status$404 = Responses.not_found.Content;
 export type Response$apps$get$by$slug$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$oauth$authorizations$list$authorizations {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
+  /** The client ID of your GitHub app. */
+  client_id?: string;
 }
 export interface Response$oauth$authorizations$list$authorizations$Status$200 {
   "application/json": Schemas.authorization[];
@@ -5260,7 +6517,7 @@ export interface Response$oauth$authorizations$get$or$create$authorization$for$a
 export type Response$oauth$authorizations$get$or$create$authorization$for$app$and$fingerprint$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$oauth$authorizations$get$authorization {
   /** authorization_id parameter */
-  authorization_id: Parameters.authorization_id;
+  authorization_id: Parameters.authorization$id;
 }
 export interface Response$oauth$authorizations$get$authorization$Status$200 {
   "application/json": Schemas.authorization;
@@ -5269,13 +6526,13 @@ export type Response$oauth$authorizations$get$authorization$Status$401 = Respons
 export type Response$oauth$authorizations$get$authorization$Status$403 = Responses.forbidden.Content;
 export interface Parameter$oauth$authorizations$delete$authorization {
   /** authorization_id parameter */
-  authorization_id: Parameters.authorization_id;
+  authorization_id: Parameters.authorization$id;
 }
 export type Response$oauth$authorizations$delete$authorization$Status$401 = Responses.requires_authentication.Content;
 export type Response$oauth$authorizations$delete$authorization$Status$403 = Responses.forbidden.Content;
 export interface Parameter$oauth$authorizations$update$authorization {
   /** authorization_id parameter */
-  authorization_id: Parameters.authorization_id;
+  authorization_id: Parameters.authorization$id;
 }
 export interface RequestBody$oauth$authorizations$update$authorization {
   "application/json": {
@@ -5300,7 +6557,6 @@ export type Response$oauth$authorizations$update$authorization$Status$422 = Resp
 export interface Response$codes$of$conduct$get$all$codes$of$conduct$Status$200 {
   "application/json": Schemas.code$of$conduct[];
 }
-export type Response$codes$of$conduct$get$all$codes$of$conduct$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$codes$of$conduct$get$conduct$code {
   key: string;
 }
@@ -5308,26 +6564,6 @@ export interface Response$codes$of$conduct$get$conduct$code$Status$200 {
   "application/json": Schemas.code$of$conduct;
 }
 export type Response$codes$of$conduct$get$conduct$code$Status$404 = Responses.not_found.Content;
-export type Response$codes$of$conduct$get$conduct$code$Status$415 = Responses.preview_header_missing.Content;
-export interface Parameter$apps$create$content$attachment {
-  content_reference_id: number;
-}
-export interface RequestBody$apps$create$content$attachment {
-  "application/json": {
-    /** The title of the attachment */
-    title: string;
-    /** The body of the attachment */
-    body: string;
-  };
-}
-export interface Response$apps$create$content$attachment$Status$200 {
-  "application/json": Schemas.content$reference$attachment;
-}
-export type Response$apps$create$content$attachment$Status$403 = Responses.forbidden.Content;
-export type Response$apps$create$content$attachment$Status$404 = Responses.not_found.Content;
-export type Response$apps$create$content$attachment$Status$410 = Responses.gone.Content;
-export type Response$apps$create$content$attachment$Status$415 = Responses.preview_header_missing.Content;
-export type Response$apps$create$content$attachment$Status$422 = Responses.validation_failed.Content;
 export interface Response$emojis$get$Status$200 {
   "application/json": {
     [key: string]: string;
@@ -5345,11 +6581,38 @@ export interface Response$enterprise$admin$set$announcement$Status$200 {
 export interface Response$enterprise$admin$get$license$information$Status$200 {
   "application/json": Schemas.license$info;
 }
-export interface Parameter$enterprise$admin$get$type$stats {
-  type: string;
-}
-export interface Response$enterprise$admin$get$type$stats$Status$200 {
+export interface Response$enterprise$admin$get$all$stats$Status$200 {
   "application/json": Schemas.enterprise$overview;
+}
+export interface Response$enterprise$admin$get$comment$stats$Status$200 {
+  "application/json": Schemas.enterprise$comment$overview;
+}
+export interface Response$enterprise$admin$get$gist$stats$Status$200 {
+  "application/json": Schemas.enterprise$gist$overview;
+}
+export interface Response$enterprise$admin$get$hooks$stats$Status$200 {
+  "application/json": Schemas.enterprise$hook$overview;
+}
+export interface Response$enterprise$admin$get$issue$stats$Status$200 {
+  "application/json": Schemas.enterprise$issue$overview;
+}
+export interface Response$enterprise$admin$get$milestone$stats$Status$200 {
+  "application/json": Schemas.enterprise$milestone$overview;
+}
+export interface Response$enterprise$admin$get$org$stats$Status$200 {
+  "application/json": Schemas.enterprise$organization$overview;
+}
+export interface Response$enterprise$admin$get$pages$stats$Status$200 {
+  "application/json": Schemas.enterprise$page$overview;
+}
+export interface Response$enterprise$admin$get$pull$request$stats$Status$200 {
+  "application/json": Schemas.enterprise$pull$request$overview;
+}
+export interface Response$enterprise$admin$get$repo$stats$Status$200 {
+  "application/json": Schemas.enterprise$repository$overview;
+}
+export interface Response$enterprise$admin$get$user$stats$Status$200 {
+  "application/json": Schemas.enterprise$user$overview;
 }
 export interface Parameter$enterprise$admin$get$github$actions$permissions$enterprise {
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
@@ -5372,7 +6635,7 @@ export interface Parameter$enterprise$admin$list$selected$organizations$enabled$
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -5396,13 +6659,13 @@ export interface Parameter$enterprise$admin$enable$selected$organization$github$
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of an organization. */
-  org_id: Parameters.org_id;
+  org_id: Parameters.org$id;
 }
 export interface Parameter$enterprise$admin$disable$selected$organization$github$actions$enterprise {
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of an organization. */
-  org_id: Parameters.org_id;
+  org_id: Parameters.org$id;
 }
 export interface Parameter$enterprise$admin$get$allowed$actions$enterprise {
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
@@ -5422,7 +6685,7 @@ export interface Parameter$enterprise$admin$list$self$hosted$runner$groups$for$e
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -5446,6 +6709,8 @@ export interface RequestBody$enterprise$admin$create$self$hosted$runner$group$fo
     selected_organization_ids?: number[];
     /** List of runner IDs to add to the runner group. */
     runners?: number[];
+    /** Whether the runner group can be used by `public` repositories. */
+    allows_public_repositories?: boolean;
   };
 }
 export interface Response$enterprise$admin$create$self$hosted$runner$group$for$enterprise$Status$201 {
@@ -5455,7 +6720,7 @@ export interface Parameter$enterprise$admin$get$self$hosted$runner$group$for$ent
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
 }
 export interface Response$enterprise$admin$get$self$hosted$runner$group$for$enterprise$Status$200 {
   "application/json": Schemas.runner$groups$enterprise;
@@ -5464,13 +6729,13 @@ export interface Parameter$enterprise$admin$delete$self$hosted$runner$group$from
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
 }
 export interface Parameter$enterprise$admin$update$self$hosted$runner$group$for$enterprise {
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
 }
 export interface RequestBody$enterprise$admin$update$self$hosted$runner$group$for$enterprise {
   "application/json": {
@@ -5478,6 +6743,8 @@ export interface RequestBody$enterprise$admin$update$self$hosted$runner$group$fo
     name?: string;
     /** Visibility of a runner group. You can select all organizations or select individual organizations. Can be one of: `all` or `selected` */
     visibility?: "selected" | "all";
+    /** Whether the runner group can be used by `public` repositories. */
+    allows_public_repositories?: boolean;
   };
 }
 export interface Response$enterprise$admin$update$self$hosted$runner$group$for$enterprise$Status$200 {
@@ -5487,9 +6754,9 @@ export interface Parameter$enterprise$admin$list$org$access$to$self$hosted$runne
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -5503,7 +6770,7 @@ export interface Parameter$enterprise$admin$set$org$access$to$self$hosted$runner
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
 }
 export interface RequestBody$enterprise$admin$set$org$access$to$self$hosted$runner$group$in$enterprise {
   "application/json": {
@@ -5515,25 +6782,25 @@ export interface Parameter$enterprise$admin$add$org$access$to$self$hosted$runner
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
   /** Unique identifier of an organization. */
-  org_id: Parameters.org_id;
+  org_id: Parameters.org$id;
 }
 export interface Parameter$enterprise$admin$remove$org$access$to$self$hosted$runner$group$in$enterprise {
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
   /** Unique identifier of an organization. */
-  org_id: Parameters.org_id;
+  org_id: Parameters.org$id;
 }
 export interface Parameter$enterprise$admin$list$self$hosted$runners$in$group$for$enterprise {
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -5547,7 +6814,7 @@ export interface Parameter$enterprise$admin$set$self$hosted$runners$in$group$for
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
 }
 export interface RequestBody$enterprise$admin$set$self$hosted$runners$in$group$for$enterprise {
   "application/json": {
@@ -5559,23 +6826,23 @@ export interface Parameter$enterprise$admin$add$self$hosted$runner$to$group$for$
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
   /** Unique identifier of the self-hosted runner. */
-  runner_id: Parameters.runner_id;
+  runner_id: Parameters.runner$id;
 }
 export interface Parameter$enterprise$admin$remove$self$hosted$runner$from$group$for$enterprise {
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
   /** Unique identifier of the self-hosted runner. */
-  runner_id: Parameters.runner_id;
+  runner_id: Parameters.runner$id;
 }
 export interface Parameter$enterprise$admin$list$self$hosted$runners$for$enterprise {
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -5610,7 +6877,7 @@ export interface Parameter$enterprise$admin$get$self$hosted$runner$for$enterpris
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of the self-hosted runner. */
-  runner_id: Parameters.runner_id;
+  runner_id: Parameters.runner$id;
 }
 export interface Response$enterprise$admin$get$self$hosted$runner$for$enterprise$Status$200 {
   "application/json": Schemas.runner;
@@ -5619,11 +6886,11 @@ export interface Parameter$enterprise$admin$delete$self$hosted$runner$from$enter
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of the self-hosted runner. */
-  runner_id: Parameters.runner_id;
+  runner_id: Parameters.runner$id;
 }
 export interface Parameter$activity$list$public$events {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -5639,7 +6906,7 @@ export interface Parameter$gists$list {
   /** Only show notifications updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   since?: Parameters.since;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -5671,7 +6938,7 @@ export interface Parameter$gists$list$public {
   /** Only show notifications updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   since?: Parameters.since;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -5684,7 +6951,7 @@ export interface Parameter$gists$list$starred {
   /** Only show notifications updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   since?: Parameters.since;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -5695,7 +6962,7 @@ export type Response$gists$list$starred$Status$401 = Responses.requires_authenti
 export type Response$gists$list$starred$Status$403 = Responses.forbidden.Content;
 export interface Parameter$gists$get {
   /** gist_id parameter */
-  gist_id: Parameters.gist_id;
+  gist_id: Parameters.gist$id;
 }
 export interface Response$gists$get$Status$200 {
   "application/json": Schemas.gist$simple;
@@ -5704,13 +6971,13 @@ export type Response$gists$get$Status$403 = Responses.forbidden_gist.Content;
 export type Response$gists$get$Status$404 = Responses.not_found.Content;
 export interface Parameter$gists$delete {
   /** gist_id parameter */
-  gist_id: Parameters.gist_id;
+  gist_id: Parameters.gist$id;
 }
 export type Response$gists$delete$Status$403 = Responses.forbidden.Content;
 export type Response$gists$delete$Status$404 = Responses.not_found.Content;
 export interface Parameter$gists$update {
   /** gist_id parameter */
-  gist_id: Parameters.gist_id;
+  gist_id: Parameters.gist$id;
 }
 export interface RequestBody$gists$update {
   "application/json":
@@ -5731,9 +6998,9 @@ export type Response$gists$update$Status$404 = Responses.not_found.Content;
 export type Response$gists$update$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$gists$list$comments {
   /** gist_id parameter */
-  gist_id: Parameters.gist_id;
+  gist_id: Parameters.gist$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -5744,7 +7011,7 @@ export type Response$gists$list$comments$Status$403 = Responses.forbidden.Conten
 export type Response$gists$list$comments$Status$404 = Responses.not_found.Content;
 export interface Parameter$gists$create$comment {
   /** gist_id parameter */
-  gist_id: Parameters.gist_id;
+  gist_id: Parameters.gist$id;
 }
 export interface RequestBody$gists$create$comment {
   "application/json": {
@@ -5759,9 +7026,9 @@ export type Response$gists$create$comment$Status$403 = Responses.forbidden.Conte
 export type Response$gists$create$comment$Status$404 = Responses.not_found.Content;
 export interface Parameter$gists$get$comment {
   /** gist_id parameter */
-  gist_id: Parameters.gist_id;
+  gist_id: Parameters.gist$id;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export interface Response$gists$get$comment$Status$200 {
   "application/json": Schemas.gist$comment;
@@ -5770,17 +7037,17 @@ export type Response$gists$get$comment$Status$403 = Responses.forbidden_gist.Con
 export type Response$gists$get$comment$Status$404 = Responses.not_found.Content;
 export interface Parameter$gists$delete$comment {
   /** gist_id parameter */
-  gist_id: Parameters.gist_id;
+  gist_id: Parameters.gist$id;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export type Response$gists$delete$comment$Status$403 = Responses.forbidden.Content;
 export type Response$gists$delete$comment$Status$404 = Responses.not_found.Content;
 export interface Parameter$gists$update$comment {
   /** gist_id parameter */
-  gist_id: Parameters.gist_id;
+  gist_id: Parameters.gist$id;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export interface RequestBody$gists$update$comment {
   "application/json": {
@@ -5794,9 +7061,9 @@ export interface Response$gists$update$comment$Status$200 {
 export type Response$gists$update$comment$Status$404 = Responses.not_found.Content;
 export interface Parameter$gists$list$commits {
   /** gist_id parameter */
-  gist_id: Parameters.gist_id;
+  gist_id: Parameters.gist$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -5807,9 +7074,9 @@ export type Response$gists$list$commits$Status$403 = Responses.forbidden.Content
 export type Response$gists$list$commits$Status$404 = Responses.not_found.Content;
 export interface Parameter$gists$list$forks {
   /** gist_id parameter */
-  gist_id: Parameters.gist_id;
+  gist_id: Parameters.gist$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -5820,7 +7087,7 @@ export type Response$gists$list$forks$Status$403 = Responses.forbidden.Content;
 export type Response$gists$list$forks$Status$404 = Responses.not_found.Content;
 export interface Parameter$gists$fork {
   /** gist_id parameter */
-  gist_id: Parameters.gist_id;
+  gist_id: Parameters.gist$id;
 }
 export interface Response$gists$fork$Status$201 {
   "application/json": Schemas.base$gist;
@@ -5830,7 +7097,7 @@ export type Response$gists$fork$Status$404 = Responses.not_found.Content;
 export type Response$gists$fork$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$gists$check$is$starred {
   /** gist_id parameter */
-  gist_id: Parameters.gist_id;
+  gist_id: Parameters.gist$id;
 }
 export type Response$gists$check$is$starred$Status$403 = Responses.forbidden.Content;
 export interface Response$gists$check$is$starred$Status$404 {
@@ -5838,19 +7105,19 @@ export interface Response$gists$check$is$starred$Status$404 {
 }
 export interface Parameter$gists$star {
   /** gist_id parameter */
-  gist_id: Parameters.gist_id;
+  gist_id: Parameters.gist$id;
 }
 export type Response$gists$star$Status$403 = Responses.forbidden.Content;
 export type Response$gists$star$Status$404 = Responses.not_found.Content;
 export interface Parameter$gists$unstar {
   /** gist_id parameter */
-  gist_id: Parameters.gist_id;
+  gist_id: Parameters.gist$id;
 }
 export type Response$gists$unstar$Status$403 = Responses.forbidden.Content;
 export type Response$gists$unstar$Status$404 = Responses.not_found.Content;
 export interface Parameter$gists$get$revision {
   /** gist_id parameter */
-  gist_id: Parameters.gist_id;
+  gist_id: Parameters.gist$id;
   sha: string;
 }
 export interface Response$gists$get$revision$Status$200 {
@@ -5870,7 +7137,7 @@ export interface Response$gitignore$get$template$Status$200 {
 }
 export interface Parameter$apps$list$repos$accessible$to$installation {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -5890,9 +7157,9 @@ export interface Parameter$issues$list {
    * \* `created`: Issues created by you
    * \* `mentioned`: Issues mentioning you
    * \* `subscribed`: Issues you're subscribed to updates for
-   * \* `all`: All issues the authenticated user can see, regardless of participation or creation
+   * \* `all` or `repos`: All issues the authenticated user can see, regardless of participation or creation
    */
-  filter?: "assigned" | "created" | "mentioned" | "subscribed" | "all";
+  filter?: "assigned" | "created" | "mentioned" | "subscribed" | "repos" | "all";
   /** Indicates the state of the issues to return. Can be either `open`, `closed`, or `all`. */
   state?: "open" | "closed" | "all";
   /** A list of comma separated label names. Example: `bug,ui,@high` */
@@ -5908,7 +7175,7 @@ export interface Parameter$issues$list {
   owned?: boolean;
   pulls?: boolean;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -5920,7 +7187,9 @@ export type Response$issues$list$Status$422 = Responses.validation_failed.Conten
 export interface Parameter$licenses$get$all$commonly$used {
   featured?: boolean;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
 }
 export interface Response$licenses$get$all$commonly$used$Status$200 {
   "application/json": Schemas.license$simple[];
@@ -5937,11 +7206,14 @@ export interface RequestBody$markdown$render {
   "application/json": {
     /** The Markdown text to render in HTML. */
     text: string;
-    /** The rendering mode. */
+    /** The rendering mode. Can be either `markdown` or `gfm`. */
     mode?: "markdown" | "gfm";
-    /** The repository context to use when creating references in `gfm` mode. */
+    /** The repository context to use when creating references in `gfm` mode.  For example, setting `context` to `octo-org/octo-repo` will change the text `#42` into an HTML link to issue 42 in the `octo-org/octo-repo` repository. */
     context?: string;
   };
+}
+export interface Response$markdown$render$Status$200 {
+  "text/html": string;
 }
 export interface RequestBody$markdown$render$raw {
   "text/plain": string;
@@ -5957,13 +7229,14 @@ export interface Parameter$activity$list$public$events$for$repo$network {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
 export interface Response$activity$list$public$events$for$repo$network$Status$200 {
   "application/json": Schemas.event[];
 }
+export type Response$activity$list$public$events$for$repo$network$Status$301 = Responses.moved_permanently.Content;
 export type Response$activity$list$public$events$for$repo$network$Status$403 = Responses.forbidden.Content;
 export type Response$activity$list$public$events$for$repo$network$Status$404 = Responses.not_found.Content;
 export interface Parameter$activity$list$notifications$for$authenticated$user {
@@ -5976,7 +7249,7 @@ export interface Parameter$activity$list$notifications$for$authenticated$user {
   /** Only show notifications updated before the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   before?: Parameters.before;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6003,7 +7276,7 @@ export type Response$activity$mark$notifications$as$read$Status$401 = Responses.
 export type Response$activity$mark$notifications$as$read$Status$403 = Responses.forbidden.Content;
 export interface Parameter$activity$get$thread {
   /** thread_id parameter */
-  thread_id: Parameters.thread_id;
+  thread_id: Parameters.thread$id;
 }
 export interface Response$activity$get$thread$Status$200 {
   "application/json": Schemas.thread;
@@ -6012,12 +7285,12 @@ export type Response$activity$get$thread$Status$401 = Responses.requires_authent
 export type Response$activity$get$thread$Status$403 = Responses.forbidden.Content;
 export interface Parameter$activity$mark$thread$as$read {
   /** thread_id parameter */
-  thread_id: Parameters.thread_id;
+  thread_id: Parameters.thread$id;
 }
 export type Response$activity$mark$thread$as$read$Status$403 = Responses.forbidden.Content;
 export interface Parameter$activity$get$thread$subscription$for$authenticated$user {
   /** thread_id parameter */
-  thread_id: Parameters.thread_id;
+  thread_id: Parameters.thread$id;
 }
 export interface Response$activity$get$thread$subscription$for$authenticated$user$Status$200 {
   "application/json": Schemas.thread$subscription;
@@ -6026,7 +7299,7 @@ export type Response$activity$get$thread$subscription$for$authenticated$user$Sta
 export type Response$activity$get$thread$subscription$for$authenticated$user$Status$403 = Responses.forbidden.Content;
 export interface Parameter$activity$set$thread$subscription {
   /** thread_id parameter */
-  thread_id: Parameters.thread_id;
+  thread_id: Parameters.thread$id;
 }
 export interface RequestBody$activity$set$thread$subscription {
   "application/json": {
@@ -6041,7 +7314,7 @@ export type Response$activity$set$thread$subscription$Status$401 = Responses.req
 export type Response$activity$set$thread$subscription$Status$403 = Responses.forbidden.Content;
 export interface Parameter$activity$delete$thread$subscription {
   /** thread_id parameter */
-  thread_id: Parameters.thread_id;
+  thread_id: Parameters.thread$id;
 }
 export type Response$activity$delete$thread$subscription$Status$401 = Responses.requires_authentication.Content;
 export type Response$activity$delete$thread$subscription$Status$403 = Responses.forbidden.Content;
@@ -6056,7 +7329,7 @@ export interface Parameter$orgs$list {
   /** An organization ID. Only return organizations with an ID greater than this ID. */
   since?: Parameters.since$org;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
 }
 export interface Response$orgs$list$Status$200 {
   "application/json": Schemas.organization$simple[];
@@ -6111,21 +7384,21 @@ export interface RequestBody$orgs$update {
      * Toggles whether organization members can create internal repositories, which are visible to all enterprise members. You can only allow members to create internal repositories if your organization is associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+. Can be one of:
      * \* `true` - all organization members can create internal repositories.
      * \* `false` - only organization owners can create internal repositories.
-     * Default: `true`. For more information, see "[Restricting repository creation in your organization](https://help.github.com/github/setting-up-and-managing-organizations-and-teams/restricting-repository-creation-in-your-organization)" in the GitHub Help documentation.
+     * Default: `true`. For more information, see "[Restricting repository creation in your organization](https://docs.github.com/github/setting-up-and-managing-organizations-and-teams/restricting-repository-creation-in-your-organization)" in the GitHub Help documentation.
      */
     members_can_create_internal_repositories?: boolean;
     /**
      * Toggles whether organization members can create private repositories, which are visible to organization members with permission. Can be one of:
      * \* `true` - all organization members can create private repositories.
      * \* `false` - only organization owners can create private repositories.
-     * Default: `true`. For more information, see "[Restricting repository creation in your organization](https://help.github.com/github/setting-up-and-managing-organizations-and-teams/restricting-repository-creation-in-your-organization)" in the GitHub Help documentation.
+     * Default: `true`. For more information, see "[Restricting repository creation in your organization](https://docs.github.com/github/setting-up-and-managing-organizations-and-teams/restricting-repository-creation-in-your-organization)" in the GitHub Help documentation.
      */
     members_can_create_private_repositories?: boolean;
     /**
      * Toggles whether organization members can create public repositories, which are visible to anyone. Can be one of:
      * \* `true` - all organization members can create public repositories.
      * \* `false` - only organization owners can create public repositories.
-     * Default: `true`. For more information, see "[Restricting repository creation in your organization](https://help.github.com/github/setting-up-and-managing-organizations-and-teams/restricting-repository-creation-in-your-organization)" in the GitHub Help documentation.
+     * Default: `true`. For more information, see "[Restricting repository creation in your organization](https://docs.github.com/github/setting-up-and-managing-organizations-and-teams/restricting-repository-creation-in-your-organization)" in the GitHub Help documentation.
      */
     members_can_create_public_repositories?: boolean;
     /**
@@ -6142,6 +7415,12 @@ export interface RequestBody$orgs$update {
      * \* `false` - no organization members can create GitHub Pages sites. Existing published sites will not be impacted.
      */
     members_can_create_pages?: boolean;
+    /**
+     * Toggles whether organization members can fork private organization repositories. Can be one of:
+     * \* `true` - all organization members can fork private repositories within the organization.
+     * \* `false` - no organization members can fork private repositories within the organization.
+     */
+    members_can_fork_private_repositories?: boolean;
     blog?: string;
   };
 }
@@ -6149,7 +7428,6 @@ export interface Response$orgs$update$Status$200 {
   "application/json": Schemas.organization$full;
 }
 export type Response$orgs$update$Status$409 = Responses.conflict.Content;
-export type Response$orgs$update$Status$415 = Responses.preview_header_missing.Content;
 export interface Response$orgs$update$Status$422 {
   "application/json": Schemas.validation$error | Schemas.validation$error$simple;
 }
@@ -6171,7 +7449,7 @@ export interface RequestBody$actions$set$github$actions$permissions$organization
 export interface Parameter$actions$list$selected$repositories$enabled$github$actions$organization {
   org: Parameters.org;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6192,11 +7470,11 @@ export interface RequestBody$actions$set$selected$repositories$enabled$github$ac
 }
 export interface Parameter$actions$enable$selected$repository$github$actions$organization {
   org: Parameters.org;
-  repository_id: Parameters.repository_id;
+  repository_id: Parameters.repository$id;
 }
 export interface Parameter$actions$disable$selected$repository$github$actions$organization {
   org: Parameters.org;
-  repository_id: Parameters.repository_id;
+  repository_id: Parameters.repository$id;
 }
 export interface Parameter$actions$get$allowed$actions$organization {
   org: Parameters.org;
@@ -6213,7 +7491,7 @@ export interface RequestBody$actions$set$allowed$actions$organization {
 export interface Parameter$actions$list$self$hosted$runner$groups$for$org {
   org: Parameters.org;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6236,6 +7514,8 @@ export interface RequestBody$actions$create$self$hosted$runner$group$for$org {
     selected_repository_ids?: number[];
     /** List of runner IDs to add to the runner group. */
     runners?: number[];
+    /** Whether the runner group can be used by `public` repositories. */
+    allows_public_repositories?: boolean;
   };
 }
 export interface Response$actions$create$self$hosted$runner$group$for$org$Status$201 {
@@ -6244,7 +7524,7 @@ export interface Response$actions$create$self$hosted$runner$group$for$org$Status
 export interface Parameter$actions$get$self$hosted$runner$group$for$org {
   org: Parameters.org;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
 }
 export interface Response$actions$get$self$hosted$runner$group$for$org$Status$200 {
   "application/json": Schemas.runner$groups$org;
@@ -6252,19 +7532,21 @@ export interface Response$actions$get$self$hosted$runner$group$for$org$Status$20
 export interface Parameter$actions$delete$self$hosted$runner$group$from$org {
   org: Parameters.org;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
 }
 export interface Parameter$actions$update$self$hosted$runner$group$for$org {
   org: Parameters.org;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
 }
 export interface RequestBody$actions$update$self$hosted$runner$group$for$org {
   "application/json": {
     /** Name of the runner group. */
-    name?: string;
+    name: string;
     /** Visibility of a runner group. You can select all repositories, select individual repositories, or all private repositories. Can be one of: `all`, `selected`, or `private`. */
     visibility?: "selected" | "all" | "private";
+    /** Whether the runner group can be used by `public` repositories. */
+    allows_public_repositories?: boolean;
   };
 }
 export interface Response$actions$update$self$hosted$runner$group$for$org$Status$200 {
@@ -6273,18 +7555,22 @@ export interface Response$actions$update$self$hosted$runner$group$for$org$Status
 export interface Parameter$actions$list$repo$access$to$self$hosted$runner$group$in$org {
   org: Parameters.org;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
 }
 export interface Response$actions$list$repo$access$to$self$hosted$runner$group$in$org$Status$200 {
   "application/json": {
     total_count: number;
-    repositories: Schemas.repository[];
+    repositories: Schemas.minimal$repository[];
   };
 }
 export interface Parameter$actions$set$repo$access$to$self$hosted$runner$group$in$org {
   org: Parameters.org;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
 }
 export interface RequestBody$actions$set$repo$access$to$self$hosted$runner$group$in$org {
   "application/json": {
@@ -6295,21 +7581,21 @@ export interface RequestBody$actions$set$repo$access$to$self$hosted$runner$group
 export interface Parameter$actions$add$repo$access$to$self$hosted$runner$group$in$org {
   org: Parameters.org;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
-  repository_id: Parameters.repository_id;
+  runner_group_id: Parameters.runner$group$id;
+  repository_id: Parameters.repository$id;
 }
 export interface Parameter$actions$remove$repo$access$to$self$hosted$runner$group$in$org {
   org: Parameters.org;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
-  repository_id: Parameters.repository_id;
+  runner_group_id: Parameters.runner$group$id;
+  repository_id: Parameters.repository$id;
 }
 export interface Parameter$actions$list$self$hosted$runners$in$group$for$org {
   org: Parameters.org;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6322,7 +7608,7 @@ export interface Response$actions$list$self$hosted$runners$in$group$for$org$Stat
 export interface Parameter$actions$set$self$hosted$runners$in$group$for$org {
   org: Parameters.org;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
 }
 export interface RequestBody$actions$set$self$hosted$runners$in$group$for$org {
   "application/json": {
@@ -6333,21 +7619,21 @@ export interface RequestBody$actions$set$self$hosted$runners$in$group$for$org {
 export interface Parameter$actions$add$self$hosted$runner$to$group$for$org {
   org: Parameters.org;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
   /** Unique identifier of the self-hosted runner. */
-  runner_id: Parameters.runner_id;
+  runner_id: Parameters.runner$id;
 }
 export interface Parameter$actions$remove$self$hosted$runner$from$group$for$org {
   org: Parameters.org;
   /** Unique identifier of the self-hosted runner group. */
-  runner_group_id: Parameters.runner_group_id;
+  runner_group_id: Parameters.runner$group$id;
   /** Unique identifier of the self-hosted runner. */
-  runner_id: Parameters.runner_id;
+  runner_id: Parameters.runner$id;
 }
 export interface Parameter$actions$list$self$hosted$runners$for$org {
   org: Parameters.org;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6378,7 +7664,7 @@ export interface Response$actions$create$remove$token$for$org$Status$201 {
 export interface Parameter$actions$get$self$hosted$runner$for$org {
   org: Parameters.org;
   /** Unique identifier of the self-hosted runner. */
-  runner_id: Parameters.runner_id;
+  runner_id: Parameters.runner$id;
 }
 export interface Response$actions$get$self$hosted$runner$for$org$Status$200 {
   "application/json": Schemas.runner;
@@ -6386,12 +7672,12 @@ export interface Response$actions$get$self$hosted$runner$for$org$Status$200 {
 export interface Parameter$actions$delete$self$hosted$runner$from$org {
   org: Parameters.org;
   /** Unique identifier of the self-hosted runner. */
-  runner_id: Parameters.runner_id;
+  runner_id: Parameters.runner$id;
 }
 export interface Parameter$actions$list$org$secrets {
   org: Parameters.org;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6410,7 +7696,7 @@ export interface Response$actions$get$org$public$key$Status$200 {
 export interface Parameter$actions$get$org$secret {
   org: Parameters.org;
   /** secret_name parameter */
-  secret_name: Parameters.secret_name;
+  secret_name: Parameters.secret$name;
 }
 export interface Response$actions$get$org$secret$Status$200 {
   "application/json": Schemas.organization$actions$secret;
@@ -6418,7 +7704,7 @@ export interface Response$actions$get$org$secret$Status$200 {
 export interface Parameter$actions$create$or$update$org$secret {
   org: Parameters.org;
   /** secret_name parameter */
-  secret_name: Parameters.secret_name;
+  secret_name: Parameters.secret$name;
 }
 export interface RequestBody$actions$create$or$update$org$secret {
   "application/json": {
@@ -6432,20 +7718,27 @@ export interface RequestBody$actions$create$or$update$org$secret {
      * \- `private` - Private repositories in an organization can access the secret.
      * \- `selected` - Only specific repositories can access the secret.
      */
-    visibility?: "all" | "private" | "selected";
+    visibility: "all" | "private" | "selected";
     /** An array of repository ids that can access the organization secret. You can only provide a list of repository ids when the `visibility` is set to `selected`. You can manage the list of selected repositories using the [List selected repositories for an organization secret](https://docs.github.com/enterprise-server@3.0/rest/reference/actions#list-selected-repositories-for-an-organization-secret), [Set selected repositories for an organization secret](https://docs.github.com/enterprise-server@3.0/rest/reference/actions#set-selected-repositories-for-an-organization-secret), and [Remove selected repository from an organization secret](https://docs.github.com/enterprise-server@3.0/rest/reference/actions#remove-selected-repository-from-an-organization-secret) endpoints. */
     selected_repository_ids?: string[];
   };
 }
+export interface Response$actions$create$or$update$org$secret$Status$201 {
+  "application/json": Schemas.empty$object;
+}
 export interface Parameter$actions$delete$org$secret {
   org: Parameters.org;
   /** secret_name parameter */
-  secret_name: Parameters.secret_name;
+  secret_name: Parameters.secret$name;
 }
 export interface Parameter$actions$list$selected$repos$for$org$secret {
   org: Parameters.org;
   /** secret_name parameter */
-  secret_name: Parameters.secret_name;
+  secret_name: Parameters.secret$name;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
 }
 export interface Response$actions$list$selected$repos$for$org$secret$Status$200 {
   "application/json": {
@@ -6456,30 +7749,30 @@ export interface Response$actions$list$selected$repos$for$org$secret$Status$200 
 export interface Parameter$actions$set$selected$repos$for$org$secret {
   org: Parameters.org;
   /** secret_name parameter */
-  secret_name: Parameters.secret_name;
+  secret_name: Parameters.secret$name;
 }
 export interface RequestBody$actions$set$selected$repos$for$org$secret {
   "application/json": {
     /** An array of repository ids that can access the organization secret. You can only provide a list of repository ids when the `visibility` is set to `selected`. You can add and remove individual repositories using the [Set selected repositories for an organization secret](https://docs.github.com/enterprise-server@3.0/rest/reference/actions#set-selected-repositories-for-an-organization-secret) and [Remove selected repository from an organization secret](https://docs.github.com/enterprise-server@3.0/rest/reference/actions#remove-selected-repository-from-an-organization-secret) endpoints. */
-    selected_repository_ids?: number[];
+    selected_repository_ids: number[];
   };
 }
 export interface Parameter$actions$add$selected$repo$to$org$secret {
   org: Parameters.org;
   /** secret_name parameter */
-  secret_name: Parameters.secret_name;
+  secret_name: Parameters.secret$name;
   repository_id: number;
 }
 export interface Parameter$actions$remove$selected$repo$from$org$secret {
   org: Parameters.org;
   /** secret_name parameter */
-  secret_name: Parameters.secret_name;
+  secret_name: Parameters.secret$name;
   repository_id: number;
 }
 export interface Parameter$activity$list$public$org$events {
   org: Parameters.org;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6489,7 +7782,7 @@ export interface Response$activity$list$public$org$events$Status$200 {
 export interface Parameter$orgs$list$webhooks {
   org: Parameters.org;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6598,7 +7891,7 @@ export interface Response$apps$get$org$installation$Status$200 {
 export interface Parameter$orgs$list$app$installations {
   org: Parameters.org;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6616,9 +7909,9 @@ export interface Parameter$issues$list$for$org {
    * \* `created`: Issues created by you
    * \* `mentioned`: Issues mentioning you
    * \* `subscribed`: Issues you're subscribed to updates for
-   * \* `all`: All issues the authenticated user can see, regardless of participation or creation
+   * \* `all` or `repos`: All issues the authenticated user can see, regardless of participation or creation
    */
-  filter?: "assigned" | "created" | "mentioned" | "subscribed" | "all";
+  filter?: "assigned" | "created" | "mentioned" | "subscribed" | "repos" | "all";
   /** Indicates the state of the issues to return. Can be either `open`, `closed`, or `all`. */
   state?: "open" | "closed" | "all";
   /** A list of comma separated label names. Example: `bug,ui,@high` */
@@ -6630,7 +7923,7 @@ export interface Parameter$issues$list$for$org {
   /** Only show notifications updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   since?: Parameters.since;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6654,7 +7947,7 @@ export interface Parameter$orgs$list$members {
    */
   role?: "all" | "admin" | "member";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6714,7 +8007,7 @@ export interface Parameter$orgs$list$outside$collaborators {
    */
   filter?: "2fa_disabled" | "all";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6725,11 +8018,8 @@ export interface Parameter$orgs$convert$member$to$outside$collaborator {
   org: Parameters.org;
   username: Parameters.username;
 }
-export interface Response$orgs$convert$member$to$outside$collaborator$Status$403 {
-  "application/json": {
-    message?: string;
-    documentation_url?: string;
-  };
+export interface Response$orgs$convert$member$to$outside$collaborator$Status$202 {
+  "application/json": {};
 }
 export type Response$orgs$convert$member$to$outside$collaborator$Status$404 = Responses.not_found.Content;
 export interface Parameter$orgs$remove$outside$collaborator {
@@ -6748,12 +8038,17 @@ export interface Parameter$enterprise$admin$list$pre$receive$hooks$for$org {
   per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
+  /** One of `asc` (ascending) or `desc` (descending). */
+  direction?: Parameters.direction;
+  /** The sort order for the response collection. */
+  sort?: "created" | "updated" | "name";
 }
 export interface Response$enterprise$admin$list$pre$receive$hooks$for$org$Status$200 {
   "application/json": Schemas.org$pre$receive$hook[];
 }
 export interface Parameter$enterprise$admin$get$pre$receive$hook$for$org {
   org: Parameters.org;
+  /** pre_receive_hook_id parameter */
   pre_receive_hook_id: Parameters.pre$receive$hook$id;
 }
 export interface Response$enterprise$admin$get$pre$receive$hook$for$org$Status$200 {
@@ -6761,6 +8056,7 @@ export interface Response$enterprise$admin$get$pre$receive$hook$for$org$Status$2
 }
 export interface Parameter$enterprise$admin$remove$pre$receive$hook$enforcement$for$org {
   org: Parameters.org;
+  /** pre_receive_hook_id parameter */
   pre_receive_hook_id: Parameters.pre$receive$hook$id;
 }
 export interface Response$enterprise$admin$remove$pre$receive$hook$enforcement$for$org$Status$200 {
@@ -6768,6 +8064,7 @@ export interface Response$enterprise$admin$remove$pre$receive$hook$enforcement$f
 }
 export interface Parameter$enterprise$admin$update$pre$receive$hook$enforcement$for$org {
   org: Parameters.org;
+  /** pre_receive_hook_id parameter */
   pre_receive_hook_id: Parameters.pre$receive$hook$id;
 }
 export interface RequestBody$enterprise$admin$update$pre$receive$hook$enforcement$for$org {
@@ -6786,7 +8083,7 @@ export interface Parameter$projects$list$for$org {
   /** Indicates the state of the projects to return. Can be either `open`, `closed`, or `all`. */
   state?: "open" | "closed" | "all";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6816,7 +8113,7 @@ export type Response$projects$create$for$org$Status$422 = Responses.validation_f
 export interface Parameter$orgs$list$public$members {
   org: Parameters.org;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6838,14 +8135,14 @@ export interface Parameter$orgs$remove$public$membership$for$authenticated$user 
 }
 export interface Parameter$repos$list$for$org {
   org: Parameters.org;
-  /** Specifies the types of repositories you want returned. Can be one of `all`, `public`, `private`, `forks`, `sources`, `member`, `internal`. Default: `all`. If your organization is associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+, `type` can also be `internal`. */
+  /** Specifies the types of repositories you want returned. Can be one of `all`, `public`, `private`, `forks`, `sources`, `member`, `internal`. Note: For GitHub AE, can be one of `all`, `private`, `forks`, `sources`, `member`, `internal`. Default: `all`. If your organization is associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+, `type` can also be `internal`. However, the `internal` value is not yet supported when a GitHub App calls this API with an installation access token. */
   type?: "all" | "public" | "private" | "forks" | "sources" | "member" | "internal";
   /** Can be one of `created`, `updated`, `pushed`, `full_name`. */
   sort?: "created" | "updated" | "pushed" | "full_name";
   /** Can be one of `asc` or `desc`. Default: when using `full_name`: `asc`, otherwise `desc` */
   direction?: "asc" | "desc";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6863,13 +8160,13 @@ export interface RequestBody$repos$create$in$org {
     description?: string;
     /** A URL with more information about the repository. */
     homepage?: string;
-    /** Either `true` to create a private repository or `false` to create a public one. */
+    /** Whether the repository is private. */
     private?: boolean;
     /**
-     * Can be `public` or `private`. If your organization is associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+, `visibility` can also be `internal`. For more information, see "[Creating an internal repository](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/about-repository-visibility#about-internal-repositories)" in the GitHub Help documentation.
+     * Can be `public` or `private`. If your organization is associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+, `visibility` can also be `internal`. Note: For GitHub Enterprise Server and GitHub AE, this endpoint will only list repositories available to all users on the enterprise. For more information, see "[Creating an internal repository](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-repository-visibility#about-internal-repositories)" in the GitHub Help documentation.
      * The `visibility` parameter overrides the `private` parameter when you use both parameters with the `nebula-preview` preview header.
      */
-    visibility?: "public" | "private" | "visibility" | "internal";
+    visibility?: "public" | "private" | "internal";
     /** Either `true` to enable issues for this repository or `false` to disable them. */
     has_issues?: boolean;
     /** Either `true` to enable projects for this repository or `false` to disable them. **Note:** If you're creating a repository in an organization that has disabled repository projects, the default is `false`, and if you pass `true`, the API returns an error. */
@@ -6884,7 +8181,7 @@ export interface RequestBody$repos$create$in$org {
     auto_init?: boolean;
     /** Desired language or platform [.gitignore template](https://github.com/github/gitignore) to apply. Use the name of the template without the extension. For example, "Haskell". */
     gitignore_template?: string;
-    /** Choose an [open source license template](https://choosealicense.com/) that best suits your needs, and then use the [license keyword](https://help.github.com/articles/licensing-a-repository/#searching-github-by-license-type) as the `license_template` string. For example, "mit" or "mpl-2.0". */
+    /** Choose an [open source license template](https://choosealicense.com/) that best suits your needs, and then use the [license keyword](https://docs.github.com/articles/licensing-a-repository/#searching-github-by-license-type) as the `license_template` string. For example, "mit" or "mpl-2.0". */
     license_template?: string;
     /** Either `true` to allow squash-merging pull requests, or `false` to prevent squash-merging. */
     allow_squash_merge?: boolean;
@@ -6904,7 +8201,7 @@ export type Response$repos$create$in$org$Status$422 = Responses.validation_faile
 export interface Parameter$teams$list {
   org: Parameters.org;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -6940,11 +8237,12 @@ export interface RequestBody$teams$create {
      * **Deprecated**. The permission that new repositories will be added to the team with when none is specified. Can be one of:
      * \* `pull` - team members can pull, but not push to or administer newly-added repositories.
      * \* `push` - team members can pull and push, but not administer newly-added repositories.
-     * \* `admin` - team members can pull, push and administer newly-added repositories.
      */
-    permission?: "pull" | "push" | "admin";
+    permission?: "pull" | "push";
     /** The ID of a team to set as the parent team. */
     parent_team_id?: number;
+    /** The [distinguished name](https://www.ldap.com/ldap-dns-and-rdns) (DN) of the LDAP entry to map to a team. LDAP synchronization must be enabled to map LDAP entries to a team. Use the "[Update LDAP mapping for a team](https://docs.github.com/enterprise-server@3.0/rest/reference/enterprise-admin#update-ldap-mapping-for-a-team)" endpoint to change the LDAP DN. For more information, see "[Using LDAP](https://docs.github.com/enterprise-server@3.0/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap#enabling-ldap-sync)." */
+    ldap_dn?: string;
   };
 }
 export interface Response$teams$create$Status$201 {
@@ -6955,7 +8253,7 @@ export type Response$teams$create$Status$422 = Responses.validation_failed.Conte
 export interface Parameter$teams$get$by$name {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
 }
 export interface Response$teams$get$by$name$Status$200 {
   "application/json": Schemas.team$full;
@@ -6964,17 +8262,17 @@ export type Response$teams$get$by$name$Status$404 = Responses.not_found.Content;
 export interface Parameter$teams$delete$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
 }
 export interface Parameter$teams$update$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
 }
 export interface RequestBody$teams$update$in$org {
   "application/json": {
     /** The name of the team. */
-    name: string;
+    name?: string;
     /** The description of the team. */
     description?: string;
     /**
@@ -6994,7 +8292,7 @@ export interface RequestBody$teams$update$in$org {
      */
     permission?: "pull" | "push" | "admin";
     /** The ID of a team to set as the parent team. */
-    parent_team_id?: number;
+    parent_team_id?: number | null;
   };
 }
 export interface Response$teams$update$in$org$Status$201 {
@@ -7003,13 +8301,15 @@ export interface Response$teams$update$in$org$Status$201 {
 export interface Parameter$teams$list$discussions$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   /** One of `asc` (ascending) or `desc` (descending). */
   direction?: Parameters.direction;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
+  /** Pinned discussions only filter */
+  pinned?: string;
 }
 export interface Response$teams$list$discussions$in$org$Status$200 {
   "application/json": Schemas.team$discussion[];
@@ -7017,7 +8317,7 @@ export interface Response$teams$list$discussions$in$org$Status$200 {
 export interface Parameter$teams$create$discussion$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
 }
 export interface RequestBody$teams$create$discussion$in$org {
   "application/json": {
@@ -7035,7 +8335,7 @@ export interface Response$teams$create$discussion$in$org$Status$201 {
 export interface Parameter$teams$get$discussion$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
 }
 export interface Response$teams$get$discussion$in$org$Status$200 {
@@ -7044,13 +8344,13 @@ export interface Response$teams$get$discussion$in$org$Status$200 {
 export interface Parameter$teams$delete$discussion$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
 }
 export interface Parameter$teams$update$discussion$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
 }
 export interface RequestBody$teams$update$discussion$in$org {
@@ -7067,12 +8367,12 @@ export interface Response$teams$update$discussion$in$org$Status$200 {
 export interface Parameter$teams$list$discussion$comments$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
   /** One of `asc` (ascending) or `desc` (descending). */
   direction?: Parameters.direction;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -7082,7 +8382,7 @@ export interface Response$teams$list$discussion$comments$in$org$Status$200 {
 export interface Parameter$teams$create$discussion$comment$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
 }
 export interface RequestBody$teams$create$discussion$comment$in$org {
@@ -7097,7 +8397,7 @@ export interface Response$teams$create$discussion$comment$in$org$Status$201 {
 export interface Parameter$teams$get$discussion$comment$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
   comment_number: Parameters.comment$number;
 }
@@ -7107,14 +8407,14 @@ export interface Response$teams$get$discussion$comment$in$org$Status$200 {
 export interface Parameter$teams$delete$discussion$comment$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
   comment_number: Parameters.comment$number;
 }
 export interface Parameter$teams$update$discussion$comment$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
   comment_number: Parameters.comment$number;
 }
@@ -7130,13 +8430,13 @@ export interface Response$teams$update$discussion$comment$in$org$Status$200 {
 export interface Parameter$reactions$list$for$team$discussion$comment$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
   comment_number: Parameters.comment$number;
   /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a team discussion comment. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -7146,7 +8446,7 @@ export interface Response$reactions$list$for$team$discussion$comment$in$org$Stat
 export interface Parameter$reactions$create$for$team$discussion$comment$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
   comment_number: Parameters.comment$number;
 }
@@ -7156,13 +8456,16 @@ export interface RequestBody$reactions$create$for$team$discussion$comment$in$org
     content: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   };
 }
+export interface Response$reactions$create$for$team$discussion$comment$in$org$Status$200 {
+  "application/json": Schemas.reaction;
+}
 export interface Response$reactions$create$for$team$discussion$comment$in$org$Status$201 {
   "application/json": Schemas.reaction;
 }
 export interface Parameter$reactions$delete$for$team$discussion$comment {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
   comment_number: Parameters.comment$number;
   reaction_id: Parameters.reaction$id;
@@ -7170,12 +8473,12 @@ export interface Parameter$reactions$delete$for$team$discussion$comment {
 export interface Parameter$reactions$list$for$team$discussion$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
   /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a team discussion. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -7185,7 +8488,7 @@ export interface Response$reactions$list$for$team$discussion$in$org$Status$200 {
 export interface Parameter$reactions$create$for$team$discussion$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
 }
 export interface RequestBody$reactions$create$for$team$discussion$in$org {
@@ -7194,20 +8497,23 @@ export interface RequestBody$reactions$create$for$team$discussion$in$org {
     content: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   };
 }
+export interface Response$reactions$create$for$team$discussion$in$org$Status$200 {
+  "application/json": Schemas.reaction;
+}
 export interface Response$reactions$create$for$team$discussion$in$org$Status$201 {
   "application/json": Schemas.reaction;
 }
 export interface Parameter$reactions$delete$for$team$discussion {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
   reaction_id: Parameters.reaction$id;
 }
 export interface Parameter$teams$list$members$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   /**
    * Filters members returned by their role in the team. Can be one of:
    * \* `member` - normal members of the team.
@@ -7216,7 +8522,7 @@ export interface Parameter$teams$list$members$in$org {
    */
   role?: "member" | "maintainer" | "all";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -7226,7 +8532,7 @@ export interface Response$teams$list$members$in$org$Status$200 {
 export interface Parameter$teams$get$membership$for$user$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   username: Parameters.username;
 }
 export interface Response$teams$get$membership$for$user$in$org$Status$200 {
@@ -7235,7 +8541,7 @@ export interface Response$teams$get$membership$for$user$in$org$Status$200 {
 export interface Parameter$teams$add$or$update$membership$for$user$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   username: Parameters.username;
 }
 export interface RequestBody$teams$add$or$update$membership$for$user$in$org {
@@ -7251,28 +8557,18 @@ export interface RequestBody$teams$add$or$update$membership$for$user$in$org {
 export interface Response$teams$add$or$update$membership$for$user$in$org$Status$200 {
   "application/json": Schemas.team$membership;
 }
-export interface Response$teams$add$or$update$membership$for$user$in$org$Status$422 {
-  "application/json": {
-    message?: string;
-    errors?: {
-      code?: string;
-      field?: string;
-      resource?: string;
-    }[];
-  };
-}
 export interface Parameter$teams$remove$membership$for$user$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   username: Parameters.username;
 }
 export interface Parameter$teams$list$projects$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -7282,7 +8578,7 @@ export interface Response$teams$list$projects$in$org$Status$200 {
 export interface Parameter$teams$check$permissions$for$project$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   project_id: Parameters.project$id;
 }
 export interface Response$teams$check$permissions$for$project$in$org$Status$200 {
@@ -7291,7 +8587,7 @@ export interface Response$teams$check$permissions$for$project$in$org$Status$200 
 export interface Parameter$teams$add$or$update$project$permissions$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   project_id: Parameters.project$id;
 }
 export interface RequestBody$teams$add$or$update$project$permissions$in$org {
@@ -7304,7 +8600,7 @@ export interface RequestBody$teams$add$or$update$project$permissions$in$org {
      * Default: the team's `permission` attribute will be used to determine what permission to grant the team on this project. Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
      */
     permission?: "read" | "write" | "admin";
-  };
+  } | null;
 }
 export interface Response$teams$add$or$update$project$permissions$in$org$Status$403 {
   "application/json": {
@@ -7315,15 +8611,15 @@ export interface Response$teams$add$or$update$project$permissions$in$org$Status$
 export interface Parameter$teams$remove$project$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   project_id: Parameters.project$id;
 }
 export interface Parameter$teams$list$repos$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -7333,17 +8629,17 @@ export interface Response$teams$list$repos$in$org$Status$200 {
 export interface Parameter$teams$check$permissions$for$repo$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   owner: Parameters.owner;
   repo: Parameters.repo;
 }
 export interface Response$teams$check$permissions$for$repo$in$org$Status$200 {
-  "application/vnd.github.v3.repository+json": Schemas.team$repository;
+  "application/json": Schemas.team$repository;
 }
 export interface Parameter$teams$add$or$update$repo$permissions$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   owner: Parameters.owner;
   repo: Parameters.repo;
 }
@@ -7365,16 +8661,16 @@ export interface RequestBody$teams$add$or$update$repo$permissions$in$org {
 export interface Parameter$teams$remove$repo$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   owner: Parameters.owner;
   repo: Parameters.repo;
 }
 export interface Parameter$teams$list$child$in$org {
   org: Parameters.org;
   /** team_slug parameter */
-  team_slug: Parameters.team_slug;
+  team_slug: Parameters.team$slug;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -7383,7 +8679,7 @@ export interface Response$teams$list$child$in$org$Status$200 {
 }
 export interface Parameter$projects$get$card {
   /** card_id parameter */
-  card_id: Parameters.card_id;
+  card_id: Parameters.card$id;
 }
 export interface Response$projects$get$card$Status$200 {
   "application/json": Schemas.project$card;
@@ -7393,7 +8689,7 @@ export type Response$projects$get$card$Status$403 = Responses.forbidden.Content;
 export type Response$projects$get$card$Status$404 = Responses.not_found.Content;
 export interface Parameter$projects$delete$card {
   /** card_id parameter */
-  card_id: Parameters.card_id;
+  card_id: Parameters.card$id;
 }
 export type Response$projects$delete$card$Status$401 = Responses.requires_authentication.Content;
 export interface Response$projects$delete$card$Status$403 {
@@ -7406,7 +8702,7 @@ export interface Response$projects$delete$card$Status$403 {
 export type Response$projects$delete$card$Status$404 = Responses.not_found.Content;
 export interface Parameter$projects$update$card {
   /** card_id parameter */
-  card_id: Parameters.card_id;
+  card_id: Parameters.card$id;
 }
 export interface RequestBody$projects$update$card {
   "application/json": {
@@ -7425,11 +8721,11 @@ export type Response$projects$update$card$Status$404 = Responses.not_found.Conte
 export type Response$projects$update$card$Status$422 = Responses.validation_failed_simple.Content;
 export interface Parameter$projects$move$card {
   /** card_id parameter */
-  card_id: Parameters.card_id;
+  card_id: Parameters.card$id;
 }
 export interface RequestBody$projects$move$card {
   "application/json": {
-    /** The position of the card in a column */
+    /** The position of the card in a column. Can be one of: `top`, `bottom`, or `after:<card_id>` to place after the specified card. */
     position: string;
     /** The unique identifier of the column the card should be moved to */
     column_id?: number;
@@ -7465,7 +8761,7 @@ export interface Response$projects$move$card$Status$503 {
 }
 export interface Parameter$projects$get$column {
   /** column_id parameter */
-  column_id: Parameters.column_id;
+  column_id: Parameters.column$id;
 }
 export interface Response$projects$get$column$Status$200 {
   "application/json": Schemas.project$column;
@@ -7475,13 +8771,13 @@ export type Response$projects$get$column$Status$403 = Responses.forbidden.Conten
 export type Response$projects$get$column$Status$404 = Responses.not_found.Content;
 export interface Parameter$projects$delete$column {
   /** column_id parameter */
-  column_id: Parameters.column_id;
+  column_id: Parameters.column$id;
 }
 export type Response$projects$delete$column$Status$401 = Responses.requires_authentication.Content;
 export type Response$projects$delete$column$Status$403 = Responses.forbidden.Content;
 export interface Parameter$projects$update$column {
   /** column_id parameter */
-  column_id: Parameters.column_id;
+  column_id: Parameters.column$id;
 }
 export interface RequestBody$projects$update$column {
   "application/json": {
@@ -7496,11 +8792,11 @@ export type Response$projects$update$column$Status$401 = Responses.requires_auth
 export type Response$projects$update$column$Status$403 = Responses.forbidden.Content;
 export interface Parameter$projects$list$cards {
   /** column_id parameter */
-  column_id: Parameters.column_id;
+  column_id: Parameters.column$id;
   /** Filters the project cards that are returned by the card's state. Can be one of `all`,`archived`, or `not_archived`. */
   archived_state?: "all" | "archived" | "not_archived";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -7511,7 +8807,7 @@ export type Response$projects$list$cards$Status$401 = Responses.requires_authent
 export type Response$projects$list$cards$Status$403 = Responses.forbidden.Content;
 export interface Parameter$projects$create$card {
   /** column_id parameter */
-  column_id: Parameters.column_id;
+  column_id: Parameters.column$id;
 }
 export interface RequestBody$projects$create$card {
   "application/json":
@@ -7547,11 +8843,11 @@ export interface Response$projects$create$card$Status$503 {
 }
 export interface Parameter$projects$move$column {
   /** column_id parameter */
-  column_id: Parameters.column_id;
+  column_id: Parameters.column$id;
 }
 export interface RequestBody$projects$move$column {
   "application/json": {
-    /** The position of the column in a project */
+    /** The position of the column in a project. Can be one of: `first`, `last`, or `after:<column_id>` to place after the specified column. */
     position: string;
   };
 }
@@ -7622,7 +8918,7 @@ export interface Parameter$projects$list$collaborators {
    */
   affiliation?: "outside" | "direct" | "all";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -7632,7 +8928,6 @@ export interface Response$projects$list$collaborators$Status$200 {
 export type Response$projects$list$collaborators$Status$401 = Responses.requires_authentication.Content;
 export type Response$projects$list$collaborators$Status$403 = Responses.forbidden.Content;
 export type Response$projects$list$collaborators$Status$404 = Responses.not_found.Content;
-export type Response$projects$list$collaborators$Status$415 = Responses.preview_header_missing.Content;
 export type Response$projects$list$collaborators$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$projects$add$collaborator {
   project_id: Parameters.project$id;
@@ -7642,12 +8937,11 @@ export interface RequestBody$projects$add$collaborator {
   "application/json": {
     /** The permission to grant the collaborator. */
     permission?: "read" | "write" | "admin";
-  };
+  } | null;
 }
 export type Response$projects$add$collaborator$Status$401 = Responses.requires_authentication.Content;
 export type Response$projects$add$collaborator$Status$403 = Responses.forbidden.Content;
 export type Response$projects$add$collaborator$Status$404 = Responses.not_found.Content;
-export type Response$projects$add$collaborator$Status$415 = Responses.preview_header_missing.Content;
 export type Response$projects$add$collaborator$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$projects$remove$collaborator {
   project_id: Parameters.project$id;
@@ -7656,24 +8950,22 @@ export interface Parameter$projects$remove$collaborator {
 export type Response$projects$remove$collaborator$Status$401 = Responses.requires_authentication.Content;
 export type Response$projects$remove$collaborator$Status$403 = Responses.forbidden.Content;
 export type Response$projects$remove$collaborator$Status$404 = Responses.not_found.Content;
-export type Response$projects$remove$collaborator$Status$415 = Responses.preview_header_missing.Content;
 export type Response$projects$remove$collaborator$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$projects$get$permission$for$user {
   project_id: Parameters.project$id;
   username: Parameters.username;
 }
 export interface Response$projects$get$permission$for$user$Status$200 {
-  "application/json": Schemas.repository$collaborator$permission;
+  "application/json": Schemas.project$collaborator$permission;
 }
 export type Response$projects$get$permission$for$user$Status$401 = Responses.requires_authentication.Content;
 export type Response$projects$get$permission$for$user$Status$403 = Responses.forbidden.Content;
 export type Response$projects$get$permission$for$user$Status$404 = Responses.not_found.Content;
-export type Response$projects$get$permission$for$user$Status$415 = Responses.preview_header_missing.Content;
 export type Response$projects$get$permission$for$user$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$projects$list$columns {
   project_id: Parameters.project$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -7707,7 +8999,6 @@ export interface Parameter$reactions$delete$legacy {
 export type Response$reactions$delete$legacy$Status$401 = Responses.requires_authentication.Content;
 export type Response$reactions$delete$legacy$Status$403 = Responses.forbidden.Content;
 export type Response$reactions$delete$legacy$Status$410 = Responses.gone.Content;
-export type Response$reactions$delete$legacy$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$repos$get {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -7715,12 +9006,14 @@ export interface Parameter$repos$get {
 export interface Response$repos$get$Status$200 {
   "application/json": Schemas.full$repository;
 }
+export type Response$repos$get$Status$301 = Responses.moved_permanently.Content;
 export type Response$repos$get$Status$403 = Responses.forbidden.Content;
 export type Response$repos$get$Status$404 = Responses.not_found.Content;
 export interface Parameter$repos$delete {
   owner: Parameters.owner;
   repo: Parameters.repo;
 }
+export type Response$repos$delete$Status$307 = Responses.temporary_redirect.Content;
 export interface Response$repos$delete$Status$403 {
   "application/json": {
     message?: string;
@@ -7742,11 +9035,11 @@ export interface RequestBody$repos$update {
     homepage?: string;
     /**
      * Either `true` to make the repository private or `false` to make it public. Default: `false`.
-     * **Note**: You will get a `422` error if the organization restricts [changing repository visibility](https://help.github.com/articles/repository-permission-levels-for-an-organization#changing-the-visibility-of-repositories) to organization owners and a non-owner tries to change the value of private. **Note**: You will get a `422` error if the organization restricts [changing repository visibility](https://help.github.com/articles/repository-permission-levels-for-an-organization#changing-the-visibility-of-repositories) to organization owners and a non-owner tries to change the value of private.
+     * **Note**: You will get a `422` error if the organization restricts [changing repository visibility](https://docs.github.com/articles/repository-permission-levels-for-an-organization#changing-the-visibility-of-repositories) to organization owners and a non-owner tries to change the value of private. **Note**: You will get a `422` error if the organization restricts [changing repository visibility](https://docs.github.com/articles/repository-permission-levels-for-an-organization#changing-the-visibility-of-repositories) to organization owners and a non-owner tries to change the value of private.
      */
     private?: boolean;
-    /** Can be `public` or `private`. If your organization is associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+, `visibility` can also be `internal`. The `visibility` parameter overrides the `private` parameter when you use both along with the `nebula-preview` preview header. */
-    visibility?: "public" | "private" | "visibility" | "internal";
+    /** Can be `public` or `private`. If your organization is associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+, `visibility` can also be `internal`." */
+    visibility?: "public" | "private" | "internal";
     /** Either `true` to enable issues for this repository or `false` to disable them. */
     has_issues?: boolean;
     /** Either `true` to enable projects for this repository or `false` to disable them. **Note:** If you're creating a repository in an organization that has disabled repository projects, the default is `false`, and if you pass `true`, the API returns an error. */
@@ -7767,11 +9060,14 @@ export interface RequestBody$repos$update {
     delete_branch_on_merge?: boolean;
     /** `true` to archive this repository. **Note**: You cannot unarchive repositories through the API. */
     archived?: boolean;
+    /** Either `true` to allow private forks, or `false` to prevent private forks. */
+    allow_forking?: boolean;
   };
 }
 export interface Response$repos$update$Status$200 {
   "application/json": Schemas.full$repository;
 }
+export type Response$repos$update$Status$307 = Responses.temporary_redirect.Content;
 export type Response$repos$update$Status$403 = Responses.forbidden.Content;
 export type Response$repos$update$Status$404 = Responses.not_found.Content;
 export type Response$repos$update$Status$422 = Responses.validation_failed.Content;
@@ -7779,7 +9075,7 @@ export interface Parameter$actions$list$artifacts$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -7793,7 +9089,7 @@ export interface Parameter$actions$get$artifact {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** artifact_id parameter */
-  artifact_id: Parameters.artifact_id;
+  artifact_id: Parameters.artifact$id;
 }
 export interface Response$actions$get$artifact$Status$200 {
   "application/json": Schemas.artifact;
@@ -7802,29 +9098,29 @@ export interface Parameter$actions$delete$artifact {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** artifact_id parameter */
-  artifact_id: Parameters.artifact_id;
+  artifact_id: Parameters.artifact$id;
 }
 export interface Parameter$actions$download$artifact {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** artifact_id parameter */
-  artifact_id: Parameters.artifact_id;
+  artifact_id: Parameters.artifact$id;
   archive_format: string;
 }
 export interface Parameter$actions$get$job$for$workflow$run {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** job_id parameter */
-  job_id: Parameters.job_id;
+  job_id: Parameters.job$id;
 }
-export interface Response$actions$get$job$for$workflow$run$Status$202 {
+export interface Response$actions$get$job$for$workflow$run$Status$200 {
   "application/json": Schemas.job;
 }
 export interface Parameter$actions$download$job$logs$for$workflow$run {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** job_id parameter */
-  job_id: Parameters.job_id;
+  job_id: Parameters.job$id;
 }
 export interface Parameter$actions$get$github$actions$permissions$repository {
   owner: Parameters.owner;
@@ -7861,7 +9157,7 @@ export interface Parameter$actions$list$self$hosted$runners$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -7896,7 +9192,7 @@ export interface Parameter$actions$get$self$hosted$runner$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Unique identifier of the self-hosted runner. */
-  runner_id: Parameters.runner_id;
+  runner_id: Parameters.runner$id;
 }
 export interface Response$actions$get$self$hosted$runner$for$repo$Status$200 {
   "application/json": Schemas.runner;
@@ -7905,7 +9201,7 @@ export interface Parameter$actions$delete$self$hosted$runner$from$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Unique identifier of the self-hosted runner. */
-  runner_id: Parameters.runner_id;
+  runner_id: Parameters.runner$id;
 }
 export interface Parameter$actions$list$workflow$runs$for$repo {
   owner: Parameters.owner;
@@ -7914,14 +9210,18 @@ export interface Parameter$actions$list$workflow$runs$for$repo {
   actor?: Parameters.actor;
   /** Returns workflow runs associated with a branch. Use the name of the branch of the `push`. */
   branch?: Parameters.workflow$run$branch;
-  /** Returns workflow run triggered by the event you specify. For example, `push`, `pull_request` or `issue`. For more information, see "[Events that trigger workflows](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows)." */
+  /** Returns workflow run triggered by the event you specify. For example, `push`, `pull_request` or `issue`. For more information, see "[Events that trigger workflows](https://docs.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows)." */
   event?: Parameters.event;
-  /** Returns workflow runs associated with the check run `status` or `conclusion` you specify. For example, a conclusion can be `success` or a status can be `completed`. For more information, see the `status` and `conclusion` options available in "[Create a check run](https://docs.github.com/enterprise-server@3.0/rest/reference/checks#create-a-check-run)." */
+  /** Returns workflow runs with the check run `status` or `conclusion` that you specify. For example, a conclusion can be `success` or a status can be `in_progress`. Only GitHub can set a status of `waiting` or `requested`. For a list of the possible `status` and `conclusion` options, see "[Create a check run](https://docs.github.com/enterprise-server@3.0/rest/reference/checks#create-a-check-run)." */
   status?: Parameters.workflow$run$status;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
+  /** Returns workflow runs created within the given date-time range. For more information on the syntax, see "[Understanding the search syntax](https://docs.github.com/enterprise-server@3.0/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)." */
+  created?: Parameters.created;
+  /** If `true` pull requests are omitted from the response (empty array). */
+  exclude_pull_requests?: Parameters.exclude$pull$requests;
 }
 export interface Response$actions$list$workflow$runs$for$repo$Status$200 {
   "application/json": {
@@ -7932,7 +9232,10 @@ export interface Response$actions$list$workflow$runs$for$repo$Status$200 {
 export interface Parameter$actions$get$workflow$run {
   owner: Parameters.owner;
   repo: Parameters.repo;
+  /** The id of the workflow run. */
   run_id: Parameters.run$id;
+  /** If `true` pull requests are omitted from the response (empty array). */
+  exclude_pull_requests?: Parameters.exclude$pull$requests;
 }
 export interface Response$actions$get$workflow$run$Status$200 {
   "application/json": Schemas.workflow$run;
@@ -7940,14 +9243,16 @@ export interface Response$actions$get$workflow$run$Status$200 {
 export interface Parameter$actions$delete$workflow$run {
   owner: Parameters.owner;
   repo: Parameters.repo;
+  /** The id of the workflow run. */
   run_id: Parameters.run$id;
 }
 export interface Parameter$actions$list$workflow$run$artifacts {
   owner: Parameters.owner;
   repo: Parameters.repo;
+  /** The id of the workflow run. */
   run_id: Parameters.run$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -7960,11 +9265,16 @@ export interface Response$actions$list$workflow$run$artifacts$Status$200 {
 export interface Parameter$actions$cancel$workflow$run {
   owner: Parameters.owner;
   repo: Parameters.repo;
+  /** The id of the workflow run. */
   run_id: Parameters.run$id;
+}
+export interface Response$actions$cancel$workflow$run$Status$202 {
+  "application/json": {};
 }
 export interface Parameter$actions$list$jobs$for$workflow$run {
   owner: Parameters.owner;
   repo: Parameters.repo;
+  /** The id of the workflow run. */
   run_id: Parameters.run$id;
   /**
    * Filters jobs by their `completed_at` timestamp. Can be one of:
@@ -7973,7 +9283,7 @@ export interface Parameter$actions$list$jobs$for$workflow$run {
    */
   filter?: "latest" | "all";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -7986,23 +9296,31 @@ export interface Response$actions$list$jobs$for$workflow$run$Status$200 {
 export interface Parameter$actions$download$workflow$run$logs {
   owner: Parameters.owner;
   repo: Parameters.repo;
+  /** The id of the workflow run. */
   run_id: Parameters.run$id;
 }
 export interface Parameter$actions$delete$workflow$run$logs {
   owner: Parameters.owner;
   repo: Parameters.repo;
+  /** The id of the workflow run. */
   run_id: Parameters.run$id;
 }
+export type Response$actions$delete$workflow$run$logs$Status$403 = Responses.forbidden.Content;
+export type Response$actions$delete$workflow$run$logs$Status$500 = Responses.internal_error.Content;
 export interface Parameter$actions$re$run$workflow {
   owner: Parameters.owner;
   repo: Parameters.repo;
+  /** The id of the workflow run. */
   run_id: Parameters.run$id;
+}
+export interface Response$actions$re$run$workflow$Status$201 {
+  "application/json": {};
 }
 export interface Parameter$actions$list$repo$secrets {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -8023,7 +9341,7 @@ export interface Parameter$actions$get$repo$secret {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** secret_name parameter */
-  secret_name: Parameters.secret_name;
+  secret_name: Parameters.secret$name;
 }
 export interface Response$actions$get$repo$secret$Status$200 {
   "application/json": Schemas.actions$secret;
@@ -8032,7 +9350,7 @@ export interface Parameter$actions$create$or$update$repo$secret {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** secret_name parameter */
-  secret_name: Parameters.secret_name;
+  secret_name: Parameters.secret$name;
 }
 export interface RequestBody$actions$create$or$update$repo$secret {
   "application/json": {
@@ -8042,17 +9360,20 @@ export interface RequestBody$actions$create$or$update$repo$secret {
     key_id?: string;
   };
 }
+export interface Response$actions$create$or$update$repo$secret$Status$201 {
+  "application/json": {};
+}
 export interface Parameter$actions$delete$repo$secret {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** secret_name parameter */
-  secret_name: Parameters.secret_name;
+  secret_name: Parameters.secret$name;
 }
 export interface Parameter$actions$list$repo$workflows {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -8108,14 +9429,18 @@ export interface Parameter$actions$list$workflow$runs {
   actor?: Parameters.actor;
   /** Returns workflow runs associated with a branch. Use the name of the branch of the `push`. */
   branch?: Parameters.workflow$run$branch;
-  /** Returns workflow run triggered by the event you specify. For example, `push`, `pull_request` or `issue`. For more information, see "[Events that trigger workflows](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows)." */
+  /** Returns workflow run triggered by the event you specify. For example, `push`, `pull_request` or `issue`. For more information, see "[Events that trigger workflows](https://docs.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows)." */
   event?: Parameters.event;
-  /** Returns workflow runs associated with the check run `status` or `conclusion` you specify. For example, a conclusion can be `success` or a status can be `completed`. For more information, see the `status` and `conclusion` options available in "[Create a check run](https://docs.github.com/enterprise-server@3.0/rest/reference/checks#create-a-check-run)." */
+  /** Returns workflow runs with the check run `status` or `conclusion` that you specify. For example, a conclusion can be `success` or a status can be `in_progress`. Only GitHub can set a status of `waiting` or `requested`. For a list of the possible `status` and `conclusion` options, see "[Create a check run](https://docs.github.com/enterprise-server@3.0/rest/reference/checks#create-a-check-run)." */
   status?: Parameters.workflow$run$status;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
+  /** Returns workflow runs created within the given date-time range. For more information on the syntax, see "[Understanding the search syntax](https://docs.github.com/enterprise-server@3.0/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)." */
+  created?: Parameters.created;
+  /** If `true` pull requests are omitted from the response (empty array). */
+  exclude_pull_requests?: Parameters.exclude$pull$requests;
 }
 export interface Response$actions$list$workflow$runs$Status$200 {
   "application/json": {
@@ -8127,7 +9452,7 @@ export interface Parameter$issues$list$assignees {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -8149,7 +9474,7 @@ export interface Parameter$repos$list$branches {
   /** Setting to `true` returns only protected branches. When set to `false`, only unprotected branches are returned. Omitting this parameter returns all branches. */
   protected?: boolean;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -8166,6 +9491,7 @@ export interface Parameter$repos$get$branch {
 export interface Response$repos$get$branch$Status$200 {
   "application/json": Schemas.branch$with$protection;
 }
+export type Response$repos$get$branch$Status$301 = Responses.moved_permanently.Content;
 export type Response$repos$get$branch$Status$404 = Responses.not_found.Content;
 export type Response$repos$get$branch$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$repos$get$branch$protection {
@@ -8190,8 +9516,15 @@ export interface RequestBody$repos$update$branch$protection {
     required_status_checks: {
       /** Require branches to be up to date before merging. */
       strict: boolean;
-      /** The list of status checks to require in order to merge into this branch */
+      /** **Deprecated**: The list of status checks to require in order to merge into this branch. If any of these checks have recently been set by a particular GitHub App, they will be required to come from that app in future for the branch to merge. Use `checks` instead of `contexts` for more fine-grained control. */
       contexts: string[];
+      /** The list of status checks to require in order to merge into this branch. */
+      checks?: {
+        /** The name of the required check */
+        context: string;
+        /** The ID of the GitHub App that must provide this check. Omit this field to automatically select the GitHub App that has recently provided this check, or any app if it was not set by a GitHub App. Pass -1 to explicitly allow any app to set the status. */
+        app_id?: number;
+      }[];
     } | null;
     /** Enforce all configured restrictions for administrators. Set to `true` to enforce required status checks for repository administrators. Set to `null` to disable. */
     enforce_admins: boolean | null;
@@ -8206,7 +9539,7 @@ export interface RequestBody$repos$update$branch$protection {
       };
       /** Set to `true` if you want to automatically dismiss approving reviews when someone pushes a new commit. */
       dismiss_stale_reviews?: boolean;
-      /** Blocks merging pull requests until [code owners](https://help.github.com/articles/about-code-owners/) review them. */
+      /** Blocks merging pull requests until [code owners](https://docs.github.com/articles/about-code-owners/) review them. */
       require_code_owner_reviews?: boolean;
       /** Specify the number of reviewers required to approve pull requests. Use a number between 1 and 6. */
       required_approving_review_count?: number;
@@ -8220,12 +9553,16 @@ export interface RequestBody$repos$update$branch$protection {
       /** The list of app `slug`s with push access */
       apps?: string[];
     } | null;
-    /** Enforces a linear commit Git history, which prevents anyone from pushing merge commits to a branch. Set to `true` to enforce a linear commit history. Set to `false` to disable a linear commit Git history. Your repository must allow squash merging or rebase merging before you can enable a linear commit history. Default: `false`. For more information, see "[Requiring a linear commit history](https://help.github.com/github/administering-a-repository/requiring-a-linear-commit-history)" in the GitHub Help documentation. */
+    /** Enforces a linear commit Git history, which prevents anyone from pushing merge commits to a branch. Set to `true` to enforce a linear commit history. Set to `false` to disable a linear commit Git history. Your repository must allow squash merging or rebase merging before you can enable a linear commit history. Default: `false`. For more information, see "[Requiring a linear commit history](https://docs.github.com/github/administering-a-repository/requiring-a-linear-commit-history)" in the GitHub Help documentation. */
     required_linear_history?: boolean;
-    /** Permits force pushes to the protected branch by anyone with write access to the repository. Set to `true` to allow force pushes. Set to `false` or `null` to block force pushes. Default: `false`. For more information, see "[Enabling force pushes to a protected branch](https://help.github.com/en/github/administering-a-repository/enabling-force-pushes-to-a-protected-branch)" in the GitHub Help documentation." */
+    /** Permits force pushes to the protected branch by anyone with write access to the repository. Set to `true` to allow force pushes. Set to `false` or `null` to block force pushes. Default: `false`. For more information, see "[Enabling force pushes to a protected branch](https://docs.github.com/en/github/administering-a-repository/enabling-force-pushes-to-a-protected-branch)" in the GitHub Help documentation." */
     allow_force_pushes?: boolean | null;
-    /** Allows deletion of the protected branch by anyone with write access to the repository. Set to `false` to prevent deletion of the protected branch. Default: `false`. For more information, see "[Enabling force pushes to a protected branch](https://help.github.com/en/github/administering-a-repository/enabling-force-pushes-to-a-protected-branch)" in the GitHub Help documentation. */
+    /** Allows deletion of the protected branch by anyone with write access to the repository. Set to `false` to prevent deletion of the protected branch. Default: `false`. For more information, see "[Enabling force pushes to a protected branch](https://docs.github.com/en/github/administering-a-repository/enabling-force-pushes-to-a-protected-branch)" in the GitHub Help documentation. */
     allow_deletions?: boolean;
+    /** Requires all conversations on code to be resolved before a pull request can be merged into a branch that matches this rule. Set to `false` to disable. Default: `false`. */
+    required_conversation_resolution?: boolean;
+    /** The list of status checks to require in order to merge into this branch. */
+    contexts?: string[];
   };
 }
 export interface Response$repos$update$branch$protection$Status$200 {
@@ -8233,7 +9570,6 @@ export interface Response$repos$update$branch$protection$Status$200 {
 }
 export type Response$repos$update$branch$protection$Status$403 = Responses.forbidden.Content;
 export type Response$repos$update$branch$protection$Status$404 = Responses.not_found.Content;
-export type Response$repos$update$branch$protection$Status$415 = Responses.preview_header_missing.Content;
 export type Response$repos$update$branch$protection$Status$422 = Responses.validation_failed_simple.Content;
 export interface Parameter$repos$delete$branch$protection {
   owner: Parameters.owner;
@@ -8274,7 +9610,7 @@ export interface Parameter$repos$get$pull$request$review$protection {
   branch: Parameters.branch;
 }
 export interface Response$repos$get$pull$request$review$protection$Status$200 {
-  "application/vnd.github.luke-cage-preview+json": Schemas.protected$branch$pull$request$review;
+  "application/json": Schemas.protected$branch$pull$request$review;
 }
 export interface Parameter$repos$delete$pull$request$review$protection {
   owner: Parameters.owner;
@@ -8300,7 +9636,7 @@ export interface RequestBody$repos$update$pull$request$review$protection {
     };
     /** Set to `true` if you want to automatically dismiss approving reviews when someone pushes a new commit. */
     dismiss_stale_reviews?: boolean;
-    /** Blocks merging pull requests until [code owners](https://help.github.com/articles/about-code-owners/) have reviewed. */
+    /** Blocks merging pull requests until [code owners](https://docs.github.com/articles/about-code-owners/) have reviewed. */
     require_code_owner_reviews?: boolean;
     /** Specifies the number of reviewers required to approve pull requests. Use a number between 1 and 6. */
     required_approving_review_count?: number;
@@ -8389,10 +9725,12 @@ export interface Parameter$repos$set$status$check$contexts {
   branch: Parameters.branch;
 }
 export interface RequestBody$repos$set$status$check$contexts {
-  "application/json": {
-    /** contexts parameter */
-    contexts: string[];
-  };
+  "application/json":
+    | {
+        /** contexts parameter */
+        contexts: string[];
+      }
+    | string[];
 }
 export interface Response$repos$set$status$check$contexts$Status$200 {
   "application/json": string[];
@@ -8406,10 +9744,12 @@ export interface Parameter$repos$add$status$check$contexts {
   branch: Parameters.branch;
 }
 export interface RequestBody$repos$add$status$check$contexts {
-  "application/json": {
-    /** contexts parameter */
-    contexts: string[];
-  };
+  "application/json":
+    | {
+        /** contexts parameter */
+        contexts: string[];
+      }
+    | string[];
 }
 export interface Response$repos$add$status$check$contexts$Status$200 {
   "application/json": string[];
@@ -8424,10 +9764,12 @@ export interface Parameter$repos$remove$status$check$contexts {
   branch: Parameters.branch;
 }
 export interface RequestBody$repos$remove$status$check$contexts {
-  "application/json": {
-    /** contexts parameter */
-    contexts: string[];
-  };
+  "application/json":
+    | {
+        /** contexts parameter */
+        contexts: string[];
+      }
+    | string[];
 }
 export interface Response$repos$remove$status$check$contexts$Status$200 {
   "application/json": string[];
@@ -8467,10 +9809,12 @@ export interface Parameter$repos$set$app$access$restrictions {
   branch: Parameters.branch;
 }
 export interface RequestBody$repos$set$app$access$restrictions {
-  "application/json": {
-    /** apps parameter */
-    apps: string[];
-  };
+  "application/json":
+    | {
+        /** apps parameter */
+        apps: string[];
+      }
+    | string[];
 }
 export interface Response$repos$set$app$access$restrictions$Status$200 {
   "application/json": Schemas.integration[];
@@ -8483,10 +9827,12 @@ export interface Parameter$repos$add$app$access$restrictions {
   branch: Parameters.branch;
 }
 export interface RequestBody$repos$add$app$access$restrictions {
-  "application/json": {
-    /** apps parameter */
-    apps: string[];
-  };
+  "application/json":
+    | {
+        /** apps parameter */
+        apps: string[];
+      }
+    | string[];
 }
 export interface Response$repos$add$app$access$restrictions$Status$200 {
   "application/json": Schemas.integration[];
@@ -8499,10 +9845,12 @@ export interface Parameter$repos$remove$app$access$restrictions {
   branch: Parameters.branch;
 }
 export interface RequestBody$repos$remove$app$access$restrictions {
-  "application/json": {
-    /** apps parameter */
-    apps: string[];
-  };
+  "application/json":
+    | {
+        /** apps parameter */
+        apps: string[];
+      }
+    | string[];
 }
 export interface Response$repos$remove$app$access$restrictions$Status$200 {
   "application/json": Schemas.integration[];
@@ -8525,10 +9873,12 @@ export interface Parameter$repos$set$team$access$restrictions {
   branch: Parameters.branch;
 }
 export interface RequestBody$repos$set$team$access$restrictions {
-  "application/json": {
-    /** teams parameter */
-    teams: string[];
-  };
+  "application/json":
+    | {
+        /** teams parameter */
+        teams: string[];
+      }
+    | string[];
 }
 export interface Response$repos$set$team$access$restrictions$Status$200 {
   "application/json": Schemas.team[];
@@ -8541,10 +9891,12 @@ export interface Parameter$repos$add$team$access$restrictions {
   branch: Parameters.branch;
 }
 export interface RequestBody$repos$add$team$access$restrictions {
-  "application/json": {
-    /** teams parameter */
-    teams: string[];
-  };
+  "application/json":
+    | {
+        /** teams parameter */
+        teams: string[];
+      }
+    | string[];
 }
 export interface Response$repos$add$team$access$restrictions$Status$200 {
   "application/json": Schemas.team[];
@@ -8557,10 +9909,12 @@ export interface Parameter$repos$remove$team$access$restrictions {
   branch: Parameters.branch;
 }
 export interface RequestBody$repos$remove$team$access$restrictions {
-  "application/json": {
-    /** teams parameter */
-    teams: string[];
-  };
+  "application/json":
+    | {
+        /** teams parameter */
+        teams: string[];
+      }
+    | string[];
 }
 export interface Response$repos$remove$team$access$restrictions$Status$200 {
   "application/json": Schemas.team[];
@@ -8583,10 +9937,12 @@ export interface Parameter$repos$set$user$access$restrictions {
   branch: Parameters.branch;
 }
 export interface RequestBody$repos$set$user$access$restrictions {
-  "application/json": {
-    /** users parameter */
-    users: string[];
-  };
+  "application/json":
+    | {
+        /** users parameter */
+        users: string[];
+      }
+    | string[];
 }
 export interface Response$repos$set$user$access$restrictions$Status$200 {
   "application/json": Schemas.simple$user[];
@@ -8599,10 +9955,12 @@ export interface Parameter$repos$add$user$access$restrictions {
   branch: Parameters.branch;
 }
 export interface RequestBody$repos$add$user$access$restrictions {
-  "application/json": {
-    /** users parameter */
-    users: string[];
-  };
+  "application/json":
+    | {
+        /** users parameter */
+        users: string[];
+      }
+    | string[];
 }
 export interface Response$repos$add$user$access$restrictions$Status$200 {
   "application/json": Schemas.simple$user[];
@@ -8615,10 +9973,12 @@ export interface Parameter$repos$remove$user$access$restrictions {
   branch: Parameters.branch;
 }
 export interface RequestBody$repos$remove$user$access$restrictions {
-  "application/json": {
-    /** users parameter */
-    users: string[];
-  };
+  "application/json":
+    | {
+        /** users parameter */
+        users: string[];
+      }
+    | string[];
 }
 export interface Response$repos$remove$user$access$restrictions$Status$200 {
   "application/json": Schemas.simple$user[];
@@ -8638,7 +9998,7 @@ export interface Parameter$checks$get {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** check_run_id parameter */
-  check_run_id: Parameters.check_run_id;
+  check_run_id: Parameters.check$run$id;
 }
 export interface Response$checks$get$Status$200 {
   "application/json": Schemas.check$run;
@@ -8647,7 +10007,7 @@ export interface Parameter$checks$update {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** check_run_id parameter */
-  check_run_id: Parameters.check_run_id;
+  check_run_id: Parameters.check$run$id;
 }
 export interface RequestBody$checks$update {
   "application/json": {} | {};
@@ -8659,9 +10019,9 @@ export interface Parameter$checks$list$annotations {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** check_run_id parameter */
-  check_run_id: Parameters.check_run_id;
+  check_run_id: Parameters.check$run$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -8677,6 +10037,9 @@ export interface RequestBody$checks$create$suite {
     /** The sha of the head commit. */
     head_sha: string;
   };
+}
+export interface Response$checks$create$suite$Status$200 {
+  "application/json": Schemas.check$suite;
 }
 export interface Response$checks$create$suite$Status$201 {
   "application/json": Schemas.check$suite;
@@ -8703,7 +10066,7 @@ export interface Parameter$checks$get$suite {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** check_suite_id parameter */
-  check_suite_id: Parameters.check_suite_id;
+  check_suite_id: Parameters.check$suite$id;
 }
 export interface Response$checks$get$suite$Status$200 {
   "application/json": Schemas.check$suite;
@@ -8712,15 +10075,15 @@ export interface Parameter$checks$list$for$suite {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** check_suite_id parameter */
-  check_suite_id: Parameters.check_suite_id;
+  check_suite_id: Parameters.check$suite$id;
   /** Returns check runs with the specified `name`. */
-  check_name?: Parameters.check_name;
+  check_name?: Parameters.check$name;
   /** Returns check runs with the specified `status`. Can be one of `queued`, `in_progress`, or `completed`. */
   status?: Parameters.status;
   /** Filters check runs by their `completed_at` timestamp. Can be one of `latest` (returning the most recent check runs) or `all`. */
   filter?: "latest" | "all";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -8734,35 +10097,50 @@ export interface Parameter$checks$rerequest$suite {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** check_suite_id parameter */
-  check_suite_id: Parameters.check_suite_id;
+  check_suite_id: Parameters.check$suite$id;
+}
+export interface Response$checks$rerequest$suite$Status$201 {
+  "application/json": {};
 }
 export interface Parameter$code$scanning$list$alerts$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
+  /** The name of a code scanning tool. Only results by this tool will be listed. You can specify the tool by using either `tool_name` or `tool_guid`, but not both. */
+  tool_name?: Parameters.tool$name;
+  /** The GUID of a code scanning tool. Only results by this tool will be listed. Note that some code scanning tools may not include a GUID in their analysis data. You can specify the tool by using either `tool_guid` or `tool_name`, but not both. */
+  tool_guid?: Parameters.tool$guid;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** The Git reference for the results you want to list. The `ref` for a branch can be formatted either as `refs/heads/<branch name>` or simply `<branch name>`. To reference a pull request use `refs/pull/<number>/merge`. */
+  ref?: Parameters.git$ref;
   /** Set to `open`, `fixed`, or `dismissed` to list code scanning alerts in a specific state. */
   state?: Schemas.code$scanning$alert$state;
-  /** Set a full Git reference to list alerts for a specific branch. The `ref` must be formatted as `refs/heads/<branch name>`. */
-  ref?: Schemas.code$scanning$alert$ref;
 }
 export interface Response$code$scanning$list$alerts$for$repo$Status$200 {
-  "application/json": Schemas.code$scanning$alert$code$scanning$alert$items[];
+  "application/json": Schemas.code$scanning$alert$items[];
 }
+export type Response$code$scanning$list$alerts$for$repo$Status$403 = Responses.code_scanning_forbidden_read.Content;
+export type Response$code$scanning$list$alerts$for$repo$Status$404 = Responses.not_found.Content;
 export type Response$code$scanning$list$alerts$for$repo$Status$503 = Responses.service_unavailable.Content;
 export interface Parameter$code$scanning$get$alert {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  alert_number: number;
+  /** The number that identifies an alert. You can find this at the end of the URL for a code scanning alert within GitHub, and in the `number` field in the response from the `GET /repos/{owner}/{repo}/code-scanning/alerts` operation. */
+  alert_number: Parameters.alert$number;
 }
 export interface Response$code$scanning$get$alert$Status$200 {
-  "application/json": Schemas.code$scanning$alert$code$scanning$alert;
+  "application/json": Schemas.code$scanning$alert;
 }
+export type Response$code$scanning$get$alert$Status$403 = Responses.code_scanning_forbidden_read.Content;
 export type Response$code$scanning$get$alert$Status$404 = Responses.not_found.Content;
 export type Response$code$scanning$get$alert$Status$503 = Responses.service_unavailable.Content;
 export interface Parameter$code$scanning$update$alert {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** The security alert number, found at the end of the security alert's URL. */
-  alert_number: Parameters.alert_number;
+  /** The number that identifies an alert. You can find this at the end of the URL for a code scanning alert within GitHub, and in the `number` field in the response from the `GET /repos/{owner}/{repo}/code-scanning/alerts` operation. */
+  alert_number: Parameters.alert$number;
 }
 export interface RequestBody$code$scanning$update$alert {
   "application/json": {
@@ -8771,19 +10149,33 @@ export interface RequestBody$code$scanning$update$alert {
   };
 }
 export interface Response$code$scanning$update$alert$Status$200 {
-  "application/json": Schemas.code$scanning$alert$code$scanning$alert;
+  "application/json": Schemas.code$scanning$alert;
 }
+export type Response$code$scanning$update$alert$Status$403 = Responses.code_scanning_forbidden_write.Content;
+export type Response$code$scanning$update$alert$Status$404 = Responses.not_found.Content;
+export type Response$code$scanning$update$alert$Status$503 = Responses.service_unavailable.Content;
 export interface Parameter$code$scanning$list$recent$analyses {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** Set a full Git reference to list alerts for a specific branch. The `ref` must be formatted as `refs/heads/<branch name>`. */
-  ref?: Schemas.code$scanning$analysis$ref;
-  /** Set a single code scanning tool name to filter alerts by tool. */
-  tool_name?: Schemas.code$scanning$analysis$tool$name;
+  /** The name of a code scanning tool. Only results by this tool will be listed. You can specify the tool by using either `tool_name` or `tool_guid`, but not both. */
+  tool_name?: Parameters.tool$name;
+  /** The GUID of a code scanning tool. Only results by this tool will be listed. Note that some code scanning tools may not include a GUID in their analysis data. You can specify the tool by using either `tool_guid` or `tool_name`, but not both. */
+  tool_guid?: Parameters.tool$guid;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** The Git reference for the analyses you want to list. The `ref` for a branch can be formatted either as `refs/heads/<branch name>` or simply `<branch name>`. To reference a pull request use `refs/pull/<number>/merge`. */
+  ref?: Schemas.code$scanning$ref;
+  /** Filter analyses belonging to the same SARIF upload. */
+  sarif_id?: Schemas.code$scanning$analysis$sarif$id;
 }
 export interface Response$code$scanning$list$recent$analyses$Status$200 {
-  "application/json": Schemas.code$scanning$analysis$code$scanning$analysis[];
+  "application/json": Schemas.code$scanning$analysis[];
 }
+export type Response$code$scanning$list$recent$analyses$Status$403 = Responses.code_scanning_forbidden_read.Content;
+export type Response$code$scanning$list$recent$analyses$Status$404 = Responses.not_found.Content;
+export type Response$code$scanning$list$recent$analyses$Status$503 = Responses.service_unavailable.Content;
 export interface Parameter$code$scanning$upload$sarif {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -8791,7 +10183,7 @@ export interface Parameter$code$scanning$upload$sarif {
 export interface RequestBody$code$scanning$upload$sarif {
   "application/json": {
     commit_sha: Schemas.code$scanning$analysis$commit$sha;
-    ref: Schemas.code$scanning$analysis$ref;
+    ref: Schemas.code$scanning$ref;
     sarif: Schemas.code$scanning$analysis$sarif$file;
     /**
      * The base directory used in the analysis, as it appears in the SARIF file.
@@ -8800,9 +10192,16 @@ export interface RequestBody$code$scanning$upload$sarif {
     checkout_uri?: string;
     /** The time that the analysis run began. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
     started_at?: string;
-    tool_name: Schemas.code$scanning$analysis$tool$name;
+    /** The name of the tool used to generate the code scanning analysis. If this parameter is not used, the tool name defaults to "API". If the uploaded SARIF contains a tool GUID, this will be available for filtering using the `tool_guid` parameter of operations such as `GET /repos/{owner}/{repo}/code-scanning/alerts`. */
+    tool_name?: string;
   };
 }
+export interface Response$code$scanning$upload$sarif$Status$202 {
+  "application/json": Schemas.code$scanning$sarifs$receipt;
+}
+export type Response$code$scanning$upload$sarif$Status$403 = Responses.code_scanning_forbidden_write.Content;
+export type Response$code$scanning$upload$sarif$Status$404 = Responses.not_found.Content;
+export type Response$code$scanning$upload$sarif$Status$503 = Responses.service_unavailable.Content;
 export interface Parameter$repos$list$collaborators {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -8814,7 +10213,7 @@ export interface Parameter$repos$list$collaborators {
    */
   affiliation?: "outside" | "direct" | "all";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -8869,7 +10268,7 @@ export interface Parameter$repos$list$commit$comments$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -8880,7 +10279,7 @@ export interface Parameter$repos$get$commit$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export interface Response$repos$get$commit$comment$Status$200 {
   "application/json": Schemas.commit$comment;
@@ -8890,14 +10289,14 @@ export interface Parameter$repos$delete$commit$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export type Response$repos$delete$commit$comment$Status$404 = Responses.not_found.Content;
 export interface Parameter$repos$update$commit$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export interface RequestBody$repos$update$commit$comment {
   "application/json": {
@@ -8913,11 +10312,11 @@ export interface Parameter$reactions$list$for$commit$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
   /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a commit comment. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -8925,12 +10324,11 @@ export interface Response$reactions$list$for$commit$comment$Status$200 {
   "application/json": Schemas.reaction[];
 }
 export type Response$reactions$list$for$commit$comment$Status$404 = Responses.not_found.Content;
-export type Response$reactions$list$for$commit$comment$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$reactions$create$for$commit$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export interface RequestBody$reactions$create$for$commit$comment {
   "application/json": {
@@ -8950,7 +10348,7 @@ export interface Parameter$reactions$delete$for$commit$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
   reaction_id: Parameters.reaction$id;
 }
 export interface Parameter$repos$list$commits {
@@ -8967,7 +10365,7 @@ export interface Parameter$repos$list$commits {
   /** Only commits before this date will be returned. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   until?: string;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -8982,20 +10380,19 @@ export interface Parameter$repos$list$branches$for$head$commit {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** commit_sha parameter */
-  commit_sha: Parameters.commit_sha;
+  commit_sha: Parameters.commit$sha;
 }
 export interface Response$repos$list$branches$for$head$commit$Status$200 {
   "application/json": Schemas.branch$short[];
 }
-export type Response$repos$list$branches$for$head$commit$Status$415 = Responses.preview_header_missing.Content;
 export type Response$repos$list$branches$for$head$commit$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$repos$list$comments$for$commit {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** commit_sha parameter */
-  commit_sha: Parameters.commit_sha;
+  commit_sha: Parameters.commit$sha;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -9006,7 +10403,7 @@ export interface Parameter$repos$create$commit$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** commit_sha parameter */
-  commit_sha: Parameters.commit_sha;
+  commit_sha: Parameters.commit$sha;
 }
 export interface RequestBody$repos$create$commit$comment {
   "application/json": {
@@ -9029,20 +10426,23 @@ export interface Parameter$repos$list$pull$requests$associated$with$commit {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** commit_sha parameter */
-  commit_sha: Parameters.commit_sha;
+  commit_sha: Parameters.commit$sha;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
 export interface Response$repos$list$pull$requests$associated$with$commit$Status$200 {
   "application/json": Schemas.pull$request$simple[];
 }
-export type Response$repos$list$pull$requests$associated$with$commit$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$repos$get$commit {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** ref+ parameter */
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** ref parameter */
   ref: string;
 }
 export interface Response$repos$get$commit$Status$200 {
@@ -9054,18 +10454,19 @@ export type Response$repos$get$commit$Status$500 = Responses.internal_error.Cont
 export interface Parameter$checks$list$for$ref {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** ref+ parameter */
+  /** ref parameter */
   ref: string;
   /** Returns check runs with the specified `name`. */
-  check_name?: Parameters.check_name;
+  check_name?: Parameters.check$name;
   /** Returns check runs with the specified `status`. Can be one of `queued`, `in_progress`, or `completed`. */
   status?: Parameters.status;
   /** Filters check runs by their `completed_at` timestamp. Can be one of `latest` (returning the most recent check runs) or `all`. */
   filter?: "latest" | "all";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
+  app_id?: number;
 }
 export interface Response$checks$list$for$ref$Status$200 {
   "application/json": {
@@ -9076,14 +10477,14 @@ export interface Response$checks$list$for$ref$Status$200 {
 export interface Parameter$checks$list$suites$for$ref {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** ref+ parameter */
+  /** ref parameter */
   ref: string;
   /** Filters check suites by GitHub App `id`. */
   app_id?: number;
   /** Returns check runs with the specified `name`. */
-  check_name?: Parameters.check_name;
+  check_name?: Parameters.check$name;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -9096,8 +10497,12 @@ export interface Response$checks$list$suites$for$ref$Status$200 {
 export interface Parameter$repos$get$combined$status$for$ref {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** ref+ parameter */
+  /** ref parameter */
   ref: string;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
 }
 export interface Response$repos$get$combined$status$for$ref$Status$200 {
   "application/json": Schemas.combined$commit$status;
@@ -9106,38 +10511,56 @@ export type Response$repos$get$combined$status$for$ref$Status$404 = Responses.no
 export interface Parameter$repos$list$commit$statuses$for$ref {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** ref+ parameter */
+  /** ref parameter */
   ref: string;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
 export interface Response$repos$list$commit$statuses$for$ref$Status$200 {
   "application/json": Schemas.status[];
 }
-export interface Parameter$codes$of$conduct$get$for$repo {
-  owner: Parameters.owner;
-  repo: Parameters.repo;
-}
-export interface Response$codes$of$conduct$get$for$repo$Status$200 {
-  "application/json": Schemas.code$of$conduct;
-}
+export type Response$repos$list$commit$statuses$for$ref$Status$301 = Responses.moved_permanently.Content;
 export interface Parameter$repos$compare$commits {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  base: string;
-  head: string;
+  /** The base branch and head branch to compare. This parameter expects the format `{base}...{head}`. */
+  basehead: string;
 }
 export interface Response$repos$compare$commits$Status$200 {
   "application/json": Schemas.commit$comparison;
 }
 export type Response$repos$compare$commits$Status$404 = Responses.not_found.Content;
 export type Response$repos$compare$commits$Status$500 = Responses.internal_error.Content;
+export interface Parameter$apps$create$content$attachment {
+  /** The owner of the repository. Determined from the `repository` `full_name` of the `content_reference` event. */
+  owner: string;
+  /** The name of the repository. Determined from the `repository` `full_name` of the `content_reference` event. */
+  repo: string;
+  /** The `id` of the `content_reference` event. */
+  content_reference_id: number;
+}
+export interface RequestBody$apps$create$content$attachment {
+  "application/json": {
+    /** The title of the attachment */
+    title: string;
+    /** The body of the attachment */
+    body: string;
+  };
+}
+export interface Response$apps$create$content$attachment$Status$200 {
+  "application/json": Schemas.content$reference$attachment;
+}
+export type Response$apps$create$content$attachment$Status$403 = Responses.forbidden.Content;
+export type Response$apps$create$content$attachment$Status$404 = Responses.not_found.Content;
+export type Response$apps$create$content$attachment$Status$410 = Responses.gone.Content;
+export type Response$apps$create$content$attachment$Status$415 = Responses.preview_header_missing.Content;
+export type Response$apps$create$content$attachment$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$repos$get$content {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** path+ parameter */
+  /** path parameter */
   path: string;
   /** The name of the commit/branch/tag. Default: the repository’s default branch (usually `master`) */
   ref?: string;
@@ -9151,7 +10574,7 @@ export type Response$repos$get$content$Status$404 = Responses.not_found.Content;
 export interface Parameter$repos$create$or$update$file$contents {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** path+ parameter */
+  /** path parameter */
   path: string;
 }
 export interface RequestBody$repos$create$or$update$file$contents {
@@ -9194,7 +10617,7 @@ export type Response$repos$create$or$update$file$contents$Status$422 = Responses
 export interface Parameter$repos$delete$file {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** path+ parameter */
+  /** path parameter */
   path: string;
 }
 export interface RequestBody$repos$delete$file {
@@ -9234,7 +10657,7 @@ export interface Parameter$repos$list$contributors {
   /** Set to `1` or `true` to include anonymous contributors in results. */
   anon?: string;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -9253,9 +10676,9 @@ export interface Parameter$repos$list$deployments {
   /** The name of the task for the deployment (e.g., `deploy` or `deploy:migrations`). */
   task?: string;
   /** The name of the environment that was deployed to (e.g., `staging` or `production`). */
-  environment?: string;
+  environment?: string | null;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -9274,7 +10697,7 @@ export interface RequestBody$repos$create$deployment {
     task?: string;
     /** Attempts to automatically merge the default branch into the requested ref, if it's behind the default branch. */
     auto_merge?: boolean;
-    /** The [status](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#statuses) contexts to verify against commit status checks. If you omit this parameter, GitHub verifies all unique contexts before creating a deployment. To bypass checking entirely, pass an empty array. Defaults to all unique contexts. */
+    /** The [status](https://docs.github.com/enterprise-server@3.0/rest/reference/commits#commit-statuses) contexts to verify against commit status checks. If you omit this parameter, GitHub verifies all unique contexts before creating a deployment. To bypass checking entirely, pass an empty array. Defaults to all unique contexts. */
     required_contexts?: string[];
     payload?: {} | string;
     /** Name for the target deployment environment (e.g., `production`, `staging`, `qa`). */
@@ -9283,7 +10706,7 @@ export interface RequestBody$repos$create$deployment {
     description?: string | null;
     /**
      * Specifies if the given environment is specific to the deployment and will no longer exist at some point in the future. Default: `false`
-     * **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type. **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type.
+     * **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type.
      */
     transient_environment?: boolean;
     /**
@@ -9291,7 +10714,6 @@ export interface RequestBody$repos$create$deployment {
      * **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type.
      */
     production_environment?: boolean;
-    created_at?: string;
   };
 }
 export interface Response$repos$create$deployment$Status$201 {
@@ -9302,18 +10724,12 @@ export interface Response$repos$create$deployment$Status$202 {
     message?: string;
   };
 }
-export interface Response$repos$create$deployment$Status$409 {
-  "application/json": {
-    message?: string;
-    documentation_url?: string;
-  };
-}
 export type Response$repos$create$deployment$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$repos$get$deployment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** deployment_id parameter */
-  deployment_id: Parameters.deployment_id;
+  deployment_id: Parameters.deployment$id;
 }
 export interface Response$repos$get$deployment$Status$200 {
   "application/json": Schemas.deployment;
@@ -9323,7 +10739,7 @@ export interface Parameter$repos$delete$deployment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** deployment_id parameter */
-  deployment_id: Parameters.deployment_id;
+  deployment_id: Parameters.deployment$id;
 }
 export type Response$repos$delete$deployment$Status$404 = Responses.not_found.Content;
 export type Response$repos$delete$deployment$Status$422 = Responses.validation_failed_simple.Content;
@@ -9331,9 +10747,9 @@ export interface Parameter$repos$list$deployment$statuses {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** deployment_id parameter */
-  deployment_id: Parameters.deployment_id;
+  deployment_id: Parameters.deployment$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -9345,31 +10761,30 @@ export interface Parameter$repos$create$deployment$status {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** deployment_id parameter */
-  deployment_id: Parameters.deployment_id;
+  deployment_id: Parameters.deployment$id;
 }
 export interface RequestBody$repos$create$deployment$status {
   "application/json": {
-    /** The state of the status. Can be one of `error`, `failure`, `inactive`, `in_progress`, `queued` `pending`, or `success`. **Note:** To use the `inactive` state, you must provide the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type. To use the `in_progress` and `queued` states, you must provide the [`application/vnd.github.flash-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#deployment-statuses) custom media type. When you set a transient deployment to `inactive`, the deployment will be shown as `destroyed` in GitHub. */
+    /** The state of the status. Can be one of `error`, `failure`, `inactive`, `in_progress`, `queued`, `pending`, or `success`. **Note:** To use the `inactive` state, you must provide the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type. When you set a transient deployment to `inactive`, the deployment will be shown as `destroyed` in GitHub. */
     state: "error" | "failure" | "inactive" | "in_progress" | "queued" | "pending" | "success";
     /** The target URL to associate with this status. This URL should contain output to keep the user updated while the task is running or serve as historical information for what happened in the deployment. **Note:** It's recommended to use the `log_url` parameter, which replaces `target_url`. */
     target_url?: string;
     /**
      * The full URL of the deployment's output. This parameter replaces `target_url`. We will continue to accept `target_url` to support legacy uses, but we recommend replacing `target_url` with `log_url`. Setting `log_url` will automatically set `target_url` to the same value. Default: `""`
-     * **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type. **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type.
+     * **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type.
      */
     log_url?: string;
     /** A short description of the status. The maximum description length is 140 characters. */
     description?: string;
-    /** Name for the target deployment environment, which can be changed when setting a deploy status. For example, `production`, `staging`, or `qa`. **Note:** This parameter requires you to use the [`application/vnd.github.flash-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#deployment-statuses) custom media type. */
+    /** Name for the target deployment environment, which can be changed when setting a deploy status. For example, `production`, `staging`, or `qa`. */
     environment?: "production" | "staging" | "qa";
     /**
      * Sets the URL for accessing your environment. Default: `""`
-     * **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type. **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type.
+     * **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type.
      */
     environment_url?: string;
     /**
      * Adds a new `inactive` status to all prior non-transient, non-production environment deployments with the same repository and `environment` name as the created status's deployment. An `inactive` status is only added to deployments that had a `success` state. Default: `true`
-     * **Note:** To add an `inactive` status to `production` environments, you must use the [`application/vnd.github.flash-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#deployment-statuses) custom media type.
      * **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type.
      */
     auto_inactive?: boolean;
@@ -9383,14 +10798,13 @@ export interface Parameter$repos$get$deployment$status {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** deployment_id parameter */
-  deployment_id: Parameters.deployment_id;
+  deployment_id: Parameters.deployment$id;
   status_id: number;
 }
 export interface Response$repos$get$deployment$status$Status$200 {
   "application/json": Schemas.deployment$status;
 }
 export type Response$repos$get$deployment$status$Status$404 = Responses.not_found.Content;
-export type Response$repos$get$deployment$status$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$repos$create$dispatch$event {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -9408,7 +10822,7 @@ export interface Parameter$activity$list$repo$events {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -9419,9 +10833,9 @@ export interface Parameter$repos$list$forks {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** The sort order. Can be either `newest`, `oldest`, or `stargazers`. */
-  sort?: "newest" | "oldest" | "stargazers";
+  sort?: "newest" | "oldest" | "stargazers" | "watchers";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -9437,10 +10851,10 @@ export interface RequestBody$repos$create$fork {
   "application/json": {
     /** Optional parameter to specify the organization name if forking into an organization. */
     organization?: string;
-  };
+  } | null;
 }
 export interface Response$repos$create$fork$Status$202 {
-  "application/json": Schemas.repository;
+  "application/json": Schemas.full$repository;
 }
 export type Response$repos$create$fork$Status$400 = Responses.bad_request.Content;
 export type Response$repos$create$fork$Status$403 = Responses.forbidden.Content;
@@ -9491,9 +10905,9 @@ export interface RequestBody$git$create$commit {
     /** Information about the author of the commit. By default, the `author` will be the authenticated user and the current date. See the `author` and `committer` object below for details. */
     author?: {
       /** The name of the author (or committer) of the commit */
-      name?: string;
+      name: string;
       /** The email of the author (or committer) of the commit */
-      email?: string;
+      email: string;
       /** Indicates when this commit was authored (or committed). This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
       date?: string;
     };
@@ -9519,7 +10933,7 @@ export interface Parameter$git$get$commit {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** commit_sha parameter */
-  commit_sha: Parameters.commit_sha;
+  commit_sha: Parameters.commit$sha;
 }
 export interface Response$git$get$commit$Status$200 {
   "application/json": Schemas.git$commit;
@@ -9528,10 +10942,10 @@ export type Response$git$get$commit$Status$404 = Responses.not_found.Content;
 export interface Parameter$git$list$matching$refs {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** ref+ parameter */
+  /** ref parameter */
   ref: string;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -9541,7 +10955,7 @@ export interface Response$git$list$matching$refs$Status$200 {
 export interface Parameter$git$get$ref {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** ref+ parameter */
+  /** ref parameter */
   ref: string;
 }
 export interface Response$git$get$ref$Status$200 {
@@ -9568,14 +10982,14 @@ export type Response$git$create$ref$Status$422 = Responses.validation_failed.Con
 export interface Parameter$git$delete$ref {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** ref+ parameter */
+  /** ref parameter */
   ref: string;
 }
 export type Response$git$delete$ref$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$git$update$ref {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** ref+ parameter */
+  /** ref parameter */
   ref: string;
 }
 export interface RequestBody$git$update$ref {
@@ -9607,9 +11021,9 @@ export interface RequestBody$git$create$tag {
     /** An object with information about the individual creating the tag. */
     tagger?: {
       /** The name of the author of the tag */
-      name?: string;
+      name: string;
       /** The email of the author of the tag */
-      email?: string;
+      email: string;
       /** When this object was tagged. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
       date?: string;
     };
@@ -9684,7 +11098,7 @@ export interface Parameter$repos$list$webhooks {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -9701,8 +11115,8 @@ export interface RequestBody$repos$create$webhook {
     /** Use `web` to create a webhook. Default: `web`. This parameter only accepts the value `web`. */
     name?: string;
     /** Key/value pairs to provide settings for this webhook. [These are defined below](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#create-hook-config-params). */
-    config: {
-      url: Schemas.webhook$config$url;
+    config?: {
+      url?: Schemas.webhook$config$url;
       content_type?: Schemas.webhook$config$content$type;
       secret?: Schemas.webhook$config$secret;
       insecure_ssl?: Schemas.webhook$config$insecure$ssl;
@@ -9713,7 +11127,7 @@ export interface RequestBody$repos$create$webhook {
     events?: string[];
     /** Determines if notifications are sent when the webhook is triggered. Set to `true` to send notifications. */
     active?: boolean;
-  };
+  } | null;
 }
 export interface Response$repos$create$webhook$Status$201 {
   "application/json": Schemas.hook;
@@ -9810,12 +11224,13 @@ export interface Parameter$apps$get$repo$installation {
 export interface Response$apps$get$repo$installation$Status$200 {
   "application/json": Schemas.installation;
 }
+export type Response$apps$get$repo$installation$Status$301 = Responses.moved_permanently.Content;
 export type Response$apps$get$repo$installation$Status$404 = Responses.not_found.Content;
 export interface Parameter$repos$list$invitations {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -9826,13 +11241,13 @@ export interface Parameter$repos$delete$invitation {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** invitation_id parameter */
-  invitation_id: Parameters.invitation_id;
+  invitation_id: Parameters.invitation$id;
 }
 export interface Parameter$repos$update$invitation {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** invitation_id parameter */
-  invitation_id: Parameters.invitation_id;
+  invitation_id: Parameters.invitation$id;
 }
 export interface RequestBody$repos$update$invitation {
   "application/json": {
@@ -9865,13 +11280,14 @@ export interface Parameter$issues$list$for$repo {
   /** Only show notifications updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   since?: Parameters.since;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
 export interface Response$issues$list$for$repo$Status$200 {
-  "application/json": Schemas.issue$simple[];
+  "application/json": Schemas.issue[];
 }
+export type Response$issues$list$for$repo$Status$301 = Responses.moved_permanently.Content;
 export type Response$issues$list$for$repo$Status$404 = Responses.not_found.Content;
 export type Response$issues$list$for$repo$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$issues$create {
@@ -9919,7 +11335,7 @@ export interface Parameter$issues$list$comments$for$repo {
   /** Only show notifications updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   since?: Parameters.since;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -9932,7 +11348,7 @@ export interface Parameter$issues$get$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export interface Response$issues$get$comment$Status$200 {
   "application/json": Schemas.issue$comment;
@@ -9942,13 +11358,13 @@ export interface Parameter$issues$delete$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export interface Parameter$issues$update$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export interface RequestBody$issues$update$comment {
   "application/json": {
@@ -9964,11 +11380,11 @@ export interface Parameter$reactions$list$for$issue$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
   /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to an issue comment. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -9976,12 +11392,11 @@ export interface Response$reactions$list$for$issue$comment$Status$200 {
   "application/json": Schemas.reaction[];
 }
 export type Response$reactions$list$for$issue$comment$Status$404 = Responses.not_found.Content;
-export type Response$reactions$list$for$issue$comment$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$reactions$create$for$issue$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export interface RequestBody$reactions$create$for$issue$comment {
   "application/json": {
@@ -9995,20 +11410,19 @@ export interface Response$reactions$create$for$issue$comment$Status$200 {
 export interface Response$reactions$create$for$issue$comment$Status$201 {
   "application/json": Schemas.reaction;
 }
-export type Response$reactions$create$for$issue$comment$Status$415 = Responses.preview_header_missing.Content;
 export type Response$reactions$create$for$issue$comment$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$reactions$delete$for$issue$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
   reaction_id: Parameters.reaction$id;
 }
 export interface Parameter$issues$list$events$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10031,25 +11445,26 @@ export interface Parameter$issues$get {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
 }
 export interface Response$issues$get$Status$200 {
   "application/json": Schemas.issue;
 }
+export type Response$issues$get$Status$301 = Responses.moved_permanently.Content;
 export type Response$issues$get$Status$404 = Responses.not_found.Content;
 export type Response$issues$get$Status$410 = Responses.gone.Content;
 export interface Parameter$issues$update {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
 }
 export interface RequestBody$issues$update {
   "application/json": {
     /** The title of the issue. */
-    title?: string | number;
+    title?: (string | number) | null;
     /** The contents of the issue. */
-    body?: string;
+    body?: string | null;
     /** Login for the user that this issue should be assigned to. **This field is deprecated.** */
     assignee?: string | null;
     /** State of the issue. Either `open` or `closed`. */
@@ -10072,6 +11487,7 @@ export interface RequestBody$issues$update {
 export interface Response$issues$update$Status$200 {
   "application/json": Schemas.issue;
 }
+export type Response$issues$update$Status$301 = Responses.moved_permanently.Content;
 export type Response$issues$update$Status$403 = Responses.forbidden.Content;
 export type Response$issues$update$Status$404 = Responses.not_found.Content;
 export type Response$issues$update$Status$410 = Responses.gone.Content;
@@ -10081,7 +11497,7 @@ export interface Parameter$issues$add$assignees {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
 }
 export interface RequestBody$issues$add$assignees {
   "application/json": {
@@ -10090,13 +11506,13 @@ export interface RequestBody$issues$add$assignees {
   };
 }
 export interface Response$issues$add$assignees$Status$201 {
-  "application/json": Schemas.issue$simple;
+  "application/json": Schemas.issue;
 }
 export interface Parameter$issues$remove$assignees {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
 }
 export interface RequestBody$issues$remove$assignees {
   "application/json": {
@@ -10105,17 +11521,17 @@ export interface RequestBody$issues$remove$assignees {
   };
 }
 export interface Response$issues$remove$assignees$Status$200 {
-  "application/json": Schemas.issue$simple;
+  "application/json": Schemas.issue;
 }
 export interface Parameter$issues$list$comments {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
   /** Only show notifications updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   since?: Parameters.since;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10128,7 +11544,7 @@ export interface Parameter$issues$create$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
 }
 export interface RequestBody$issues$create$comment {
   "application/json": {
@@ -10147,9 +11563,9 @@ export interface Parameter$issues$list$events {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10161,9 +11577,9 @@ export interface Parameter$issues$list$labels$on$issue {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10175,13 +11591,24 @@ export interface Parameter$issues$set$labels {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
 }
 export interface RequestBody$issues$set$labels {
-  "application/json": {
-    /** The names of the labels to add to the issue. You can pass an empty array to remove all labels. **Note:** Alternatively, you can pass a single label as a `string` or an `array` of labels directly, but GitHub recommends passing an object with the `labels` key. */
-    labels?: string[];
-  };
+  "application/json":
+    | {
+        /** The names of the labels to set for the issue. The labels you set replace any existing labels. You can pass an empty array to remove all labels. Alternatively, you can pass a single label as a `string` or an `array` of labels directly, but GitHub recommends passing an object with the `labels` key. You can also add labels to the existing labels for an issue. For more information, see "[Add labels to an issue](https://docs.github.com/enterprise-server@3.0/rest/reference/issues#add-labels-to-an-issue)." */
+        labels?: string[];
+      }
+    | string[]
+    | {
+        labels?: {
+          name: string;
+        }[];
+      }
+    | {
+        name: string;
+      }[]
+    | string;
 }
 export interface Response$issues$set$labels$Status$200 {
   "application/json": Schemas.label[];
@@ -10192,13 +11619,24 @@ export interface Parameter$issues$add$labels {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
 }
 export interface RequestBody$issues$add$labels {
-  "application/json": {
-    /** The name of the label to add to the issue. Must contain at least one label. **Note:** Alternatively, you can pass a single label as a `string` or an `array` of labels directly, but GitHub recommends passing an object with the `labels` key. */
-    labels: string[];
-  };
+  "application/json":
+    | {
+        /** The names of the labels to add to the issue's existing labels. You can pass an empty array to remove all labels. Alternatively, you can pass a single label as a `string` or an `array` of labels directly, but GitHub recommends passing an object with the `labels` key. You can also replace all of the labels for an issue. For more information, see "[Set labels for an issue](https://docs.github.com/enterprise-server@3.0/rest/reference/issues#set-labels-for-an-issue)." */
+        labels?: string[];
+      }
+    | string[]
+    | {
+        labels?: {
+          name: string;
+        }[];
+      }
+    | {
+        name: string;
+      }[]
+    | string;
 }
 export interface Response$issues$add$labels$Status$200 {
   "application/json": Schemas.label[];
@@ -10209,14 +11647,14 @@ export interface Parameter$issues$remove$all$labels {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
 }
 export type Response$issues$remove$all$labels$Status$410 = Responses.gone.Content;
 export interface Parameter$issues$remove$label {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
   name: string;
 }
 export interface Response$issues$remove$label$Status$200 {
@@ -10228,7 +11666,7 @@ export interface Parameter$issues$lock {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
 }
 export interface RequestBody$issues$lock {
   "application/json": {
@@ -10250,7 +11688,7 @@ export interface Parameter$issues$unlock {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
 }
 export type Response$issues$unlock$Status$403 = Responses.forbidden.Content;
 export type Response$issues$unlock$Status$404 = Responses.not_found.Content;
@@ -10258,11 +11696,11 @@ export interface Parameter$reactions$list$for$issue {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
   /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to an issue. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10271,12 +11709,11 @@ export interface Response$reactions$list$for$issue$Status$200 {
 }
 export type Response$reactions$list$for$issue$Status$404 = Responses.not_found.Content;
 export type Response$reactions$list$for$issue$Status$410 = Responses.gone.Content;
-export type Response$reactions$list$for$issue$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$reactions$create$for$issue {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
 }
 export interface RequestBody$reactions$create$for$issue {
   "application/json": {
@@ -10284,39 +11721,40 @@ export interface RequestBody$reactions$create$for$issue {
     content: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   };
 }
+export interface Response$reactions$create$for$issue$Status$200 {
+  "application/json": Schemas.reaction;
+}
 export interface Response$reactions$create$for$issue$Status$201 {
   "application/json": Schemas.reaction;
 }
-export type Response$reactions$create$for$issue$Status$415 = Responses.preview_header_missing.Content;
 export type Response$reactions$create$for$issue$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$reactions$delete$for$issue {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
   reaction_id: Parameters.reaction$id;
 }
 export interface Parameter$issues$list$events$for$timeline {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** issue_number parameter */
-  issue_number: Parameters.issue_number;
+  issue_number: Parameters.issue$number;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
 export interface Response$issues$list$events$for$timeline$Status$200 {
-  "application/json": Schemas.issue$event$for$issue[];
+  "application/json": Schemas.timeline$issue$events[];
 }
 export type Response$issues$list$events$for$timeline$Status$404 = Responses.not_found.Content;
 export type Response$issues$list$events$for$timeline$Status$410 = Responses.gone.Content;
-export type Response$issues$list$events$for$timeline$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$repos$list$deploy$keys {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10336,7 +11774,7 @@ export interface RequestBody$repos$create$deploy$key {
     /**
      * If `true`, the key will only be able to read repository contents. Otherwise, the key will be able to read and write.
      *
-     * Deploy keys with write access can perform the same actions as an organization member with admin access, or a collaborator on a personal repository. For more information, see "[Repository permission levels for an organization](https://help.github.com/articles/repository-permission-levels-for-an-organization/)" and "[Permission levels for a user account repository](https://help.github.com/articles/permission-levels-for-a-user-account-repository/)."
+     * Deploy keys with write access can perform the same actions as an organization member with admin access, or a collaborator on a personal repository. For more information, see "[Repository permission levels for an organization](https://docs.github.com/articles/repository-permission-levels-for-an-organization/)" and "[Permission levels for a user account repository](https://docs.github.com/articles/permission-levels-for-a-user-account-repository/)."
      */
     read_only?: boolean;
   };
@@ -10349,7 +11787,7 @@ export interface Parameter$repos$get$deploy$key {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** key_id parameter */
-  key_id: Parameters.key_id;
+  key_id: Parameters.key$id;
 }
 export interface Response$repos$get$deploy$key$Status$200 {
   "application/json": Schemas.deploy$key;
@@ -10359,13 +11797,13 @@ export interface Parameter$repos$delete$deploy$key {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** key_id parameter */
-  key_id: Parameters.key_id;
+  key_id: Parameters.key$id;
 }
 export interface Parameter$issues$list$labels$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10379,11 +11817,11 @@ export interface Parameter$issues$create$label {
 }
 export interface RequestBody$issues$create$label {
   "application/json": {
-    /** The name of the label. Emoji can be added to label names, using either native emoji or colon-style markup. For example, typing `:strawberry:` will render the emoji ![:strawberry:](https://github.githubassets.com/images/icons/emoji/unicode/1f353.png ":strawberry:"). For a full list of available emoji and codes, see [emoji-cheat-sheet.com](http://emoji-cheat-sheet.com/). */
+    /** The name of the label. Emoji can be added to label names, using either native emoji or colon-style markup. For example, typing `:strawberry:` will render the emoji ![:strawberry:](https://github.githubassets.com/images/icons/emoji/unicode/1f353.png ":strawberry:"). For a full list of available emoji and codes, see "[Emoji cheat sheet](https://github.com/ikatyang/emoji-cheat-sheet)." */
     name: string;
     /** The [hexadecimal color code](http://www.color-hex.com/) for the label, without the leading `#`. */
     color?: string;
-    /** A short description of the label. */
+    /** A short description of the label. Must be 100 characters or fewer. */
     description?: string;
   };
 }
@@ -10413,11 +11851,11 @@ export interface Parameter$issues$update$label {
 }
 export interface RequestBody$issues$update$label {
   "application/json": {
-    /** The new name of the label. Emoji can be added to label names, using either native emoji or colon-style markup. For example, typing `:strawberry:` will render the emoji ![:strawberry:](https://github.githubassets.com/images/icons/emoji/unicode/1f353.png ":strawberry:"). For a full list of available emoji and codes, see [emoji-cheat-sheet.com](http://emoji-cheat-sheet.com/). */
+    /** The new name of the label. Emoji can be added to label names, using either native emoji or colon-style markup. For example, typing `:strawberry:` will render the emoji ![:strawberry:](https://github.githubassets.com/images/icons/emoji/unicode/1f353.png ":strawberry:"). For a full list of available emoji and codes, see "[Emoji cheat sheet](https://github.com/ikatyang/emoji-cheat-sheet)." */
     new_name?: string;
     /** The [hexadecimal color code](http://www.color-hex.com/) for the label, without the leading `#`. */
     color?: string;
-    /** A short description of the label. */
+    /** A short description of the label. Must be 100 characters or fewer. */
     description?: string;
   };
 }
@@ -10456,18 +11894,6 @@ export interface Response$repos$merge$Status$201 {
   "application/json": Schemas.commit;
 }
 export type Response$repos$merge$Status$403 = Responses.forbidden.Content;
-export interface Response$repos$merge$Status$404 {
-  "application/json": {
-    message?: string;
-    documentation_url?: string;
-  };
-}
-export interface Response$repos$merge$Status$409 {
-  "application/json": {
-    message?: string;
-    documentation_url?: string;
-  };
-}
 export type Response$repos$merge$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$issues$list$milestones {
   owner: Parameters.owner;
@@ -10479,7 +11905,7 @@ export interface Parameter$issues$list$milestones {
   /** The direction of the sort. Either `asc` or `desc`. */
   direction?: "asc" | "desc";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10512,7 +11938,7 @@ export interface Parameter$issues$get$milestone {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** milestone_number parameter */
-  milestone_number: Parameters.milestone_number;
+  milestone_number: Parameters.milestone$number;
 }
 export interface Response$issues$get$milestone$Status$200 {
   "application/json": Schemas.milestone;
@@ -10522,14 +11948,14 @@ export interface Parameter$issues$delete$milestone {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** milestone_number parameter */
-  milestone_number: Parameters.milestone_number;
+  milestone_number: Parameters.milestone$number;
 }
 export type Response$issues$delete$milestone$Status$404 = Responses.not_found.Content;
 export interface Parameter$issues$update$milestone {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** milestone_number parameter */
-  milestone_number: Parameters.milestone_number;
+  milestone_number: Parameters.milestone$number;
 }
 export interface RequestBody$issues$update$milestone {
   "application/json": {
@@ -10550,9 +11976,9 @@ export interface Parameter$issues$list$labels$for$milestone {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** milestone_number parameter */
-  milestone_number: Parameters.milestone_number;
+  milestone_number: Parameters.milestone$number;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10571,7 +11997,7 @@ export interface Parameter$activity$list$repo$notifications$for$authenticated$us
   /** Only show notifications updated before the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   before?: Parameters.before;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10588,6 +12014,12 @@ export interface RequestBody$activity$mark$repo$notifications$as$read {
     last_read_at?: string;
   };
 }
+export interface Response$activity$mark$repo$notifications$as$read$Status$202 {
+  "application/json": {
+    message?: string;
+    url?: string;
+  };
+}
 export interface Parameter$repos$get$pages {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -10601,20 +12033,19 @@ export interface Parameter$repos$update$information$about$pages$site {
   repo: Parameters.repo;
 }
 export interface RequestBody$repos$update$information$about$pages$site {
-  "application/json": {
-    /** Specify a custom domain for the repository. Sending a `null` value will remove the custom domain. For more about custom domains, see "[Using a custom domain with GitHub Pages](https://help.github.com/articles/using-a-custom-domain-with-github-pages/)." */
-    cname?: string | null;
-    /** Configures access controls for the GitHub Pages site. If public is set to `true`, the site is accessible to anyone on the internet. If set to `false`, the site will only be accessible to users who have at least `read` access to the repository that published the site. This includes anyone in your Enterprise if the repository is set to `internal` visibility. This feature is only available to repositories in an organization on an Enterprise plan. */
-    public?: boolean;
-    source:
-      | ("gh-pages" | "master" | "master /docs")
-      | {
-          /** The repository branch used to publish your site's source files. */
-          branch: string;
-          /** The repository directory that includes the source files for the Pages site. Allowed paths are `/` or `/docs`. */
-          path: "/" | "/docs";
-        };
-  };
+  "application/json":
+    | {
+        source: any;
+      }
+    | {
+        cname: any;
+      }
+    | {
+        public: any;
+      }
+    | {
+        https_enforced: any;
+      };
 }
 export type Response$repos$update$information$about$pages$site$Status$400 = Responses.bad_request.Content;
 export type Response$repos$update$information$about$pages$site$Status$422 = Responses.validation_failed.Content;
@@ -10632,26 +12063,24 @@ export interface RequestBody$repos$create$pages$site {
       /** The repository directory that includes the source files for the Pages site. Allowed paths are `/` or `/docs`. Default: `/` */
       path?: "/" | "/docs";
     };
-  };
+  } | null;
 }
 export interface Response$repos$create$pages$site$Status$201 {
   "application/json": Schemas.page;
 }
 export type Response$repos$create$pages$site$Status$409 = Responses.conflict.Content;
-export type Response$repos$create$pages$site$Status$415 = Responses.preview_header_missing.Content;
 export type Response$repos$create$pages$site$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$repos$delete$pages$site {
   owner: Parameters.owner;
   repo: Parameters.repo;
 }
 export type Response$repos$delete$pages$site$Status$404 = Responses.not_found.Content;
-export type Response$repos$delete$pages$site$Status$415 = Responses.preview_header_missing.Content;
 export type Response$repos$delete$pages$site$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$repos$list$pages$builds {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10687,6 +12116,9 @@ export interface Parameter$enterprise$admin$list$pre$receive$hooks$for$repo {
   per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
+  /** One of `asc` (ascending) or `desc` (descending). */
+  direction?: Parameters.direction;
+  sort?: "created" | "updated" | "name";
 }
 export interface Response$enterprise$admin$list$pre$receive$hooks$for$repo$Status$200 {
   "application/json": Schemas.repository$pre$receive$hook[];
@@ -10694,6 +12126,7 @@ export interface Response$enterprise$admin$list$pre$receive$hooks$for$repo$Statu
 export interface Parameter$enterprise$admin$get$pre$receive$hook$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
+  /** pre_receive_hook_id parameter */
   pre_receive_hook_id: Parameters.pre$receive$hook$id;
 }
 export interface Response$enterprise$admin$get$pre$receive$hook$for$repo$Status$200 {
@@ -10702,6 +12135,7 @@ export interface Response$enterprise$admin$get$pre$receive$hook$for$repo$Status$
 export interface Parameter$enterprise$admin$remove$pre$receive$hook$enforcement$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
+  /** pre_receive_hook_id parameter */
   pre_receive_hook_id: Parameters.pre$receive$hook$id;
 }
 export interface Response$enterprise$admin$remove$pre$receive$hook$enforcement$for$repo$Status$200 {
@@ -10710,12 +12144,13 @@ export interface Response$enterprise$admin$remove$pre$receive$hook$enforcement$f
 export interface Parameter$enterprise$admin$update$pre$receive$hook$enforcement$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
+  /** pre_receive_hook_id parameter */
   pre_receive_hook_id: Parameters.pre$receive$hook$id;
 }
 export interface RequestBody$enterprise$admin$update$pre$receive$hook$enforcement$for$repo {
   "application/json": {
     /** The state of enforcement for the hook on this repository. */
-    enforcement?: string;
+    enforcement?: "enabled" | "disabled" | "testing";
   };
 }
 export interface Response$enterprise$admin$update$pre$receive$hook$enforcement$for$repo$Status$200 {
@@ -10727,7 +12162,7 @@ export interface Parameter$projects$list$for$repo {
   /** Indicates the state of the projects to return. Can be either `open`, `closed`, or `all`. */
   state?: "open" | "closed" | "all";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10773,7 +12208,7 @@ export interface Parameter$pulls$list {
   /** The direction of the sort. Can be either `asc` or `desc`. Default: `desc` when sort is `created` or sort is not specified, otherwise `asc`. */
   direction?: "asc" | "desc";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10795,9 +12230,9 @@ export interface RequestBody$pulls$create {
     base: string;
     /** The contents of the pull request. */
     body?: string;
-    /** Indicates whether [maintainers can modify](https://help.github.com/articles/allowing-changes-to-a-pull-request-branch-created-from-a-fork/) the pull request. */
+    /** Indicates whether [maintainers can modify](https://docs.github.com/articles/allowing-changes-to-a-pull-request-branch-created-from-a-fork/) the pull request. */
     maintainer_can_modify?: boolean;
-    /** Indicates whether the pull request is a draft. See "[Draft Pull Requests](https://help.github.com/en/articles/about-pull-requests#draft-pull-requests)" in the GitHub Help documentation to learn more. */
+    /** Indicates whether the pull request is a draft. See "[Draft Pull Requests](https://docs.github.com/en/articles/about-pull-requests#draft-pull-requests)" in the GitHub Help documentation to learn more. */
     draft?: boolean;
     issue?: number;
   };
@@ -10810,14 +12245,13 @@ export type Response$pulls$create$Status$422 = Responses.validation_failed.Conte
 export interface Parameter$pulls$list$review$comments$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** One of `created` (when the repository was starred) or `updated` (when it was last pushed to). */
-  sort?: Parameters.sort;
+  sort?: "created" | "updated" | "created_at";
   /** Can be either `asc` or `desc`. Ignored without `sort` parameter. */
   direction?: "asc" | "desc";
   /** Only show notifications updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   since?: Parameters.since;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10828,7 +12262,7 @@ export interface Parameter$pulls$get$review$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export interface Response$pulls$get$review$comment$Status$200 {
   "application/json": Schemas.pull$request$review$comment;
@@ -10838,14 +12272,14 @@ export interface Parameter$pulls$delete$review$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export type Response$pulls$delete$review$comment$Status$404 = Responses.not_found.Content;
 export interface Parameter$pulls$update$review$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export interface RequestBody$pulls$update$review$comment {
   "application/json": {
@@ -10860,11 +12294,11 @@ export interface Parameter$reactions$list$for$pull$request$review$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
   /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a pull request review comment. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10872,12 +12306,11 @@ export interface Response$reactions$list$for$pull$request$review$comment$Status$
   "application/json": Schemas.reaction[];
 }
 export type Response$reactions$list$for$pull$request$review$comment$Status$404 = Responses.not_found.Content;
-export type Response$reactions$list$for$pull$request$review$comment$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$reactions$create$for$pull$request$review$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export interface RequestBody$reactions$create$for$pull$request$review$comment {
   "application/json": {
@@ -10891,13 +12324,12 @@ export interface Response$reactions$create$for$pull$request$review$comment$Statu
 export interface Response$reactions$create$for$pull$request$review$comment$Status$201 {
   "application/json": Schemas.reaction;
 }
-export type Response$reactions$create$for$pull$request$review$comment$Status$415 = Responses.preview_header_missing.Content;
 export type Response$reactions$create$for$pull$request$review$comment$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$reactions$delete$for$pull$request$comment {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
   reaction_id: Parameters.reaction$id;
 }
 export interface Parameter$pulls$get {
@@ -10925,7 +12357,7 @@ export interface RequestBody$pulls$update {
     state?: "open" | "closed";
     /** The name of the branch you want your changes pulled into. This should be an existing branch on the current repository. You cannot update the base branch on a pull request to point to another repository. */
     base?: string;
-    /** Indicates whether [maintainers can modify](https://help.github.com/articles/allowing-changes-to-a-pull-request-branch-created-from-a-fork/) the pull request. */
+    /** Indicates whether [maintainers can modify](https://docs.github.com/articles/allowing-changes-to-a-pull-request-branch-created-from-a-fork/) the pull request. */
     maintainer_can_modify?: boolean;
   };
 }
@@ -10945,7 +12377,7 @@ export interface Parameter$pulls$list$review$comments {
   /** Only show notifications updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   since?: Parameters.since;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -10964,17 +12396,18 @@ export interface RequestBody$pulls$create$review$comment {
     /** The SHA of the commit needing a comment. Not using the latest commit SHA may render your comment outdated if a subsequent commit modifies the line you specify as the `position`. */
     commit_id?: string;
     /** The relative path to the file that necessitates a comment. */
-    path: string;
+    path?: string;
     /** **Required without `comfort-fade` preview**. The position in the diff where you want to add a review comment. Note this value is not the same as the line number in the file. For help finding the position value, read the note above. */
     position?: number;
-    /** **Required with `comfort-fade` preview**. In a split diff view, the side of the diff that the pull request's changes appear on. Can be `LEFT` or `RIGHT`. Use `LEFT` for deletions that appear in red. Use `RIGHT` for additions that appear in green or unchanged lines that appear in white and are shown for context. For a multi-line comment, side represents whether the last line of the comment range is a deletion or addition. For more information, see "[Diff view options](https://help.github.com/en/articles/about-comparing-branches-in-pull-requests#diff-view-options)" in the GitHub Help documentation. */
+    /** **Required with `comfort-fade` preview**. In a split diff view, the side of the diff that the pull request's changes appear on. Can be `LEFT` or `RIGHT`. Use `LEFT` for deletions that appear in red. Use `RIGHT` for additions that appear in green or unchanged lines that appear in white and are shown for context. For a multi-line comment, side represents whether the last line of the comment range is a deletion or addition. For more information, see "[Diff view options](https://docs.github.com/en/articles/about-comparing-branches-in-pull-requests#diff-view-options)" in the GitHub Help documentation. */
     side?: "LEFT" | "RIGHT";
     /** **Required with `comfort-fade` preview**. The line of the blob in the pull request diff that the comment applies to. For a multi-line comment, the last line of the range that your comment applies to. */
     line?: number;
-    /** **Required when using multi-line comments**. To create multi-line comments, you must use the `comfort-fade` preview header. The `start_line` is the first line in the pull request diff that your multi-line comment applies to. To learn more about multi-line comments, see "[Commenting on a pull request](https://help.github.com/en/articles/commenting-on-a-pull-request#adding-line-comments-to-a-pull-request)" in the GitHub Help documentation. */
+    /** **Required when using multi-line comments**. To create multi-line comments, you must use the `comfort-fade` preview header. The `start_line` is the first line in the pull request diff that your multi-line comment applies to. To learn more about multi-line comments, see "[Commenting on a pull request](https://docs.github.com/en/articles/commenting-on-a-pull-request#adding-line-comments-to-a-pull-request)" in the GitHub Help documentation. */
     start_line?: number;
-    /** **Required when using multi-line comments**. To create multi-line comments, you must use the `comfort-fade` preview header. The `start_side` is the starting side of the diff that the comment applies to. Can be `LEFT` or `RIGHT`. To learn more about multi-line comments, see "[Commenting on a pull request](https://help.github.com/en/articles/commenting-on-a-pull-request#adding-line-comments-to-a-pull-request)" in the GitHub Help documentation. See `side` in this table for additional context. */
+    /** **Required when using multi-line comments**. To create multi-line comments, you must use the `comfort-fade` preview header. The `start_side` is the starting side of the diff that the comment applies to. Can be `LEFT` or `RIGHT`. To learn more about multi-line comments, see "[Commenting on a pull request](https://docs.github.com/en/articles/commenting-on-a-pull-request#adding-line-comments-to-a-pull-request)" in the GitHub Help documentation. See `side` in this table for additional context. */
     start_side?: "LEFT" | "RIGHT" | "side";
+    /** The ID of the review comment to reply to. To find the ID of a review comment with ["List review comments on a pull request"](#list-review-comments-on-a-pull-request). When specified, all parameters other than `body` in the request body are ignored. */
     in_reply_to?: number;
   };
 }
@@ -10988,7 +12421,7 @@ export interface Parameter$pulls$create$reply$for$review$comment {
   repo: Parameters.repo;
   pull_number: Parameters.pull$number;
   /** comment_id parameter */
-  comment_id: Parameters.comment_id;
+  comment_id: Parameters.comment$id;
 }
 export interface RequestBody$pulls$create$reply$for$review$comment {
   "application/json": {
@@ -11005,7 +12438,7 @@ export interface Parameter$pulls$list$commits {
   repo: Parameters.repo;
   pull_number: Parameters.pull$number;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11017,7 +12450,7 @@ export interface Parameter$pulls$list$files {
   repo: Parameters.repo;
   pull_number: Parameters.pull$number;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11071,7 +12504,7 @@ export interface Parameter$pulls$list$requested$reviewers {
   repo: Parameters.repo;
   pull_number: Parameters.pull$number;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11084,12 +12517,13 @@ export interface Parameter$pulls$request$reviewers {
   pull_number: Parameters.pull$number;
 }
 export interface RequestBody$pulls$request$reviewers {
-  "application/json": {
-    /** An array of user `login`s that will be requested. */
-    reviewers?: string[];
-    /** An array of team `slug`s that will be requested. */
-    team_reviewers?: string[];
-  };
+  "application/json":
+    | {
+        reviewers: any;
+      }
+    | {
+        team_reviewers: any;
+      };
 }
 export interface Response$pulls$request$reviewers$Status$201 {
   "application/json": Schemas.pull$request$simple;
@@ -11103,10 +12537,13 @@ export interface Parameter$pulls$remove$requested$reviewers {
 export interface RequestBody$pulls$remove$requested$reviewers {
   "application/json": {
     /** An array of user `login`s that will be removed. */
-    reviewers?: string[];
+    reviewers: string[];
     /** An array of team `slug`s that will be removed. */
     team_reviewers?: string[];
   };
+}
+export interface Response$pulls$remove$requested$reviewers$Status$200 {
+  "application/json": Schemas.pull$request$simple;
 }
 export type Response$pulls$remove$requested$reviewers$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$pulls$list$reviews {
@@ -11114,7 +12551,7 @@ export interface Parameter$pulls$list$reviews {
   repo: Parameters.repo;
   pull_number: Parameters.pull$number;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11159,7 +12596,7 @@ export interface Parameter$pulls$get$review {
   repo: Parameters.repo;
   pull_number: Parameters.pull$number;
   /** review_id parameter */
-  review_id: Parameters.review_id;
+  review_id: Parameters.review$id;
 }
 export interface Response$pulls$get$review$Status$200 {
   "application/json": Schemas.pull$request$review;
@@ -11170,7 +12607,7 @@ export interface Parameter$pulls$update$review {
   repo: Parameters.repo;
   pull_number: Parameters.pull$number;
   /** review_id parameter */
-  review_id: Parameters.review_id;
+  review_id: Parameters.review$id;
 }
 export interface RequestBody$pulls$update$review {
   "application/json": {
@@ -11187,7 +12624,7 @@ export interface Parameter$pulls$delete$pending$review {
   repo: Parameters.repo;
   pull_number: Parameters.pull$number;
   /** review_id parameter */
-  review_id: Parameters.review_id;
+  review_id: Parameters.review$id;
 }
 export interface Response$pulls$delete$pending$review$Status$200 {
   "application/json": Schemas.pull$request$review;
@@ -11199,9 +12636,9 @@ export interface Parameter$pulls$list$comments$for$review {
   repo: Parameters.repo;
   pull_number: Parameters.pull$number;
   /** review_id parameter */
-  review_id: Parameters.review_id;
+  review_id: Parameters.review$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11214,7 +12651,7 @@ export interface Parameter$pulls$dismiss$review {
   repo: Parameters.repo;
   pull_number: Parameters.pull$number;
   /** review_id parameter */
-  review_id: Parameters.review_id;
+  review_id: Parameters.review$id;
 }
 export interface RequestBody$pulls$dismiss$review {
   "application/json": {
@@ -11233,7 +12670,7 @@ export interface Parameter$pulls$submit$review {
   repo: Parameters.repo;
   pull_number: Parameters.pull$number;
   /** review_id parameter */
-  review_id: Parameters.review_id;
+  review_id: Parameters.review$id;
 }
 export interface RequestBody$pulls$submit$review {
   "application/json": {
@@ -11267,7 +12704,6 @@ export interface Response$pulls$update$branch$Status$202 {
   };
 }
 export type Response$pulls$update$branch$Status$403 = Responses.forbidden.Content;
-export type Response$pulls$update$branch$Status$415 = Responses.preview_header_missing.Content;
 export type Response$pulls$update$branch$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$repos$get$readme {
   owner: Parameters.owner;
@@ -11280,11 +12716,24 @@ export interface Response$repos$get$readme$Status$200 {
 }
 export type Response$repos$get$readme$Status$404 = Responses.not_found.Content;
 export type Response$repos$get$readme$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$repos$get$readme$in$directory {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** The alternate path to look for a README file */
+  dir: string;
+  /** The name of the commit/branch/tag. Default: the repository’s default branch (usually `master`) */
+  ref?: string;
+}
+export interface Response$repos$get$readme$in$directory$Status$200 {
+  "application/json": Schemas.content$file;
+}
+export type Response$repos$get$readme$in$directory$Status$404 = Responses.not_found.Content;
+export type Response$repos$get$readme$in$directory$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$repos$list$releases {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11320,7 +12769,7 @@ export interface Parameter$repos$get$release$asset {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** asset_id parameter */
-  asset_id: Parameters.asset_id;
+  asset_id: Parameters.asset$id;
 }
 export interface Response$repos$get$release$asset$Status$200 {
   "application/json": Schemas.release$asset;
@@ -11331,13 +12780,13 @@ export interface Parameter$repos$delete$release$asset {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** asset_id parameter */
-  asset_id: Parameters.asset_id;
+  asset_id: Parameters.asset$id;
 }
 export interface Parameter$repos$update$release$asset {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** asset_id parameter */
-  asset_id: Parameters.asset_id;
+  asset_id: Parameters.asset$id;
 }
 export interface RequestBody$repos$update$release$asset {
   "application/json": {
@@ -11361,7 +12810,7 @@ export interface Response$repos$get$latest$release$Status$200 {
 export interface Parameter$repos$get$release$by$tag {
   owner: Parameters.owner;
   repo: Parameters.repo;
-  /** tag+ parameter */
+  /** tag parameter */
   tag: string;
 }
 export interface Response$repos$get$release$by$tag$Status$200 {
@@ -11372,7 +12821,7 @@ export interface Parameter$repos$get$release {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** release_id parameter */
-  release_id: Parameters.release_id;
+  release_id: Parameters.release$id;
 }
 export interface Response$repos$get$release$Status$200 {
   "application/json": Schemas.release;
@@ -11382,13 +12831,13 @@ export interface Parameter$repos$delete$release {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** release_id parameter */
-  release_id: Parameters.release_id;
+  release_id: Parameters.release$id;
 }
 export interface Parameter$repos$update$release {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** release_id parameter */
-  release_id: Parameters.release_id;
+  release_id: Parameters.release$id;
 }
 export interface RequestBody$repos$update$release {
   "application/json": {
@@ -11413,9 +12862,9 @@ export interface Parameter$repos$list$release$assets {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** release_id parameter */
-  release_id: Parameters.release_id;
+  release_id: Parameters.release$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11426,8 +12875,8 @@ export interface Parameter$repos$upload$release$asset {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** release_id parameter */
-  release_id: Parameters.release_id;
-  name?: string;
+  release_id: Parameters.release$id;
+  name: string;
   label?: string;
 }
 export interface RequestBody$repos$upload$release$asset {
@@ -11441,13 +12890,12 @@ export interface Parameter$activity$list$stargazers$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
 export interface Response$activity$list$stargazers$for$repo$Status$200 {
-  "application/json": Schemas.simple$user[];
-  "application/vnd.github.v3.star+json": Schemas.stargazer[];
+  "application/json": Schemas.simple$user[] | Schemas.stargazer[];
 }
 export type Response$activity$list$stargazers$for$repo$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$repos$get$code$frequency$stats {
@@ -11457,6 +12905,7 @@ export interface Parameter$repos$get$code$frequency$stats {
 export interface Response$repos$get$code$frequency$stats$Status$200 {
   "application/json": Schemas.code$frequency$stat[];
 }
+export type Response$repos$get$code$frequency$stats$Status$202 = Responses.accepted.Content;
 export interface Parameter$repos$get$commit$activity$stats {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -11464,6 +12913,7 @@ export interface Parameter$repos$get$commit$activity$stats {
 export interface Response$repos$get$commit$activity$stats$Status$200 {
   "application/json": Schemas.commit$activity[];
 }
+export type Response$repos$get$commit$activity$stats$Status$202 = Responses.accepted.Content;
 export interface Parameter$repos$get$contributors$stats {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -11471,6 +12921,7 @@ export interface Parameter$repos$get$contributors$stats {
 export interface Response$repos$get$contributors$stats$Status$200 {
   "application/json": Schemas.contributor$activity[];
 }
+export type Response$repos$get$contributors$stats$Status$202 = Responses.accepted.Content;
 export interface Parameter$repos$get$participation$stats {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -11514,7 +12965,7 @@ export interface Parameter$activity$list$watchers$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11552,7 +13003,7 @@ export interface Parameter$repos$list$tags {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11568,7 +13019,7 @@ export interface Parameter$repos$list$teams {
   owner: Parameters.owner;
   repo: Parameters.repo;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11578,6 +13029,10 @@ export interface Response$repos$list$teams$Status$200 {
 export interface Parameter$repos$get$all$topics {
   owner: Parameters.owner;
   repo: Parameters.repo;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
 }
 export interface Response$repos$get$all$topics$Status$200 {
   "application/json": Schemas.topic;
@@ -11613,15 +13068,7 @@ export interface RequestBody$repos$transfer {
   };
 }
 export interface Response$repos$transfer$Status$202 {
-  "application/json": Schemas.repository;
-}
-export interface Parameter$repos$enable$vulnerability$alerts {
-  owner: Parameters.owner;
-  repo: Parameters.repo;
-}
-export interface Parameter$repos$disable$vulnerability$alerts {
-  owner: Parameters.owner;
-  repo: Parameters.repo;
+  "application/json": Schemas.minimal$repository;
 }
 export interface Parameter$repos$download$zipball$archive {
   owner: Parameters.owner;
@@ -11652,7 +13099,7 @@ export interface Response$repos$create$using$template$Status$201 {
 export interface Parameter$repos$list$public {
   /** A repository ID. Only return repositories with an ID greater than this ID. */
   since?: Parameters.since$repo;
-  /** Specifies the types of repositories to return. Can be one of `all` or `public`. Default: `public`. */
+  /** Specifies the types of repositories to return. Can be one of `all` or `public`. Default: `public`. Note: For GitHub Enterprise Server and GitHub AE, this endpoint will only list repositories available to all users on the enterprise. */
   visibility?: "all" | "public";
 }
 export interface Response$repos$list$public$Status$200 {
@@ -11660,14 +13107,14 @@ export interface Response$repos$list$public$Status$200 {
 }
 export type Response$repos$list$public$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$search$code {
-  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). See "[Searching code](https://help.github.com/articles/searching-code/)" for a detailed list of qualifiers. */
+  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). See "[Searching code](https://docs.github.com/articles/searching-code/)" for a detailed list of qualifiers. */
   q: string;
   /** Sorts the results of your query. Can only be `indexed`, which indicates how recently a file has been indexed by the GitHub Enterprise Server search infrastructure. Default: [best match](https://docs.github.com/enterprise-server@3.0/rest/reference/search#ranking-search-results) */
   sort?: "indexed";
   /** Determines whether the first search result returned is the highest number of matches (`desc`) or lowest number of matches (`asc`). This parameter is ignored unless you provide `sort`. */
   order?: Parameters.order;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11682,14 +13129,14 @@ export type Response$search$code$Status$403 = Responses.forbidden.Content;
 export type Response$search$code$Status$422 = Responses.validation_failed.Content;
 export type Response$search$code$Status$503 = Responses.service_unavailable.Content;
 export interface Parameter$search$commits {
-  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). See "[Searching commits](https://help.github.com/articles/searching-commits/)" for a detailed list of qualifiers. */
+  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). See "[Searching commits](https://docs.github.com/articles/searching-commits/)" for a detailed list of qualifiers. */
   q: string;
   /** Sorts the results of your query by `author-date` or `committer-date`. Default: [best match](https://docs.github.com/enterprise-server@3.0/rest/reference/search#ranking-search-results) */
   sort?: "author-date" | "committer-date";
   /** Determines whether the first search result returned is the highest number of matches (`desc`) or lowest number of matches (`asc`). This parameter is ignored unless you provide `sort`. */
   order?: Parameters.order;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11700,9 +13147,8 @@ export interface Response$search$commits$Status$200 {
     items: Schemas.commit$search$result$item[];
   };
 }
-export type Response$search$commits$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$search$issues$and$pull$requests {
-  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). See "[Searching issues and pull requests](https://help.github.com/articles/searching-issues-and-pull-requests/)" for a detailed list of qualifiers. */
+  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). See "[Searching issues and pull requests](https://docs.github.com/articles/searching-issues-and-pull-requests/)" for a detailed list of qualifiers. */
   q: string;
   /** Sorts the results of your query by the number of `comments`, `reactions`, `reactions-+1`, `reactions--1`, `reactions-smile`, `reactions-thinking_face`, `reactions-heart`, `reactions-tada`, or `interactions`. You can also sort results by how recently the items were `created` or `updated`, Default: [best match](https://docs.github.com/enterprise-server@3.0/rest/reference/search#ranking-search-results) */
   sort?:
@@ -11720,7 +13166,7 @@ export interface Parameter$search$issues$and$pull$requests {
   /** Determines whether the first search result returned is the highest number of matches (`desc`) or lowest number of matches (`asc`). This parameter is ignored unless you provide `sort`. */
   order?: Parameters.order;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11743,6 +13189,10 @@ export interface Parameter$search$labels {
   sort?: "created" | "updated";
   /** Determines whether the first search result returned is the highest number of matches (`desc`) or lowest number of matches (`asc`). This parameter is ignored unless you provide `sort`. */
   order?: Parameters.order;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
 }
 export interface Response$search$labels$Status$200 {
   "application/json": {
@@ -11755,14 +13205,14 @@ export type Response$search$labels$Status$403 = Responses.forbidden.Content;
 export type Response$search$labels$Status$404 = Responses.not_found.Content;
 export type Response$search$labels$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$search$repos {
-  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). See "[Searching for repositories](https://help.github.com/articles/searching-for-repositories/)" for a detailed list of qualifiers. */
+  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). See "[Searching for repositories](https://docs.github.com/articles/searching-for-repositories/)" for a detailed list of qualifiers. */
   q: string;
   /** Sorts the results of your query by number of `stars`, `forks`, or `help-wanted-issues` or how recently the items were `updated`. Default: [best match](https://docs.github.com/enterprise-server@3.0/rest/reference/search#ranking-search-results) */
   sort?: "stars" | "forks" | "help-wanted-issues" | "updated";
   /** Determines whether the first search result returned is the highest number of matches (`desc`) or lowest number of matches (`asc`). This parameter is ignored unless you provide `sort`. */
   order?: Parameters.order;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11778,6 +13228,10 @@ export type Response$search$repos$Status$503 = Responses.service_unavailable.Con
 export interface Parameter$search$topics {
   /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). */
   q: string;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
 }
 export interface Response$search$topics$Status$200 {
   "application/json": {
@@ -11788,14 +13242,14 @@ export interface Response$search$topics$Status$200 {
 }
 export type Response$search$topics$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$search$users {
-  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). See "[Searching users](https://help.github.com/articles/searching-users/)" for a detailed list of qualifiers. */
+  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). See "[Searching users](https://docs.github.com/articles/searching-users/)" for a detailed list of qualifiers. */
   q: string;
   /** Sorts the results of your query by number of `followers` or `repositories`, or when the person `joined` GitHub Enterprise Server. Default: [best match](https://docs.github.com/enterprise-server@3.0/rest/reference/search#ranking-search-results) */
   sort?: "followers" | "repositories" | "joined";
   /** Determines whether the first search result returned is the highest number of matches (`desc`) or lowest number of matches (`asc`). This parameter is ignored unless you provide `sort`. */
   order?: Parameters.order;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11815,8 +13269,14 @@ export interface Response$enterprise$admin$get$maintenance$status$Status$200 {
   "application/json": Schemas.maintenance$status;
 }
 export interface RequestBody$enterprise$admin$enable$or$disable$maintenance$mode {
-  "application/json": {
-    /** A JSON string with the attributes `enabled` and `when`. */
+  "application/x-www-form-urlencoded": {
+    /**
+     * A JSON string with the attributes `enabled` and `when`.
+     *
+     * The possible values for `enabled` are `true` and `false`. When it's `false`, the attribute `when` is ignored and the maintenance mode is turned off. `when` defines the time period when the maintenance was enabled.
+     *
+     * The possible values for `when` are `now` or any date parseable by [mojombo/chronic](https://github.com/mojombo/chronic).
+     */
     maintenance: string;
   };
 }
@@ -11827,8 +13287,8 @@ export interface Response$enterprise$admin$get$settings$Status$200 {
   "application/json": Schemas.enterprise$settings;
 }
 export interface RequestBody$enterprise$admin$set$settings {
-  "application/json": {
-    /** A JSON string with the new settings. Note that you only need to pass the specific settings you want to modify. */
+  "application/x-www-form-urlencoded": {
+    /** A JSON string with the new settings. Note that you only need to pass the specific settings you want to modify. For a list of the available settings, see the [Get settings endpoint](https://docs.github.com/enterprise-server@3.0/rest/reference/enterprise-admin#get-settings). */
     settings: string;
   };
 }
@@ -11836,8 +13296,8 @@ export interface Response$enterprise$admin$get$all$authorized$ssh$keys$Status$20
   "application/json": Schemas.ssh$key[];
 }
 export interface RequestBody$enterprise$admin$add$authorized$ssh$key {
-  "application/json": {
-    /** The path to the public SSH key. */
+  "application/x-www-form-urlencoded": {
+    /** The public SSH key. */
     authorized_key: string;
   };
 }
@@ -11845,8 +13305,8 @@ export interface Response$enterprise$admin$add$authorized$ssh$key$Status$201 {
   "application/json": Schemas.ssh$key[];
 }
 export interface RequestBody$enterprise$admin$remove$authorized$ssh$key {
-  "application/json": {
-    /** The path to the public SSH key. */
+  "application/x-www-form-urlencoded": {
+    /** The public SSH key. */
     authorized_key: string;
   };
 }
@@ -11854,17 +13314,17 @@ export interface Response$enterprise$admin$remove$authorized$ssh$key$Status$200 
   "application/json": Schemas.ssh$key[];
 }
 export interface RequestBody$enterprise$admin$create$enterprise$server$license {
-  "application/json": {
+  "application/x-www-form-urlencoded": {
     /** The content of your _.ghl_ license file. */
     license: string;
     /** You **must** provide a password _only if_ you are uploading your license for the first time. If you previously set a password through the web interface, you don't need this parameter. */
     password?: string;
-    /** An optional JSON string containing the installation settings. */
+    /** An optional JSON string containing the installation settings. For a list of the available settings, see the [Get settings endpoint](https://docs.github.com/enterprise-server@3.0/rest/reference/enterprise-admin#get-settings). */
     settings?: string;
   };
 }
 export interface RequestBody$enterprise$admin$upgrade$license {
-  "application/json": {
+  "application/x-www-form-urlencoded": {
     /** The content of your new _.ghl_ license file. */
     license?: string;
   };
@@ -11910,6 +13370,9 @@ export interface RequestBody$teams$update$legacy {
     parent_team_id?: number | null;
   };
 }
+export interface Response$teams$update$legacy$Status$200 {
+  "application/json": Schemas.team$full;
+}
 export interface Response$teams$update$legacy$Status$201 {
   "application/json": Schemas.team$full;
 }
@@ -11921,7 +13384,7 @@ export interface Parameter$teams$list$discussions$legacy {
   /** One of `asc` (ascending) or `desc` (descending). */
   direction?: Parameters.direction;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -11976,7 +13439,7 @@ export interface Parameter$teams$list$discussion$comments$legacy {
   /** One of `asc` (ascending) or `desc` (descending). */
   direction?: Parameters.direction;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12030,7 +13493,7 @@ export interface Parameter$reactions$list$for$team$discussion$comment$legacy {
   /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a team discussion comment. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12057,7 +13520,7 @@ export interface Parameter$reactions$list$for$team$discussion$legacy {
   /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a team discussion. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12087,7 +13550,7 @@ export interface Parameter$teams$list$members$legacy {
    */
   role?: "member" | "maintainer" | "all";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12104,17 +13567,6 @@ export interface Parameter$teams$add$member$legacy {
   username: Parameters.username;
 }
 export type Response$teams$add$member$legacy$Status$403 = Responses.forbidden.Content;
-export interface Response$teams$add$member$legacy$Status$422 {
-  "application/json": {
-    message?: string;
-    errors?: {
-      code?: string;
-      field?: string;
-      resource?: string;
-    }[];
-    documentation_url?: string;
-  };
-}
 export interface Parameter$teams$remove$member$legacy {
   team_id: Parameters.team$id;
   username: Parameters.username;
@@ -12145,17 +13597,6 @@ export interface Response$teams$add$or$update$membership$for$user$legacy$Status$
   "application/json": Schemas.team$membership;
 }
 export type Response$teams$add$or$update$membership$for$user$legacy$Status$404 = Responses.not_found.Content;
-export interface Response$teams$add$or$update$membership$for$user$legacy$Status$422 {
-  "application/json": {
-    message?: string;
-    errors?: {
-      code?: string;
-      field?: string;
-      resource?: string;
-    }[];
-    documentation_url?: string;
-  };
-}
 export interface Parameter$teams$remove$membership$for$user$legacy {
   team_id: Parameters.team$id;
   username: Parameters.username;
@@ -12163,7 +13604,7 @@ export interface Parameter$teams$remove$membership$for$user$legacy {
 export interface Parameter$teams$list$projects$legacy {
   team_id: Parameters.team$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12171,7 +13612,6 @@ export interface Response$teams$list$projects$legacy$Status$200 {
   "application/json": Schemas.team$project[];
 }
 export type Response$teams$list$projects$legacy$Status$404 = Responses.not_found.Content;
-export type Response$teams$list$projects$legacy$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$teams$check$permissions$for$project$legacy {
   team_id: Parameters.team$id;
   project_id: Parameters.project$id;
@@ -12179,7 +13619,6 @@ export interface Parameter$teams$check$permissions$for$project$legacy {
 export interface Response$teams$check$permissions$for$project$legacy$Status$200 {
   "application/json": Schemas.team$project;
 }
-export type Response$teams$check$permissions$for$project$legacy$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$teams$add$or$update$project$permissions$legacy {
   team_id: Parameters.team$id;
   project_id: Parameters.project$id;
@@ -12203,7 +13642,6 @@ export interface Response$teams$add$or$update$project$permissions$legacy$Status$
   };
 }
 export type Response$teams$add$or$update$project$permissions$legacy$Status$404 = Responses.not_found.Content;
-export type Response$teams$add$or$update$project$permissions$legacy$Status$415 = Responses.preview_header_missing.Content;
 export type Response$teams$add$or$update$project$permissions$legacy$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$teams$remove$project$legacy {
   team_id: Parameters.team$id;
@@ -12215,7 +13653,7 @@ export type Response$teams$remove$project$legacy$Status$422 = Responses.validati
 export interface Parameter$teams$list$repos$legacy {
   team_id: Parameters.team$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12229,7 +13667,7 @@ export interface Parameter$teams$check$permissions$for$repo$legacy {
   repo: Parameters.repo;
 }
 export interface Response$teams$check$permissions$for$repo$legacy$Status$200 {
-  "application/vnd.github.v3.repository+json": Schemas.team$repository;
+  "application/json": Schemas.team$repository;
 }
 export interface Parameter$teams$add$or$update$repo$permissions$legacy {
   team_id: Parameters.team$id;
@@ -12259,7 +13697,7 @@ export interface Parameter$teams$remove$repo$legacy {
 export interface Parameter$teams$list$child$legacy {
   team_id: Parameters.team$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12301,19 +13739,19 @@ export type Response$users$update$authenticated$Status$401 = Responses.requires_
 export type Response$users$update$authenticated$Status$403 = Responses.forbidden.Content;
 export type Response$users$update$authenticated$Status$404 = Responses.not_found.Content;
 export type Response$users$update$authenticated$Status$422 = Responses.validation_failed.Content;
-export interface Parameter$users$list$emails$for$authenticated {
+export interface Parameter$users$list$emails$for$authenticated$user {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
-export interface Response$users$list$emails$for$authenticated$Status$200 {
+export interface Response$users$list$emails$for$authenticated$user$Status$200 {
   "application/json": Schemas.email[];
 }
-export type Response$users$list$emails$for$authenticated$Status$401 = Responses.requires_authentication.Content;
-export type Response$users$list$emails$for$authenticated$Status$403 = Responses.forbidden.Content;
-export type Response$users$list$emails$for$authenticated$Status$404 = Responses.not_found.Content;
-export interface RequestBody$users$add$email$for$authenticated {
+export type Response$users$list$emails$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$users$list$emails$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$users$list$emails$for$authenticated$user$Status$404 = Responses.not_found.Content;
+export interface RequestBody$users$add$email$for$authenticated$user {
   "application/json":
     | {
         /** Adds one or more email addresses to your GitHub account. Must contain at least one email address. **Note:** Alternatively, you can pass a single email address or an `array` of emails addresses directly, but we recommend that you pass an object using the `emails` key. */
@@ -12322,14 +13760,14 @@ export interface RequestBody$users$add$email$for$authenticated {
     | string[]
     | string;
 }
-export interface Response$users$add$email$for$authenticated$Status$201 {
+export interface Response$users$add$email$for$authenticated$user$Status$201 {
   "application/json": Schemas.email[];
 }
-export type Response$users$add$email$for$authenticated$Status$401 = Responses.requires_authentication.Content;
-export type Response$users$add$email$for$authenticated$Status$403 = Responses.forbidden.Content;
-export type Response$users$add$email$for$authenticated$Status$404 = Responses.not_found.Content;
-export type Response$users$add$email$for$authenticated$Status$422 = Responses.validation_failed.Content;
-export interface RequestBody$users$delete$email$for$authenticated {
+export type Response$users$add$email$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$users$add$email$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$users$add$email$for$authenticated$user$Status$404 = Responses.not_found.Content;
+export type Response$users$add$email$for$authenticated$user$Status$422 = Responses.validation_failed.Content;
+export interface RequestBody$users$delete$email$for$authenticated$user {
   "application/json":
     | {
         /** Email addresses associated with the GitHub user account. */
@@ -12338,13 +13776,13 @@ export interface RequestBody$users$delete$email$for$authenticated {
     | string[]
     | string;
 }
-export type Response$users$delete$email$for$authenticated$Status$401 = Responses.requires_authentication.Content;
-export type Response$users$delete$email$for$authenticated$Status$403 = Responses.forbidden.Content;
-export type Response$users$delete$email$for$authenticated$Status$404 = Responses.not_found.Content;
-export type Response$users$delete$email$for$authenticated$Status$422 = Responses.validation_failed.Content;
+export type Response$users$delete$email$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$users$delete$email$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$users$delete$email$for$authenticated$user$Status$404 = Responses.not_found.Content;
+export type Response$users$delete$email$for$authenticated$user$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$users$list$followers$for$authenticated$user {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12353,17 +13791,17 @@ export interface Response$users$list$followers$for$authenticated$user$Status$200
 }
 export type Response$users$list$followers$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
 export type Response$users$list$followers$for$authenticated$user$Status$403 = Responses.forbidden.Content;
-export interface Parameter$users$list$followed$by$authenticated {
+export interface Parameter$users$list$followed$by$authenticated$user {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
-export interface Response$users$list$followed$by$authenticated$Status$200 {
+export interface Response$users$list$followed$by$authenticated$user$Status$200 {
   "application/json": Schemas.simple$user[];
 }
-export type Response$users$list$followed$by$authenticated$Status$401 = Responses.requires_authentication.Content;
-export type Response$users$list$followed$by$authenticated$Status$403 = Responses.forbidden.Content;
+export type Response$users$list$followed$by$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$users$list$followed$by$authenticated$user$Status$403 = Responses.forbidden.Content;
 export interface Parameter$users$check$person$is$followed$by$authenticated {
   username: Parameters.username;
 }
@@ -12384,52 +13822,52 @@ export interface Parameter$users$unfollow {
 export type Response$users$unfollow$Status$401 = Responses.requires_authentication.Content;
 export type Response$users$unfollow$Status$403 = Responses.forbidden.Content;
 export type Response$users$unfollow$Status$404 = Responses.not_found.Content;
-export interface Parameter$users$list$gpg$keys$for$authenticated {
+export interface Parameter$users$list$gpg$keys$for$authenticated$user {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
-export interface Response$users$list$gpg$keys$for$authenticated$Status$200 {
+export interface Response$users$list$gpg$keys$for$authenticated$user$Status$200 {
   "application/json": Schemas.gpg$key[];
 }
-export type Response$users$list$gpg$keys$for$authenticated$Status$401 = Responses.requires_authentication.Content;
-export type Response$users$list$gpg$keys$for$authenticated$Status$403 = Responses.forbidden.Content;
-export type Response$users$list$gpg$keys$for$authenticated$Status$404 = Responses.not_found.Content;
-export interface RequestBody$users$create$gpg$key$for$authenticated {
+export type Response$users$list$gpg$keys$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$users$list$gpg$keys$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$users$list$gpg$keys$for$authenticated$user$Status$404 = Responses.not_found.Content;
+export interface RequestBody$users$create$gpg$key$for$authenticated$user {
   "application/json": {
     /** A GPG key in ASCII-armored format. */
     armored_public_key: string;
   };
 }
-export interface Response$users$create$gpg$key$for$authenticated$Status$201 {
+export interface Response$users$create$gpg$key$for$authenticated$user$Status$201 {
   "application/json": Schemas.gpg$key;
 }
-export type Response$users$create$gpg$key$for$authenticated$Status$401 = Responses.requires_authentication.Content;
-export type Response$users$create$gpg$key$for$authenticated$Status$403 = Responses.forbidden.Content;
-export type Response$users$create$gpg$key$for$authenticated$Status$404 = Responses.not_found.Content;
-export type Response$users$create$gpg$key$for$authenticated$Status$422 = Responses.validation_failed.Content;
-export interface Parameter$users$get$gpg$key$for$authenticated {
+export type Response$users$create$gpg$key$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$users$create$gpg$key$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$users$create$gpg$key$for$authenticated$user$Status$404 = Responses.not_found.Content;
+export type Response$users$create$gpg$key$for$authenticated$user$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$users$get$gpg$key$for$authenticated$user {
   /** gpg_key_id parameter */
-  gpg_key_id: Parameters.gpg_key_id;
+  gpg_key_id: Parameters.gpg$key$id;
 }
-export interface Response$users$get$gpg$key$for$authenticated$Status$200 {
+export interface Response$users$get$gpg$key$for$authenticated$user$Status$200 {
   "application/json": Schemas.gpg$key;
 }
-export type Response$users$get$gpg$key$for$authenticated$Status$401 = Responses.requires_authentication.Content;
-export type Response$users$get$gpg$key$for$authenticated$Status$403 = Responses.forbidden.Content;
-export type Response$users$get$gpg$key$for$authenticated$Status$404 = Responses.not_found.Content;
-export interface Parameter$users$delete$gpg$key$for$authenticated {
+export type Response$users$get$gpg$key$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$users$get$gpg$key$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$users$get$gpg$key$for$authenticated$user$Status$404 = Responses.not_found.Content;
+export interface Parameter$users$delete$gpg$key$for$authenticated$user {
   /** gpg_key_id parameter */
-  gpg_key_id: Parameters.gpg_key_id;
+  gpg_key_id: Parameters.gpg$key$id;
 }
-export type Response$users$delete$gpg$key$for$authenticated$Status$401 = Responses.requires_authentication.Content;
-export type Response$users$delete$gpg$key$for$authenticated$Status$403 = Responses.forbidden.Content;
-export type Response$users$delete$gpg$key$for$authenticated$Status$404 = Responses.not_found.Content;
-export type Response$users$delete$gpg$key$for$authenticated$Status$422 = Responses.validation_failed.Content;
+export type Response$users$delete$gpg$key$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$users$delete$gpg$key$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$users$delete$gpg$key$for$authenticated$user$Status$404 = Responses.not_found.Content;
+export type Response$users$delete$gpg$key$for$authenticated$user$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$apps$list$installations$for$authenticated$user {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12444,9 +13882,9 @@ export type Response$apps$list$installations$for$authenticated$user$Status$403 =
 export type Response$apps$list$installations$for$authenticated$user$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$apps$list$installation$repos$for$authenticated$user {
   /** installation_id parameter */
-  installation_id: Parameters.installation_id;
+  installation_id: Parameters.installation$id;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12459,20 +13897,20 @@ export interface Response$apps$list$installation$repos$for$authenticated$user$St
 }
 export type Response$apps$list$installation$repos$for$authenticated$user$Status$403 = Responses.forbidden.Content;
 export type Response$apps$list$installation$repos$for$authenticated$user$Status$404 = Responses.not_found.Content;
-export interface Parameter$apps$add$repo$to$installation {
+export interface Parameter$apps$add$repo$to$installation$for$authenticated$user {
   /** installation_id parameter */
-  installation_id: Parameters.installation_id;
-  repository_id: Parameters.repository_id;
+  installation_id: Parameters.installation$id;
+  repository_id: Parameters.repository$id;
 }
-export type Response$apps$add$repo$to$installation$Status$403 = Responses.forbidden.Content;
-export type Response$apps$add$repo$to$installation$Status$404 = Responses.not_found.Content;
-export interface Parameter$apps$remove$repo$from$installation {
+export type Response$apps$add$repo$to$installation$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$apps$add$repo$to$installation$for$authenticated$user$Status$404 = Responses.not_found.Content;
+export interface Parameter$apps$remove$repo$from$installation$for$authenticated$user {
   /** installation_id parameter */
-  installation_id: Parameters.installation_id;
-  repository_id: Parameters.repository_id;
+  installation_id: Parameters.installation$id;
+  repository_id: Parameters.repository$id;
 }
-export type Response$apps$remove$repo$from$installation$Status$403 = Responses.forbidden.Content;
-export type Response$apps$remove$repo$from$installation$Status$404 = Responses.not_found.Content;
+export type Response$apps$remove$repo$from$installation$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$apps$remove$repo$from$installation$for$authenticated$user$Status$404 = Responses.not_found.Content;
 export interface Parameter$issues$list$for$authenticated$user {
   /**
    * Indicates which sorts of issues to return. Can be one of:
@@ -12480,9 +13918,9 @@ export interface Parameter$issues$list$for$authenticated$user {
    * \* `created`: Issues created by you
    * \* `mentioned`: Issues mentioning you
    * \* `subscribed`: Issues you're subscribed to updates for
-   * \* `all`: All issues the authenticated user can see, regardless of participation or creation
+   * \* `all` or `repos`: All issues the authenticated user can see, regardless of participation or creation
    */
-  filter?: "assigned" | "created" | "mentioned" | "subscribed" | "all";
+  filter?: "assigned" | "created" | "mentioned" | "subscribed" | "repos" | "all";
   /** Indicates the state of the issues to return. Can be either `open`, `closed`, or `all`. */
   state?: "open" | "closed" | "all";
   /** A list of comma separated label names. Example: `bug,ui,@high` */
@@ -12494,7 +13932,7 @@ export interface Parameter$issues$list$for$authenticated$user {
   /** Only show notifications updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   since?: Parameters.since;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12502,19 +13940,19 @@ export interface Response$issues$list$for$authenticated$user$Status$200 {
   "application/json": Schemas.issue[];
 }
 export type Response$issues$list$for$authenticated$user$Status$404 = Responses.not_found.Content;
-export interface Parameter$users$list$public$ssh$keys$for$authenticated {
+export interface Parameter$users$list$public$ssh$keys$for$authenticated$user {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
-export interface Response$users$list$public$ssh$keys$for$authenticated$Status$200 {
+export interface Response$users$list$public$ssh$keys$for$authenticated$user$Status$200 {
   "application/json": Schemas.key[];
 }
-export type Response$users$list$public$ssh$keys$for$authenticated$Status$401 = Responses.requires_authentication.Content;
-export type Response$users$list$public$ssh$keys$for$authenticated$Status$403 = Responses.forbidden.Content;
-export type Response$users$list$public$ssh$keys$for$authenticated$Status$404 = Responses.not_found.Content;
-export interface RequestBody$users$create$public$ssh$key$for$authenticated {
+export type Response$users$list$public$ssh$keys$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$users$list$public$ssh$keys$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$users$list$public$ssh$keys$for$authenticated$user$Status$404 = Responses.not_found.Content;
+export interface RequestBody$users$create$public$ssh$key$for$authenticated$user {
   "application/json": {
     /** A descriptive name for the new key. */
     title?: string;
@@ -12522,35 +13960,35 @@ export interface RequestBody$users$create$public$ssh$key$for$authenticated {
     key: string;
   };
 }
-export interface Response$users$create$public$ssh$key$for$authenticated$Status$201 {
+export interface Response$users$create$public$ssh$key$for$authenticated$user$Status$201 {
   "application/json": Schemas.key;
 }
-export type Response$users$create$public$ssh$key$for$authenticated$Status$401 = Responses.requires_authentication.Content;
-export type Response$users$create$public$ssh$key$for$authenticated$Status$403 = Responses.forbidden.Content;
-export type Response$users$create$public$ssh$key$for$authenticated$Status$404 = Responses.not_found.Content;
-export type Response$users$create$public$ssh$key$for$authenticated$Status$422 = Responses.validation_failed.Content;
-export interface Parameter$users$get$public$ssh$key$for$authenticated {
+export type Response$users$create$public$ssh$key$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$users$create$public$ssh$key$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$users$create$public$ssh$key$for$authenticated$user$Status$404 = Responses.not_found.Content;
+export type Response$users$create$public$ssh$key$for$authenticated$user$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$users$get$public$ssh$key$for$authenticated$user {
   /** key_id parameter */
-  key_id: Parameters.key_id;
+  key_id: Parameters.key$id;
 }
-export interface Response$users$get$public$ssh$key$for$authenticated$Status$200 {
+export interface Response$users$get$public$ssh$key$for$authenticated$user$Status$200 {
   "application/json": Schemas.key;
 }
-export type Response$users$get$public$ssh$key$for$authenticated$Status$401 = Responses.requires_authentication.Content;
-export type Response$users$get$public$ssh$key$for$authenticated$Status$403 = Responses.forbidden.Content;
-export type Response$users$get$public$ssh$key$for$authenticated$Status$404 = Responses.not_found.Content;
-export interface Parameter$users$delete$public$ssh$key$for$authenticated {
+export type Response$users$get$public$ssh$key$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$users$get$public$ssh$key$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$users$get$public$ssh$key$for$authenticated$user$Status$404 = Responses.not_found.Content;
+export interface Parameter$users$delete$public$ssh$key$for$authenticated$user {
   /** key_id parameter */
-  key_id: Parameters.key_id;
+  key_id: Parameters.key$id;
 }
-export type Response$users$delete$public$ssh$key$for$authenticated$Status$401 = Responses.requires_authentication.Content;
-export type Response$users$delete$public$ssh$key$for$authenticated$Status$403 = Responses.forbidden.Content;
-export type Response$users$delete$public$ssh$key$for$authenticated$Status$404 = Responses.not_found.Content;
+export type Response$users$delete$public$ssh$key$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$users$delete$public$ssh$key$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$users$delete$public$ssh$key$for$authenticated$user$Status$404 = Responses.not_found.Content;
 export interface Parameter$orgs$list$memberships$for$authenticated$user {
   /** Indicates the state of the memberships to return. Can be either `active` or `pending`. If not specified, the API returns both active and pending memberships. */
   state?: "active" | "pending";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12585,7 +14023,7 @@ export type Response$orgs$update$membership$for$authenticated$user$Status$404 = 
 export type Response$orgs$update$membership$for$authenticated$user$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$orgs$list$for$authenticated$user {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12609,20 +14047,20 @@ export type Response$projects$create$for$authenticated$user$Status$401 = Respons
 export type Response$projects$create$for$authenticated$user$Status$403 = Responses.forbidden.Content;
 export type Response$projects$create$for$authenticated$user$Status$415 = Responses.preview_header_missing.Content;
 export type Response$projects$create$for$authenticated$user$Status$422 = Responses.validation_failed_simple.Content;
-export interface Parameter$users$list$public$emails$for$authenticated {
+export interface Parameter$users$list$public$emails$for$authenticated$user {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
-export interface Response$users$list$public$emails$for$authenticated$Status$200 {
+export interface Response$users$list$public$emails$for$authenticated$user$Status$200 {
   "application/json": Schemas.email[];
 }
-export type Response$users$list$public$emails$for$authenticated$Status$401 = Responses.requires_authentication.Content;
-export type Response$users$list$public$emails$for$authenticated$Status$403 = Responses.forbidden.Content;
-export type Response$users$list$public$emails$for$authenticated$Status$404 = Responses.not_found.Content;
+export type Response$users$list$public$emails$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$users$list$public$emails$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$users$list$public$emails$for$authenticated$user$Status$404 = Responses.not_found.Content;
 export interface Parameter$repos$list$for$authenticated$user {
-  /** Can be one of `all`, `public`, or `private`. */
+  /** Can be one of `all`, `public`, or `private`. Note: For GitHub AE, can be one of `all`, `internal`, or `private`. */
   visibility?: "all" | "public" | "private";
   /**
    * Comma-separated list of values. Can include:
@@ -12632,7 +14070,7 @@ export interface Parameter$repos$list$for$authenticated$user {
    */
   affiliation?: string;
   /**
-   * Can be one of `all`, `owner`, `public`, `private`, `member`. Default: `all`
+   * Can be one of `all`, `owner`, `public`, `private`, `member`. Note: For GitHub AE, can be one of `all`, `owner`, `internal`, `private`, `member`. Default: `all`
    *
    * Will cause a `422` error if used in the same request as **visibility** or **affiliation**. Will cause a `422` error if used in the same request as **visibility** or **affiliation**.
    */
@@ -12642,7 +14080,7 @@ export interface Parameter$repos$list$for$authenticated$user {
   /** Can be one of `asc` or `desc`. Default: `asc` when using `full_name`, otherwise `desc` */
   direction?: "asc" | "desc";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
   /** Only show notifications updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
@@ -12664,7 +14102,7 @@ export interface RequestBody$repos$create$for$authenticated$user {
     description?: string;
     /** A URL with more information about the repository. */
     homepage?: string;
-    /** Whether the repository is private or public. */
+    /** Whether the repository is private. */
     private?: boolean;
     /** Whether issues are enabled. */
     has_issues?: boolean;
@@ -12704,7 +14142,7 @@ export type Response$repos$create$for$authenticated$user$Status$404 = Responses.
 export type Response$repos$create$for$authenticated$user$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$repos$list$invitations$for$authenticated$user {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12714,27 +14152,27 @@ export interface Response$repos$list$invitations$for$authenticated$user$Status$2
 export type Response$repos$list$invitations$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
 export type Response$repos$list$invitations$for$authenticated$user$Status$403 = Responses.forbidden.Content;
 export type Response$repos$list$invitations$for$authenticated$user$Status$404 = Responses.not_found.Content;
-export interface Parameter$repos$decline$invitation {
+export interface Parameter$repos$decline$invitation$for$authenticated$user {
   /** invitation_id parameter */
-  invitation_id: Parameters.invitation_id;
+  invitation_id: Parameters.invitation$id;
 }
-export type Response$repos$decline$invitation$Status$403 = Responses.forbidden.Content;
-export type Response$repos$decline$invitation$Status$404 = Responses.not_found.Content;
-export type Response$repos$decline$invitation$Status$409 = Responses.conflict.Content;
-export interface Parameter$repos$accept$invitation {
+export type Response$repos$decline$invitation$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$repos$decline$invitation$for$authenticated$user$Status$404 = Responses.not_found.Content;
+export type Response$repos$decline$invitation$for$authenticated$user$Status$409 = Responses.conflict.Content;
+export interface Parameter$repos$accept$invitation$for$authenticated$user {
   /** invitation_id parameter */
-  invitation_id: Parameters.invitation_id;
+  invitation_id: Parameters.invitation$id;
 }
-export type Response$repos$accept$invitation$Status$403 = Responses.forbidden.Content;
-export type Response$repos$accept$invitation$Status$404 = Responses.not_found.Content;
-export type Response$repos$accept$invitation$Status$409 = Responses.conflict.Content;
+export type Response$repos$accept$invitation$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$repos$accept$invitation$for$authenticated$user$Status$404 = Responses.not_found.Content;
+export type Response$repos$accept$invitation$for$authenticated$user$Status$409 = Responses.conflict.Content;
 export interface Parameter$activity$list$repos$starred$by$authenticated$user {
   /** One of `created` (when the repository was starred) or `updated` (when it was last pushed to). */
   sort?: Parameters.sort;
   /** One of `asc` (ascending) or `desc` (descending). */
   direction?: Parameters.direction;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12769,7 +14207,7 @@ export type Response$activity$unstar$repo$for$authenticated$user$Status$403 = Re
 export type Response$activity$unstar$repo$for$authenticated$user$Status$404 = Responses.not_found.Content;
 export interface Parameter$activity$list$watched$repos$for$authenticated$user {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12780,7 +14218,7 @@ export type Response$activity$list$watched$repos$for$authenticated$user$Status$4
 export type Response$activity$list$watched$repos$for$authenticated$user$Status$403 = Responses.forbidden.Content;
 export interface Parameter$teams$list$for$authenticated$user {
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12793,7 +14231,7 @@ export interface Parameter$users$list {
   /** A user ID. Only return users with an ID greater than this ID. */
   since?: Parameters.since$user;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
 }
 export interface Response$users$list$Status$200 {
   "application/json": Schemas.simple$user[];
@@ -12808,7 +14246,7 @@ export type Response$users$get$by$username$Status$404 = Responses.not_found.Cont
 export interface Parameter$activity$list$events$for$authenticated$user {
   username: Parameters.username;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12819,7 +14257,7 @@ export interface Parameter$activity$list$org$events$for$authenticated$user {
   username: Parameters.username;
   org: Parameters.org;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12829,7 +14267,7 @@ export interface Response$activity$list$org$events$for$authenticated$user$Status
 export interface Parameter$activity$list$public$events$for$user {
   username: Parameters.username;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12839,7 +14277,7 @@ export interface Response$activity$list$public$events$for$user$Status$200 {
 export interface Parameter$users$list$followers$for$user {
   username: Parameters.username;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12849,7 +14287,7 @@ export interface Response$users$list$followers$for$user$Status$200 {
 export interface Parameter$users$list$following$for$user {
   username: Parameters.username;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12865,7 +14303,7 @@ export interface Parameter$gists$list$for$user {
   /** Only show notifications updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   since?: Parameters.since;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12876,7 +14314,7 @@ export type Response$gists$list$for$user$Status$422 = Responses.validation_faile
 export interface Parameter$users$list$gpg$keys$for$user {
   username: Parameters.username;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12904,7 +14342,7 @@ export interface Response$apps$get$user$installation$Status$200 {
 export interface Parameter$users$list$public$keys$for$user {
   username: Parameters.username;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12914,7 +14352,7 @@ export interface Response$users$list$public$keys$for$user$Status$200 {
 export interface Parameter$orgs$list$for$user {
   username: Parameters.username;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12926,19 +14364,18 @@ export interface Parameter$projects$list$for$user {
   /** Indicates the state of the projects to return. Can be either `open`, `closed`, or `all`. */
   state?: "open" | "closed" | "all";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
 export interface Response$projects$list$for$user$Status$200 {
   "application/json": Schemas.project[];
 }
-export type Response$projects$list$for$user$Status$415 = Responses.preview_header_missing.Content;
 export type Response$projects$list$for$user$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$activity$list$received$events$for$user {
   username: Parameters.username;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12948,7 +14385,7 @@ export interface Response$activity$list$received$events$for$user$Status$200 {
 export interface Parameter$activity$list$received$public$events$for$user {
   username: Parameters.username;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12964,7 +14401,7 @@ export interface Parameter$repos$list$for$user {
   /** Can be one of `asc` or `desc`. Default: `asc` when using `full_name`, otherwise `desc` */
   direction?: "asc" | "desc";
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -12984,18 +14421,17 @@ export interface Parameter$activity$list$repos$starred$by$user {
   /** One of `asc` (ascending) or `desc` (descending). */
   direction?: Parameters.direction;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
 export interface Response$activity$list$repos$starred$by$user$Status$200 {
-  "application/json": Schemas.repository[];
-  "application/vnd.github.v3.star+json": Schemas.starred$repository[];
+  "application/json": Schemas.starred$repository[] | Schemas.repository[];
 }
 export interface Parameter$activity$list$repos$watched$by$user {
   username: Parameters.username;
   /** Results per page (max 100) */
-  per_page?: Parameters.per_page;
+  per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
 }
@@ -13007,18 +14443,18 @@ export interface Parameter$enterprise$admin$suspend$user {
 }
 export interface RequestBody$enterprise$admin$suspend$user {
   "application/json": {
-    /** The reason the user is being suspended. This message will be logged in the [audit log](https://help.github.com/enterprise/admin/articles/audit-logging/). If you don't provide a `reason`, it will default to "Suspended via API by _SITE\_ADMINISTRATOR_", where _SITE\_ADMINISTRATOR_ is the person who performed the action. */
+    /** The reason the user is being suspended. This message will be logged in the [audit log](https://docs.github.com/enterprise/admin/articles/audit-logging/). If you don't provide a `reason`, it will default to "Suspended via API by _SITE\_ADMINISTRATOR_", where _SITE\_ADMINISTRATOR_ is the person who performed the action. */
     reason?: string;
-  };
+  } | null;
 }
 export interface Parameter$enterprise$admin$unsuspend$user {
   username: Parameters.username;
 }
 export interface RequestBody$enterprise$admin$unsuspend$user {
   "application/json": {
-    /** The reason the user is being unsuspended. This message will be logged in the [audit log](https://help.github.com/enterprise/admin/articles/audit-logging/). If you don't provide a `reason`, it will default to "Unsuspended via API by _SITE\_ADMINISTRATOR_", where _SITE\_ADMINISTRATOR_ is the person who performed the action. */
+    /** The reason the user is being unsuspended. This message will be logged in the [audit log](https://docs.github.com/enterprise/admin/articles/audit-logging/). If you don't provide a `reason`, it will default to "Unsuspended via API by _SITE\_ADMINISTRATOR_", where _SITE\_ADMINISTRATOR_ is the person who performed the action. */
     reason?: string;
-  };
+  } | null;
 }
 export interface Response$meta$get$zen$Status$200 {
   "text/plain": string;
@@ -13186,9 +14622,11 @@ export interface Params$enterprise$admin$delete$impersonation$o$auth$token {
   parameter: Parameter$enterprise$admin$delete$impersonation$o$auth$token;
 }
 export type ResponseContentType$apps$get$authenticated = keyof Response$apps$get$authenticated$Status$200;
+export type RequestContentType$apps$create$from$manifest = keyof RequestBody$apps$create$from$manifest;
 export type ResponseContentType$apps$create$from$manifest = keyof Response$apps$create$from$manifest$Status$201;
 export interface Params$apps$create$from$manifest {
   parameter: Parameter$apps$create$from$manifest;
+  requestBody: RequestBody$apps$create$from$manifest["application/json"];
 }
 export type ResponseContentType$apps$get$webhook$config$for$app = keyof Response$apps$get$webhook$config$for$app$Status$200;
 export type RequestContentType$apps$update$webhook$config$for$app = keyof RequestBody$apps$update$webhook$config$for$app;
@@ -13212,6 +14650,12 @@ export type ResponseContentType$apps$create$installation$access$token = keyof Re
 export interface Params$apps$create$installation$access$token {
   parameter: Parameter$apps$create$installation$access$token;
   requestBody: RequestBody$apps$create$installation$access$token["application/json"];
+}
+export interface Params$apps$suspend$installation {
+  parameter: Parameter$apps$suspend$installation;
+}
+export interface Params$apps$unsuspend$installation {
+  parameter: Parameter$apps$unsuspend$installation;
 }
 export type ResponseContentType$oauth$authorizations$list$grants = keyof Response$oauth$authorizations$list$grants$Status$200;
 export interface Params$oauth$authorizations$list$grants {
@@ -13313,12 +14757,6 @@ export type ResponseContentType$codes$of$conduct$get$conduct$code = keyof Respon
 export interface Params$codes$of$conduct$get$conduct$code {
   parameter: Parameter$codes$of$conduct$get$conduct$code;
 }
-export type RequestContentType$apps$create$content$attachment = keyof RequestBody$apps$create$content$attachment;
-export type ResponseContentType$apps$create$content$attachment = keyof Response$apps$create$content$attachment$Status$200;
-export interface Params$apps$create$content$attachment {
-  parameter: Parameter$apps$create$content$attachment;
-  requestBody: RequestBody$apps$create$content$attachment["application/json"];
-}
 export type ResponseContentType$emojis$get = keyof Response$emojis$get$Status$200;
 export type ResponseContentType$enterprise$admin$get$announcement = keyof Response$enterprise$admin$get$announcement$Status$200;
 export type RequestContentType$enterprise$admin$set$announcement = keyof RequestBody$enterprise$admin$set$announcement;
@@ -13327,10 +14765,17 @@ export interface Params$enterprise$admin$set$announcement {
   requestBody: RequestBody$enterprise$admin$set$announcement["application/json"];
 }
 export type ResponseContentType$enterprise$admin$get$license$information = keyof Response$enterprise$admin$get$license$information$Status$200;
-export type ResponseContentType$enterprise$admin$get$type$stats = keyof Response$enterprise$admin$get$type$stats$Status$200;
-export interface Params$enterprise$admin$get$type$stats {
-  parameter: Parameter$enterprise$admin$get$type$stats;
-}
+export type ResponseContentType$enterprise$admin$get$all$stats = keyof Response$enterprise$admin$get$all$stats$Status$200;
+export type ResponseContentType$enterprise$admin$get$comment$stats = keyof Response$enterprise$admin$get$comment$stats$Status$200;
+export type ResponseContentType$enterprise$admin$get$gist$stats = keyof Response$enterprise$admin$get$gist$stats$Status$200;
+export type ResponseContentType$enterprise$admin$get$hooks$stats = keyof Response$enterprise$admin$get$hooks$stats$Status$200;
+export type ResponseContentType$enterprise$admin$get$issue$stats = keyof Response$enterprise$admin$get$issue$stats$Status$200;
+export type ResponseContentType$enterprise$admin$get$milestone$stats = keyof Response$enterprise$admin$get$milestone$stats$Status$200;
+export type ResponseContentType$enterprise$admin$get$org$stats = keyof Response$enterprise$admin$get$org$stats$Status$200;
+export type ResponseContentType$enterprise$admin$get$pages$stats = keyof Response$enterprise$admin$get$pages$stats$Status$200;
+export type ResponseContentType$enterprise$admin$get$pull$request$stats = keyof Response$enterprise$admin$get$pull$request$stats$Status$200;
+export type ResponseContentType$enterprise$admin$get$repo$stats = keyof Response$enterprise$admin$get$repo$stats$Status$200;
+export type ResponseContentType$enterprise$admin$get$user$stats = keyof Response$enterprise$admin$get$user$stats$Status$200;
 export type ResponseContentType$enterprise$admin$get$github$actions$permissions$enterprise =
   keyof Response$enterprise$admin$get$github$actions$permissions$enterprise$Status$200;
 export interface Params$enterprise$admin$get$github$actions$permissions$enterprise {
@@ -13567,6 +15012,7 @@ export interface Params$licenses$get {
   parameter: Parameter$licenses$get;
 }
 export type RequestContentType$markdown$render = keyof RequestBody$markdown$render;
+export type ResponseContentType$markdown$render = keyof Response$markdown$render$Status$200;
 export interface Params$markdown$render {
   requestBody: RequestBody$markdown$render["application/json"];
 }
@@ -13769,6 +15215,7 @@ export interface Params$actions$get$org$secret {
   parameter: Parameter$actions$get$org$secret;
 }
 export type RequestContentType$actions$create$or$update$org$secret = keyof RequestBody$actions$create$or$update$org$secret;
+export type ResponseContentType$actions$create$or$update$org$secret = keyof Response$actions$create$or$update$org$secret$Status$201;
 export interface Params$actions$create$or$update$org$secret {
   parameter: Parameter$actions$create$or$update$org$secret;
   requestBody: RequestBody$actions$create$or$update$org$secret["application/json"];
@@ -13871,6 +15318,8 @@ export type ResponseContentType$orgs$list$outside$collaborators = keyof Response
 export interface Params$orgs$list$outside$collaborators {
   parameter: Parameter$orgs$list$outside$collaborators;
 }
+export type ResponseContentType$orgs$convert$member$to$outside$collaborator =
+  keyof Response$orgs$convert$member$to$outside$collaborator$Status$202;
 export interface Params$orgs$convert$member$to$outside$collaborator {
   parameter: Parameter$orgs$convert$member$to$outside$collaborator;
 }
@@ -14010,7 +15459,7 @@ export interface Params$reactions$list$for$team$discussion$comment$in$org {
 export type RequestContentType$reactions$create$for$team$discussion$comment$in$org =
   keyof RequestBody$reactions$create$for$team$discussion$comment$in$org;
 export type ResponseContentType$reactions$create$for$team$discussion$comment$in$org =
-  keyof Response$reactions$create$for$team$discussion$comment$in$org$Status$201;
+  keyof Response$reactions$create$for$team$discussion$comment$in$org$Status$200;
 export interface Params$reactions$create$for$team$discussion$comment$in$org {
   parameter: Parameter$reactions$create$for$team$discussion$comment$in$org;
   requestBody: RequestBody$reactions$create$for$team$discussion$comment$in$org["application/json"];
@@ -14024,7 +15473,7 @@ export interface Params$reactions$list$for$team$discussion$in$org {
 }
 export type RequestContentType$reactions$create$for$team$discussion$in$org = keyof RequestBody$reactions$create$for$team$discussion$in$org;
 export type ResponseContentType$reactions$create$for$team$discussion$in$org =
-  keyof Response$reactions$create$for$team$discussion$in$org$Status$201;
+  keyof Response$reactions$create$for$team$discussion$in$org$Status$200;
 export interface Params$reactions$create$for$team$discussion$in$org {
   parameter: Parameter$reactions$create$for$team$discussion$in$org;
   requestBody: RequestBody$reactions$create$for$team$discussion$in$org["application/json"];
@@ -14207,7 +15656,7 @@ export interface Params$actions$delete$artifact {
 export interface Params$actions$download$artifact {
   parameter: Parameter$actions$download$artifact;
 }
-export type ResponseContentType$actions$get$job$for$workflow$run = keyof Response$actions$get$job$for$workflow$run$Status$202;
+export type ResponseContentType$actions$get$job$for$workflow$run = keyof Response$actions$get$job$for$workflow$run$Status$200;
 export interface Params$actions$get$job$for$workflow$run {
   parameter: Parameter$actions$get$job$for$workflow$run;
 }
@@ -14273,6 +15722,7 @@ export type ResponseContentType$actions$list$workflow$run$artifacts = keyof Resp
 export interface Params$actions$list$workflow$run$artifacts {
   parameter: Parameter$actions$list$workflow$run$artifacts;
 }
+export type ResponseContentType$actions$cancel$workflow$run = keyof Response$actions$cancel$workflow$run$Status$202;
 export interface Params$actions$cancel$workflow$run {
   parameter: Parameter$actions$cancel$workflow$run;
 }
@@ -14286,6 +15736,7 @@ export interface Params$actions$download$workflow$run$logs {
 export interface Params$actions$delete$workflow$run$logs {
   parameter: Parameter$actions$delete$workflow$run$logs;
 }
+export type ResponseContentType$actions$re$run$workflow = keyof Response$actions$re$run$workflow$Status$201;
 export interface Params$actions$re$run$workflow {
   parameter: Parameter$actions$re$run$workflow;
 }
@@ -14302,6 +15753,7 @@ export interface Params$actions$get$repo$secret {
   parameter: Parameter$actions$get$repo$secret;
 }
 export type RequestContentType$actions$create$or$update$repo$secret = keyof RequestBody$actions$create$or$update$repo$secret;
+export type ResponseContentType$actions$create$or$update$repo$secret = keyof Response$actions$create$or$update$repo$secret$Status$201;
 export interface Params$actions$create$or$update$repo$secret {
   parameter: Parameter$actions$create$or$update$repo$secret;
   requestBody: RequestBody$actions$create$or$update$repo$secret["application/json"];
@@ -14528,7 +15980,7 @@ export interface Params$checks$list$annotations {
   parameter: Parameter$checks$list$annotations;
 }
 export type RequestContentType$checks$create$suite = keyof RequestBody$checks$create$suite;
-export type ResponseContentType$checks$create$suite = keyof Response$checks$create$suite$Status$201;
+export type ResponseContentType$checks$create$suite = keyof Response$checks$create$suite$Status$200;
 export interface Params$checks$create$suite {
   parameter: Parameter$checks$create$suite;
   requestBody: RequestBody$checks$create$suite["application/json"];
@@ -14547,6 +15999,7 @@ export type ResponseContentType$checks$list$for$suite = keyof Response$checks$li
 export interface Params$checks$list$for$suite {
   parameter: Parameter$checks$list$for$suite;
 }
+export type ResponseContentType$checks$rerequest$suite = keyof Response$checks$rerequest$suite$Status$201;
 export interface Params$checks$rerequest$suite {
   parameter: Parameter$checks$rerequest$suite;
 }
@@ -14569,6 +16022,7 @@ export interface Params$code$scanning$list$recent$analyses {
   parameter: Parameter$code$scanning$list$recent$analyses;
 }
 export type RequestContentType$code$scanning$upload$sarif = keyof RequestBody$code$scanning$upload$sarif;
+export type ResponseContentType$code$scanning$upload$sarif = keyof Response$code$scanning$upload$sarif$Status$202;
 export interface Params$code$scanning$upload$sarif {
   parameter: Parameter$code$scanning$upload$sarif;
   requestBody: RequestBody$code$scanning$upload$sarif["application/json"];
@@ -14666,13 +16120,15 @@ export type ResponseContentType$repos$list$commit$statuses$for$ref = keyof Respo
 export interface Params$repos$list$commit$statuses$for$ref {
   parameter: Parameter$repos$list$commit$statuses$for$ref;
 }
-export type ResponseContentType$codes$of$conduct$get$for$repo = keyof Response$codes$of$conduct$get$for$repo$Status$200;
-export interface Params$codes$of$conduct$get$for$repo {
-  parameter: Parameter$codes$of$conduct$get$for$repo;
-}
 export type ResponseContentType$repos$compare$commits = keyof Response$repos$compare$commits$Status$200;
 export interface Params$repos$compare$commits {
   parameter: Parameter$repos$compare$commits;
+}
+export type RequestContentType$apps$create$content$attachment = keyof RequestBody$apps$create$content$attachment;
+export type ResponseContentType$apps$create$content$attachment = keyof Response$apps$create$content$attachment$Status$200;
+export interface Params$apps$create$content$attachment {
+  parameter: Parameter$apps$create$content$attachment;
+  requestBody: RequestBody$apps$create$content$attachment["application/json"];
 }
 export type ResponseContentType$repos$get$content = keyof Response$repos$get$content$Status$200;
 export interface Params$repos$get$content<U extends ResponseContentType$repos$get$content> {
@@ -14986,7 +16442,7 @@ export interface Params$reactions$list$for$issue {
   parameter: Parameter$reactions$list$for$issue;
 }
 export type RequestContentType$reactions$create$for$issue = keyof RequestBody$reactions$create$for$issue;
-export type ResponseContentType$reactions$create$for$issue = keyof Response$reactions$create$for$issue$Status$201;
+export type ResponseContentType$reactions$create$for$issue = keyof Response$reactions$create$for$issue$Status$200;
 export interface Params$reactions$create$for$issue {
   parameter: Parameter$reactions$create$for$issue;
   requestBody: RequestBody$reactions$create$for$issue["application/json"];
@@ -15085,6 +16541,7 @@ export interface Params$activity$list$repo$notifications$for$authenticated$user 
   parameter: Parameter$activity$list$repo$notifications$for$authenticated$user;
 }
 export type RequestContentType$activity$mark$repo$notifications$as$read = keyof RequestBody$activity$mark$repo$notifications$as$read;
+export type ResponseContentType$activity$mark$repo$notifications$as$read = keyof Response$activity$mark$repo$notifications$as$read$Status$202;
 export interface Params$activity$mark$repo$notifications$as$read {
   parameter: Parameter$activity$mark$repo$notifications$as$read;
   requestBody: RequestBody$activity$mark$repo$notifications$as$read["application/json"];
@@ -15253,6 +16710,7 @@ export interface Params$pulls$request$reviewers {
   requestBody: RequestBody$pulls$request$reviewers["application/json"];
 }
 export type RequestContentType$pulls$remove$requested$reviewers = keyof RequestBody$pulls$remove$requested$reviewers;
+export type ResponseContentType$pulls$remove$requested$reviewers = keyof Response$pulls$remove$requested$reviewers$Status$200;
 export interface Params$pulls$remove$requested$reviewers {
   parameter: Parameter$pulls$remove$requested$reviewers;
   requestBody: RequestBody$pulls$remove$requested$reviewers["application/json"];
@@ -15306,6 +16764,10 @@ export interface Params$pulls$update$branch {
 export type ResponseContentType$repos$get$readme = keyof Response$repos$get$readme$Status$200;
 export interface Params$repos$get$readme {
   parameter: Parameter$repos$get$readme;
+}
+export type ResponseContentType$repos$get$readme$in$directory = keyof Response$repos$get$readme$in$directory$Status$200;
+export interface Params$repos$get$readme$in$directory {
+  parameter: Parameter$repos$get$readme$in$directory;
 }
 export type ResponseContentType$repos$list$releases = keyof Response$repos$list$releases$Status$200;
 export interface Params$repos$list$releases {
@@ -15362,10 +16824,7 @@ export interface Params$repos$upload$release$asset {
   requestBody: RequestBody$repos$upload$release$asset["*/*"];
 }
 export type ResponseContentType$activity$list$stargazers$for$repo = keyof Response$activity$list$stargazers$for$repo$Status$200;
-export interface Params$activity$list$stargazers$for$repo<U extends ResponseContentType$activity$list$stargazers$for$repo> {
-  headers: {
-    Accept: U;
-  };
+export interface Params$activity$list$stargazers$for$repo {
   parameter: Parameter$activity$list$stargazers$for$repo;
 }
 export type ResponseContentType$repos$get$code$frequency$stats = keyof Response$repos$get$code$frequency$stats$Status$200;
@@ -15438,12 +16897,6 @@ export interface Params$repos$transfer {
   parameter: Parameter$repos$transfer;
   requestBody: RequestBody$repos$transfer["application/json"];
 }
-export interface Params$repos$enable$vulnerability$alerts {
-  parameter: Parameter$repos$enable$vulnerability$alerts;
-}
-export interface Params$repos$disable$vulnerability$alerts {
-  parameter: Parameter$repos$disable$vulnerability$alerts;
-}
 export interface Params$repos$download$zipball$archive {
   parameter: Parameter$repos$download$zipball$archive;
 }
@@ -15492,34 +16945,34 @@ export type RequestContentType$enterprise$admin$enable$or$disable$maintenance$mo
 export type ResponseContentType$enterprise$admin$enable$or$disable$maintenance$mode =
   keyof Response$enterprise$admin$enable$or$disable$maintenance$mode$Status$200;
 export interface Params$enterprise$admin$enable$or$disable$maintenance$mode {
-  requestBody: RequestBody$enterprise$admin$enable$or$disable$maintenance$mode["application/json"];
+  requestBody: RequestBody$enterprise$admin$enable$or$disable$maintenance$mode["application/x-www-form-urlencoded"];
 }
 export type ResponseContentType$enterprise$admin$get$settings = keyof Response$enterprise$admin$get$settings$Status$200;
 export type RequestContentType$enterprise$admin$set$settings = keyof RequestBody$enterprise$admin$set$settings;
 export interface Params$enterprise$admin$set$settings {
-  requestBody: RequestBody$enterprise$admin$set$settings["application/json"];
+  requestBody: RequestBody$enterprise$admin$set$settings["application/x-www-form-urlencoded"];
 }
 export type ResponseContentType$enterprise$admin$get$all$authorized$ssh$keys =
   keyof Response$enterprise$admin$get$all$authorized$ssh$keys$Status$200;
 export type RequestContentType$enterprise$admin$add$authorized$ssh$key = keyof RequestBody$enterprise$admin$add$authorized$ssh$key;
 export type ResponseContentType$enterprise$admin$add$authorized$ssh$key = keyof Response$enterprise$admin$add$authorized$ssh$key$Status$201;
 export interface Params$enterprise$admin$add$authorized$ssh$key {
-  requestBody: RequestBody$enterprise$admin$add$authorized$ssh$key["application/json"];
+  requestBody: RequestBody$enterprise$admin$add$authorized$ssh$key["application/x-www-form-urlencoded"];
 }
 export type RequestContentType$enterprise$admin$remove$authorized$ssh$key = keyof RequestBody$enterprise$admin$remove$authorized$ssh$key;
 export type ResponseContentType$enterprise$admin$remove$authorized$ssh$key =
   keyof Response$enterprise$admin$remove$authorized$ssh$key$Status$200;
 export interface Params$enterprise$admin$remove$authorized$ssh$key {
-  requestBody: RequestBody$enterprise$admin$remove$authorized$ssh$key["application/json"];
+  requestBody: RequestBody$enterprise$admin$remove$authorized$ssh$key["application/x-www-form-urlencoded"];
 }
 export type RequestContentType$enterprise$admin$create$enterprise$server$license =
   keyof RequestBody$enterprise$admin$create$enterprise$server$license;
 export interface Params$enterprise$admin$create$enterprise$server$license {
-  requestBody: RequestBody$enterprise$admin$create$enterprise$server$license["application/json"];
+  requestBody: RequestBody$enterprise$admin$create$enterprise$server$license["application/x-www-form-urlencoded"];
 }
 export type RequestContentType$enterprise$admin$upgrade$license = keyof RequestBody$enterprise$admin$upgrade$license;
 export interface Params$enterprise$admin$upgrade$license {
-  requestBody: RequestBody$enterprise$admin$upgrade$license["application/json"];
+  requestBody: RequestBody$enterprise$admin$upgrade$license["application/x-www-form-urlencoded"];
 }
 export type ResponseContentType$teams$get$legacy = keyof Response$teams$get$legacy$Status$200;
 export interface Params$teams$get$legacy {
@@ -15529,7 +16982,7 @@ export interface Params$teams$delete$legacy {
   parameter: Parameter$teams$delete$legacy;
 }
 export type RequestContentType$teams$update$legacy = keyof RequestBody$teams$update$legacy;
-export type ResponseContentType$teams$update$legacy = keyof Response$teams$update$legacy$Status$201;
+export type ResponseContentType$teams$update$legacy = keyof Response$teams$update$legacy$Status$200;
 export interface Params$teams$update$legacy {
   parameter: Parameter$teams$update$legacy;
   requestBody: RequestBody$teams$update$legacy["application/json"];
@@ -15676,27 +17129,27 @@ export type ResponseContentType$users$update$authenticated = keyof Response$user
 export interface Params$users$update$authenticated {
   requestBody: RequestBody$users$update$authenticated["application/json"];
 }
-export type ResponseContentType$users$list$emails$for$authenticated = keyof Response$users$list$emails$for$authenticated$Status$200;
-export interface Params$users$list$emails$for$authenticated {
-  parameter: Parameter$users$list$emails$for$authenticated;
+export type ResponseContentType$users$list$emails$for$authenticated$user = keyof Response$users$list$emails$for$authenticated$user$Status$200;
+export interface Params$users$list$emails$for$authenticated$user {
+  parameter: Parameter$users$list$emails$for$authenticated$user;
 }
-export type RequestContentType$users$add$email$for$authenticated = keyof RequestBody$users$add$email$for$authenticated;
-export type ResponseContentType$users$add$email$for$authenticated = keyof Response$users$add$email$for$authenticated$Status$201;
-export interface Params$users$add$email$for$authenticated {
-  requestBody: RequestBody$users$add$email$for$authenticated["application/json"];
+export type RequestContentType$users$add$email$for$authenticated$user = keyof RequestBody$users$add$email$for$authenticated$user;
+export type ResponseContentType$users$add$email$for$authenticated$user = keyof Response$users$add$email$for$authenticated$user$Status$201;
+export interface Params$users$add$email$for$authenticated$user {
+  requestBody: RequestBody$users$add$email$for$authenticated$user["application/json"];
 }
-export type RequestContentType$users$delete$email$for$authenticated = keyof RequestBody$users$delete$email$for$authenticated;
-export interface Params$users$delete$email$for$authenticated {
-  requestBody: RequestBody$users$delete$email$for$authenticated["application/json"];
+export type RequestContentType$users$delete$email$for$authenticated$user = keyof RequestBody$users$delete$email$for$authenticated$user;
+export interface Params$users$delete$email$for$authenticated$user {
+  requestBody: RequestBody$users$delete$email$for$authenticated$user["application/json"];
 }
 export type ResponseContentType$users$list$followers$for$authenticated$user =
   keyof Response$users$list$followers$for$authenticated$user$Status$200;
 export interface Params$users$list$followers$for$authenticated$user {
   parameter: Parameter$users$list$followers$for$authenticated$user;
 }
-export type ResponseContentType$users$list$followed$by$authenticated = keyof Response$users$list$followed$by$authenticated$Status$200;
-export interface Params$users$list$followed$by$authenticated {
-  parameter: Parameter$users$list$followed$by$authenticated;
+export type ResponseContentType$users$list$followed$by$authenticated$user = keyof Response$users$list$followed$by$authenticated$user$Status$200;
+export interface Params$users$list$followed$by$authenticated$user {
+  parameter: Parameter$users$list$followed$by$authenticated$user;
 }
 export interface Params$users$check$person$is$followed$by$authenticated {
   parameter: Parameter$users$check$person$is$followed$by$authenticated;
@@ -15707,21 +17160,23 @@ export interface Params$users$follow {
 export interface Params$users$unfollow {
   parameter: Parameter$users$unfollow;
 }
-export type ResponseContentType$users$list$gpg$keys$for$authenticated = keyof Response$users$list$gpg$keys$for$authenticated$Status$200;
-export interface Params$users$list$gpg$keys$for$authenticated {
-  parameter: Parameter$users$list$gpg$keys$for$authenticated;
+export type ResponseContentType$users$list$gpg$keys$for$authenticated$user =
+  keyof Response$users$list$gpg$keys$for$authenticated$user$Status$200;
+export interface Params$users$list$gpg$keys$for$authenticated$user {
+  parameter: Parameter$users$list$gpg$keys$for$authenticated$user;
 }
-export type RequestContentType$users$create$gpg$key$for$authenticated = keyof RequestBody$users$create$gpg$key$for$authenticated;
-export type ResponseContentType$users$create$gpg$key$for$authenticated = keyof Response$users$create$gpg$key$for$authenticated$Status$201;
-export interface Params$users$create$gpg$key$for$authenticated {
-  requestBody: RequestBody$users$create$gpg$key$for$authenticated["application/json"];
+export type RequestContentType$users$create$gpg$key$for$authenticated$user = keyof RequestBody$users$create$gpg$key$for$authenticated$user;
+export type ResponseContentType$users$create$gpg$key$for$authenticated$user =
+  keyof Response$users$create$gpg$key$for$authenticated$user$Status$201;
+export interface Params$users$create$gpg$key$for$authenticated$user {
+  requestBody: RequestBody$users$create$gpg$key$for$authenticated$user["application/json"];
 }
-export type ResponseContentType$users$get$gpg$key$for$authenticated = keyof Response$users$get$gpg$key$for$authenticated$Status$200;
-export interface Params$users$get$gpg$key$for$authenticated {
-  parameter: Parameter$users$get$gpg$key$for$authenticated;
+export type ResponseContentType$users$get$gpg$key$for$authenticated$user = keyof Response$users$get$gpg$key$for$authenticated$user$Status$200;
+export interface Params$users$get$gpg$key$for$authenticated$user {
+  parameter: Parameter$users$get$gpg$key$for$authenticated$user;
 }
-export interface Params$users$delete$gpg$key$for$authenticated {
-  parameter: Parameter$users$delete$gpg$key$for$authenticated;
+export interface Params$users$delete$gpg$key$for$authenticated$user {
+  parameter: Parameter$users$delete$gpg$key$for$authenticated$user;
 }
 export type ResponseContentType$apps$list$installations$for$authenticated$user =
   keyof Response$apps$list$installations$for$authenticated$user$Status$200;
@@ -15733,34 +17188,35 @@ export type ResponseContentType$apps$list$installation$repos$for$authenticated$u
 export interface Params$apps$list$installation$repos$for$authenticated$user {
   parameter: Parameter$apps$list$installation$repos$for$authenticated$user;
 }
-export interface Params$apps$add$repo$to$installation {
-  parameter: Parameter$apps$add$repo$to$installation;
+export interface Params$apps$add$repo$to$installation$for$authenticated$user {
+  parameter: Parameter$apps$add$repo$to$installation$for$authenticated$user;
 }
-export interface Params$apps$remove$repo$from$installation {
-  parameter: Parameter$apps$remove$repo$from$installation;
+export interface Params$apps$remove$repo$from$installation$for$authenticated$user {
+  parameter: Parameter$apps$remove$repo$from$installation$for$authenticated$user;
 }
 export type ResponseContentType$issues$list$for$authenticated$user = keyof Response$issues$list$for$authenticated$user$Status$200;
 export interface Params$issues$list$for$authenticated$user {
   parameter: Parameter$issues$list$for$authenticated$user;
 }
-export type ResponseContentType$users$list$public$ssh$keys$for$authenticated =
-  keyof Response$users$list$public$ssh$keys$for$authenticated$Status$200;
-export interface Params$users$list$public$ssh$keys$for$authenticated {
-  parameter: Parameter$users$list$public$ssh$keys$for$authenticated;
+export type ResponseContentType$users$list$public$ssh$keys$for$authenticated$user =
+  keyof Response$users$list$public$ssh$keys$for$authenticated$user$Status$200;
+export interface Params$users$list$public$ssh$keys$for$authenticated$user {
+  parameter: Parameter$users$list$public$ssh$keys$for$authenticated$user;
 }
-export type RequestContentType$users$create$public$ssh$key$for$authenticated = keyof RequestBody$users$create$public$ssh$key$for$authenticated;
-export type ResponseContentType$users$create$public$ssh$key$for$authenticated =
-  keyof Response$users$create$public$ssh$key$for$authenticated$Status$201;
-export interface Params$users$create$public$ssh$key$for$authenticated {
-  requestBody: RequestBody$users$create$public$ssh$key$for$authenticated["application/json"];
+export type RequestContentType$users$create$public$ssh$key$for$authenticated$user =
+  keyof RequestBody$users$create$public$ssh$key$for$authenticated$user;
+export type ResponseContentType$users$create$public$ssh$key$for$authenticated$user =
+  keyof Response$users$create$public$ssh$key$for$authenticated$user$Status$201;
+export interface Params$users$create$public$ssh$key$for$authenticated$user {
+  requestBody: RequestBody$users$create$public$ssh$key$for$authenticated$user["application/json"];
 }
-export type ResponseContentType$users$get$public$ssh$key$for$authenticated =
-  keyof Response$users$get$public$ssh$key$for$authenticated$Status$200;
-export interface Params$users$get$public$ssh$key$for$authenticated {
-  parameter: Parameter$users$get$public$ssh$key$for$authenticated;
+export type ResponseContentType$users$get$public$ssh$key$for$authenticated$user =
+  keyof Response$users$get$public$ssh$key$for$authenticated$user$Status$200;
+export interface Params$users$get$public$ssh$key$for$authenticated$user {
+  parameter: Parameter$users$get$public$ssh$key$for$authenticated$user;
 }
-export interface Params$users$delete$public$ssh$key$for$authenticated {
-  parameter: Parameter$users$delete$public$ssh$key$for$authenticated;
+export interface Params$users$delete$public$ssh$key$for$authenticated$user {
+  parameter: Parameter$users$delete$public$ssh$key$for$authenticated$user;
 }
 export type ResponseContentType$orgs$list$memberships$for$authenticated$user =
   keyof Response$orgs$list$memberships$for$authenticated$user$Status$200;
@@ -15788,10 +17244,10 @@ export type ResponseContentType$projects$create$for$authenticated$user = keyof R
 export interface Params$projects$create$for$authenticated$user {
   requestBody: RequestBody$projects$create$for$authenticated$user["application/json"];
 }
-export type ResponseContentType$users$list$public$emails$for$authenticated =
-  keyof Response$users$list$public$emails$for$authenticated$Status$200;
-export interface Params$users$list$public$emails$for$authenticated {
-  parameter: Parameter$users$list$public$emails$for$authenticated;
+export type ResponseContentType$users$list$public$emails$for$authenticated$user =
+  keyof Response$users$list$public$emails$for$authenticated$user$Status$200;
+export interface Params$users$list$public$emails$for$authenticated$user {
+  parameter: Parameter$users$list$public$emails$for$authenticated$user;
 }
 export type ResponseContentType$repos$list$for$authenticated$user = keyof Response$repos$list$for$authenticated$user$Status$200;
 export interface Params$repos$list$for$authenticated$user {
@@ -15807,11 +17263,11 @@ export type ResponseContentType$repos$list$invitations$for$authenticated$user =
 export interface Params$repos$list$invitations$for$authenticated$user {
   parameter: Parameter$repos$list$invitations$for$authenticated$user;
 }
-export interface Params$repos$decline$invitation {
-  parameter: Parameter$repos$decline$invitation;
+export interface Params$repos$decline$invitation$for$authenticated$user {
+  parameter: Parameter$repos$decline$invitation$for$authenticated$user;
 }
-export interface Params$repos$accept$invitation {
-  parameter: Parameter$repos$accept$invitation;
+export interface Params$repos$accept$invitation$for$authenticated$user {
+  parameter: Parameter$repos$accept$invitation$for$authenticated$user;
 }
 export type ResponseContentType$activity$list$repos$starred$by$authenticated$user =
   keyof Response$activity$list$repos$starred$by$authenticated$user$Status$200;
@@ -15922,10 +17378,7 @@ export interface Params$enterprise$admin$demote$site$administrator {
   parameter: Parameter$enterprise$admin$demote$site$administrator;
 }
 export type ResponseContentType$activity$list$repos$starred$by$user = keyof Response$activity$list$repos$starred$by$user$Status$200;
-export interface Params$activity$list$repos$starred$by$user<U extends ResponseContentType$activity$list$repos$starred$by$user> {
-  headers: {
-    Accept: U;
-  };
+export interface Params$activity$list$repos$starred$by$user {
   parameter: Parameter$activity$list$repos$starred$by$user;
 }
 export type ResponseContentType$activity$list$repos$watched$by$user = keyof Response$activity$list$repos$watched$by$user$Status$200;
@@ -16007,12 +17460,21 @@ export type SuccessResponses =
   | Response$oauth$authorizations$update$authorization$Status$200
   | Response$codes$of$conduct$get$all$codes$of$conduct$Status$200
   | Response$codes$of$conduct$get$conduct$code$Status$200
-  | Response$apps$create$content$attachment$Status$200
   | Response$emojis$get$Status$200
   | Response$enterprise$admin$get$announcement$Status$200
   | Response$enterprise$admin$set$announcement$Status$200
   | Response$enterprise$admin$get$license$information$Status$200
-  | Response$enterprise$admin$get$type$stats$Status$200
+  | Response$enterprise$admin$get$all$stats$Status$200
+  | Response$enterprise$admin$get$comment$stats$Status$200
+  | Response$enterprise$admin$get$gist$stats$Status$200
+  | Response$enterprise$admin$get$hooks$stats$Status$200
+  | Response$enterprise$admin$get$issue$stats$Status$200
+  | Response$enterprise$admin$get$milestone$stats$Status$200
+  | Response$enterprise$admin$get$org$stats$Status$200
+  | Response$enterprise$admin$get$pages$stats$Status$200
+  | Response$enterprise$admin$get$pull$request$stats$Status$200
+  | Response$enterprise$admin$get$repo$stats$Status$200
+  | Response$enterprise$admin$get$user$stats$Status$200
   | Response$enterprise$admin$get$github$actions$permissions$enterprise$Status$200
   | Response$enterprise$admin$list$selected$organizations$enabled$github$actions$enterprise$Status$200
   | Response$enterprise$admin$get$allowed$actions$enterprise$Status$200
@@ -16049,6 +17511,7 @@ export type SuccessResponses =
   | Response$issues$list$Status$200
   | Response$licenses$get$all$commonly$used$Status$200
   | Response$licenses$get$Status$200
+  | Response$markdown$render$Status$200
   | Response$markdown$render$raw$Status$200
   | Response$meta$get$Status$200
   | Response$activity$list$public$events$for$repo$network$Status$200
@@ -16078,6 +17541,7 @@ export type SuccessResponses =
   | Response$actions$list$org$secrets$Status$200
   | Response$actions$get$org$public$key$Status$200
   | Response$actions$get$org$secret$Status$200
+  | Response$actions$create$or$update$org$secret$Status$201
   | Response$actions$list$selected$repos$for$org$secret$Status$200
   | Response$activity$list$public$org$events$Status$200
   | Response$orgs$list$webhooks$Status$200
@@ -16093,6 +17557,7 @@ export type SuccessResponses =
   | Response$orgs$get$membership$for$user$Status$200
   | Response$orgs$set$membership$for$user$Status$200
   | Response$orgs$list$outside$collaborators$Status$200
+  | Response$orgs$convert$member$to$outside$collaborator$Status$202
   | Response$enterprise$admin$list$pre$receive$hooks$for$org$Status$200
   | Response$enterprise$admin$get$pre$receive$hook$for$org$Status$200
   | Response$enterprise$admin$remove$pre$receive$hook$enforcement$for$org$Status$200
@@ -16115,8 +17580,10 @@ export type SuccessResponses =
   | Response$teams$get$discussion$comment$in$org$Status$200
   | Response$teams$update$discussion$comment$in$org$Status$200
   | Response$reactions$list$for$team$discussion$comment$in$org$Status$200
+  | Response$reactions$create$for$team$discussion$comment$in$org$Status$200
   | Response$reactions$create$for$team$discussion$comment$in$org$Status$201
   | Response$reactions$list$for$team$discussion$in$org$Status$200
+  | Response$reactions$create$for$team$discussion$in$org$Status$200
   | Response$reactions$create$for$team$discussion$in$org$Status$201
   | Response$teams$list$members$in$org$Status$200
   | Response$teams$get$membership$for$user$in$org$Status$200
@@ -16145,7 +17612,7 @@ export type SuccessResponses =
   | Response$repos$update$Status$200
   | Response$actions$list$artifacts$for$repo$Status$200
   | Response$actions$get$artifact$Status$200
-  | Response$actions$get$job$for$workflow$run$Status$202
+  | Response$actions$get$job$for$workflow$run$Status$200
   | Response$actions$get$github$actions$permissions$repository$Status$200
   | Response$actions$get$allowed$actions$repository$Status$200
   | Response$actions$list$self$hosted$runners$for$repo$Status$200
@@ -16156,10 +17623,13 @@ export type SuccessResponses =
   | Response$actions$list$workflow$runs$for$repo$Status$200
   | Response$actions$get$workflow$run$Status$200
   | Response$actions$list$workflow$run$artifacts$Status$200
+  | Response$actions$cancel$workflow$run$Status$202
   | Response$actions$list$jobs$for$workflow$run$Status$200
+  | Response$actions$re$run$workflow$Status$201
   | Response$actions$list$repo$secrets$Status$200
   | Response$actions$get$repo$public$key$Status$200
   | Response$actions$get$repo$secret$Status$200
+  | Response$actions$create$or$update$repo$secret$Status$201
   | Response$actions$list$repo$workflows$Status$200
   | Response$actions$get$workflow$Status$200
   | Response$actions$list$workflow$runs$Status$200
@@ -16197,14 +17667,17 @@ export type SuccessResponses =
   | Response$checks$get$Status$200
   | Response$checks$update$Status$200
   | Response$checks$list$annotations$Status$200
+  | Response$checks$create$suite$Status$200
   | Response$checks$create$suite$Status$201
   | Response$checks$set$suites$preferences$Status$200
   | Response$checks$get$suite$Status$200
   | Response$checks$list$for$suite$Status$200
+  | Response$checks$rerequest$suite$Status$201
   | Response$code$scanning$list$alerts$for$repo$Status$200
   | Response$code$scanning$get$alert$Status$200
   | Response$code$scanning$update$alert$Status$200
   | Response$code$scanning$list$recent$analyses$Status$200
+  | Response$code$scanning$upload$sarif$Status$202
   | Response$repos$list$collaborators$Status$200
   | Response$repos$add$collaborator$Status$201
   | Response$repos$get$collaborator$permission$level$Status$200
@@ -16224,8 +17697,8 @@ export type SuccessResponses =
   | Response$checks$list$suites$for$ref$Status$200
   | Response$repos$get$combined$status$for$ref$Status$200
   | Response$repos$list$commit$statuses$for$ref$Status$200
-  | Response$codes$of$conduct$get$for$repo$Status$200
   | Response$repos$compare$commits$Status$200
+  | Response$apps$create$content$attachment$Status$200
   | Response$repos$get$content$Status$200
   | Response$repos$create$or$update$file$contents$Status$200
   | Response$repos$create$or$update$file$contents$Status$201
@@ -16284,6 +17757,7 @@ export type SuccessResponses =
   | Response$issues$add$labels$Status$200
   | Response$issues$remove$label$Status$200
   | Response$reactions$list$for$issue$Status$200
+  | Response$reactions$create$for$issue$Status$200
   | Response$reactions$create$for$issue$Status$201
   | Response$issues$list$events$for$timeline$Status$200
   | Response$repos$list$deploy$keys$Status$200
@@ -16302,6 +17776,7 @@ export type SuccessResponses =
   | Response$issues$update$milestone$Status$200
   | Response$issues$list$labels$for$milestone$Status$200
   | Response$activity$list$repo$notifications$for$authenticated$user$Status$200
+  | Response$activity$mark$repo$notifications$as$read$Status$202
   | Response$repos$get$pages$Status$200
   | Response$repos$create$pages$site$Status$201
   | Response$repos$list$pages$builds$Status$200
@@ -16332,6 +17807,7 @@ export type SuccessResponses =
   | Response$pulls$merge$Status$200
   | Response$pulls$list$requested$reviewers$Status$200
   | Response$pulls$request$reviewers$Status$201
+  | Response$pulls$remove$requested$reviewers$Status$200
   | Response$pulls$list$reviews$Status$200
   | Response$pulls$create$review$Status$200
   | Response$pulls$get$review$Status$200
@@ -16342,6 +17818,7 @@ export type SuccessResponses =
   | Response$pulls$submit$review$Status$200
   | Response$pulls$update$branch$Status$202
   | Response$repos$get$readme$Status$200
+  | Response$repos$get$readme$in$directory$Status$200
   | Response$repos$list$releases$Status$200
   | Response$repos$create$release$Status$201
   | Response$repos$get$release$asset$Status$200
@@ -16354,8 +17831,11 @@ export type SuccessResponses =
   | Response$repos$upload$release$asset$Status$201
   | Response$activity$list$stargazers$for$repo$Status$200
   | Response$repos$get$code$frequency$stats$Status$200
+  | Response$repos$get$code$frequency$stats$Status$202
   | Response$repos$get$commit$activity$stats$Status$200
+  | Response$repos$get$commit$activity$stats$Status$202
   | Response$repos$get$contributors$stats$Status$200
+  | Response$repos$get$contributors$stats$Status$202
   | Response$repos$get$participation$stats$Status$200
   | Response$repos$get$punch$card$stats$Status$200
   | Response$repos$create$commit$status$Status$201
@@ -16384,6 +17864,7 @@ export type SuccessResponses =
   | Response$enterprise$admin$add$authorized$ssh$key$Status$201
   | Response$enterprise$admin$remove$authorized$ssh$key$Status$200
   | Response$teams$get$legacy$Status$200
+  | Response$teams$update$legacy$Status$200
   | Response$teams$update$legacy$Status$201
   | Response$teams$list$discussions$legacy$Status$200
   | Response$teams$create$discussion$legacy$Status$201
@@ -16407,25 +17888,25 @@ export type SuccessResponses =
   | Response$teams$list$child$legacy$Status$200
   | Response$users$get$authenticated$Status$200
   | Response$users$update$authenticated$Status$200
-  | Response$users$list$emails$for$authenticated$Status$200
-  | Response$users$add$email$for$authenticated$Status$201
+  | Response$users$list$emails$for$authenticated$user$Status$200
+  | Response$users$add$email$for$authenticated$user$Status$201
   | Response$users$list$followers$for$authenticated$user$Status$200
-  | Response$users$list$followed$by$authenticated$Status$200
-  | Response$users$list$gpg$keys$for$authenticated$Status$200
-  | Response$users$create$gpg$key$for$authenticated$Status$201
-  | Response$users$get$gpg$key$for$authenticated$Status$200
+  | Response$users$list$followed$by$authenticated$user$Status$200
+  | Response$users$list$gpg$keys$for$authenticated$user$Status$200
+  | Response$users$create$gpg$key$for$authenticated$user$Status$201
+  | Response$users$get$gpg$key$for$authenticated$user$Status$200
   | Response$apps$list$installations$for$authenticated$user$Status$200
   | Response$apps$list$installation$repos$for$authenticated$user$Status$200
   | Response$issues$list$for$authenticated$user$Status$200
-  | Response$users$list$public$ssh$keys$for$authenticated$Status$200
-  | Response$users$create$public$ssh$key$for$authenticated$Status$201
-  | Response$users$get$public$ssh$key$for$authenticated$Status$200
+  | Response$users$list$public$ssh$keys$for$authenticated$user$Status$200
+  | Response$users$create$public$ssh$key$for$authenticated$user$Status$201
+  | Response$users$get$public$ssh$key$for$authenticated$user$Status$200
   | Response$orgs$list$memberships$for$authenticated$user$Status$200
   | Response$orgs$get$membership$for$authenticated$user$Status$200
   | Response$orgs$update$membership$for$authenticated$user$Status$200
   | Response$orgs$list$for$authenticated$user$Status$200
   | Response$projects$create$for$authenticated$user$Status$201
-  | Response$users$list$public$emails$for$authenticated$Status$200
+  | Response$users$list$public$emails$for$authenticated$user$Status$200
   | Response$repos$list$for$authenticated$user$Status$200
   | Response$repos$create$for$authenticated$user$Status$201
   | Response$repos$list$invitations$for$authenticated$user$Status$200
@@ -16501,6 +17982,8 @@ export namespace ErrorResponse {
     | Response$apps$create$installation$access$token$Status$404
     | Response$apps$create$installation$access$token$Status$415
     | Response$apps$create$installation$access$token$Status$422;
+  export type apps$suspend$installation = Response$apps$suspend$installation$Status$404;
+  export type apps$unsuspend$installation = Response$apps$unsuspend$installation$Status$404;
   export type oauth$authorizations$list$grants =
     | Response$oauth$authorizations$list$grants$Status$401
     | Response$oauth$authorizations$list$grants$Status$403
@@ -16550,22 +18033,24 @@ export namespace ErrorResponse {
     | Response$oauth$authorizations$delete$authorization$Status$401
     | Response$oauth$authorizations$delete$authorization$Status$403;
   export type oauth$authorizations$update$authorization = Response$oauth$authorizations$update$authorization$Status$422;
-  export type codes$of$conduct$get$all$codes$of$conduct = Response$codes$of$conduct$get$all$codes$of$conduct$Status$415;
-  export type codes$of$conduct$get$conduct$code =
-    | Response$codes$of$conduct$get$conduct$code$Status$404
-    | Response$codes$of$conduct$get$conduct$code$Status$415;
-  export type apps$create$content$attachment =
-    | Response$apps$create$content$attachment$Status$403
-    | Response$apps$create$content$attachment$Status$404
-    | Response$apps$create$content$attachment$Status$410
-    | Response$apps$create$content$attachment$Status$415
-    | Response$apps$create$content$attachment$Status$422;
+  export type codes$of$conduct$get$all$codes$of$conduct = void;
+  export type codes$of$conduct$get$conduct$code = Response$codes$of$conduct$get$conduct$code$Status$404;
   export type emojis$get = void;
   export type enterprise$admin$get$announcement = void;
   export type enterprise$admin$remove$announcement = void;
   export type enterprise$admin$set$announcement = void;
   export type enterprise$admin$get$license$information = void;
-  export type enterprise$admin$get$type$stats = void;
+  export type enterprise$admin$get$all$stats = void;
+  export type enterprise$admin$get$comment$stats = void;
+  export type enterprise$admin$get$gist$stats = void;
+  export type enterprise$admin$get$hooks$stats = void;
+  export type enterprise$admin$get$issue$stats = void;
+  export type enterprise$admin$get$milestone$stats = void;
+  export type enterprise$admin$get$org$stats = void;
+  export type enterprise$admin$get$pages$stats = void;
+  export type enterprise$admin$get$pull$request$stats = void;
+  export type enterprise$admin$get$repo$stats = void;
+  export type enterprise$admin$get$user$stats = void;
   export type enterprise$admin$get$github$actions$permissions$enterprise = void;
   export type enterprise$admin$set$github$actions$permissions$enterprise = void;
   export type enterprise$admin$list$selected$organizations$enabled$github$actions$enterprise = void;
@@ -16653,7 +18138,7 @@ export namespace ErrorResponse {
   export type meta$get$octocat = void;
   export type orgs$list = void;
   export type orgs$get = Response$orgs$get$Status$404;
-  export type orgs$update = Response$orgs$update$Status$409 | Response$orgs$update$Status$415 | Response$orgs$update$Status$422;
+  export type orgs$update = Response$orgs$update$Status$409 | Response$orgs$update$Status$422;
   export type actions$get$github$actions$permissions$organization = void;
   export type actions$set$github$actions$permissions$organization = void;
   export type actions$list$selected$repositories$enabled$github$actions$organization = void;
@@ -16715,9 +18200,7 @@ export namespace ErrorResponse {
     | Response$orgs$remove$membership$for$user$Status$403
     | Response$orgs$remove$membership$for$user$Status$404;
   export type orgs$list$outside$collaborators = void;
-  export type orgs$convert$member$to$outside$collaborator =
-    | Response$orgs$convert$member$to$outside$collaborator$Status$403
-    | Response$orgs$convert$member$to$outside$collaborator$Status$404;
+  export type orgs$convert$member$to$outside$collaborator = Response$orgs$convert$member$to$outside$collaborator$Status$404;
   export type orgs$remove$outside$collaborator = Response$orgs$remove$outside$collaborator$Status$422;
   export type enterprise$admin$list$pre$receive$hooks$for$org = void;
   export type enterprise$admin$get$pre$receive$hook$for$org = void;
@@ -16759,7 +18242,7 @@ export namespace ErrorResponse {
   export type reactions$delete$for$team$discussion = void;
   export type teams$list$members$in$org = void;
   export type teams$get$membership$for$user$in$org = void;
-  export type teams$add$or$update$membership$for$user$in$org = Response$teams$add$or$update$membership$for$user$in$org$Status$422;
+  export type teams$add$or$update$membership$for$user$in$org = void;
   export type teams$remove$membership$for$user$in$org = void;
   export type teams$list$projects$in$org = void;
   export type teams$check$permissions$for$project$in$org = void;
@@ -16819,25 +18302,21 @@ export namespace ErrorResponse {
     | Response$projects$list$collaborators$Status$401
     | Response$projects$list$collaborators$Status$403
     | Response$projects$list$collaborators$Status$404
-    | Response$projects$list$collaborators$Status$415
     | Response$projects$list$collaborators$Status$422;
   export type projects$add$collaborator =
     | Response$projects$add$collaborator$Status$401
     | Response$projects$add$collaborator$Status$403
     | Response$projects$add$collaborator$Status$404
-    | Response$projects$add$collaborator$Status$415
     | Response$projects$add$collaborator$Status$422;
   export type projects$remove$collaborator =
     | Response$projects$remove$collaborator$Status$401
     | Response$projects$remove$collaborator$Status$403
     | Response$projects$remove$collaborator$Status$404
-    | Response$projects$remove$collaborator$Status$415
     | Response$projects$remove$collaborator$Status$422;
   export type projects$get$permission$for$user =
     | Response$projects$get$permission$for$user$Status$401
     | Response$projects$get$permission$for$user$Status$403
     | Response$projects$get$permission$for$user$Status$404
-    | Response$projects$get$permission$for$user$Status$415
     | Response$projects$get$permission$for$user$Status$422;
   export type projects$list$columns = Response$projects$list$columns$Status$401 | Response$projects$list$columns$Status$403;
   export type projects$create$column =
@@ -16848,8 +18327,7 @@ export namespace ErrorResponse {
   export type reactions$delete$legacy =
     | Response$reactions$delete$legacy$Status$401
     | Response$reactions$delete$legacy$Status$403
-    | Response$reactions$delete$legacy$Status$410
-    | Response$reactions$delete$legacy$Status$415;
+    | Response$reactions$delete$legacy$Status$410;
   export type repos$get = Response$repos$get$Status$403 | Response$repos$get$Status$404;
   export type repos$delete = Response$repos$delete$Status$403 | Response$repos$delete$Status$404;
   export type repos$update = Response$repos$update$Status$403 | Response$repos$update$Status$404 | Response$repos$update$Status$422;
@@ -16876,7 +18354,9 @@ export namespace ErrorResponse {
   export type actions$cancel$workflow$run = void;
   export type actions$list$jobs$for$workflow$run = void;
   export type actions$download$workflow$run$logs = void;
-  export type actions$delete$workflow$run$logs = void;
+  export type actions$delete$workflow$run$logs =
+    | Response$actions$delete$workflow$run$logs$Status$403
+    | Response$actions$delete$workflow$run$logs$Status$500;
   export type actions$re$run$workflow = void;
   export type actions$list$repo$secrets = void;
   export type actions$get$repo$public$key = void;
@@ -16897,7 +18377,6 @@ export namespace ErrorResponse {
   export type repos$update$branch$protection =
     | Response$repos$update$branch$protection$Status$403
     | Response$repos$update$branch$protection$Status$404
-    | Response$repos$update$branch$protection$Status$415
     | Response$repos$update$branch$protection$Status$422;
   export type repos$delete$branch$protection = Response$repos$delete$branch$protection$Status$403;
   export type repos$get$admin$branch$protection = void;
@@ -16948,11 +18427,26 @@ export namespace ErrorResponse {
   export type checks$get$suite = void;
   export type checks$list$for$suite = void;
   export type checks$rerequest$suite = void;
-  export type code$scanning$list$alerts$for$repo = Response$code$scanning$list$alerts$for$repo$Status$503;
-  export type code$scanning$get$alert = Response$code$scanning$get$alert$Status$404 | Response$code$scanning$get$alert$Status$503;
-  export type code$scanning$update$alert = void;
-  export type code$scanning$list$recent$analyses = void;
-  export type code$scanning$upload$sarif = void;
+  export type code$scanning$list$alerts$for$repo =
+    | Response$code$scanning$list$alerts$for$repo$Status$403
+    | Response$code$scanning$list$alerts$for$repo$Status$404
+    | Response$code$scanning$list$alerts$for$repo$Status$503;
+  export type code$scanning$get$alert =
+    | Response$code$scanning$get$alert$Status$403
+    | Response$code$scanning$get$alert$Status$404
+    | Response$code$scanning$get$alert$Status$503;
+  export type code$scanning$update$alert =
+    | Response$code$scanning$update$alert$Status$403
+    | Response$code$scanning$update$alert$Status$404
+    | Response$code$scanning$update$alert$Status$503;
+  export type code$scanning$list$recent$analyses =
+    | Response$code$scanning$list$recent$analyses$Status$403
+    | Response$code$scanning$list$recent$analyses$Status$404
+    | Response$code$scanning$list$recent$analyses$Status$503;
+  export type code$scanning$upload$sarif =
+    | Response$code$scanning$upload$sarif$Status$403
+    | Response$code$scanning$upload$sarif$Status$404
+    | Response$code$scanning$upload$sarif$Status$503;
   export type repos$list$collaborators = Response$repos$list$collaborators$Status$404;
   export type repos$check$collaborator = void;
   export type repos$add$collaborator = Response$repos$add$collaborator$Status$403 | Response$repos$add$collaborator$Status$422;
@@ -16962,9 +18456,7 @@ export namespace ErrorResponse {
   export type repos$get$commit$comment = Response$repos$get$commit$comment$Status$404;
   export type repos$delete$commit$comment = Response$repos$delete$commit$comment$Status$404;
   export type repos$update$commit$comment = Response$repos$update$commit$comment$Status$404;
-  export type reactions$list$for$commit$comment =
-    | Response$reactions$list$for$commit$comment$Status$404
-    | Response$reactions$list$for$commit$comment$Status$415;
+  export type reactions$list$for$commit$comment = Response$reactions$list$for$commit$comment$Status$404;
   export type reactions$create$for$commit$comment =
     | Response$reactions$create$for$commit$comment$Status$415
     | Response$reactions$create$for$commit$comment$Status$422;
@@ -16974,12 +18466,10 @@ export namespace ErrorResponse {
     | Response$repos$list$commits$Status$404
     | Response$repos$list$commits$Status$409
     | Response$repos$list$commits$Status$500;
-  export type repos$list$branches$for$head$commit =
-    | Response$repos$list$branches$for$head$commit$Status$415
-    | Response$repos$list$branches$for$head$commit$Status$422;
+  export type repos$list$branches$for$head$commit = Response$repos$list$branches$for$head$commit$Status$422;
   export type repos$list$comments$for$commit = void;
   export type repos$create$commit$comment = Response$repos$create$commit$comment$Status$403 | Response$repos$create$commit$comment$Status$422;
-  export type repos$list$pull$requests$associated$with$commit = Response$repos$list$pull$requests$associated$with$commit$Status$415;
+  export type repos$list$pull$requests$associated$with$commit = void;
   export type repos$get$commit =
     | Response$repos$get$commit$Status$404
     | Response$repos$get$commit$Status$422
@@ -16988,8 +18478,13 @@ export namespace ErrorResponse {
   export type checks$list$suites$for$ref = void;
   export type repos$get$combined$status$for$ref = Response$repos$get$combined$status$for$ref$Status$404;
   export type repos$list$commit$statuses$for$ref = void;
-  export type codes$of$conduct$get$for$repo = void;
   export type repos$compare$commits = Response$repos$compare$commits$Status$404 | Response$repos$compare$commits$Status$500;
+  export type apps$create$content$attachment =
+    | Response$apps$create$content$attachment$Status$403
+    | Response$apps$create$content$attachment$Status$404
+    | Response$apps$create$content$attachment$Status$410
+    | Response$apps$create$content$attachment$Status$415
+    | Response$apps$create$content$attachment$Status$422;
   export type repos$get$content = Response$repos$get$content$Status$403 | Response$repos$get$content$Status$404;
   export type repos$create$or$update$file$contents =
     | Response$repos$create$or$update$file$contents$Status$404
@@ -17002,12 +18497,12 @@ export namespace ErrorResponse {
     | Response$repos$delete$file$Status$503;
   export type repos$list$contributors = Response$repos$list$contributors$Status$403 | Response$repos$list$contributors$Status$404;
   export type repos$list$deployments = void;
-  export type repos$create$deployment = Response$repos$create$deployment$Status$409 | Response$repos$create$deployment$Status$422;
+  export type repos$create$deployment = Response$repos$create$deployment$Status$422;
   export type repos$get$deployment = Response$repos$get$deployment$Status$404;
   export type repos$delete$deployment = Response$repos$delete$deployment$Status$404 | Response$repos$delete$deployment$Status$422;
   export type repos$list$deployment$statuses = Response$repos$list$deployment$statuses$Status$404;
   export type repos$create$deployment$status = Response$repos$create$deployment$status$Status$422;
-  export type repos$get$deployment$status = Response$repos$get$deployment$status$Status$404 | Response$repos$get$deployment$status$Status$415;
+  export type repos$get$deployment$status = Response$repos$get$deployment$status$Status$404;
   export type repos$create$dispatch$event = Response$repos$create$dispatch$event$Status$422;
   export type activity$list$repo$events = void;
   export type repos$list$forks = Response$repos$list$forks$Status$400;
@@ -17062,12 +18557,8 @@ export namespace ErrorResponse {
   export type issues$get$comment = Response$issues$get$comment$Status$404;
   export type issues$delete$comment = void;
   export type issues$update$comment = Response$issues$update$comment$Status$422;
-  export type reactions$list$for$issue$comment =
-    | Response$reactions$list$for$issue$comment$Status$404
-    | Response$reactions$list$for$issue$comment$Status$415;
-  export type reactions$create$for$issue$comment =
-    | Response$reactions$create$for$issue$comment$Status$415
-    | Response$reactions$create$for$issue$comment$Status$422;
+  export type reactions$list$for$issue$comment = Response$reactions$list$for$issue$comment$Status$404;
+  export type reactions$create$for$issue$comment = Response$reactions$create$for$issue$comment$Status$422;
   export type reactions$delete$for$issue$comment = void;
   export type issues$list$events$for$repo = Response$issues$list$events$for$repo$Status$422;
   export type issues$get$event =
@@ -17101,16 +18592,12 @@ export namespace ErrorResponse {
     | Response$issues$lock$Status$410
     | Response$issues$lock$Status$422;
   export type issues$unlock = Response$issues$unlock$Status$403 | Response$issues$unlock$Status$404;
-  export type reactions$list$for$issue =
-    | Response$reactions$list$for$issue$Status$404
-    | Response$reactions$list$for$issue$Status$410
-    | Response$reactions$list$for$issue$Status$415;
-  export type reactions$create$for$issue = Response$reactions$create$for$issue$Status$415 | Response$reactions$create$for$issue$Status$422;
+  export type reactions$list$for$issue = Response$reactions$list$for$issue$Status$404 | Response$reactions$list$for$issue$Status$410;
+  export type reactions$create$for$issue = Response$reactions$create$for$issue$Status$422;
   export type reactions$delete$for$issue = void;
   export type issues$list$events$for$timeline =
     | Response$issues$list$events$for$timeline$Status$404
-    | Response$issues$list$events$for$timeline$Status$410
-    | Response$issues$list$events$for$timeline$Status$415;
+    | Response$issues$list$events$for$timeline$Status$410;
   export type repos$list$deploy$keys = void;
   export type repos$create$deploy$key = Response$repos$create$deploy$key$Status$422;
   export type repos$get$deploy$key = Response$repos$get$deploy$key$Status$404;
@@ -17122,11 +18609,7 @@ export namespace ErrorResponse {
   export type issues$update$label = void;
   export type repos$list$languages = void;
   export type licenses$get$for$repo = void;
-  export type repos$merge =
-    | Response$repos$merge$Status$403
-    | Response$repos$merge$Status$404
-    | Response$repos$merge$Status$409
-    | Response$repos$merge$Status$422;
+  export type repos$merge = Response$repos$merge$Status$403 | Response$repos$merge$Status$422;
   export type issues$list$milestones = Response$issues$list$milestones$Status$404;
   export type issues$create$milestone = Response$issues$create$milestone$Status$404 | Response$issues$create$milestone$Status$422;
   export type issues$get$milestone = Response$issues$get$milestone$Status$404;
@@ -17139,14 +18622,8 @@ export namespace ErrorResponse {
   export type repos$update$information$about$pages$site =
     | Response$repos$update$information$about$pages$site$Status$400
     | Response$repos$update$information$about$pages$site$Status$422;
-  export type repos$create$pages$site =
-    | Response$repos$create$pages$site$Status$409
-    | Response$repos$create$pages$site$Status$415
-    | Response$repos$create$pages$site$Status$422;
-  export type repos$delete$pages$site =
-    | Response$repos$delete$pages$site$Status$404
-    | Response$repos$delete$pages$site$Status$415
-    | Response$repos$delete$pages$site$Status$422;
+  export type repos$create$pages$site = Response$repos$create$pages$site$Status$409 | Response$repos$create$pages$site$Status$422;
+  export type repos$delete$pages$site = Response$repos$delete$pages$site$Status$404 | Response$repos$delete$pages$site$Status$422;
   export type repos$list$pages$builds = void;
   export type repos$request$pages$build = void;
   export type repos$get$latest$pages$build = void;
@@ -17173,12 +18650,8 @@ export namespace ErrorResponse {
   export type pulls$get$review$comment = Response$pulls$get$review$comment$Status$404;
   export type pulls$delete$review$comment = Response$pulls$delete$review$comment$Status$404;
   export type pulls$update$review$comment = void;
-  export type reactions$list$for$pull$request$review$comment =
-    | Response$reactions$list$for$pull$request$review$comment$Status$404
-    | Response$reactions$list$for$pull$request$review$comment$Status$415;
-  export type reactions$create$for$pull$request$review$comment =
-    | Response$reactions$create$for$pull$request$review$comment$Status$415
-    | Response$reactions$create$for$pull$request$review$comment$Status$422;
+  export type reactions$list$for$pull$request$review$comment = Response$reactions$list$for$pull$request$review$comment$Status$404;
+  export type reactions$create$for$pull$request$review$comment = Response$reactions$create$for$pull$request$review$comment$Status$422;
   export type reactions$delete$for$pull$request$comment = void;
   export type pulls$get = Response$pulls$get$Status$404 | Response$pulls$get$Status$500;
   export type pulls$update = Response$pulls$update$Status$403 | Response$pulls$update$Status$422;
@@ -17208,11 +18681,11 @@ export namespace ErrorResponse {
     | Response$pulls$submit$review$Status$403
     | Response$pulls$submit$review$Status$404
     | Response$pulls$submit$review$Status$422;
-  export type pulls$update$branch =
-    | Response$pulls$update$branch$Status$403
-    | Response$pulls$update$branch$Status$415
-    | Response$pulls$update$branch$Status$422;
+  export type pulls$update$branch = Response$pulls$update$branch$Status$403 | Response$pulls$update$branch$Status$422;
   export type repos$get$readme = Response$repos$get$readme$Status$404 | Response$repos$get$readme$Status$422;
+  export type repos$get$readme$in$directory =
+    | Response$repos$get$readme$in$directory$Status$404
+    | Response$repos$get$readme$in$directory$Status$422;
   export type repos$list$releases = Response$repos$list$releases$Status$404;
   export type repos$create$release = Response$repos$create$release$Status$422;
   export type repos$get$release$asset = Response$repos$get$release$asset$Status$404 | Response$repos$get$release$asset$Status$415;
@@ -17245,13 +18718,11 @@ export namespace ErrorResponse {
     | Response$repos$replace$all$topics$Status$415
     | Response$repos$replace$all$topics$Status$422;
   export type repos$transfer = void;
-  export type repos$enable$vulnerability$alerts = void;
-  export type repos$disable$vulnerability$alerts = void;
   export type repos$download$zipball$archive = void;
   export type repos$create$using$template = void;
   export type repos$list$public = Response$repos$list$public$Status$422;
   export type search$code = Response$search$code$Status$403 | Response$search$code$Status$422 | Response$search$code$Status$503;
-  export type search$commits = Response$search$commits$Status$415;
+  export type search$commits = void;
   export type search$issues$and$pull$requests =
     | Response$search$issues$and$pull$requests$Status$403
     | Response$search$issues$and$pull$requests$Status$422
@@ -17293,19 +18764,16 @@ export namespace ErrorResponse {
   export type reactions$create$for$team$discussion$legacy = void;
   export type teams$list$members$legacy = Response$teams$list$members$legacy$Status$404;
   export type teams$get$member$legacy = void;
-  export type teams$add$member$legacy = Response$teams$add$member$legacy$Status$403 | Response$teams$add$member$legacy$Status$422;
+  export type teams$add$member$legacy = Response$teams$add$member$legacy$Status$403;
   export type teams$remove$member$legacy = void;
   export type teams$get$membership$for$user$legacy = Response$teams$get$membership$for$user$legacy$Status$404;
-  export type teams$add$or$update$membership$for$user$legacy =
-    | Response$teams$add$or$update$membership$for$user$legacy$Status$404
-    | Response$teams$add$or$update$membership$for$user$legacy$Status$422;
+  export type teams$add$or$update$membership$for$user$legacy = Response$teams$add$or$update$membership$for$user$legacy$Status$404;
   export type teams$remove$membership$for$user$legacy = void;
-  export type teams$list$projects$legacy = Response$teams$list$projects$legacy$Status$404 | Response$teams$list$projects$legacy$Status$415;
-  export type teams$check$permissions$for$project$legacy = Response$teams$check$permissions$for$project$legacy$Status$415;
+  export type teams$list$projects$legacy = Response$teams$list$projects$legacy$Status$404;
+  export type teams$check$permissions$for$project$legacy = void;
   export type teams$add$or$update$project$permissions$legacy =
     | Response$teams$add$or$update$project$permissions$legacy$Status$403
     | Response$teams$add$or$update$project$permissions$legacy$Status$404
-    | Response$teams$add$or$update$project$permissions$legacy$Status$415
     | Response$teams$add$or$update$project$permissions$legacy$Status$422;
   export type teams$remove$project$legacy =
     | Response$teams$remove$project$legacy$Status$404
@@ -17327,50 +18795,50 @@ export namespace ErrorResponse {
     | Response$users$update$authenticated$Status$403
     | Response$users$update$authenticated$Status$404
     | Response$users$update$authenticated$Status$422;
-  export type users$list$emails$for$authenticated =
-    | Response$users$list$emails$for$authenticated$Status$401
-    | Response$users$list$emails$for$authenticated$Status$403
-    | Response$users$list$emails$for$authenticated$Status$404;
-  export type users$add$email$for$authenticated =
-    | Response$users$add$email$for$authenticated$Status$401
-    | Response$users$add$email$for$authenticated$Status$403
-    | Response$users$add$email$for$authenticated$Status$404
-    | Response$users$add$email$for$authenticated$Status$422;
-  export type users$delete$email$for$authenticated =
-    | Response$users$delete$email$for$authenticated$Status$401
-    | Response$users$delete$email$for$authenticated$Status$403
-    | Response$users$delete$email$for$authenticated$Status$404
-    | Response$users$delete$email$for$authenticated$Status$422;
+  export type users$list$emails$for$authenticated$user =
+    | Response$users$list$emails$for$authenticated$user$Status$401
+    | Response$users$list$emails$for$authenticated$user$Status$403
+    | Response$users$list$emails$for$authenticated$user$Status$404;
+  export type users$add$email$for$authenticated$user =
+    | Response$users$add$email$for$authenticated$user$Status$401
+    | Response$users$add$email$for$authenticated$user$Status$403
+    | Response$users$add$email$for$authenticated$user$Status$404
+    | Response$users$add$email$for$authenticated$user$Status$422;
+  export type users$delete$email$for$authenticated$user =
+    | Response$users$delete$email$for$authenticated$user$Status$401
+    | Response$users$delete$email$for$authenticated$user$Status$403
+    | Response$users$delete$email$for$authenticated$user$Status$404
+    | Response$users$delete$email$for$authenticated$user$Status$422;
   export type users$list$followers$for$authenticated$user =
     | Response$users$list$followers$for$authenticated$user$Status$401
     | Response$users$list$followers$for$authenticated$user$Status$403;
-  export type users$list$followed$by$authenticated =
-    | Response$users$list$followed$by$authenticated$Status$401
-    | Response$users$list$followed$by$authenticated$Status$403;
+  export type users$list$followed$by$authenticated$user =
+    | Response$users$list$followed$by$authenticated$user$Status$401
+    | Response$users$list$followed$by$authenticated$user$Status$403;
   export type users$check$person$is$followed$by$authenticated =
     | Response$users$check$person$is$followed$by$authenticated$Status$401
     | Response$users$check$person$is$followed$by$authenticated$Status$403
     | Response$users$check$person$is$followed$by$authenticated$Status$404;
   export type users$follow = Response$users$follow$Status$401 | Response$users$follow$Status$403 | Response$users$follow$Status$404;
   export type users$unfollow = Response$users$unfollow$Status$401 | Response$users$unfollow$Status$403 | Response$users$unfollow$Status$404;
-  export type users$list$gpg$keys$for$authenticated =
-    | Response$users$list$gpg$keys$for$authenticated$Status$401
-    | Response$users$list$gpg$keys$for$authenticated$Status$403
-    | Response$users$list$gpg$keys$for$authenticated$Status$404;
-  export type users$create$gpg$key$for$authenticated =
-    | Response$users$create$gpg$key$for$authenticated$Status$401
-    | Response$users$create$gpg$key$for$authenticated$Status$403
-    | Response$users$create$gpg$key$for$authenticated$Status$404
-    | Response$users$create$gpg$key$for$authenticated$Status$422;
-  export type users$get$gpg$key$for$authenticated =
-    | Response$users$get$gpg$key$for$authenticated$Status$401
-    | Response$users$get$gpg$key$for$authenticated$Status$403
-    | Response$users$get$gpg$key$for$authenticated$Status$404;
-  export type users$delete$gpg$key$for$authenticated =
-    | Response$users$delete$gpg$key$for$authenticated$Status$401
-    | Response$users$delete$gpg$key$for$authenticated$Status$403
-    | Response$users$delete$gpg$key$for$authenticated$Status$404
-    | Response$users$delete$gpg$key$for$authenticated$Status$422;
+  export type users$list$gpg$keys$for$authenticated$user =
+    | Response$users$list$gpg$keys$for$authenticated$user$Status$401
+    | Response$users$list$gpg$keys$for$authenticated$user$Status$403
+    | Response$users$list$gpg$keys$for$authenticated$user$Status$404;
+  export type users$create$gpg$key$for$authenticated$user =
+    | Response$users$create$gpg$key$for$authenticated$user$Status$401
+    | Response$users$create$gpg$key$for$authenticated$user$Status$403
+    | Response$users$create$gpg$key$for$authenticated$user$Status$404
+    | Response$users$create$gpg$key$for$authenticated$user$Status$422;
+  export type users$get$gpg$key$for$authenticated$user =
+    | Response$users$get$gpg$key$for$authenticated$user$Status$401
+    | Response$users$get$gpg$key$for$authenticated$user$Status$403
+    | Response$users$get$gpg$key$for$authenticated$user$Status$404;
+  export type users$delete$gpg$key$for$authenticated$user =
+    | Response$users$delete$gpg$key$for$authenticated$user$Status$401
+    | Response$users$delete$gpg$key$for$authenticated$user$Status$403
+    | Response$users$delete$gpg$key$for$authenticated$user$Status$404
+    | Response$users$delete$gpg$key$for$authenticated$user$Status$422;
   export type apps$list$installations$for$authenticated$user =
     | Response$apps$list$installations$for$authenticated$user$Status$401
     | Response$apps$list$installations$for$authenticated$user$Status$403
@@ -17378,30 +18846,30 @@ export namespace ErrorResponse {
   export type apps$list$installation$repos$for$authenticated$user =
     | Response$apps$list$installation$repos$for$authenticated$user$Status$403
     | Response$apps$list$installation$repos$for$authenticated$user$Status$404;
-  export type apps$add$repo$to$installation =
-    | Response$apps$add$repo$to$installation$Status$403
-    | Response$apps$add$repo$to$installation$Status$404;
-  export type apps$remove$repo$from$installation =
-    | Response$apps$remove$repo$from$installation$Status$403
-    | Response$apps$remove$repo$from$installation$Status$404;
+  export type apps$add$repo$to$installation$for$authenticated$user =
+    | Response$apps$add$repo$to$installation$for$authenticated$user$Status$403
+    | Response$apps$add$repo$to$installation$for$authenticated$user$Status$404;
+  export type apps$remove$repo$from$installation$for$authenticated$user =
+    | Response$apps$remove$repo$from$installation$for$authenticated$user$Status$403
+    | Response$apps$remove$repo$from$installation$for$authenticated$user$Status$404;
   export type issues$list$for$authenticated$user = Response$issues$list$for$authenticated$user$Status$404;
-  export type users$list$public$ssh$keys$for$authenticated =
-    | Response$users$list$public$ssh$keys$for$authenticated$Status$401
-    | Response$users$list$public$ssh$keys$for$authenticated$Status$403
-    | Response$users$list$public$ssh$keys$for$authenticated$Status$404;
-  export type users$create$public$ssh$key$for$authenticated =
-    | Response$users$create$public$ssh$key$for$authenticated$Status$401
-    | Response$users$create$public$ssh$key$for$authenticated$Status$403
-    | Response$users$create$public$ssh$key$for$authenticated$Status$404
-    | Response$users$create$public$ssh$key$for$authenticated$Status$422;
-  export type users$get$public$ssh$key$for$authenticated =
-    | Response$users$get$public$ssh$key$for$authenticated$Status$401
-    | Response$users$get$public$ssh$key$for$authenticated$Status$403
-    | Response$users$get$public$ssh$key$for$authenticated$Status$404;
-  export type users$delete$public$ssh$key$for$authenticated =
-    | Response$users$delete$public$ssh$key$for$authenticated$Status$401
-    | Response$users$delete$public$ssh$key$for$authenticated$Status$403
-    | Response$users$delete$public$ssh$key$for$authenticated$Status$404;
+  export type users$list$public$ssh$keys$for$authenticated$user =
+    | Response$users$list$public$ssh$keys$for$authenticated$user$Status$401
+    | Response$users$list$public$ssh$keys$for$authenticated$user$Status$403
+    | Response$users$list$public$ssh$keys$for$authenticated$user$Status$404;
+  export type users$create$public$ssh$key$for$authenticated$user =
+    | Response$users$create$public$ssh$key$for$authenticated$user$Status$401
+    | Response$users$create$public$ssh$key$for$authenticated$user$Status$403
+    | Response$users$create$public$ssh$key$for$authenticated$user$Status$404
+    | Response$users$create$public$ssh$key$for$authenticated$user$Status$422;
+  export type users$get$public$ssh$key$for$authenticated$user =
+    | Response$users$get$public$ssh$key$for$authenticated$user$Status$401
+    | Response$users$get$public$ssh$key$for$authenticated$user$Status$403
+    | Response$users$get$public$ssh$key$for$authenticated$user$Status$404;
+  export type users$delete$public$ssh$key$for$authenticated$user =
+    | Response$users$delete$public$ssh$key$for$authenticated$user$Status$401
+    | Response$users$delete$public$ssh$key$for$authenticated$user$Status$403
+    | Response$users$delete$public$ssh$key$for$authenticated$user$Status$404;
   export type orgs$list$memberships$for$authenticated$user =
     | Response$orgs$list$memberships$for$authenticated$user$Status$401
     | Response$orgs$list$memberships$for$authenticated$user$Status$403
@@ -17421,10 +18889,10 @@ export namespace ErrorResponse {
     | Response$projects$create$for$authenticated$user$Status$403
     | Response$projects$create$for$authenticated$user$Status$415
     | Response$projects$create$for$authenticated$user$Status$422;
-  export type users$list$public$emails$for$authenticated =
-    | Response$users$list$public$emails$for$authenticated$Status$401
-    | Response$users$list$public$emails$for$authenticated$Status$403
-    | Response$users$list$public$emails$for$authenticated$Status$404;
+  export type users$list$public$emails$for$authenticated$user =
+    | Response$users$list$public$emails$for$authenticated$user$Status$401
+    | Response$users$list$public$emails$for$authenticated$user$Status$403
+    | Response$users$list$public$emails$for$authenticated$user$Status$404;
   export type repos$list$for$authenticated$user =
     | Response$repos$list$for$authenticated$user$Status$401
     | Response$repos$list$for$authenticated$user$Status$403
@@ -17439,14 +18907,14 @@ export namespace ErrorResponse {
     | Response$repos$list$invitations$for$authenticated$user$Status$401
     | Response$repos$list$invitations$for$authenticated$user$Status$403
     | Response$repos$list$invitations$for$authenticated$user$Status$404;
-  export type repos$decline$invitation =
-    | Response$repos$decline$invitation$Status$403
-    | Response$repos$decline$invitation$Status$404
-    | Response$repos$decline$invitation$Status$409;
-  export type repos$accept$invitation =
-    | Response$repos$accept$invitation$Status$403
-    | Response$repos$accept$invitation$Status$404
-    | Response$repos$accept$invitation$Status$409;
+  export type repos$decline$invitation$for$authenticated$user =
+    | Response$repos$decline$invitation$for$authenticated$user$Status$403
+    | Response$repos$decline$invitation$for$authenticated$user$Status$404
+    | Response$repos$decline$invitation$for$authenticated$user$Status$409;
+  export type repos$accept$invitation$for$authenticated$user =
+    | Response$repos$accept$invitation$for$authenticated$user$Status$403
+    | Response$repos$accept$invitation$for$authenticated$user$Status$404
+    | Response$repos$accept$invitation$for$authenticated$user$Status$409;
   export type activity$list$repos$starred$by$authenticated$user =
     | Response$activity$list$repos$starred$by$authenticated$user$Status$401
     | Response$activity$list$repos$starred$by$authenticated$user$Status$403;
@@ -17482,7 +18950,7 @@ export namespace ErrorResponse {
   export type apps$get$user$installation = void;
   export type users$list$public$keys$for$user = void;
   export type orgs$list$for$user = void;
-  export type projects$list$for$user = Response$projects$list$for$user$Status$415 | Response$projects$list$for$user$Status$422;
+  export type projects$list$for$user = Response$projects$list$for$user$Status$422;
   export type activity$list$received$events$for$user = void;
   export type activity$list$received$public$events$for$user = void;
   export type repos$list$for$user = void;
@@ -17640,6 +19108,9 @@ export class Client<RequestOption> {
     const queryParameters: QueryParameters = {
       per_page: { value: params.parameter.per_page, explode: false },
       page: { value: params.parameter.page, explode: false },
+      direction: { value: params.parameter.direction, explode: false },
+      sort: { value: params.parameter.sort, explode: false },
+      since: { value: params.parameter.since, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
@@ -17655,7 +19126,7 @@ export class Client<RequestOption> {
   }
   /**
    * Update LDAP mapping for a team
-   * Updates the [distinguished name](https://www.ldap.com/ldap-dns-and-rdns) (DN) of the LDAP entry to map to a team. [LDAP synchronization](https://help.github.com/enterprise/admin/guides/user-management/using-ldap/#enabling-ldap-sync) must be enabled to map LDAP entries to a team. Use the [Create a team](https://docs.github.com/enterprise-server@3.0/v3/teams/#create-a-team) endpoint to create a team with LDAP mapping.
+   * Updates the [distinguished name](https://www.ldap.com/ldap-dns-and-rdns) (DN) of the LDAP entry to map to a team. [LDAP synchronization](https://docs.github.com/enterprise/admin/guides/user-management/using-ldap/#enabling-ldap-sync) must be enabled to map LDAP entries to a team. Use the [Create a team](https://docs.github.com/enterprise-server@3.0/rest/reference/teams/#create-a-team) endpoint to create a team with LDAP mapping.
    *
    * If you pass the `hellcat-preview` media type, you can also update the LDAP mapping of a child team.
    * operationId: enterprise-admin/update-ldap-mapping-for-team
@@ -17768,6 +19239,8 @@ export class Client<RequestOption> {
     const queryParameters: QueryParameters = {
       per_page: { value: params.parameter.per_page, explode: false },
       page: { value: params.parameter.page, explode: false },
+      direction: { value: params.parameter.direction, explode: false },
+      sort: { value: params.parameter.sort, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
@@ -17894,6 +19367,8 @@ export class Client<RequestOption> {
     const queryParameters: QueryParameters = {
       per_page: { value: params.parameter.per_page, explode: false },
       page: { value: params.parameter.page, explode: false },
+      direction: { value: params.parameter.direction, explode: false },
+      sort: { value: params.parameter.sort, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
@@ -18097,9 +19572,10 @@ export class Client<RequestOption> {
   ): Promise<Response$apps$create$from$manifest$Status$201["application/json"]> {
     const url = this.baseUrl + `/app-manifests/${params.parameter.code}/conversions`;
     const headers = {
+      "Content-Type": "application/json",
       Accept: "application/json",
     };
-    return this.apiClient.request("POST", url, headers, undefined, undefined, option);
+    return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
   }
   /**
    * Get a webhook configuration for an app
@@ -18163,7 +19639,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get an installation for the authenticated app
-   * Enables an authenticated GitHub App to find an installation's information using the installation id. The installation's account type (`target_type`) will be either an organization or a user account, depending which account the repository belongs to.
+   * Enables an authenticated GitHub App to find an installation's information using the installation id.
    *
    * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
    * operationId: apps/get-installation
@@ -18181,7 +19657,7 @@ export class Client<RequestOption> {
   }
   /**
    * Delete an installation for the authenticated app
-   * Uninstalls a GitHub App on a user, organization, or business account. If you prefer to temporarily suspend an app's access to your account's resources, then we recommend the "[Suspend an app installation](https://docs.github.com/enterprise-server@3.0/v3/apps/#suspend-an-app-installation)" endpoint.
+   * Uninstalls a GitHub App on a user, organization, or business account. If you prefer to temporarily suspend an app's access to your account's resources, then we recommend the "[Suspend an app installation](https://docs.github.com/enterprise-server@3.0/rest/reference/apps/#suspend-an-app-installation)" endpoint.
    *
    * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
    * operationId: apps/delete-installation
@@ -18212,6 +19688,32 @@ export class Client<RequestOption> {
     return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
   }
   /**
+   * Suspend an app installation
+   * Suspends a GitHub App on a user, organization, or business account, which blocks the app from accessing the account's resources. When a GitHub App is suspended, the app's access to the GitHub Enterprise Server API or webhook events is blocked for that account.
+   *
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * operationId: apps/suspend-installation
+   * Request URI: /app/installations/{installation_id}/suspended
+   */
+  public async apps$suspend$installation(params: Params$apps$suspend$installation, option?: RequestOption): Promise<void> {
+    const url = this.baseUrl + `/app/installations/${params.parameter.installation_id}/suspended`;
+    const headers = {};
+    return this.apiClient.request("PUT", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Unsuspend an app installation
+   * Removes a GitHub App installation suspension.
+   *
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * operationId: apps/unsuspend-installation
+   * Request URI: /app/installations/{installation_id}/suspended
+   */
+  public async apps$unsuspend$installation(params: Params$apps$unsuspend$installation, option?: RequestOption): Promise<void> {
+    const url = this.baseUrl + `/app/installations/${params.parameter.installation_id}/suspended`;
+    const headers = {};
+    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
+  }
+  /**
    * @deprecated
    * List your grants
    * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.0/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
@@ -18231,6 +19733,7 @@ export class Client<RequestOption> {
     const queryParameters: QueryParameters = {
       per_page: { value: params.parameter.per_page, explode: false },
       page: { value: params.parameter.page, explode: false },
+      client_id: { value: params.parameter.client_id, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
@@ -18344,7 +19847,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create a scoped access token
-   * Exchanges a non-repository scoped user-to-server OAuth access token for a repository scoped user-to-server OAuth access token. You can specify which repositories the token can access and which permissions are granted to the token. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password. Invalid tokens will return `404 NOT FOUND`.
+   * Use a non-scoped user-to-server OAuth access token to create a repository scoped and/or permission scoped user-to-server OAuth access token. You can specify which repositories the token can access and which permissions are granted to the token. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password. Invalid tokens will return `404 NOT FOUND`.
    * operationId: apps/scope-token
    * Request URI: /applications/{client_id}/token/scoped
    */
@@ -18418,7 +19921,7 @@ export class Client<RequestOption> {
    * Get an app
    * **Note**: The `:app_slug` is just the URL-friendly name of your GitHub App. You can find this on the settings page for your GitHub App (e.g., `https://github.com/settings/apps/:app_slug`).
    *
-   * If the GitHub App you specify is public, you can access this endpoint without authenticating. If the GitHub App you specify is private, you must authenticate with a [personal access token](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/) or an [installation access token](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation) to access this endpoint.
+   * If the GitHub App you specify is public, you can access this endpoint without authenticating. If the GitHub App you specify is private, you must authenticate with a [personal access token](https://docs.github.com/articles/creating-a-personal-access-token-for-the-command-line/) or an [installation access token](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation) to access this endpoint.
    * operationId: apps/get-by-slug
    * Request URI: /apps/{app_slug}
    */
@@ -18450,6 +19953,7 @@ export class Client<RequestOption> {
     const queryParameters: QueryParameters = {
       per_page: { value: params.parameter.per_page, explode: false },
       page: { value: params.parameter.page, explode: false },
+      client_id: { value: params.parameter.client_id, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
@@ -18464,9 +19968,9 @@ export class Client<RequestOption> {
    *
    * To create tokens for a particular OAuth application using this endpoint, you must authenticate as the user you want to create an authorization for and provide the app's client ID and secret, found on your OAuth application's settings page. If your OAuth application intends to create multiple tokens for one user, use `fingerprint` to differentiate between them.
    *
-   * You can also create tokens on GitHub Enterprise Server from the [personal access tokens settings](https://github.com/settings/tokens) page. Read more about these tokens in [the GitHub Help documentation](https://help.github.com/articles/creating-an-access-token-for-command-line-use).
+   * You can also create tokens on GitHub Enterprise Server from the [personal access tokens settings](https://github.com/settings/tokens) page. Read more about these tokens in [the GitHub Help documentation](https://docs.github.com/articles/creating-an-access-token-for-command-line-use).
    *
-   * Organizations that enforce SAML SSO require personal access tokens to be allowed. Read more about allowing tokens in [the GitHub Help documentation](https://help.github.com/articles/about-identity-and-access-management-with-saml-single-sign-on).
+   * Organizations that enforce SAML SSO require personal access tokens to be allowed. Read more about allowing tokens in [the GitHub Help documentation](https://docs.github.com/articles/about-identity-and-access-management-with-saml-single-sign-on).
    * operationId: oauth-authorizations/create-authorization
    * Request URI: /authorizations
    */
@@ -18625,27 +20129,6 @@ export class Client<RequestOption> {
     return this.apiClient.request("GET", url, headers, undefined, undefined, option);
   }
   /**
-   * Create a content attachment
-   * Creates an attachment under a content reference URL in the body or comment of an issue or pull request. Use the `id` of the content reference from the [`content_reference` event](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads/#content_reference) to create an attachment.
-   *
-   * The app must create a content attachment within six hours of the content reference URL being posted. See "[Using content attachments](https://docs.github.com/enterprise-server@3.0/apps/using-content-attachments/)" for details about content attachments.
-   *
-   * You must use an [installation access token](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation) to access this endpoint.
-   * operationId: apps/create-content-attachment
-   * Request URI: /content_references/{content_reference_id}/attachments
-   */
-  public async apps$create$content$attachment(
-    params: Params$apps$create$content$attachment,
-    option?: RequestOption,
-  ): Promise<Response$apps$create$content$attachment$Status$200["application/json"]> {
-    const url = this.baseUrl + `/content_references/${params.parameter.content_reference_id}/attachments`;
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    };
-    return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
-  }
-  /**
    * Get emojis
    * Lists all the emojis available to use on GitHub Enterprise Server.
    * operationId: emojis/get
@@ -18716,32 +20199,154 @@ export class Client<RequestOption> {
     return this.apiClient.request("GET", url, headers, undefined, undefined, option);
   }
   /**
-   * Get statistics
-   * There are a variety of types to choose from:
-   *
-   * | Type         | Description                                                                                         |
-   * | ------------ | --------------------------------------------------------------------------------------------------- |
-   * | `issues`     | The number of open and closed issues.                                                               |
-   * | `hooks`      | The number of active and inactive hooks.                                                            |
-   * | `milestones` | The number of open and closed milestones.                                                           |
-   * | `orgs`       | The number of organizations, teams, team members, and disabled organizations.                       |
-   * | `comments`   | The number of comments on issues, pull requests, commits, and gists.                                |
-   * | `pages`      | The number of GitHub Pages sites.                                                                   |
-   * | `users`      | The number of suspended and admin users.                                                            |
-   * | `gists`      | The number of private and public gists.                                                             |
-   * | `pulls`      | The number of merged, mergeable, and unmergeable pull requests.                                     |
-   * | `repos`      | The number of organization-owned repositories, root repositories, forks, pushed commits, and wikis. |
-   * | `all`        | All of the statistics listed above.                                                                 |
-   *
-   * These statistics are cached and will be updated approximately every 10 minutes.
-   * operationId: enterprise-admin/get-type-stats
-   * Request URI: /enterprise/stats/{type}
+   * Get all statistics
+   * operationId: enterprise-admin/get-all-stats
+   * Request URI: /enterprise/stats/all
    */
-  public async enterprise$admin$get$type$stats(
-    params: Params$enterprise$admin$get$type$stats,
+  public async enterprise$admin$get$all$stats(
     option?: RequestOption,
-  ): Promise<Response$enterprise$admin$get$type$stats$Status$200["application/json"]> {
-    const url = this.baseUrl + `/enterprise/stats/${params.parameter.type}`;
+  ): Promise<Response$enterprise$admin$get$all$stats$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprise/stats/all`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get comment statistics
+   * operationId: enterprise-admin/get-comment-stats
+   * Request URI: /enterprise/stats/comments
+   */
+  public async enterprise$admin$get$comment$stats(
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$get$comment$stats$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprise/stats/comments`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get gist statistics
+   * operationId: enterprise-admin/get-gist-stats
+   * Request URI: /enterprise/stats/gists
+   */
+  public async enterprise$admin$get$gist$stats(
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$get$gist$stats$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprise/stats/gists`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get hooks statistics
+   * operationId: enterprise-admin/get-hooks-stats
+   * Request URI: /enterprise/stats/hooks
+   */
+  public async enterprise$admin$get$hooks$stats(
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$get$hooks$stats$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprise/stats/hooks`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get issue statistics
+   * operationId: enterprise-admin/get-issue-stats
+   * Request URI: /enterprise/stats/issues
+   */
+  public async enterprise$admin$get$issue$stats(
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$get$issue$stats$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprise/stats/issues`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get milestone statistics
+   * operationId: enterprise-admin/get-milestone-stats
+   * Request URI: /enterprise/stats/milestones
+   */
+  public async enterprise$admin$get$milestone$stats(
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$get$milestone$stats$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprise/stats/milestones`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get organization statistics
+   * operationId: enterprise-admin/get-org-stats
+   * Request URI: /enterprise/stats/orgs
+   */
+  public async enterprise$admin$get$org$stats(
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$get$org$stats$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprise/stats/orgs`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get pages statistics
+   * operationId: enterprise-admin/get-pages-stats
+   * Request URI: /enterprise/stats/pages
+   */
+  public async enterprise$admin$get$pages$stats(
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$get$pages$stats$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprise/stats/pages`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get pull request statistics
+   * operationId: enterprise-admin/get-pull-request-stats
+   * Request URI: /enterprise/stats/pulls
+   */
+  public async enterprise$admin$get$pull$request$stats(
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$get$pull$request$stats$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprise/stats/pulls`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get repository statistics
+   * operationId: enterprise-admin/get-repo-stats
+   * Request URI: /enterprise/stats/repos
+   */
+  public async enterprise$admin$get$repo$stats(
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$get$repo$stats$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprise/stats/repos`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get users statistics
+   * operationId: enterprise-admin/get-user-stats
+   * Request URI: /enterprise/stats/users
+   */
+  public async enterprise$admin$get$user$stats(
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$get$user$stats$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprise/stats/users`;
     const headers = {
       Accept: "application/json",
     };
@@ -19087,7 +20692,7 @@ export class Client<RequestOption> {
   }
   /**
    * Set self-hosted runners in a group for an enterprise
-   * Replaces the list of self-hosted runners that that are part of an enterprise runner group.
+   * Replaces the list of self-hosted runners that are part of an enterprise runner group.
    *
    * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/set-self-hosted-runners-in-group-for-enterprise
@@ -19723,6 +21328,7 @@ export class Client<RequestOption> {
     const queryParameters: QueryParameters = {
       featured: { value: params.parameter.featured, explode: false },
       per_page: { value: params.parameter.per_page, explode: false },
+      page: { value: params.parameter.page, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
@@ -19746,10 +21352,14 @@ export class Client<RequestOption> {
    * operationId: markdown/render
    * Request URI: /markdown
    */
-  public async markdown$render(params: Params$markdown$render, option?: RequestOption): Promise<void> {
+  public async markdown$render(
+    params: Params$markdown$render,
+    option?: RequestOption,
+  ): Promise<Response$markdown$render$Status$200["text/html"]> {
     const url = this.baseUrl + `/markdown`;
     const headers = {
       "Content-Type": "application/json",
+      Accept: "text/html",
     };
     return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
   }
@@ -19957,7 +21567,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get an organization
-   * To see many of the organization response values, you need to be an authenticated organization owner with the `admin:org` scope. When the value of `two_factor_requirement_enabled` is `true`, the organization requires all members, billing managers, and outside collaborators to enable [two-factor authentication](https://help.github.com/articles/securing-your-account-with-two-factor-authentication-2fa/).
+   * To see many of the organization response values, you need to be an authenticated organization owner with the `admin:org` scope. When the value of `two_factor_requirement_enabled` is `true`, the organization requires all members, billing managers, and outside collaborators to enable [two-factor authentication](https://docs.github.com/articles/securing-your-account-with-two-factor-authentication-2fa/).
    *
    * GitHub Apps with the `Organization plan` permission can use this endpoint to retrieve information about an organization's GitHub Enterprise Server plan. See "[Authenticating with GitHub Apps](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/)" for details. For an example response, see 'Response with GitHub Enterprise Server plan information' below."
    * operationId: orgs/get
@@ -20246,7 +21856,11 @@ export class Client<RequestOption> {
     const headers = {
       Accept: "application/json",
     };
-    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+    const queryParameters: QueryParameters = {
+      page: { value: params.parameter.page, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
    * Set repository access for a self-hosted runner group in an organization
@@ -20583,7 +22197,7 @@ export class Client<RequestOption> {
    *
    * #### Example encrypting a secret using Python
    *
-   * Encrypt your secret using [pynacl](https://pynacl.readthedocs.io/en/stable/public/#nacl-public-sealedbox) with Python 3.
+   * Encrypt your secret using [pynacl](https://pynacl.readthedocs.io/en/latest/public/#nacl-public-sealedbox) with Python 3.
    *
    * ```
    * from base64 import b64encode
@@ -20630,10 +22244,14 @@ export class Client<RequestOption> {
    * operationId: actions/create-or-update-org-secret
    * Request URI: /orgs/{org}/actions/secrets/{secret_name}
    */
-  public async actions$create$or$update$org$secret(params: Params$actions$create$or$update$org$secret, option?: RequestOption): Promise<void> {
+  public async actions$create$or$update$org$secret(
+    params: Params$actions$create$or$update$org$secret,
+    option?: RequestOption,
+  ): Promise<Response$actions$create$or$update$org$secret$Status$201["application/json"]> {
     const url = this.baseUrl + `/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}`;
     const headers = {
       "Content-Type": "application/json",
+      Accept: "application/json",
     };
     return this.apiClient.request("PUT", url, headers, params.requestBody, undefined, option);
   }
@@ -20662,7 +22280,11 @@ export class Client<RequestOption> {
     const headers = {
       Accept: "application/json",
     };
-    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+    const queryParameters: QueryParameters = {
+      page: { value: params.parameter.page, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
    * Set selected repositories for an organization secret
@@ -20973,7 +22595,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get organization membership for a user
-   * In order to get a user's membership with an organization, the authenticated user must be an organization member.
+   * In order to get a user's membership with an organization, the authenticated user must be an organization member. The `state` parameter in the response can be used to identify the user's membership status.
    * operationId: orgs/get-membership-for-user
    * Request URI: /orgs/{org}/memberships/{username}
    */
@@ -21048,16 +22670,18 @@ export class Client<RequestOption> {
   }
   /**
    * Convert an organization member to outside collaborator
-   * When an organization member is converted to an outside collaborator, they'll only have access to the repositories that their current team membership allows. The user will no longer be a member of the organization. For more information, see "[Converting an organization member to an outside collaborator](https://help.github.com/articles/converting-an-organization-member-to-an-outside-collaborator/)".
+   * When an organization member is converted to an outside collaborator, they'll only have access to the repositories that their current team membership allows. The user will no longer be a member of the organization. For more information, see "[Converting an organization member to an outside collaborator](https://docs.github.com/articles/converting-an-organization-member-to-an-outside-collaborator/)".
    * operationId: orgs/convert-member-to-outside-collaborator
    * Request URI: /orgs/{org}/outside_collaborators/{username}
    */
   public async orgs$convert$member$to$outside$collaborator(
     params: Params$orgs$convert$member$to$outside$collaborator,
     option?: RequestOption,
-  ): Promise<void> {
+  ): Promise<Response$orgs$convert$member$to$outside$collaborator$Status$202["application/json"]> {
     const url = this.baseUrl + `/orgs/${params.parameter.org}/outside_collaborators/${params.parameter.username}`;
-    const headers = {};
+    const headers = {
+      Accept: "application/json",
+    };
     return this.apiClient.request("PUT", url, headers, undefined, undefined, option);
   }
   /**
@@ -21088,6 +22712,8 @@ export class Client<RequestOption> {
     const queryParameters: QueryParameters = {
       per_page: { value: params.parameter.per_page, explode: false },
       page: { value: params.parameter.page, explode: false },
+      direction: { value: params.parameter.direction, explode: false },
+      sort: { value: params.parameter.sort, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
@@ -21270,7 +22896,7 @@ export class Client<RequestOption> {
    *
    * When using [OAuth](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/), authorizations must include:
    *
-   * *   `public_repo` scope or `repo` scope to create a public repository
+   * *   `public_repo` scope or `repo` scope to create a public repository. Note: For GitHub AE, use `repo` scope to create an internal repository.
    * *   `repo` scope to create a private repository
    * operationId: repos/create-in-org
    * Request URI: /orgs/{org}/repos
@@ -21305,9 +22931,9 @@ export class Client<RequestOption> {
   }
   /**
    * Create a team
-   * To create a team, the authenticated user must be a member or owner of `{org}`. By default, organization members can create teams. Organization owners can limit team creation to organization owners. For more information, see "[Setting team creation permissions](https://help.github.com/en/articles/setting-team-creation-permissions-in-your-organization)."
+   * To create a team, the authenticated user must be a member or owner of `{org}`. By default, organization members can create teams. Organization owners can limit team creation to organization owners. For more information, see "[Setting team creation permissions](https://docs.github.com/en/articles/setting-team-creation-permissions-in-your-organization)."
    *
-   * When you create a new team, you automatically become a team maintainer without explicitly adding yourself to the optional array of `maintainers`. For more information, see "[About teams](https://help.github.com/en/github/setting-up-and-managing-organizations-and-teams/about-teams)".
+   * When you create a new team, you automatically become a team maintainer without explicitly adding yourself to the optional array of `maintainers`. For more information, see "[About teams](https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/about-teams)".
    * operationId: teams/create
    * Request URI: /orgs/{org}/teams
    */
@@ -21394,6 +23020,7 @@ export class Client<RequestOption> {
       direction: { value: params.parameter.direction, explode: false },
       per_page: { value: params.parameter.per_page, explode: false },
       page: { value: params.parameter.page, explode: false },
+      pinned: { value: params.parameter.pinned, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
@@ -21401,7 +23028,7 @@ export class Client<RequestOption> {
    * Create a discussion
    * Creates a new discussion post on a team's page. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in abuse rate limiting. See "[Abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#abuse-rate-limits)" and "[Dealing with abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `POST /organizations/{org_id}/team/{team_id}/discussions`.
    * operationId: teams/create-discussion-in-org
@@ -21500,7 +23127,7 @@ export class Client<RequestOption> {
    * Create a discussion comment
    * Creates a new comment on a team discussion. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in abuse rate limiting. See "[Abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#abuse-rate-limits)" and "[Dealing with abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `POST /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}/comments`.
    * operationId: teams/create-discussion-comment-in-org
@@ -21605,7 +23232,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create reaction for a team discussion comment
-   * Create a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussion-comments). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with a `Status: 200 OK` means that you already added the reaction type to this team discussion comment.
+   * Create a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussion-comments). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with an HTTP `200` status means that you already added the reaction type to this team discussion comment.
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `POST /organizations/:org_id/team/:team_id/discussions/:discussion_number/comments/:comment_number/reactions`.
    * operationId: reactions/create-for-team-discussion-comment-in-org
@@ -21614,7 +23241,12 @@ export class Client<RequestOption> {
   public async reactions$create$for$team$discussion$comment$in$org(
     params: Params$reactions$create$for$team$discussion$comment$in$org,
     option?: RequestOption,
-  ): Promise<Response$reactions$create$for$team$discussion$comment$in$org$Status$201["application/json"]> {
+  ): Promise<
+    (
+      | Response$reactions$create$for$team$discussion$comment$in$org$Status$200
+      | Response$reactions$create$for$team$discussion$comment$in$org$Status$201
+    )["application/json"]
+  > {
     const url =
       this.baseUrl +
       `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}/reactions`;
@@ -21669,7 +23301,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create reaction for a team discussion
-   * Create a reaction to a [team discussion](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussions). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with a `Status: 200 OK` means that you already added the reaction type to this team discussion.
+   * Create a reaction to a [team discussion](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussions). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with an HTTP `200` status means that you already added the reaction type to this team discussion.
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `POST /organizations/:org_id/team/:team_id/discussions/:discussion_number/reactions`.
    * operationId: reactions/create-for-team-discussion-in-org
@@ -21678,7 +23310,12 @@ export class Client<RequestOption> {
   public async reactions$create$for$team$discussion$in$org(
     params: Params$reactions$create$for$team$discussion$in$org,
     option?: RequestOption,
-  ): Promise<Response$reactions$create$for$team$discussion$in$org$Status$201["application/json"]> {
+  ): Promise<
+    (
+      | Response$reactions$create$for$team$discussion$in$org$Status$200
+      | Response$reactions$create$for$team$discussion$in$org$Status$201
+    )["application/json"]
+  > {
     const url =
       this.baseUrl +
       `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/reactions`;
@@ -21737,7 +23374,10 @@ export class Client<RequestOption> {
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `GET /organizations/{org_id}/team/{team_id}/memberships/{username}`.
    *
-   * **Note:** The `role` for organization owners returns as `maintainer`. For more information about `maintainer` roles, see [Create a team](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#create-a-team).
+   * **Note:**
+   * The response contains the `state` of the membership and the member's `role`.
+   *
+   * The `role` for organization owners is set to `maintainer`. For more information about `maintainer` roles, see see [Create a team](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#create-a-team).
    * operationId: teams/get-membership-for-user-in-org
    * Request URI: /orgs/{org}/teams/{team_slug}/memberships/{username}
    */
@@ -21753,11 +23393,11 @@ export class Client<RequestOption> {
   }
   /**
    * Add or update team membership for a user
-   * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Adds an organization member to a team. An authenticated organization owner or team maintainer can add organization members to a team.
    *
-   * **Note:** When you have team synchronization set up for a team with your organization's identity provider (IdP), you will see an error if you attempt to use the API for making changes to the team's membership. If you have access to manage group membership in your IdP, you can manage GitHub Enterprise Server team membership through your identity provider, which automatically adds and removes team members in an organization. For more information, see "[Synchronizing teams between your identity provider and GitHub Enterprise Server](https://help.github.com/articles/synchronizing-teams-between-your-identity-provider-and-github/)."
+   * **Note:** When you have team synchronization set up for a team with your organization's identity provider (IdP), you will see an error if you attempt to use the API for making changes to the team's membership. If you have access to manage group membership in your IdP, you can manage GitHub Enterprise Server team membership through your identity provider, which automatically adds and removes team members in an organization. For more information, see "[Synchronizing teams between your identity provider and GitHub Enterprise Server](https://docs.github.com/articles/synchronizing-teams-between-your-identity-provider-and-github/)."
    *
    * An organization owner can add someone who is not part of the team's organization to a team. When an organization owner adds someone to a team who is not an organization member, this endpoint will send an invitation to the person via email. This newly-created membership will be in the "pending" state until the person accepts the invitation, at which point the membership will transition to the "active" state and the user will be added as a member of the team.
    *
@@ -21780,11 +23420,11 @@ export class Client<RequestOption> {
   }
   /**
    * Remove team membership for a user
-   * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * To remove a membership between a user and a team, the authenticated user must have 'admin' permissions to the team or be an owner of the organization that the team is associated with. Removing team membership does not delete the user, it just removes their membership from the team.
    *
-   * **Note:** When you have team synchronization set up for a team with your organization's identity provider (IdP), you will see an error if you attempt to use the API for making changes to the team's membership. If you have access to manage group membership in your IdP, you can manage GitHub Enterprise Server team membership through your identity provider, which automatically adds and removes team members in an organization. For more information, see "[Synchronizing teams between your identity provider and GitHub Enterprise Server](https://help.github.com/articles/synchronizing-teams-between-your-identity-provider-and-github/)."
+   * **Note:** When you have team synchronization set up for a team with your organization's identity provider (IdP), you will see an error if you attempt to use the API for making changes to the team's membership. If you have access to manage group membership in your IdP, you can manage GitHub Enterprise Server team membership through your identity provider, which automatically adds and removes team members in an organization. For more information, see "[Synchronizing teams between your identity provider and GitHub Enterprise Server](https://docs.github.com/articles/synchronizing-teams-between-your-identity-provider-and-github/)."
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `DELETE /organizations/{org_id}/team/{team_id}/memberships/{username}`.
    * operationId: teams/remove-membership-for-user-in-org
@@ -21906,12 +23546,12 @@ export class Client<RequestOption> {
   public async teams$check$permissions$for$repo$in$org(
     params: Params$teams$check$permissions$for$repo$in$org,
     option?: RequestOption,
-  ): Promise<Response$teams$check$permissions$for$repo$in$org$Status$200["application/vnd.github.v3.repository+json"]> {
+  ): Promise<Response$teams$check$permissions$for$repo$in$org$Status$200["application/json"]> {
     const url =
       this.baseUrl +
       `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/repos/${params.parameter.owner}/${params.parameter.repo}`;
     const headers = {
-      Accept: "application/vnd.github.v3.repository+json",
+      Accept: "application/json",
     };
     return this.apiClient.request("GET", url, headers, undefined, undefined, option);
   }
@@ -21921,7 +23561,7 @@ export class Client<RequestOption> {
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `PUT /organizations/{org_id}/team/{team_id}/repos/{owner}/{repo}`.
    *
-   * For more information about the permission levels, see "[Repository permission levels for an organization](https://help.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization#permission-levels-for-repositories-owned-by-an-organization)".
+   * For more information about the permission levels, see "[Repository permission levels for an organization](https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization#permission-levels-for-repositories-owned-by-an-organization)".
    * operationId: teams/add-or-update-repo-permissions-in-org
    * Request URI: /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
    */
@@ -22094,9 +23734,6 @@ export class Client<RequestOption> {
   }
   /**
    * Create a project card
-   * **Note**: GitHub's REST API v3 considers every pull request an issue, but not every issue is a pull request. For this reason, "Issues" endpoints may return both issues and pull requests in the response. You can identify pull requests by the `pull_request` key.
-   *
-   * Be aware that the `id` of a pull request returned from "Issues" endpoints will be an _issue id_. To find out the pull request id, use the "[List pull requests](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#list-pull-requests)" endpoint.
    * operationId: projects/create-card
    * Request URI: /projects/columns/{column_id}/cards
    */
@@ -22414,7 +24051,7 @@ export class Client<RequestOption> {
   public async actions$get$job$for$workflow$run(
     params: Params$actions$get$job$for$workflow$run,
     option?: RequestOption,
-  ): Promise<Response$actions$get$job$for$workflow$run$Status$202["application/json"]> {
+  ): Promise<Response$actions$get$job$for$workflow$run$Status$200["application/json"]> {
     const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/jobs/${params.parameter.job_id}`;
     const headers = {
       Accept: "application/json",
@@ -22664,6 +24301,8 @@ export class Client<RequestOption> {
       status: { value: params.parameter.status, explode: false },
       per_page: { value: params.parameter.per_page, explode: false },
       page: { value: params.parameter.page, explode: false },
+      created: { value: params.parameter.created, explode: false },
+      exclude_pull_requests: { value: params.parameter.exclude_pull_requests, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
@@ -22681,7 +24320,10 @@ export class Client<RequestOption> {
     const headers = {
       Accept: "application/json",
     };
-    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+    const queryParameters: QueryParameters = {
+      exclude_pull_requests: { value: params.parameter.exclude_pull_requests, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
    * Delete a workflow run
@@ -22722,9 +24364,14 @@ export class Client<RequestOption> {
    * operationId: actions/cancel-workflow-run
    * Request URI: /repos/{owner}/{repo}/actions/runs/{run_id}/cancel
    */
-  public async actions$cancel$workflow$run(params: Params$actions$cancel$workflow$run, option?: RequestOption): Promise<void> {
+  public async actions$cancel$workflow$run(
+    params: Params$actions$cancel$workflow$run,
+    option?: RequestOption,
+  ): Promise<Response$actions$cancel$workflow$run$Status$202["application/json"]> {
     const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/cancel`;
-    const headers = {};
+    const headers = {
+      Accept: "application/json",
+    };
     return this.apiClient.request("POST", url, headers, undefined, undefined, option);
   }
   /**
@@ -22774,14 +24421,20 @@ export class Client<RequestOption> {
     return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
   }
   /**
+   * @deprecated
    * Re-run a workflow
    * Re-runs your workflow run using its `id`. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `actions:write` permission to use this endpoint.
    * operationId: actions/re-run-workflow
    * Request URI: /repos/{owner}/{repo}/actions/runs/{run_id}/rerun
    */
-  public async actions$re$run$workflow(params: Params$actions$re$run$workflow, option?: RequestOption): Promise<void> {
+  public async actions$re$run$workflow(
+    params: Params$actions$re$run$workflow,
+    option?: RequestOption,
+  ): Promise<Response$actions$re$run$workflow$Status$201["application/json"]> {
     const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/rerun`;
-    const headers = {};
+    const headers = {
+      Accept: "application/json",
+    };
     return this.apiClient.request("POST", url, headers, undefined, undefined, option);
   }
   /**
@@ -22869,7 +24522,7 @@ export class Client<RequestOption> {
    *
    * #### Example encrypting a secret using Python
    *
-   * Encrypt your secret using [pynacl](https://pynacl.readthedocs.io/en/stable/public/#nacl-public-sealedbox) with Python 3.
+   * Encrypt your secret using [pynacl](https://pynacl.readthedocs.io/en/latest/public/#nacl-public-sealedbox) with Python 3.
    *
    * ```
    * from base64 import b64encode
@@ -22919,10 +24572,11 @@ export class Client<RequestOption> {
   public async actions$create$or$update$repo$secret(
     params: Params$actions$create$or$update$repo$secret,
     option?: RequestOption,
-  ): Promise<void> {
+  ): Promise<Response$actions$create$or$update$repo$secret$Status$201["application/json"]> {
     const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/secrets/${params.parameter.secret_name}`;
     const headers = {
       "Content-Type": "application/json",
+      Accept: "application/json",
     };
     return this.apiClient.request("PUT", url, headers, params.requestBody, undefined, option);
   }
@@ -22993,7 +24647,7 @@ export class Client<RequestOption> {
    *
    * You must configure your GitHub Actions workflow to run when the [`workflow_dispatch` webhook](/developers/webhooks-and-events/webhook-events-and-payloads#workflow_dispatch) event occurs. The `inputs` are configured in the workflow file. For more information about how to configure the `workflow_dispatch` event in the workflow file, see "[Events that trigger workflows](/actions/reference/events-that-trigger-workflows#workflow_dispatch)."
    *
-   * You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `actions:write` permission to use this endpoint. For more information, see "[Creating a personal access token for the command line](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line)."
+   * You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `actions:write` permission to use this endpoint. For more information, see "[Creating a personal access token for the command line](https://docs.github.com/articles/creating-a-personal-access-token-for-the-command-line)."
    * operationId: actions/create-workflow-dispatch
    * Request URI: /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches
    */
@@ -23043,12 +24697,14 @@ export class Client<RequestOption> {
       status: { value: params.parameter.status, explode: false },
       per_page: { value: params.parameter.per_page, explode: false },
       page: { value: params.parameter.page, explode: false },
+      created: { value: params.parameter.created, explode: false },
+      exclude_pull_requests: { value: params.parameter.exclude_pull_requests, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
    * List assignees
-   * Lists the [available assignees](https://help.github.com/articles/assigning-issues-and-pull-requests-to-other-github-users/) for issues in a repository.
+   * Lists the [available assignees](https://docs.github.com/articles/assigning-issues-and-pull-requests-to-other-github-users/) for issues in a repository.
    * operationId: issues/list-assignees
    * Request URI: /repos/{owner}/{repo}/assignees
    */
@@ -23118,7 +24774,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get branch protection
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    * operationId: repos/get-branch-protection
    * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection
    */
@@ -23134,7 +24790,7 @@ export class Client<RequestOption> {
   }
   /**
    * Update branch protection
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Protecting a branch requires admin or owner permissions to the repository.
    *
@@ -23157,7 +24813,7 @@ export class Client<RequestOption> {
   }
   /**
    * Delete branch protection
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    * operationId: repos/delete-branch-protection
    * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection
    */
@@ -23168,7 +24824,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get admin branch protection
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    * operationId: repos/get-admin-branch-protection
    * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins
    */
@@ -23185,7 +24841,7 @@ export class Client<RequestOption> {
   }
   /**
    * Set admin branch protection
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Adding admin enforcement requires admin or owner permissions to the repository and branch protection to be enabled.
    * operationId: repos/set-admin-branch-protection
@@ -23204,7 +24860,7 @@ export class Client<RequestOption> {
   }
   /**
    * Delete admin branch protection
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Removing admin enforcement requires admin or owner permissions to the repository and branch protection to be enabled.
    * operationId: repos/delete-admin-branch-protection
@@ -23221,25 +24877,25 @@ export class Client<RequestOption> {
   }
   /**
    * Get pull request review protection
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    * operationId: repos/get-pull-request-review-protection
    * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews
    */
   public async repos$get$pull$request$review$protection(
     params: Params$repos$get$pull$request$review$protection,
     option?: RequestOption,
-  ): Promise<Response$repos$get$pull$request$review$protection$Status$200["application/vnd.github.luke-cage-preview+json"]> {
+  ): Promise<Response$repos$get$pull$request$review$protection$Status$200["application/json"]> {
     const url =
       this.baseUrl +
       `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_pull_request_reviews`;
     const headers = {
-      Accept: "application/vnd.github.luke-cage-preview+json",
+      Accept: "application/json",
     };
     return this.apiClient.request("GET", url, headers, undefined, undefined, option);
   }
   /**
    * Delete pull request review protection
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    * operationId: repos/delete-pull-request-review-protection
    * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews
    */
@@ -23255,7 +24911,7 @@ export class Client<RequestOption> {
   }
   /**
    * Update pull request review protection
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Updating pull request review enforcement requires admin or owner permissions to the repository and branch protection to be enabled.
    *
@@ -23278,9 +24934,9 @@ export class Client<RequestOption> {
   }
   /**
    * Get commit signature protection
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
-   * When authenticated with admin or owner permissions to the repository, you can use this endpoint to check whether a branch requires signed commits. An enabled status of `true` indicates you must sign commits on this branch. For more information, see [Signing commits with GPG](https://help.github.com/articles/signing-commits-with-gpg) in GitHub Help.
+   * When authenticated with admin or owner permissions to the repository, you can use this endpoint to check whether a branch requires signed commits. An enabled status of `true` indicates you must sign commits on this branch. For more information, see [Signing commits with GPG](https://docs.github.com/articles/signing-commits-with-gpg) in GitHub Help.
    *
    * **Note**: You must enable branch protection to require signed commits.
    * operationId: repos/get-commit-signature-protection
@@ -23300,7 +24956,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create commit signature protection
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * When authenticated with admin or owner permissions to the repository, you can use this endpoint to require signed commits on a branch. You must enable branch protection to require signed commits.
    * operationId: repos/create-commit-signature-protection
@@ -23320,7 +24976,7 @@ export class Client<RequestOption> {
   }
   /**
    * Delete commit signature protection
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * When authenticated with admin or owner permissions to the repository, you can use this endpoint to disable required signed commits on a branch. You must enable branch protection to require signed commits.
    * operationId: repos/delete-commit-signature-protection
@@ -23338,7 +24994,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get status checks protection
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    * operationId: repos/get-status-checks-protection
    * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks
    */
@@ -23356,7 +25012,7 @@ export class Client<RequestOption> {
   }
   /**
    * Remove status check protection
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    * operationId: repos/remove-status-check-protection
    * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks
    */
@@ -23372,7 +25028,7 @@ export class Client<RequestOption> {
   }
   /**
    * Update status check protection
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Updating required status checks requires admin or owner permissions to the repository and branch protection to be enabled.
    * operationId: repos/update-status-check-protection
@@ -23393,7 +25049,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get all status check contexts
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    * operationId: repos/get-all-status-check-contexts
    * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
    */
@@ -23411,7 +25067,7 @@ export class Client<RequestOption> {
   }
   /**
    * Set status check contexts
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    * operationId: repos/set-status-check-contexts
    * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
    */
@@ -23430,7 +25086,7 @@ export class Client<RequestOption> {
   }
   /**
    * Add status check contexts
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    * operationId: repos/add-status-check-contexts
    * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
    */
@@ -23449,7 +25105,7 @@ export class Client<RequestOption> {
   }
   /**
    * Remove status check contexts
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    * operationId: repos/remove-status-check-contexts
    * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
    */
@@ -23468,7 +25124,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get access restrictions
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Lists who has access to this protected branch.
    *
@@ -23489,7 +25145,7 @@ export class Client<RequestOption> {
   }
   /**
    * Delete access restrictions
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Disables the ability to restrict who can push to this branch.
    * operationId: repos/delete-access-restrictions
@@ -23503,7 +25159,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get apps with access to the protected branch
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Lists the GitHub Apps that have push access to this branch. Only installed GitHub Apps with `write` access to the `contents` permission can be added as authorized actors on a protected branch.
    * operationId: repos/get-apps-with-access-to-protected-branch
@@ -23523,7 +25179,7 @@ export class Client<RequestOption> {
   }
   /**
    * Set app access restrictions
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Replaces the list of apps that have push access to this branch. This removes all apps that previously had push access and grants push access to the new list of apps. Only installed GitHub Apps with `write` access to the `contents` permission can be added as authorized actors on a protected branch.
    *
@@ -23548,7 +25204,7 @@ export class Client<RequestOption> {
   }
   /**
    * Add app access restrictions
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Grants the specified apps push access for this branch. Only installed GitHub Apps with `write` access to the `contents` permission can be added as authorized actors on a protected branch.
    *
@@ -23573,7 +25229,7 @@ export class Client<RequestOption> {
   }
   /**
    * Remove app access restrictions
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Removes the ability of an app to push to this branch. Only installed GitHub Apps with `write` access to the `contents` permission can be added as authorized actors on a protected branch.
    *
@@ -23598,7 +25254,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get teams with access to the protected branch
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Lists the teams who have push access to this branch. The list includes child teams.
    * operationId: repos/get-teams-with-access-to-protected-branch
@@ -23618,7 +25274,7 @@ export class Client<RequestOption> {
   }
   /**
    * Set team access restrictions
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Replaces the list of teams that have push access to this branch. This removes all teams that previously had push access and grants push access to the new list of teams. Team restrictions include child teams.
    *
@@ -23643,7 +25299,7 @@ export class Client<RequestOption> {
   }
   /**
    * Add team access restrictions
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Grants the specified teams push access for this branch. You can also give push access to child teams.
    *
@@ -23668,7 +25324,7 @@ export class Client<RequestOption> {
   }
   /**
    * Remove team access restrictions
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Removes the ability of a team to push to this branch. You can also remove push access for child teams.
    *
@@ -23693,7 +25349,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get users with access to the protected branch
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Lists the people who have push access to this branch.
    * operationId: repos/get-users-with-access-to-protected-branch
@@ -23713,7 +25369,7 @@ export class Client<RequestOption> {
   }
   /**
    * Set user access restrictions
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Replaces the list of people that have push access to this branch. This removes all people that previously had push access and grants push access to the new list of people.
    *
@@ -23738,7 +25394,7 @@ export class Client<RequestOption> {
   }
   /**
    * Add user access restrictions
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Grants the specified people push access for this branch.
    *
@@ -23763,7 +25419,7 @@ export class Client<RequestOption> {
   }
   /**
    * Remove user access restrictions
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Removes the ability of a user to push to this branch.
    *
@@ -23873,7 +25529,7 @@ export class Client<RequestOption> {
   public async checks$create$suite(
     params: Params$checks$create$suite,
     option?: RequestOption,
-  ): Promise<Response$checks$create$suite$Status$201["application/json"]> {
+  ): Promise<(Response$checks$create$suite$Status$200 | Response$checks$create$suite$Status$201)["application/json"]> {
     const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/check-suites`;
     const headers = {
       "Content-Type": "application/json",
@@ -23950,15 +25606,28 @@ export class Client<RequestOption> {
    * operationId: checks/rerequest-suite
    * Request URI: /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest
    */
-  public async checks$rerequest$suite(params: Params$checks$rerequest$suite, option?: RequestOption): Promise<void> {
+  public async checks$rerequest$suite(
+    params: Params$checks$rerequest$suite,
+    option?: RequestOption,
+  ): Promise<Response$checks$rerequest$suite$Status$201["application/json"]> {
     const url =
       this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/check-suites/${params.parameter.check_suite_id}/rerequest`;
-    const headers = {};
+    const headers = {
+      Accept: "application/json",
+    };
     return this.apiClient.request("POST", url, headers, undefined, undefined, option);
   }
   /**
    * List code scanning alerts for a repository
-   * Lists all open code scanning alerts for the default branch (usually `main` or `master`). You must use an access token with the `security_events` scope to use this endpoint. GitHub Apps must have the `security_events` read permission to use this endpoint.
+   * Lists all open code scanning alerts for the default branch (usually `main`
+   * or `master`). You must use an access token with the `security_events` scope to use
+   * this endpoint. GitHub Apps must have the `security_events` read permission to use
+   * this endpoint.
+   *
+   * The response includes a `most_recent_instance` object.
+   * This provides details of the most recent instance of this alert
+   * for the default branch or for the specified Git reference
+   * (if you used `ref` in the request).
    * operationId: code-scanning/list-alerts-for-repo
    * Request URI: /repos/{owner}/{repo}/code-scanning/alerts
    */
@@ -23971,8 +25640,12 @@ export class Client<RequestOption> {
       Accept: "application/json",
     };
     const queryParameters: QueryParameters = {
-      state: { value: params.parameter.state, explode: false },
+      tool_name: { value: params.parameter.tool_name, explode: false },
+      tool_guid: { value: params.parameter.tool_guid, explode: false },
+      page: { value: params.parameter.page, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
       ref: { value: params.parameter.ref, explode: false },
+      state: { value: params.parameter.state, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
@@ -23980,7 +25653,8 @@ export class Client<RequestOption> {
    * Get a code scanning alert
    * Gets a single code scanning alert. You must use an access token with the `security_events` scope to use this endpoint. GitHub Apps must have the `security_events` read permission to use this endpoint.
    *
-   * The security `alert_number` is found at the end of the security alert's URL. For example, the security alert ID for `https://github.com/Octo-org/octo-repo/security/code-scanning/88` is `88`.
+   * **Deprecation notice**:
+   * The instances field is deprecated and will, in future, not be included in the response for this endpoint. The example response reflects this change. The same information can now be retrieved via a GET request to the URL specified by `instances_url`.
    * operationId: code-scanning/get-alert
    * Request URI: /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}
    */
@@ -24014,8 +25688,23 @@ export class Client<RequestOption> {
     return this.apiClient.request("PATCH", url, headers, params.requestBody, undefined, option);
   }
   /**
-   * List recent code scanning analyses for a repository
-   * List the details of recent code scanning analyses for a repository. You must use an access token with the `security_events` scope to use this endpoint. GitHub Apps must have the `security_events` read permission to use this endpoint.
+   * List code scanning analyses for a repository
+   * Lists the details of all code scanning analyses for a repository,
+   * starting with the most recent.
+   * The response is paginated and you can use the `page` and `per_page` parameters
+   * to list the analyses you're interested in.
+   * By default 30 analyses are listed per page.
+   *
+   * The `rules_count` field in the response give the number of rules
+   * that were run in the analysis.
+   * For very old analyses this data is not available,
+   * and `0` is returned in this field.
+   *
+   * You must use an access token with the `security_events` scope to use this endpoint.
+   * GitHub Apps must have the `security_events` read permission to use this endpoint.
+   *
+   * **Deprecation notice**:
+   * The `tool_name` field is deprecated and will, in future, not be included in the response for this endpoint. The example response reflects this change. The tool name can now be found inside the `tool` field.
    * operationId: code-scanning/list-recent-analyses
    * Request URI: /repos/{owner}/{repo}/code-scanning/analyses
    */
@@ -24028,21 +25717,45 @@ export class Client<RequestOption> {
       Accept: "application/json",
     };
     const queryParameters: QueryParameters = {
-      ref: { value: params.parameter.ref, explode: false },
       tool_name: { value: params.parameter.tool_name, explode: false },
+      tool_guid: { value: params.parameter.tool_guid, explode: false },
+      page: { value: params.parameter.page, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
+      ref: { value: params.parameter.ref, explode: false },
+      sarif_id: { value: params.parameter.sarif_id, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
-   * Upload a SARIF file
-   * Upload a SARIF file containing the results of a code scanning analysis to make the results available in a repository. You must use an access token with the `security_events` scope to use this endpoint. GitHub Apps must have the `security_events` write permission to use this endpoint.
+   * Upload an analysis as SARIF data
+   * Uploads SARIF data containing the results of a code scanning analysis to make the results available in a repository. You must use an access token with the `security_events` scope to use this endpoint. GitHub Apps must have the `security_events` write permission to use this endpoint.
+   *
+   * There are two places where you can upload code scanning results.
+   *  - If you upload to a pull request, for example `--ref refs/pull/42/merge` or `--ref refs/pull/42/head`, then the results appear as alerts in a pull request check. For more information, see "[Triaging code scanning alerts in pull requests](/code-security/secure-coding/triaging-code-scanning-alerts-in-pull-requests)."
+   *  - If you upload to a branch, for example `--ref refs/heads/my-branch`, then the results appear in the **Security** tab for your repository. For more information, see "[Managing code scanning alerts for your repository](/code-security/secure-coding/managing-code-scanning-alerts-for-your-repository#viewing-the-alerts-for-a-repository)."
+   *
+   * You must compress the SARIF-formatted analysis data that you want to upload, using `gzip`, and then encode it as a Base64 format string. For example:
+   *
+   * ```
+   * gzip -c analysis-data.sarif | base64 -w0
+   * ```
+   *
+   * SARIF upload supports a maximum of 1000 results per analysis run. Any results over this limit are ignored. Typically, but not necessarily, a SARIF file contains a single run of a single tool. If a code scanning tool generates too many results, you should update the analysis configuration to run only the most important rules or queries.
+   *
+   * The `202 Accepted`, response includes an `id` value.
+   * You can use this ID to check the status of the upload by using this for the `/sarifs/{sarif_id}` endpoint.
+   * For more information, see "[Get information about a SARIF upload](/rest/reference/code-scanning#get-information-about-a-sarif-upload)."
    * operationId: code-scanning/upload-sarif
    * Request URI: /repos/{owner}/{repo}/code-scanning/sarifs
    */
-  public async code$scanning$upload$sarif(params: Params$code$scanning$upload$sarif, option?: RequestOption): Promise<void> {
+  public async code$scanning$upload$sarif(
+    params: Params$code$scanning$upload$sarif,
+    option?: RequestOption,
+  ): Promise<Response$code$scanning$upload$sarif$Status$202["application/json"]> {
     const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/sarifs`;
     const headers = {
       "Content-Type": "application/json",
+      Accept: "application/json",
     };
     return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
   }
@@ -24051,6 +25764,10 @@ export class Client<RequestOption> {
    * For organization-owned repositories, the list of collaborators includes outside collaborators, organization members that are direct collaborators, organization members with access through team memberships, organization members with access through default organization permissions, and organization owners.
    *
    * Team members will include the members of child teams.
+   *
+   * You must authenticate using an access token with the `read:org` and `repo` scopes with push access to use this
+   * endpoint. GitHub Apps must have the `members` organization permission and `metadata` repository permission to use this
+   * endpoint.
    * operationId: repos/list-collaborators
    * Request URI: /repos/{owner}/{repo}/collaborators
    */
@@ -24074,6 +25791,10 @@ export class Client<RequestOption> {
    * For organization-owned repositories, the list of collaborators includes outside collaborators, organization members that are direct collaborators, organization members with access through team memberships, organization members with access through default organization permissions, and organization owners.
    *
    * Team members will include the members of child teams.
+   *
+   * You must authenticate using an access token with the `read:org` and `repo` scopes with push access to use this
+   * endpoint. GitHub Apps must have the `members` organization permission and `metadata` repository permission to use this
+   * endpoint.
    * operationId: repos/check-collaborator
    * Request URI: /repos/{owner}/{repo}/collaborators/{username}
    */
@@ -24084,9 +25805,13 @@ export class Client<RequestOption> {
   }
   /**
    * Add a repository collaborator
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in abuse rate limiting. See "[Abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#abuse-rate-limits)" and "[Dealing with abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    *
-   * For more information the permission levels, see "[Repository permission levels for an organization](https://help.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization#permission-levels-for-repositories-owned-by-an-organization)".
+   * For more information on permission levels, see "[Repository permission levels for an organization](https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization#permission-levels-for-repositories-owned-by-an-organization)". There are restrictions on which permissions can be granted to organization members when an organization base role is in place. In this case, the permission being given must be equal to or higher than the org base permission. Otherwise, the request will fail with:
+   *
+   * ```
+   * Cannot assign {member} permission of {role name}
+   * ```
    *
    * Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
    *
@@ -24094,7 +25819,7 @@ export class Client<RequestOption> {
    *
    * **Rate limits**
    *
-   * To prevent abuse, you are limited to sending 50 invitations to a repository per 24 hour period. Note there is no limit if you are inviting organization members to an organization repository.
+   * You are limited to sending 50 invitations to a repository per 24 hour period. Note there is no limit if you are inviting organization members to an organization repository.
    * operationId: repos/add-collaborator
    * Request URI: /repos/{owner}/{repo}/collaborators/{username}
    */
@@ -24222,7 +25947,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create reaction for a commit comment
-   * Create a reaction to a [commit comment](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#comments). A response with a `Status: 200 OK` means that you already added the reaction type to this commit comment.
+   * Create a reaction to a [commit comment](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#comments). A response with an HTTP `200` status means that you already added the reaction type to this commit comment.
    * operationId: reactions/create-for-commit-comment
    * Request URI: /repos/{owner}/{repo}/comments/{comment_id}/reactions
    */
@@ -24308,7 +26033,7 @@ export class Client<RequestOption> {
   }
   /**
    * List branches for HEAD commit
-   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Returns all branches where the given commit SHA is the HEAD, or latest commit for the branch.
    * operationId: repos/list-branches-for-head-commit
@@ -24349,7 +26074,7 @@ export class Client<RequestOption> {
    * Create a commit comment
    * Create a comment for a commit using its `:commit_sha`.
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in abuse rate limiting. See "[Abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#abuse-rate-limits)" and "[Dealing with abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: repos/create-commit-comment
    * Request URI: /repos/{owner}/{repo}/commits/{commit_sha}/comments
    */
@@ -24366,7 +26091,7 @@ export class Client<RequestOption> {
   }
   /**
    * List pull requests associated with a commit
-   * Lists all pull requests containing the provided commit SHA, which can be from any point in the commit history. The results will include open and closed pull requests. Additional preview headers may be required to see certain details for associated pull requests, such as whether a pull request is in a draft state. For more information about previews that might affect this endpoint, see the [List pull requests](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#list-pull-requests) endpoint.
+   * Lists the merged pull request that introduced the commit to the repository. If the commit is not present in the default branch, additionally returns open pull requests associated with the commit. The results may include open and closed pull requests. Additional preview headers may be required to see certain details for associated pull requests, such as whether a pull request is in a draft state. For more information about previews that might affect this endpoint, see the [List pull requests](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#list-pull-requests) endpoint.
    * operationId: repos/list-pull-requests-associated-with-commit
    * Request URI: /repos/{owner}/{repo}/commits/{commit_sha}/pulls
    */
@@ -24433,7 +26158,11 @@ export class Client<RequestOption> {
     const headers = {
       Accept: "application/json",
     };
-    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+    const queryParameters: QueryParameters = {
+      page: { value: params.parameter.page, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
    * List check runs for a Git reference
@@ -24457,6 +26186,7 @@ export class Client<RequestOption> {
       filter: { value: params.parameter.filter, explode: false },
       per_page: { value: params.parameter.per_page, explode: false },
       page: { value: params.parameter.page, explode: false },
+      app_id: { value: params.parameter.app_id, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
@@ -24488,7 +26218,6 @@ export class Client<RequestOption> {
    * Get the combined status for a specific reference
    * Users with pull access in a repository can access a combined view of commit statuses for a given ref. The ref can be a SHA, a branch name, or a tag name.
    *
-   * The most recent status for each context is returned, up to 100. This field [paginates](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#pagination) if there are over 100 contexts.
    *
    * Additionally, a combined `state` is returned. The `state` is one of:
    *
@@ -24506,7 +26235,11 @@ export class Client<RequestOption> {
     const headers = {
       Accept: "application/json",
     };
-    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+    const queryParameters: QueryParameters = {
+      per_page: { value: params.parameter.per_page, explode: false },
+      page: { value: params.parameter.page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
    * List commit statuses for a reference
@@ -24531,26 +26264,8 @@ export class Client<RequestOption> {
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
-   * Get the code of conduct for a repository
-   * Returns the contents of the repository's code of conduct file, if one is detected.
-   *
-   * A code of conduct is detected if there is a file named `CODE_OF_CONDUCT` in the root directory of the repository. GitHub detects which code of conduct it is using fuzzy matching.
-   * operationId: codes-of-conduct/get-for-repo
-   * Request URI: /repos/{owner}/{repo}/community/code_of_conduct
-   */
-  public async codes$of$conduct$get$for$repo(
-    params: Params$codes$of$conduct$get$for$repo,
-    option?: RequestOption,
-  ): Promise<Response$codes$of$conduct$get$for$repo$Status$200["application/json"]> {
-    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/community/code_of_conduct`;
-    const headers = {
-      Accept: "application/json",
-    };
-    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
-  }
-  /**
    * Compare two commits
-   * Both `:base` and `:head` must be branch names in `:repo`. To compare branches across other repositories in the same network as `:repo`, use the format `<USERNAME>:branch`.
+   * The `basehead` param is comprised of two parts: `base` and `head`. Both must be branch names in `repo`. To compare branches across other repositories in the same network as `repo`, use the format `<USERNAME>:branch`.
    *
    * The response from the API is equivalent to running the `git log base..head` command; however, commits are returned in chronological order. Pass the appropriate [media type](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types/#commits-commit-comparison-and-pull-requests) to fetch diff and patch formats.
    *
@@ -24592,18 +26307,40 @@ export class Client<RequestOption> {
    * | `invalid` | The signature could not be cryptographically verified using the key whose key-id was found in the signature. |
    * | `valid` | None of the above errors applied, so the signature is considered to be verified. |
    * operationId: repos/compare-commits
-   * Request URI: /repos/{owner}/{repo}/compare/{base}...{head}
+   * Request URI: /repos/{owner}/{repo}/compare/{basehead}
    */
   public async repos$compare$commits(
     params: Params$repos$compare$commits,
     option?: RequestOption,
   ): Promise<Response$repos$compare$commits$Status$200["application/json"]> {
-    const url =
-      this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/compare/${params.parameter.base}...${params.parameter.head}`;
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/compare/${params.parameter.basehead}`;
     const headers = {
       Accept: "application/json",
     };
     return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Create a content attachment
+   * Creates an attachment under a content reference URL in the body or comment of an issue or pull request. Use the `id` and `repository` `full_name` of the content reference from the [`content_reference` event](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads/#content_reference) to create an attachment.
+   *
+   * The app must create a content attachment within six hours of the content reference URL being posted. See "[Using content attachments](https://docs.github.com/enterprise-server@3.0/apps/using-content-attachments/)" for details about content attachments.
+   *
+   * You must use an [installation access token](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation) to access this endpoint.
+   * operationId: apps/create-content-attachment
+   * Request URI: /repos/{owner}/{repo}/content_references/{content_reference_id}/attachments
+   */
+  public async apps$create$content$attachment(
+    params: Params$apps$create$content$attachment,
+    option?: RequestOption,
+  ): Promise<Response$apps$create$content$attachment$Status$200["application/json"]> {
+    const url =
+      this.baseUrl +
+      `/repos/${params.parameter.owner}/${params.parameter.repo}/content_references/${params.parameter.content_reference_id}/attachments`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
   }
   /**
    * Get repository content
@@ -24760,7 +26497,7 @@ export class Client<RequestOption> {
    * the API will return a successful merge commit. If merge conflicts prevent the merge from succeeding, the API will
    * return a failure response.
    *
-   * By default, [commit statuses](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#statuses) for every submitted context must be in a `success`
+   * By default, [commit statuses](https://docs.github.com/enterprise-server@3.0/rest/reference/commits#commit-statuses) for every submitted context must be in a `success`
    * state. The `required_contexts` parameter allows you to specify a subset of contexts that must be `success`, or to
    * specify contexts that have not yet been submitted. You are not required to use commit statuses to deploy. If you do
    * not require any contexts or create any commit statuses, the deployment will always succeed.
@@ -24822,7 +26559,7 @@ export class Client<RequestOption> {
   }
   /**
    * Delete a deployment
-   * To ensure there can always be an active deployment, you can only delete an _inactive_ deployment. Anyone with `repo` or `repo_deployment` scopes can delete an inactive deployment.
+   * If the repository only has one deployment, you can delete the deployment regardless of its status. If the repository has more than one deployment, you can only delete inactive deployments. This ensures that repositories with multiple deployments will always have an active deployment. Anyone with `repo` or `repo_deployment` scopes can delete a deployment.
    *
    * To set a deployment as inactive, you must:
    *
@@ -24905,7 +26642,7 @@ export class Client<RequestOption> {
    *
    * This endpoint requires write access to the repository by providing either:
    *
-   *   - Personal access tokens with `repo` scope. For more information, see "[Creating a personal access token for the command line](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line)" in the GitHub Help documentation.
+   *   - Personal access tokens with `repo` scope. For more information, see "[Creating a personal access token for the command line](https://docs.github.com/articles/creating-a-personal-access-token-for-the-command-line)" in the GitHub Help documentation.
    *   - GitHub Apps with both `metadata:read` and `contents:read&write` permissions.
    *
    * This input example shows how you can use the `client_payload` as a test to debug your workflow.
@@ -24962,7 +26699,7 @@ export class Client<RequestOption> {
    * Create a fork
    * Create a fork for the authenticated user.
    *
-   * **Note**: Forking a Repository happens asynchronously. You may have to wait a short period of time before you can access the git objects. If this takes longer than 5 minutes, be sure to contact [GitHub Enterprise Server Support](https://support.github.com/contact) or [GitHub Enterprise Server Premium Support](https://premium.githubsupport.com).
+   * **Note**: Forking a Repository happens asynchronously. You may have to wait a short period of time before you can access the git objects. If this takes longer than 5 minutes, be sure to contact [GitHub Enterprise Server Support](https://support.github.com/contact?tags=dotcom-rest-api).
    * operationId: repos/create-fork
    * Request URI: /repos/{owner}/{repo}/forks
    */
@@ -25553,9 +27290,9 @@ export class Client<RequestOption> {
   }
   /**
    * Create an issue
-   * Any user with pull access to a repository can create an issue. If [issues are disabled in the repository](https://help.github.com/articles/disabling-issues/), the API returns a `410 Gone` status.
+   * Any user with pull access to a repository can create an issue. If [issues are disabled in the repository](https://docs.github.com/articles/disabling-issues/), the API returns a `410 Gone` status.
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in abuse rate limiting. See "[Abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#abuse-rate-limits)" and "[Dealing with abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-abuse-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.0/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: issues/create
    * Request URI: /repos/{owner}/{repo}/issues
    */
@@ -25658,7 +27395,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create reaction for an issue comment
-   * Create a reaction to an [issue comment](https://docs.github.com/enterprise-server@3.0/rest/reference/issues#comments). A response with a `Status: 200 OK` means that you already added the reaction type to this issue comment.
+   * Create a reaction to an [issue comment](https://docs.github.com/enterprise-server@3.0/rest/reference/issues#comments). A response with an HTTP `200` status means that you already added the reaction type to this issue comment.
    * operationId: reactions/create-for-issue-comment
    * Request URI: /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions
    */
@@ -25728,7 +27465,7 @@ export class Client<RequestOption> {
   /**
    * Get an issue
    * The API returns a [`301 Moved Permanently` status](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-redirects-redirects) if the issue was
-   * [transferred](https://help.github.com/articles/transferring-an-issue-to-another-repository/) to another repository. If
+   * [transferred](https://docs.github.com/articles/transferring-an-issue-to-another-repository/) to another repository. If
    * the issue was transferred to or deleted from a repository where the authenticated user lacks read access, the API
    * returns a `404 Not Found` status. If the issue was deleted from a repository where the authenticated user has read
    * access, the API returns a `410 Gone` status. To receive webhook events for transferred and deleted issues, subscribe
@@ -25822,7 +27559,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create an issue comment
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in abuse rate limiting. See "[Abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#abuse-rate-limits)" and "[Dealing with abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-abuse-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.0/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: issues/create-comment
    * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/comments
    */
@@ -25985,14 +27722,14 @@ export class Client<RequestOption> {
   }
   /**
    * Create reaction for an issue
-   * Create a reaction to an [issue](https://docs.github.com/enterprise-server@3.0/rest/reference/issues/). A response with a `Status: 200 OK` means that you already added the reaction type to this issue.
+   * Create a reaction to an [issue](https://docs.github.com/enterprise-server@3.0/rest/reference/issues/). A response with an HTTP `200` status means that you already added the reaction type to this issue.
    * operationId: reactions/create-for-issue
    * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/reactions
    */
   public async reactions$create$for$issue(
     params: Params$reactions$create$for$issue,
     option?: RequestOption,
-  ): Promise<Response$reactions$create$for$issue$Status$201["application/json"]> {
+  ): Promise<(Response$reactions$create$for$issue$Status$200 | Response$reactions$create$for$issue$Status$201)["application/json"]> {
     const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/reactions`;
     const headers = {
       "Content-Type": "application/json",
@@ -26351,10 +28088,11 @@ export class Client<RequestOption> {
   public async activity$mark$repo$notifications$as$read(
     params: Params$activity$mark$repo$notifications$as$read,
     option?: RequestOption,
-  ): Promise<void> {
+  ): Promise<Response$activity$mark$repo$notifications$as$read$Status$202["application/json"]> {
     const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/notifications`;
     const headers = {
       "Content-Type": "application/json",
+      Accept: "application/json",
     };
     return this.apiClient.request("PUT", url, headers, params.requestBody, undefined, option);
   }
@@ -26500,6 +28238,8 @@ export class Client<RequestOption> {
     const queryParameters: QueryParameters = {
       per_page: { value: params.parameter.per_page, explode: false },
       page: { value: params.parameter.page, explode: false },
+      direction: { value: params.parameter.direction, explode: false },
+      sort: { value: params.parameter.sort, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
@@ -26596,7 +28336,7 @@ export class Client<RequestOption> {
   }
   /**
    * List pull requests
-   * Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    * operationId: pulls/list
    * Request URI: /repos/{owner}/{repo}/pulls
    */
@@ -26618,13 +28358,13 @@ export class Client<RequestOption> {
   }
   /**
    * Create a pull request
-   * Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * To open or update a pull request in a public repository, you must have write access to the head or the source branch. For organization-owned repositories, you must be a member of the organization that owns the repository to open or update a pull request.
    *
    * You can create a new pull request.
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in abuse rate limiting. See "[Abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#abuse-rate-limits)" and "[Dealing with abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-rate-limits)" for details.
    * operationId: pulls/create
    * Request URI: /repos/{owner}/{repo}/pulls
    */
@@ -26730,7 +28470,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create reaction for a pull request review comment
-   * Create a reaction to a [pull request review comment](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#comments). A response with a `Status: 200 OK` means that you already added the reaction type to this pull request review comment.
+   * Create a reaction to a [pull request review comment](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#comments). A response with an HTTP `200` status means that you already added the reaction type to this pull request review comment.
    * operationId: reactions/create-for-pull-request-review-comment
    * Request URI: /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions
    */
@@ -26771,7 +28511,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get a pull request
-   * Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * Lists details of a pull request by providing its number.
    *
@@ -26781,9 +28521,9 @@ export class Client<RequestOption> {
    *
    * The value of the `merge_commit_sha` attribute changes depending on the state of the pull request. Before merging a pull request, the `merge_commit_sha` attribute holds the SHA of the _test_ merge commit. After merging a pull request, the `merge_commit_sha` attribute changes depending on how you merged the pull request:
    *
-   * *   If merged as a [merge commit](https://help.github.com/articles/about-merge-methods-on-github/), `merge_commit_sha` represents the SHA of the merge commit.
-   * *   If merged via a [squash](https://help.github.com/articles/about-merge-methods-on-github/#squashing-your-merge-commits), `merge_commit_sha` represents the SHA of the squashed commit on the base branch.
-   * *   If [rebased](https://help.github.com/articles/about-merge-methods-on-github/#rebasing-and-merging-your-commits), `merge_commit_sha` represents the commit that the base branch was updated to.
+   * *   If merged as a [merge commit](https://docs.github.com/articles/about-merge-methods-on-github/), `merge_commit_sha` represents the SHA of the merge commit.
+   * *   If merged via a [squash](https://docs.github.com/articles/about-merge-methods-on-github/#squashing-your-merge-commits), `merge_commit_sha` represents the SHA of the squashed commit on the base branch.
+   * *   If [rebased](https://docs.github.com/articles/about-merge-methods-on-github/#rebasing-and-merging-your-commits), `merge_commit_sha` represents the commit that the base branch was updated to.
    *
    * Pass the appropriate [media type](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types/#commits-commit-comparison-and-pull-requests) to fetch diff and patch formats.
    * operationId: pulls/get
@@ -26798,7 +28538,7 @@ export class Client<RequestOption> {
   }
   /**
    * Update a pull request
-   * Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * To open or update a pull request in a public repository, you must have write access to the head or the source branch. For organization-owned repositories, you must be a member of the organization that owns the repository to open or update a pull request.
    * operationId: pulls/update
@@ -26847,7 +28587,7 @@ export class Client<RequestOption> {
    *
    * **Note:** The position value equals the number of lines down from the first "@@" hunk header in the file you want to add a comment. The line just below the "@@" line is position 1, the next line is position 2, and so on. The position in the diff continues to increase through lines of whitespace and additional hunks until the beginning of a new file.
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in abuse rate limiting. See "[Abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#abuse-rate-limits)" and "[Dealing with abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: pulls/create-review-comment
    * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/comments
    */
@@ -26866,7 +28606,7 @@ export class Client<RequestOption> {
    * Create a reply for a review comment
    * Creates a reply to a review comment for a pull request. For the `comment_id`, provide the ID of the review comment you are replying to. This must be the ID of a _top-level review comment_, not a reply to that comment. Replies to replies are not supported.
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in abuse rate limiting. See "[Abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#abuse-rate-limits)" and "[Dealing with abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: pulls/create-reply-for-review-comment
    * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies
    */
@@ -26935,7 +28675,7 @@ export class Client<RequestOption> {
   }
   /**
    * Merge a pull request
-   * This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.0/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in abuse rate limiting. See "[Abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#abuse-rate-limits)" and "[Dealing with abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-abuse-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.0/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: pulls/merge
    * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/merge
    */
@@ -26969,7 +28709,7 @@ export class Client<RequestOption> {
   }
   /**
    * Request reviewers for a pull request
-   * This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.0/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in abuse rate limiting. See "[Abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#abuse-rate-limits)" and "[Dealing with abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-abuse-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.0/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: pulls/request-reviewers
    * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
    */
@@ -26990,11 +28730,15 @@ export class Client<RequestOption> {
    * operationId: pulls/remove-requested-reviewers
    * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
    */
-  public async pulls$remove$requested$reviewers(params: Params$pulls$remove$requested$reviewers, option?: RequestOption): Promise<void> {
+  public async pulls$remove$requested$reviewers(
+    params: Params$pulls$remove$requested$reviewers,
+    option?: RequestOption,
+  ): Promise<Response$pulls$remove$requested$reviewers$Status$200["application/json"]> {
     const url =
       this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/requested_reviewers`;
     const headers = {
       "Content-Type": "application/json",
+      Accept: "application/json",
     };
     return this.apiClient.request("DELETE", url, headers, params.requestBody, undefined, option);
   }
@@ -27020,7 +28764,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create a review for a pull request
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in abuse rate limiting. See "[Abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#abuse-rate-limits)" and "[Dealing with abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    *
    * Pull request reviews created in the `PENDING` state do not include the `submitted_at` property in the response.
    *
@@ -27192,6 +28936,27 @@ export class Client<RequestOption> {
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
+   * Get a repository README for a directory
+   * Gets the README from a repository directory.
+   *
+   * READMEs support [custom media types](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#custom-media-types) for retrieving the raw content or rendered HTML.
+   * operationId: repos/get-readme-in-directory
+   * Request URI: /repos/{owner}/{repo}/readme/{dir}
+   */
+  public async repos$get$readme$in$directory(
+    params: Params$repos$get$readme$in$directory,
+    option?: RequestOption,
+  ): Promise<Response$repos$get$readme$in$directory$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/readme/${params.parameter.dir}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      ref: { value: params.parameter.ref, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
    * List releases
    * This returns a list of releases, which does not include regular Git tags that have not been associated with a release. To get a list of Git tags, use the [Repository Tags API](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#list-repository-tags).
    *
@@ -27217,7 +28982,7 @@ export class Client<RequestOption> {
    * Create a release
    * Users with push access to the repository can create a release.
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in abuse rate limiting. See "[Abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#abuse-rate-limits)" and "[Dealing with abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: repos/create-release
    * Request URI: /repos/{owner}/{repo}/releases
    */
@@ -27390,7 +29155,7 @@ export class Client<RequestOption> {
    *
    * **Notes:**
    * *   GitHub Enterprise Server renames asset filenames that have special characters, non-alphanumeric characters, and leading or trailing periods. The "[List assets for a release](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#list-assets-for-a-release)"
-   * endpoint lists the renamed filenames. For more information and help, contact [GitHub Enterprise Server Support](https://support.github.com/contact).
+   * endpoint lists the renamed filenames. For more information and help, contact [GitHub Enterprise Server Support](https://support.github.com/contact?tags=dotcom-rest-api).
    * *   If you upload an asset with the same filename as another uploaded asset, you'll receive an error and must delete the old file before you can re-upload the new asset.
    * operationId: repos/upload-release-asset
    * Request URI: /repos/{owner}/{repo}/releases/{release_id}/assets
@@ -27418,13 +29183,13 @@ export class Client<RequestOption> {
    * operationId: activity/list-stargazers-for-repo
    * Request URI: /repos/{owner}/{repo}/stargazers
    */
-  public async activity$list$stargazers$for$repo<ResponseContentType extends ResponseContentType$activity$list$stargazers$for$repo>(
-    params: Params$activity$list$stargazers$for$repo<ResponseContentType>,
+  public async activity$list$stargazers$for$repo(
+    params: Params$activity$list$stargazers$for$repo,
     option?: RequestOption,
-  ): Promise<Response$activity$list$stargazers$for$repo$Status$200[ResponseContentType]> {
+  ): Promise<Response$activity$list$stargazers$for$repo$Status$200["application/json"]> {
     const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/stargazers`;
     const headers = {
-      Accept: params.headers.Accept,
+      Accept: "application/json",
     };
     const queryParameters: QueryParameters = {
       per_page: { value: params.parameter.per_page, explode: false },
@@ -27441,7 +29206,7 @@ export class Client<RequestOption> {
   public async repos$get$code$frequency$stats(
     params: Params$repos$get$code$frequency$stats,
     option?: RequestOption,
-  ): Promise<Response$repos$get$code$frequency$stats$Status$200["application/json"]> {
+  ): Promise<(Response$repos$get$code$frequency$stats$Status$200 | Response$repos$get$code$frequency$stats$Status$202)["application/json"]> {
     const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/stats/code_frequency`;
     const headers = {
       Accept: "application/json",
@@ -27457,7 +29222,7 @@ export class Client<RequestOption> {
   public async repos$get$commit$activity$stats(
     params: Params$repos$get$commit$activity$stats,
     option?: RequestOption,
-  ): Promise<Response$repos$get$commit$activity$stats$Status$200["application/json"]> {
+  ): Promise<(Response$repos$get$commit$activity$stats$Status$200 | Response$repos$get$commit$activity$stats$Status$202)["application/json"]> {
     const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/stats/commit_activity`;
     const headers = {
       Accept: "application/json",
@@ -27479,7 +29244,7 @@ export class Client<RequestOption> {
   public async repos$get$contributors$stats(
     params: Params$repos$get$contributors$stats,
     option?: RequestOption,
-  ): Promise<Response$repos$get$contributors$stats$Status$200["application/json"]> {
+  ): Promise<(Response$repos$get$contributors$stats$Status$200 | Response$repos$get$contributors$stats$Status$202)["application/json"]> {
     const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/stats/contributors`;
     const headers = {
       Accept: "application/json",
@@ -27673,7 +29438,11 @@ export class Client<RequestOption> {
     const headers = {
       Accept: "application/json",
     };
-    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+    const queryParameters: QueryParameters = {
+      page: { value: params.parameter.page, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
    * Replace all repository topics
@@ -27693,7 +29462,7 @@ export class Client<RequestOption> {
   }
   /**
    * Transfer a repository
-   * A transfer request will need to be accepted by the new owner when transferring a personal repository to another user. The response will contain the original `owner`, and the transfer will continue asynchronously. For more details on the requirements to transfer personal and organization-owned repositories, see [about repository transfers](https://help.github.com/articles/about-repository-transfers/).
+   * A transfer request will need to be accepted by the new owner when transferring a personal repository to another user. The response will contain the original `owner`, and the transfer will continue asynchronously. For more details on the requirements to transfer personal and organization-owned repositories, see [about repository transfers](https://docs.github.com/articles/about-repository-transfers/).
    * operationId: repos/transfer
    * Request URI: /repos/{owner}/{repo}/transfer
    */
@@ -27707,28 +29476,6 @@ export class Client<RequestOption> {
       Accept: "application/json",
     };
     return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
-  }
-  /**
-   * Enable vulnerability alerts
-   * Enables dependency alerts and the dependency graph for a repository. The authenticated user must have admin access to the repository. For more information, see "[About security alerts for vulnerable dependencies](https://help.github.com/en/articles/about-security-alerts-for-vulnerable-dependencies)".
-   * operationId: repos/enable-vulnerability-alerts
-   * Request URI: /repos/{owner}/{repo}/vulnerability-alerts
-   */
-  public async repos$enable$vulnerability$alerts(params: Params$repos$enable$vulnerability$alerts, option?: RequestOption): Promise<void> {
-    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/vulnerability-alerts`;
-    const headers = {};
-    return this.apiClient.request("PUT", url, headers, undefined, undefined, option);
-  }
-  /**
-   * Disable vulnerability alerts
-   * Disables dependency alerts and the dependency graph for a repository. The authenticated user must have admin access to the repository. For more information, see "[About security alerts for vulnerable dependencies](https://help.github.com/en/articles/about-security-alerts-for-vulnerable-dependencies)".
-   * operationId: repos/disable-vulnerability-alerts
-   * Request URI: /repos/{owner}/{repo}/vulnerability-alerts
-   */
-  public async repos$disable$vulnerability$alerts(params: Params$repos$disable$vulnerability$alerts, option?: RequestOption): Promise<void> {
-    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/vulnerability-alerts`;
-    const headers = {};
-    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
   }
   /**
    * Download a repository archive (zip)
@@ -27752,7 +29499,7 @@ export class Client<RequestOption> {
    *
    * When using [OAuth](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/), authorizations must include:
    *
-   * *   `public_repo` scope or `repo` scope to create a public repository
+   * *   `public_repo` scope or `repo` scope to create a public repository. Note: For GitHub AE, use `repo` scope to create an internal repository.
    * *   `repo` scope to create a private repository
    * operationId: repos/create-using-template
    * Request URI: /repos/{template_owner}/{template_repo}/generate
@@ -27772,7 +29519,9 @@ export class Client<RequestOption> {
    * List public repositories
    * Lists all public repositories in the order that they were created.
    *
-   * Note: Pagination is powered exclusively by the `since` parameter. Use the [Link header](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#link-header) to get the URL for the next page of repositories.
+   * Note:
+   * - For GitHub Enterprise Server, this endpoint will only list repositories available to all users on the enterprise.
+   * - Pagination is powered exclusively by the `since` parameter. Use the [Link header](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#link-header) to get the URL for the next page of repositories.
    * operationId: repos/list-public
    * Request URI: /repositories
    */
@@ -27918,6 +29667,8 @@ export class Client<RequestOption> {
       q: { value: params.parameter.q, explode: false },
       sort: { value: params.parameter.sort, explode: false },
       order: { value: params.parameter.order, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
+      page: { value: params.parameter.page, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
@@ -27958,7 +29709,7 @@ export class Client<RequestOption> {
   }
   /**
    * Search topics
-   * Find topics via various criteria. Results are sorted by best match. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#pagination). See "[Searching topics](https://help.github.com/articles/searching-topics/)" for a detailed list of qualifiers.
+   * Find topics via various criteria. Results are sorted by best match. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#pagination). See "[Searching topics](https://docs.github.com/articles/searching-topics/)" for a detailed list of qualifiers.
    *
    * When searching for topics, you can get text match metadata for the topic's **short\_description**, **description**, **name**, or **display\_name** field when you pass the `text-match` media type. For more details about how to receive highlighted search results, see [Text match metadata](https://docs.github.com/enterprise-server@3.0/rest/reference/search#text-match-metadata).
    *
@@ -27980,6 +29731,8 @@ export class Client<RequestOption> {
     };
     const queryParameters: QueryParameters = {
       q: { value: params.parameter.q, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
+      page: { value: params.parameter.page, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
@@ -28068,9 +29821,7 @@ export class Client<RequestOption> {
   }
   /**
    * Enable or disable maintenance mode
-   * The possible values for `enabled` are `true` and `false`. When it's `false`, the attribute `when` is ignored and the maintenance mode is turned off. `when` defines the time period when the maintenance was enabled.
-   *
-   * The possible values for `when` are `now` or any date parseable by [mojombo/chronic](https://github.com/mojombo/chronic).
+   * **Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#--data-urlencode).
    * operationId: enterprise-admin/enable-or-disable-maintenance-mode
    * Request URI: /setup/api/maintenance
    */
@@ -28080,7 +29831,7 @@ export class Client<RequestOption> {
   ): Promise<Response$enterprise$admin$enable$or$disable$maintenance$mode$Status$200["application/json"]> {
     const url = this.baseUrl + `/setup/api/maintenance`;
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
       Accept: "application/json",
     };
     return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
@@ -28102,13 +29853,15 @@ export class Client<RequestOption> {
   /**
    * Set settings
    * For a list of the available settings, see the [Get settings endpoint](https://docs.github.com/enterprise-server@3.0/rest/reference/enterprise-admin#get-settings).
+   *
+   * **Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#--data-urlencode).
    * operationId: enterprise-admin/set-settings
    * Request URI: /setup/api/settings
    */
   public async enterprise$admin$set$settings(params: Params$enterprise$admin$set$settings, option?: RequestOption): Promise<void> {
     const url = this.baseUrl + `/setup/api/settings`;
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
     };
     return this.apiClient.request("PUT", url, headers, params.requestBody, undefined, option);
   }
@@ -28128,6 +29881,7 @@ export class Client<RequestOption> {
   }
   /**
    * Add an authorized SSH key
+   * **Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#--data-urlencode).
    * operationId: enterprise-admin/add-authorized-ssh-key
    * Request URI: /setup/api/settings/authorized-keys
    */
@@ -28137,13 +29891,14 @@ export class Client<RequestOption> {
   ): Promise<Response$enterprise$admin$add$authorized$ssh$key$Status$201["application/json"]> {
     const url = this.baseUrl + `/setup/api/settings/authorized-keys`;
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
       Accept: "application/json",
     };
     return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
   }
   /**
    * Remove an authorized SSH key
+   * **Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#--data-urlencode).
    * operationId: enterprise-admin/remove-authorized-ssh-key
    * Request URI: /setup/api/settings/authorized-keys
    */
@@ -28153,23 +29908,23 @@ export class Client<RequestOption> {
   ): Promise<Response$enterprise$admin$remove$authorized$ssh$key$Status$200["application/json"]> {
     const url = this.baseUrl + `/setup/api/settings/authorized-keys`;
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
       Accept: "application/json",
     };
     return this.apiClient.request("DELETE", url, headers, params.requestBody, undefined, option);
   }
   /**
    * Create a GitHub license
-   * When you boot a GitHub instance for the first time, you can use the following endpoint to upload a license:
+   * When you boot a GitHub instance for the first time, you can use the following endpoint to upload a license.
    *
-   * Note that you need to POST to [`/setup/api/configure`](https://docs.github.com/enterprise-server@3.0/rest/reference/enterprise-admin#start-a-configuration-process) to start the actual configuration process.
+   * Note that you need to `POST` to [`/setup/api/configure`](https://docs.github.com/enterprise-server@3.0/rest/reference/enterprise-admin#start-a-configuration-process) to start the actual configuration process.
    *
    * When using this endpoint, your GitHub instance must have a password set. This can be accomplished two ways:
    *
    * 1.  If you're working directly with the API before accessing the web interface, you must pass in the password parameter to set your password.
    * 2.  If you set up your instance via the web interface before accessing the API, your calls to this endpoint do not need the password parameter.
    *
-   * For a list of the available settings, see the [Get settings endpoint](https://docs.github.com/enterprise-server@3.0/rest/reference/enterprise-admin#get-settings).
+   * **Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#--data-urlencode).
    * operationId: enterprise-admin/create-enterprise-server-license
    * Request URI: /setup/api/start
    */
@@ -28179,20 +29934,22 @@ export class Client<RequestOption> {
   ): Promise<void> {
     const url = this.baseUrl + `/setup/api/start`;
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
     };
     return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
   }
   /**
    * Upgrade a license
-   * This API upgrades your license and also triggers the configuration process:
+   * This API upgrades your license and also triggers the configuration process.
+   *
+   * **Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#--data-urlencode).
    * operationId: enterprise-admin/upgrade-license
    * Request URI: /setup/api/upgrade
    */
   public async enterprise$admin$upgrade$license(params: Params$enterprise$admin$upgrade$license, option?: RequestOption): Promise<void> {
     const url = this.baseUrl + `/setup/api/upgrade`;
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
     };
     return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
   }
@@ -28243,7 +30000,7 @@ export class Client<RequestOption> {
   public async teams$update$legacy(
     params: Params$teams$update$legacy,
     option?: RequestOption,
-  ): Promise<Response$teams$update$legacy$Status$201["application/json"]> {
+  ): Promise<(Response$teams$update$legacy$Status$200 | Response$teams$update$legacy$Status$201)["application/json"]> {
     const url = this.baseUrl + `/teams/${params.parameter.team_id}`;
     const headers = {
       "Content-Type": "application/json",
@@ -28282,7 +30039,7 @@ export class Client<RequestOption> {
    *
    * Creates a new discussion post on a team's page. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in abuse rate limiting. See "[Abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#abuse-rate-limits)" and "[Dealing with abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: teams/create-discussion-legacy
    * Request URI: /teams/{team_id}/discussions
    */
@@ -28381,7 +30138,7 @@ export class Client<RequestOption> {
    *
    * Creates a new comment on a team discussion. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in abuse rate limiting. See "[Abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#abuse-rate-limits)" and "[Dealing with abuse rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: teams/create-discussion-comment-legacy
    * Request URI: /teams/{team_id}/discussions/{discussion_number}/comments
    */
@@ -28489,7 +30246,7 @@ export class Client<RequestOption> {
    * Create reaction for a team discussion comment (Legacy)
    * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new "[Create reaction for a team discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#create-reaction-for-a-team-discussion-comment)" endpoint.
    *
-   * Create a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussion-comments). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with a `Status: 200 OK` means that you already added the reaction type to this team discussion comment.
+   * Create a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussion-comments). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with an HTTP `200` status means that you already added the reaction type to this team discussion comment.
    * operationId: reactions/create-for-team-discussion-comment-legacy
    * Request URI: /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions
    */
@@ -28535,7 +30292,7 @@ export class Client<RequestOption> {
    * Create reaction for a team discussion (Legacy)
    * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`Create reaction for a team discussion`](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#create-reaction-for-a-team-discussion) endpoint.
    *
-   * Create a reaction to a [team discussion](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussions). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with a `Status: 200 OK` means that you already added the reaction type to this team discussion.
+   * Create a reaction to a [team discussion](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussions). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with an HTTP `200` status means that you already added the reaction type to this team discussion.
    * operationId: reactions/create-for-team-discussion-legacy
    * Request URI: /teams/{team_id}/discussions/{discussion_number}/reactions
    */
@@ -28597,11 +30354,11 @@ export class Client<RequestOption> {
    *
    * We recommend using the [Add or update team membership for a user](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#add-or-update-team-membership-for-a-user) endpoint instead. It allows you to invite new organization members to your teams.
    *
-   * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * To add someone to a team, the authenticated user must be an organization owner or a team maintainer in the team they're changing. The person being added to the team must be a member of the team's organization.
    *
-   * **Note:** When you have team synchronization set up for a team with your organization's identity provider (IdP), you will see an error if you attempt to use the API for making changes to the team's membership. If you have access to manage group membership in your IdP, you can manage GitHub Enterprise Server team membership through your identity provider, which automatically adds and removes team members in an organization. For more information, see "[Synchronizing teams between your identity provider and GitHub Enterprise Server](https://help.github.com/articles/synchronizing-teams-between-your-identity-provider-and-github/)."
+   * **Note:** When you have team synchronization set up for a team with your organization's identity provider (IdP), you will see an error if you attempt to use the API for making changes to the team's membership. If you have access to manage group membership in your IdP, you can manage GitHub Enterprise Server team membership through your identity provider, which automatically adds and removes team members in an organization. For more information, see "[Synchronizing teams between your identity provider and GitHub Enterprise Server](https://docs.github.com/articles/synchronizing-teams-between-your-identity-provider-and-github/)."
    *
    * Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
    * operationId: teams/add-member-legacy
@@ -28619,11 +30376,11 @@ export class Client<RequestOption> {
    *
    * We recommend using the [Remove team membership for a user](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#remove-team-membership-for-a-user) endpoint instead. It allows you to remove both active and pending memberships.
    *
-   * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * To remove a team member, the authenticated user must have 'admin' permissions to the team or be an owner of the org that the team is associated with. Removing a team member does not delete the user, it just removes them from the team.
    *
-   * **Note:** When you have team synchronization set up for a team with your organization's identity provider (IdP), you will see an error if you attempt to use the API for making changes to the team's membership. If you have access to manage group membership in your IdP, you can manage GitHub Enterprise Server team membership through your identity provider, which automatically adds and removes team members in an organization. For more information, see "[Synchronizing teams between your identity provider and GitHub Enterprise Server](https://help.github.com/articles/synchronizing-teams-between-your-identity-provider-and-github/)."
+   * **Note:** When you have team synchronization set up for a team with your organization's identity provider (IdP), you will see an error if you attempt to use the API for making changes to the team's membership. If you have access to manage group membership in your IdP, you can manage GitHub Enterprise Server team membership through your identity provider, which automatically adds and removes team members in an organization. For more information, see "[Synchronizing teams between your identity provider and GitHub Enterprise Server](https://docs.github.com/articles/synchronizing-teams-between-your-identity-provider-and-github/)."
    * operationId: teams/remove-member-legacy
    * Request URI: /teams/{team_id}/members/{username}
    */
@@ -28641,7 +30398,10 @@ export class Client<RequestOption> {
    *
    * To get a user's membership with a team, the team must be visible to the authenticated user.
    *
-   * **Note:** The `role` for organization owners returns as `maintainer`. For more information about `maintainer` roles, see [Create a team](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#create-a-team).
+   * **Note:**
+   * The response contains the `state` of the membership and the member's `role`.
+   *
+   * The `role` for organization owners is set to `maintainer`. For more information about `maintainer` roles, see [Create a team](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#create-a-team).
    * operationId: teams/get-membership-for-user-legacy
    * Request URI: /teams/{team_id}/memberships/{username}
    */
@@ -28660,11 +30420,11 @@ export class Client<RequestOption> {
    * Add or update team membership for a user (Legacy)
    * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Add or update team membership for a user](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#add-or-update-team-membership-for-a-user) endpoint.
    *
-   * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * If the user is already a member of the team's organization, this endpoint will add the user to the team. To add a membership between an organization member and a team, the authenticated user must be an organization owner or a team maintainer.
    *
-   * **Note:** When you have team synchronization set up for a team with your organization's identity provider (IdP), you will see an error if you attempt to use the API for making changes to the team's membership. If you have access to manage group membership in your IdP, you can manage GitHub Enterprise Server team membership through your identity provider, which automatically adds and removes team members in an organization. For more information, see "[Synchronizing teams between your identity provider and GitHub Enterprise Server](https://help.github.com/articles/synchronizing-teams-between-your-identity-provider-and-github/)."
+   * **Note:** When you have team synchronization set up for a team with your organization's identity provider (IdP), you will see an error if you attempt to use the API for making changes to the team's membership. If you have access to manage group membership in your IdP, you can manage GitHub Enterprise Server team membership through your identity provider, which automatically adds and removes team members in an organization. For more information, see "[Synchronizing teams between your identity provider and GitHub Enterprise Server](https://docs.github.com/articles/synchronizing-teams-between-your-identity-provider-and-github/)."
    *
    * If the user is unaffiliated with the team's organization, this endpoint will send an invitation to the user via email. This newly-created membership will be in the "pending" state until the user accepts the invitation, at which point the membership will transition to the "active" state and the user will be added as a member of the team. To add a membership between an unaffiliated user and a team, the authenticated user must be an organization owner.
    *
@@ -28688,11 +30448,11 @@ export class Client<RequestOption> {
    * Remove team membership for a user (Legacy)
    * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Remove team membership for a user](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#remove-team-membership-for-a-user) endpoint.
    *
-   * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+   * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
    * To remove a membership between a user and a team, the authenticated user must have 'admin' permissions to the team or be an owner of the organization that the team is associated with. Removing team membership does not delete the user, it just removes their membership from the team.
    *
-   * **Note:** When you have team synchronization set up for a team with your organization's identity provider (IdP), you will see an error if you attempt to use the API for making changes to the team's membership. If you have access to manage group membership in your IdP, you can manage GitHub Enterprise Server team membership through your identity provider, which automatically adds and removes team members in an organization. For more information, see "[Synchronizing teams between your identity provider and GitHub Enterprise Server](https://help.github.com/articles/synchronizing-teams-between-your-identity-provider-and-github/)."
+   * **Note:** When you have team synchronization set up for a team with your organization's identity provider (IdP), you will see an error if you attempt to use the API for making changes to the team's membership. If you have access to manage group membership in your IdP, you can manage GitHub Enterprise Server team membership through your identity provider, which automatically adds and removes team members in an organization. For more information, see "[Synchronizing teams between your identity provider and GitHub Enterprise Server](https://docs.github.com/articles/synchronizing-teams-between-your-identity-provider-and-github/)."
    * operationId: teams/remove-membership-for-user-legacy
    * Request URI: /teams/{team_id}/memberships/{username}
    */
@@ -28814,10 +30574,10 @@ export class Client<RequestOption> {
   public async teams$check$permissions$for$repo$legacy(
     params: Params$teams$check$permissions$for$repo$legacy,
     option?: RequestOption,
-  ): Promise<Response$teams$check$permissions$for$repo$legacy$Status$200["application/vnd.github.v3.repository+json"]> {
+  ): Promise<Response$teams$check$permissions$for$repo$legacy$Status$200["application/json"]> {
     const url = this.baseUrl + `/teams/${params.parameter.team_id}/repos/${params.parameter.owner}/${params.parameter.repo}`;
     const headers = {
-      Accept: "application/vnd.github.v3.repository+json",
+      Accept: "application/json",
     };
     return this.apiClient.request("GET", url, headers, undefined, undefined, option);
   }
@@ -28912,13 +30672,13 @@ export class Client<RequestOption> {
   /**
    * List email addresses for the authenticated user
    * Lists all of your email addresses, and specifies which one is visible to the public. This endpoint is accessible with the `user:email` scope.
-   * operationId: users/list-emails-for-authenticated
+   * operationId: users/list-emails-for-authenticated-user
    * Request URI: /user/emails
    */
-  public async users$list$emails$for$authenticated(
-    params: Params$users$list$emails$for$authenticated,
+  public async users$list$emails$for$authenticated$user(
+    params: Params$users$list$emails$for$authenticated$user,
     option?: RequestOption,
-  ): Promise<Response$users$list$emails$for$authenticated$Status$200["application/json"]> {
+  ): Promise<Response$users$list$emails$for$authenticated$user$Status$200["application/json"]> {
     const url = this.baseUrl + `/user/emails`;
     const headers = {
       Accept: "application/json",
@@ -28932,13 +30692,13 @@ export class Client<RequestOption> {
   /**
    * Add an email address for the authenticated user
    * This endpoint is accessible with the `user` scope.
-   * operationId: users/add-email-for-authenticated
+   * operationId: users/add-email-for-authenticated-user
    * Request URI: /user/emails
    */
-  public async users$add$email$for$authenticated(
-    params: Params$users$add$email$for$authenticated,
+  public async users$add$email$for$authenticated$user(
+    params: Params$users$add$email$for$authenticated$user,
     option?: RequestOption,
-  ): Promise<Response$users$add$email$for$authenticated$Status$201["application/json"]> {
+  ): Promise<Response$users$add$email$for$authenticated$user$Status$201["application/json"]> {
     const url = this.baseUrl + `/user/emails`;
     const headers = {
       "Content-Type": "application/json",
@@ -28949,11 +30709,11 @@ export class Client<RequestOption> {
   /**
    * Delete an email address for the authenticated user
    * This endpoint is accessible with the `user` scope.
-   * operationId: users/delete-email-for-authenticated
+   * operationId: users/delete-email-for-authenticated-user
    * Request URI: /user/emails
    */
-  public async users$delete$email$for$authenticated(
-    params: Params$users$delete$email$for$authenticated,
+  public async users$delete$email$for$authenticated$user(
+    params: Params$users$delete$email$for$authenticated$user,
     option?: RequestOption,
   ): Promise<void> {
     const url = this.baseUrl + `/user/emails`;
@@ -28985,13 +30745,13 @@ export class Client<RequestOption> {
   /**
    * List the people the authenticated user follows
    * Lists the people who the authenticated user follows.
-   * operationId: users/list-followed-by-authenticated
+   * operationId: users/list-followed-by-authenticated-user
    * Request URI: /user/following
    */
-  public async users$list$followed$by$authenticated(
-    params: Params$users$list$followed$by$authenticated,
+  public async users$list$followed$by$authenticated$user(
+    params: Params$users$list$followed$by$authenticated$user,
     option?: RequestOption,
-  ): Promise<Response$users$list$followed$by$authenticated$Status$200["application/json"]> {
+  ): Promise<Response$users$list$followed$by$authenticated$user$Status$200["application/json"]> {
     const url = this.baseUrl + `/user/following`;
     const headers = {
       Accept: "application/json",
@@ -29042,13 +30802,13 @@ export class Client<RequestOption> {
   /**
    * List GPG keys for the authenticated user
    * Lists the current user's GPG keys. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:gpg_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
-   * operationId: users/list-gpg-keys-for-authenticated
+   * operationId: users/list-gpg-keys-for-authenticated-user
    * Request URI: /user/gpg_keys
    */
-  public async users$list$gpg$keys$for$authenticated(
-    params: Params$users$list$gpg$keys$for$authenticated,
+  public async users$list$gpg$keys$for$authenticated$user(
+    params: Params$users$list$gpg$keys$for$authenticated$user,
     option?: RequestOption,
-  ): Promise<Response$users$list$gpg$keys$for$authenticated$Status$200["application/json"]> {
+  ): Promise<Response$users$list$gpg$keys$for$authenticated$user$Status$200["application/json"]> {
     const url = this.baseUrl + `/user/gpg_keys`;
     const headers = {
       Accept: "application/json",
@@ -29062,13 +30822,13 @@ export class Client<RequestOption> {
   /**
    * Create a GPG key for the authenticated user
    * Adds a GPG key to the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth, or OAuth with at least `write:gpg_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
-   * operationId: users/create-gpg-key-for-authenticated
+   * operationId: users/create-gpg-key-for-authenticated-user
    * Request URI: /user/gpg_keys
    */
-  public async users$create$gpg$key$for$authenticated(
-    params: Params$users$create$gpg$key$for$authenticated,
+  public async users$create$gpg$key$for$authenticated$user(
+    params: Params$users$create$gpg$key$for$authenticated$user,
     option?: RequestOption,
-  ): Promise<Response$users$create$gpg$key$for$authenticated$Status$201["application/json"]> {
+  ): Promise<Response$users$create$gpg$key$for$authenticated$user$Status$201["application/json"]> {
     const url = this.baseUrl + `/user/gpg_keys`;
     const headers = {
       "Content-Type": "application/json",
@@ -29079,13 +30839,13 @@ export class Client<RequestOption> {
   /**
    * Get a GPG key for the authenticated user
    * View extended details for a single GPG key. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:gpg_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
-   * operationId: users/get-gpg-key-for-authenticated
+   * operationId: users/get-gpg-key-for-authenticated-user
    * Request URI: /user/gpg_keys/{gpg_key_id}
    */
-  public async users$get$gpg$key$for$authenticated(
-    params: Params$users$get$gpg$key$for$authenticated,
+  public async users$get$gpg$key$for$authenticated$user(
+    params: Params$users$get$gpg$key$for$authenticated$user,
     option?: RequestOption,
-  ): Promise<Response$users$get$gpg$key$for$authenticated$Status$200["application/json"]> {
+  ): Promise<Response$users$get$gpg$key$for$authenticated$user$Status$200["application/json"]> {
     const url = this.baseUrl + `/user/gpg_keys/${params.parameter.gpg_key_id}`;
     const headers = {
       Accept: "application/json",
@@ -29095,11 +30855,11 @@ export class Client<RequestOption> {
   /**
    * Delete a GPG key for the authenticated user
    * Removes a GPG key from the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth or via OAuth with at least `admin:gpg_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
-   * operationId: users/delete-gpg-key-for-authenticated
+   * operationId: users/delete-gpg-key-for-authenticated-user
    * Request URI: /user/gpg_keys/{gpg_key_id}
    */
-  public async users$delete$gpg$key$for$authenticated(
-    params: Params$users$delete$gpg$key$for$authenticated,
+  public async users$delete$gpg$key$for$authenticated$user(
+    params: Params$users$delete$gpg$key$for$authenticated$user,
     option?: RequestOption,
   ): Promise<void> {
     const url = this.baseUrl + `/user/gpg_keys/${params.parameter.gpg_key_id}`;
@@ -29163,10 +30923,13 @@ export class Client<RequestOption> {
    * Add a single repository to an installation. The authenticated user must have admin access to the repository.
    *
    * You must use a personal access token (which you can create via the [command line](https://docs.github.com/enterprise-server@3.0/github/authenticating-to-github/creating-a-personal-access-token) or [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication)) to access this endpoint.
-   * operationId: apps/add-repo-to-installation
+   * operationId: apps/add-repo-to-installation-for-authenticated-user
    * Request URI: /user/installations/{installation_id}/repositories/{repository_id}
    */
-  public async apps$add$repo$to$installation(params: Params$apps$add$repo$to$installation, option?: RequestOption): Promise<void> {
+  public async apps$add$repo$to$installation$for$authenticated$user(
+    params: Params$apps$add$repo$to$installation$for$authenticated$user,
+    option?: RequestOption,
+  ): Promise<void> {
     const url = this.baseUrl + `/user/installations/${params.parameter.installation_id}/repositories/${params.parameter.repository_id}`;
     const headers = {};
     return this.apiClient.request("PUT", url, headers, undefined, undefined, option);
@@ -29176,10 +30939,13 @@ export class Client<RequestOption> {
    * Remove a single repository from an installation. The authenticated user must have admin access to the repository.
    *
    * You must use a personal access token (which you can create via the [command line](https://docs.github.com/enterprise-server@3.0/github/authenticating-to-github/creating-a-personal-access-token) or [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication)) to access this endpoint.
-   * operationId: apps/remove-repo-from-installation
+   * operationId: apps/remove-repo-from-installation-for-authenticated-user
    * Request URI: /user/installations/{installation_id}/repositories/{repository_id}
    */
-  public async apps$remove$repo$from$installation(params: Params$apps$remove$repo$from$installation, option?: RequestOption): Promise<void> {
+  public async apps$remove$repo$from$installation$for$authenticated$user(
+    params: Params$apps$remove$repo$from$installation$for$authenticated$user,
+    option?: RequestOption,
+  ): Promise<void> {
     const url = this.baseUrl + `/user/installations/${params.parameter.installation_id}/repositories/${params.parameter.repository_id}`;
     const headers = {};
     return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
@@ -29218,13 +30984,13 @@ export class Client<RequestOption> {
   /**
    * List public SSH keys for the authenticated user
    * Lists the public SSH keys for the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:public_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
-   * operationId: users/list-public-ssh-keys-for-authenticated
+   * operationId: users/list-public-ssh-keys-for-authenticated-user
    * Request URI: /user/keys
    */
-  public async users$list$public$ssh$keys$for$authenticated(
-    params: Params$users$list$public$ssh$keys$for$authenticated,
+  public async users$list$public$ssh$keys$for$authenticated$user(
+    params: Params$users$list$public$ssh$keys$for$authenticated$user,
     option?: RequestOption,
-  ): Promise<Response$users$list$public$ssh$keys$for$authenticated$Status$200["application/json"]> {
+  ): Promise<Response$users$list$public$ssh$keys$for$authenticated$user$Status$200["application/json"]> {
     const url = this.baseUrl + `/user/keys`;
     const headers = {
       Accept: "application/json",
@@ -29238,13 +31004,13 @@ export class Client<RequestOption> {
   /**
    * Create a public SSH key for the authenticated user
    * Adds a public SSH key to the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth, or OAuth with at least `write:public_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
-   * operationId: users/create-public-ssh-key-for-authenticated
+   * operationId: users/create-public-ssh-key-for-authenticated-user
    * Request URI: /user/keys
    */
-  public async users$create$public$ssh$key$for$authenticated(
-    params: Params$users$create$public$ssh$key$for$authenticated,
+  public async users$create$public$ssh$key$for$authenticated$user(
+    params: Params$users$create$public$ssh$key$for$authenticated$user,
     option?: RequestOption,
-  ): Promise<Response$users$create$public$ssh$key$for$authenticated$Status$201["application/json"]> {
+  ): Promise<Response$users$create$public$ssh$key$for$authenticated$user$Status$201["application/json"]> {
     const url = this.baseUrl + `/user/keys`;
     const headers = {
       "Content-Type": "application/json",
@@ -29255,13 +31021,13 @@ export class Client<RequestOption> {
   /**
    * Get a public SSH key for the authenticated user
    * View extended details for a single public SSH key. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:public_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
-   * operationId: users/get-public-ssh-key-for-authenticated
+   * operationId: users/get-public-ssh-key-for-authenticated-user
    * Request URI: /user/keys/{key_id}
    */
-  public async users$get$public$ssh$key$for$authenticated(
-    params: Params$users$get$public$ssh$key$for$authenticated,
+  public async users$get$public$ssh$key$for$authenticated$user(
+    params: Params$users$get$public$ssh$key$for$authenticated$user,
     option?: RequestOption,
-  ): Promise<Response$users$get$public$ssh$key$for$authenticated$Status$200["application/json"]> {
+  ): Promise<Response$users$get$public$ssh$key$for$authenticated$user$Status$200["application/json"]> {
     const url = this.baseUrl + `/user/keys/${params.parameter.key_id}`;
     const headers = {
       Accept: "application/json",
@@ -29271,11 +31037,11 @@ export class Client<RequestOption> {
   /**
    * Delete a public SSH key for the authenticated user
    * Removes a public SSH key from the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth or via OAuth with at least `admin:public_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
-   * operationId: users/delete-public-ssh-key-for-authenticated
+   * operationId: users/delete-public-ssh-key-for-authenticated-user
    * Request URI: /user/keys/{key_id}
    */
-  public async users$delete$public$ssh$key$for$authenticated(
-    params: Params$users$delete$public$ssh$key$for$authenticated,
+  public async users$delete$public$ssh$key$for$authenticated$user(
+    params: Params$users$delete$public$ssh$key$for$authenticated$user,
     option?: RequestOption,
   ): Promise<void> {
     const url = this.baseUrl + `/user/keys/${params.parameter.key_id}`;
@@ -29376,13 +31142,13 @@ export class Client<RequestOption> {
   /**
    * List public email addresses for the authenticated user
    * Lists your publicly visible email address, which you can set with the [Set primary email visibility for the authenticated user](https://docs.github.com/enterprise-server@3.0/rest/reference/users#set-primary-email-visibility-for-the-authenticated-user) endpoint. This endpoint is accessible with the `user:email` scope.
-   * operationId: users/list-public-emails-for-authenticated
+   * operationId: users/list-public-emails-for-authenticated-user
    * Request URI: /user/public_emails
    */
-  public async users$list$public$emails$for$authenticated(
-    params: Params$users$list$public$emails$for$authenticated,
+  public async users$list$public$emails$for$authenticated$user(
+    params: Params$users$list$public$emails$for$authenticated$user,
     option?: RequestOption,
-  ): Promise<Response$users$list$public$emails$for$authenticated$Status$200["application/json"]> {
+  ): Promise<Response$users$list$public$emails$for$authenticated$user$Status$200["application/json"]> {
     const url = this.baseUrl + `/user/public_emails`;
     const headers = {
       Accept: "application/json",
@@ -29430,8 +31196,8 @@ export class Client<RequestOption> {
    *
    * When using [OAuth](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/), authorizations must include:
    *
-   * *   `public_repo` scope or `repo` scope to create a public repository
-   * *   `repo` scope to create a private repository
+   * *   `public_repo` scope or `repo` scope to create a public repository. Note: For GitHub AE, use `repo` scope to create an internal repository.
+   * *   `repo` scope to create a private repository.
    * operationId: repos/create-for-authenticated-user
    * Request URI: /user/repos
    */
@@ -29468,20 +31234,26 @@ export class Client<RequestOption> {
   }
   /**
    * Decline a repository invitation
-   * operationId: repos/decline-invitation
+   * operationId: repos/decline-invitation-for-authenticated-user
    * Request URI: /user/repository_invitations/{invitation_id}
    */
-  public async repos$decline$invitation(params: Params$repos$decline$invitation, option?: RequestOption): Promise<void> {
+  public async repos$decline$invitation$for$authenticated$user(
+    params: Params$repos$decline$invitation$for$authenticated$user,
+    option?: RequestOption,
+  ): Promise<void> {
     const url = this.baseUrl + `/user/repository_invitations/${params.parameter.invitation_id}`;
     const headers = {};
     return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
   }
   /**
    * Accept a repository invitation
-   * operationId: repos/accept-invitation
+   * operationId: repos/accept-invitation-for-authenticated-user
    * Request URI: /user/repository_invitations/{invitation_id}
    */
-  public async repos$accept$invitation(params: Params$repos$accept$invitation, option?: RequestOption): Promise<void> {
+  public async repos$accept$invitation$for$authenticated$user(
+    params: Params$repos$accept$invitation$for$authenticated$user,
+    option?: RequestOption,
+  ): Promise<void> {
     const url = this.baseUrl + `/user/repository_invitations/${params.parameter.invitation_id}`;
     const headers = {};
     return this.apiClient.request("PATCH", url, headers, undefined, undefined, option);
@@ -29850,7 +31622,7 @@ export class Client<RequestOption> {
   }
   /**
    * List organizations for a user
-   * List [public organization memberships](https://help.github.com/articles/publicizing-or-concealing-organization-membership) for the specified user.
+   * List [public organization memberships](https://docs.github.com/articles/publicizing-or-concealing-organization-membership) for the specified user.
    *
    * This method only lists _public_ memberships, regardless of authentication. If you need to fetch all of the organization memberships (public and private) for the authenticated user, use the [List organizations for the authenticated user](https://docs.github.com/enterprise-server@3.0/rest/reference/orgs#list-organizations-for-the-authenticated-user) API instead.
    * operationId: orgs/list-for-user
@@ -29931,7 +31703,7 @@ export class Client<RequestOption> {
   }
   /**
    * List repositories for a user
-   * Lists public repositories for the specified user.
+   * Lists public repositories for the specified user. Note: For GitHub AE, this endpoint will list internal repositories for the specified user.
    * operationId: repos/list-for-user
    * Request URI: /users/{username}/repos
    */
@@ -29988,13 +31760,13 @@ export class Client<RequestOption> {
    * operationId: activity/list-repos-starred-by-user
    * Request URI: /users/{username}/starred
    */
-  public async activity$list$repos$starred$by$user<ResponseContentType extends ResponseContentType$activity$list$repos$starred$by$user>(
-    params: Params$activity$list$repos$starred$by$user<ResponseContentType>,
+  public async activity$list$repos$starred$by$user(
+    params: Params$activity$list$repos$starred$by$user,
     option?: RequestOption,
-  ): Promise<Response$activity$list$repos$starred$by$user$Status$200[ResponseContentType]> {
+  ): Promise<Response$activity$list$repos$starred$by$user$Status$200["application/json"]> {
     const url = this.baseUrl + `/users/${params.parameter.username}/starred`;
     const headers = {
-      Accept: params.headers.Accept,
+      Accept: "application/json",
     };
     const queryParameters: QueryParameters = {
       sort: { value: params.parameter.sort, explode: false },
@@ -30026,7 +31798,7 @@ export class Client<RequestOption> {
   }
   /**
    * Suspend a user
-   * If your GitHub instance uses [LDAP Sync with Active Directory LDAP servers](https://help.github.com/enterprise/admin/guides/user-management/using-ldap), Active Directory LDAP-authenticated users cannot be suspended through this API. If you attempt to suspend an Active Directory LDAP-authenticated user through this API, it will return a `403` response.
+   * If your GitHub instance uses [LDAP Sync with Active Directory LDAP servers](https://docs.github.com/enterprise/admin/guides/user-management/using-ldap), Active Directory LDAP-authenticated users cannot be suspended through this API. If you attempt to suspend an Active Directory LDAP-authenticated user through this API, it will return a `403` response.
    *
    * You can suspend any user account except your own.
    *
@@ -30043,7 +31815,7 @@ export class Client<RequestOption> {
   }
   /**
    * Unsuspend a user
-   * If your GitHub instance uses [LDAP Sync with Active Directory LDAP servers](https://help.github.com/enterprise/admin/guides/user-management/using-ldap), this API is disabled and will return a `403` response. Active Directory LDAP-authenticated users cannot be unsuspended using the API.
+   * If your GitHub instance uses [LDAP Sync with Active Directory LDAP servers](https://docs.github.com/enterprise/admin/guides/user-management/using-ldap), this API is disabled and will return a `403` response. Active Directory LDAP-authenticated users cannot be unsuspended using the API.
    * operationId: enterprise-admin/unsuspend-user
    * Request URI: /users/{username}/suspended
    */
