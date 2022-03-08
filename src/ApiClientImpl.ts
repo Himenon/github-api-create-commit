@@ -1,7 +1,6 @@
 import type { ApiClient, QueryParameters } from "./api";
 import type * as Types from "./types";
 import * as Formatter from "@himenon/openapi-parameter-formatter";
-import fetch from "node-fetch";
 
 export const generateQueryString = (queryParameters: QueryParameters | undefined): string | undefined => {
   if (!queryParameters) {
@@ -24,7 +23,13 @@ export const generateQueryString = (queryParameters: QueryParameters | undefined
   return queries.join("&");
 };
 
-export const create = (accessToken?: string): ApiClient<Types.RequestOption> => {
+export interface Params {
+  accessToken?: string;
+  fetch: Types.FetchFunction;
+}
+
+export const create = (params: Params): ApiClient<Types.RequestOption> => {
+  const { accessToken, fetch: _fetch } = params;
   const apiClientImpl: ApiClient<Types.RequestOption> = {
     request: async (httpMethod, url, headers, requestBody, queryParameters): Promise<any> => {
       const query = generateQueryString(queryParameters);
@@ -33,7 +38,7 @@ export const create = (accessToken?: string): ApiClient<Types.RequestOption> => 
         ...headers,
         Authorization: "token " + accessToken,
       };
-      const response = await fetch(requestUrl, {
+      const response = await _fetch(requestUrl, {
         body: JSON.stringify(requestBody),
         headers: requestHeaders,
         method: httpMethod,
