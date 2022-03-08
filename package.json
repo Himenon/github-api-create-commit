@@ -37,6 +37,7 @@
     "clean": "yarn ts ./scripts/clean.ts",
     "format:code": "run-s prettier:format eslint:format",
     "format:yarn:lock": "yarn-deduplicate yarn.lock --strategy highest",
+    "generate:api": "yarn ts ./scripts/generateTsCode.ts",
     "lerna:version:up": "lerna version --yes",
     "release:github:registry": "yarn publish --registry https://npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}",
     "release:npm:registry": "yarn publish",
