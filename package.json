@@ -1,7 +1,7 @@
 {
   "name": "@himenon/github-api-create-commit",
   "version": "0.3.0",
-  "description": "Create a Commit to GitHub via WebAPI.",
+  "description": "Create a Commit to GitHub via WebAPI",
   "keywords": [
     "github",
     "create commit",
@@ -21,6 +21,38 @@
     "url": "https://github.com/Himenon"
   },
   "sideEffects": false,
+  "exports": {
+    "./ApiClientImpl": {
+      "node": "./lib/$cjs/ApiClientImpl.js",
+      "require": "./lib/$cjs/ApiClientImpl.js",
+      "import": "./lib/$esm/ApiClientImpl.js",
+      "default": "./lib/$cjs/ApiClientImpl.js"
+    },
+    "./GitHub": {
+      "node": "./lib/$cjs/GitHub.js",
+      "require": "./lib/$cjs/GitHub.js",
+      "import": "./lib/$esm/GitHub.js",
+      "default": "./lib/$cjs/GitHub.js"
+    },
+    "./api": {
+      "node": "./lib/$cjs/api.js",
+      "require": "./lib/$cjs/api.js",
+      "import": "./lib/$esm/api.js",
+      "default": "./lib/$cjs/api.js"
+    },
+    ".": {
+      "node": "./lib/$cjs/index.js",
+      "require": "./lib/$cjs/index.js",
+      "import": "./lib/$esm/index.js",
+      "default": "./lib/$cjs/index.js"
+    },
+    "./types": {
+      "node": "./lib/$cjs/types.js",
+      "require": "./lib/$cjs/types.js",
+      "import": "./lib/$esm/types.js",
+      "default": "./lib/$cjs/types.js"
+    }
+  },
   "main": "./lib/$cjs/index.js",
   "module": "./lib/$esm/index.js",
   "types": "./lib/$types/index.d.ts",
@@ -77,7 +109,7 @@
     "eslint": "8.10.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.25.4",
-    "execa": "6.1.0",
+    "execa": "5.1.1",
     "generate-changelog": "1.8.0",
     "jest": "27.5.1",
     "jest-cli": "27.5.1",
