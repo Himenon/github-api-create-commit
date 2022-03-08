@@ -7,7 +7,11 @@ Create a Commit to GitHub via WebAPI.
 ```ts
 import * as GitHubApiCreateCommit from "@himenon/github-api-create-commit";
 
-const github = GitHubApiCreateCommit.create({ owner: "Himenon", repo: "github-api-create-commit", accessToken: "" });
+const github = GitHubApiCreateCommit.create({
+  owner: "Himenon",
+  repo: "github-api-create-commit",
+  accessToken: "",
+});
 
 await github.createGitCommit({
   baseBranchName: "master",
