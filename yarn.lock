@@ -2078,6 +2078,14 @@
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.1.tgz#283f669ff76d7b8260df8ab7a4262cc83d988256"
   integrity sha512-fZQQafSREFyuZcdWFAExYjBiCL7AUCdgsk80iO0q4yihYYdcIiH28CcuPTGFgLOCC8RlW49GSQxdHwZP+I7CNg==
 
+"@types/node-fetch@^2.6.1":
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.6.1.tgz#8f127c50481db65886800ef496f20bbf15518975"
+  integrity sha512-oMqjURCaxoSIsHSr1E47QHzbmzNR5rK8McHuNb11BOM9cHcIK3Avy0s/b2JlXHoQGTYS3NsvWzV1M0iK7l0wbA==
+  dependencies:
+    "@types/node" "*"
+    form-data "^3.0.0"
+
 "@types/node@*":
   version "14.14.7"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.7.tgz#8ea1e8f8eae2430cf440564b98c6dfce1ec5945d"
@@ -6406,7 +6414,7 @@ nice-try@^1.0.4:
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
-node-fetch@2:
+node-fetch@2.6.7:
   version "2.6.7"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
   integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
