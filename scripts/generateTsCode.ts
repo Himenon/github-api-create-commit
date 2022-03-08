@@ -46,7 +46,7 @@ export const generateTsCode = (entryPoint: string, outputFileName: string): void
 };
 
 const main = () => {
-  generateTsCode("openapi/ghes-3.4.yaml", "src/api.ts");
+  generateTsCode("openapi/ghes-3.0.yaml", "src/api.ts");
 };
 
 main();
