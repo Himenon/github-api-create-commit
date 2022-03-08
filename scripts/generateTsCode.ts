@@ -8,23 +8,23 @@ import type * as Types from "@himenon/openapi-typescript-code-generator/types";
 export const generateTsCode = (entryPoint: string, outputFileName: string): void => {
   const codeGenerator = new CodeGenerator(entryPoint, {
     convertOption: {},
-    allowOperationIds: [
-      "meta/root",
-      "git/get-ref",
-      "git/create-ref",
-      "git/create-blob",
-      "git/create-tree",
-      "git/create-commit",
-      "git/get-tree",
-      "git/update-ref",
-      "pulls/create",
-      "pulls/list",
-      "repos/get",
-      "repos/get-commit",
-      "repos/list-branches",
-      "repos/get-content",
-      "repos/list-tags",
-    ],
+    // allowOperationIds: [
+    //   "meta/root",
+    //   "git/get-ref",
+    //   "git/create-ref",
+    //   "git/create-blob",
+    //   "git/create-tree",
+    //   "git/create-commit",
+    //   "git/get-tree",
+    //   "git/update-ref",
+    //   "pulls/create",
+    //   "pulls/list",
+    //   "repos/get",
+    //   "repos/get-commit",
+    //   "repos/list-branches",
+    //   "repos/get-content",
+    //   "repos/list-tags",
+    // ],
   });
 
   const apiClientGeneratorTemplate: Types.CodeGenerator.CustomGenerator<Templates.ApiClient.Option> = {
@@ -46,7 +46,7 @@ export const generateTsCode = (entryPoint: string, outputFileName: string): void
 };
 
 const main = () => {
-  generateTsCode("openapi/ghes-3.0.yaml", "src/api.ts");
+  generateTsCode("openapi/ghes-3.4.yaml", "src/api.ts");
 };
 
 main();

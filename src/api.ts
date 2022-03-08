@@ -270,8 +270,6 @@ export namespace Schemas {
     organization_user_blocking?: "read" | "write";
     /** The level of permission to grant the access token to manage team discussions and related comments. Can be one of: `read` or `write`. */
     team_discussions?: "read" | "write";
-    /** The level of permission to grant the access token for notification of content references and creation content attachments. Can be one of: `read` or `write`. */
-    content_references?: "read" | "write";
   }
   /** Simple User */
   export interface simple$user {
@@ -328,6 +326,7 @@ export namespace Schemas {
     fingerprint: string | null;
     user?: Schemas.nullable$simple$user;
     installation?: Schemas.nullable$scoped$installation;
+    expires_at: string | null;
   }
   /** GitHub apps are a new way to extend GitHub. They can be installed directly on organizations and user accounts and granted access to specific repositories. They come with granular permissions and built-in webhooks. GitHub apps are first class actors within GitHub. */
   export interface integration {
@@ -345,17 +344,15 @@ export namespace Schemas {
     created_at: string;
     updated_at: string;
     /** The set of permissions for the GitHub app */
-    permissions:
-      | {
-          issues?: string;
-          checks?: string;
-          metadata?: string;
-          contents?: string;
-          deployments?: string;
-        }
-      | {
-          [key: string]: string;
-        };
+    permissions: {
+      issues?: string;
+      checks?: string;
+      metadata?: string;
+      contents?: string;
+      deployments?: string;
+    } & {
+      [key: string]: string;
+    };
     /** The list of events for the GitHub app */
     events: string[];
     /** The number of installations associated with the GitHub app */
@@ -382,7 +379,7 @@ export namespace Schemas {
   export type webhook$config$url = string;
   /** The media type used to serialize the payloads. Supported values include `json` and `form`. The default is `form`. */
   export type webhook$config$content$type = string;
-  /** If provided, the `secret` will be used as the `key` to generate the HMAC hex digest value for [delivery signature headers](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads/#delivery-headers). */
+  /** If provided, the `secret` will be used as the `key` to generate the HMAC hex digest value for [delivery signature headers](https://docs.github.com/enterprise-server@3.4/webhooks/event-payloads/#delivery-headers). */
   export type webhook$config$secret = string;
   export type webhook$config$insecure$ssl = string | number;
   /** Configuration object of the webhook */
@@ -391,6 +388,92 @@ export namespace Schemas {
     content_type?: Schemas.webhook$config$content$type;
     secret?: Schemas.webhook$config$secret;
     insecure_ssl?: Schemas.webhook$config$insecure$ssl;
+  }
+  /** Delivery made by a webhook, without request and response information. */
+  export interface hook$delivery$item {
+    /** Unique identifier of the webhook delivery. */
+    id: number;
+    /** Unique identifier for the event (shared with all deliveries for all webhooks that subscribe to this event). */
+    guid: string;
+    /** Time when the webhook delivery occurred. */
+    delivered_at: string;
+    /** Whether the webhook delivery is a redelivery. */
+    redelivery: boolean;
+    /** Time spent delivering. */
+    duration: number;
+    /** Describes the response returned after attempting the delivery. */
+    status: string;
+    /** Status code received when delivery was made. */
+    status_code: number;
+    /** The event that triggered the delivery. */
+    event: string;
+    /** The type of activity for the event that triggered the delivery. */
+    action: string | null;
+    /** The id of the GitHub App installation associated with this event. */
+    installation_id: number | null;
+    /** The id of the repository associated with this event. */
+    repository_id: number | null;
+  }
+  /** Scim Error */
+  export interface scim$error {
+    message?: string | null;
+    documentation_url?: string | null;
+    detail?: string | null;
+    status?: number;
+    scimType?: string | null;
+    schemas?: string[];
+  }
+  /** Validation Error */
+  export interface validation$error {
+    message: string;
+    documentation_url: string;
+    errors?: {
+      resource?: string;
+      field?: string;
+      message?: string;
+      code: string;
+      index?: number;
+      value?: (string | null) | (number | null) | (string[] | null);
+    }[];
+  }
+  /** Delivery made by a webhook. */
+  export interface hook$delivery {
+    /** Unique identifier of the delivery. */
+    id: number;
+    /** Unique identifier for the event (shared with all deliveries for all webhooks that subscribe to this event). */
+    guid: string;
+    /** Time when the delivery was delivered. */
+    delivered_at: string;
+    /** Whether the delivery is a redelivery. */
+    redelivery: boolean;
+    /** Time spent delivering. */
+    duration: number;
+    /** Description of the status of the attempted delivery */
+    status: string;
+    /** Status code received when delivery was made. */
+    status_code: number;
+    /** The event that triggered the delivery. */
+    event: string;
+    /** The type of activity for the event that triggered the delivery. */
+    action: string | null;
+    /** The id of the GitHub App installation associated with this event. */
+    installation_id: number | null;
+    /** The id of the repository associated with this event. */
+    repository_id: number | null;
+    /** The URL target of the delivery. */
+    url?: string;
+    request: {
+      /** The request headers sent with the webhook delivery. */
+      headers: {};
+      /** The webhook payload. */
+      payload: {};
+    };
+    response: {
+      /** The response headers received when the delivery was made. */
+      headers: {};
+      /** The response payload received. */
+      payload: string | null;
+    };
   }
   /** An enterprise account */
   export interface enterprise {
@@ -645,6 +728,7 @@ export namespace Schemas {
       allow_rebase_merge?: boolean;
       temp_clone_token?: string;
       allow_squash_merge?: boolean;
+      allow_auto_merge?: boolean;
       delete_branch_on_merge?: boolean;
       allow_update_branch?: boolean;
       allow_merge_commit?: boolean;
@@ -654,6 +738,8 @@ export namespace Schemas {
     temp_clone_token?: string;
     /** Whether to allow squash merges for pull requests. */
     allow_squash_merge?: boolean;
+    /** Whether to allow Auto-merge to be used on pull requests. */
+    allow_auto_merge?: boolean;
     /** Whether to delete head branches when pull requests are merged */
     delete_branch_on_merge?: boolean;
     /** Whether to allow merge commits for pull requests. */
@@ -678,19 +764,6 @@ export namespace Schemas {
     has_multiple_single_files?: boolean;
     single_file_paths?: string[];
   }
-  /** Validation Error */
-  export interface validation$error {
-    message: string;
-    documentation_url: string;
-    errors?: {
-      resource?: string;
-      field?: string;
-      message?: string;
-      code: string;
-      index?: number;
-      value?: (string | null) | (number | null) | (string[] | null);
-    }[];
-  }
   /** The authorization associated with an OAuth Access. */
   export interface application$grant {
     id: number;
@@ -705,28 +778,6 @@ export namespace Schemas {
     scopes: string[];
     user?: Schemas.nullable$simple$user;
   }
-  /** The authorization for an OAuth app, GitHub App, or a Personal Access Token. */
-  export interface nullable$authorization {
-    id: number;
-    url: string;
-    /** A list of scopes that this authorization is in. */
-    scopes: string[] | null;
-    token: string;
-    token_last_eight: string | null;
-    hashed_token: string | null;
-    app: {
-      client_id: string;
-      name: string;
-      url: string;
-    };
-    note: string | null;
-    note_url: string | null;
-    updated_at: string;
-    created_at: string;
-    fingerprint: string | null;
-    user?: Schemas.nullable$simple$user;
-    installation?: Schemas.nullable$scoped$installation;
-  }
   /** Code Of Conduct */
   export interface code$of$conduct {
     key: string;
@@ -735,7 +786,7 @@ export namespace Schemas {
     body?: string;
     html_url: string | null;
   }
-  /** The announcement text in GitHub Flavored Markdown. For more information about GitHub Flavored Markdown, see "[Basic writing and formatting syntax](https://docs.github.com/enterprise-server@3.0/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)." */
+  /** The announcement text in GitHub Flavored Markdown. For more information about GitHub Flavored Markdown, see "[Basic writing and formatting syntax](https://docs.github.com/enterprise-server@3.4/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)." */
   export type announcement$message = string;
   /** The time at which the announcement expires. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. To set an announcement that never expires, omit this parameter, set it to `null`, or set it to an empty string. */
   export type announcement$expiration = string;
@@ -891,448 +942,75 @@ export namespace Schemas {
     /** Describe whether all repositories have been selected or there's a selection involved */
     repository_selection?: "all" | "selected";
   }
-  /** Actor */
-  export interface actor {
-    id: number;
-    login: string;
-    display_login?: string;
-    gravatar_id: string | null;
-    url: string;
-    avatar_url: string;
-  }
-  /** A collection of related issues and pull requests. */
-  export interface nullable$milestone {
-    url: string;
-    html_url: string;
-    labels_url: string;
-    id: number;
-    node_id: string;
-    /** The number of the milestone. */
-    number: number;
-    /** The state of the milestone. */
-    state: "open" | "closed";
-    /** The title of the milestone. */
-    title: string;
-    description: string | null;
-    creator: Schemas.nullable$simple$user;
-    open_issues: number;
-    closed_issues: number;
-    created_at: string;
-    updated_at: string;
-    closed_at: string | null;
-    due_on: string | null;
-  }
-  /** GitHub apps are a new way to extend GitHub. They can be installed directly on organizations and user accounts and granted access to specific repositories. They come with granular permissions and built-in webhooks. GitHub apps are first class actors within GitHub. */
-  export interface nullable$integration {
-    /** Unique identifier of the GitHub app */
-    id: number;
-    /** The slug name of the GitHub app */
-    slug?: string;
-    node_id: string;
-    owner: Schemas.nullable$simple$user;
-    /** The name of the GitHub app */
-    name: string;
-    description: string | null;
-    external_url: string;
-    html_url: string;
-    created_at: string;
-    updated_at: string;
-    /** The set of permissions for the GitHub app */
-    permissions:
-      | {
-          issues?: string;
-          checks?: string;
-          metadata?: string;
-          contents?: string;
-          deployments?: string;
-        }
-      | {
-          [key: string]: string;
-        };
-    /** The list of events for the GitHub app */
-    events: string[];
-    /** The number of installations associated with the GitHub app */
-    installations_count?: number;
-    client_id?: string;
-    client_secret?: string;
-    webhook_secret?: string | null;
-    pem?: string;
-  }
-  /** How the author is associated with the repository. */
-  export type author_association =
-    | "COLLABORATOR"
-    | "CONTRIBUTOR"
-    | "FIRST_TIMER"
-    | "FIRST_TIME_CONTRIBUTOR"
-    | "MANNEQUIN"
-    | "MEMBER"
-    | "NONE"
-    | "OWNER";
-  export interface reaction$rollup {
-    url: string;
-    total_count: number;
-    "+1": number;
-    "-1": number;
-    laugh: number;
-    confused: number;
-    heart: number;
-    hooray: number;
-    eyes: number;
-    rocket: number;
-  }
-  /** Issues are a great way to keep track of tasks, enhancements, and bugs for your projects. */
-  export interface issue {
-    id: number;
-    node_id: string;
-    /** URL for the issue */
-    url: string;
-    repository_url: string;
-    labels_url: string;
-    comments_url: string;
-    events_url: string;
-    html_url: string;
-    /** Number uniquely identifying the issue within its repository */
-    number: number;
-    /** State of the issue; either 'open' or 'closed' */
-    state: string;
-    /** Title of the issue */
-    title: string;
-    /** Contents of the issue */
-    body?: string | null;
-    user: Schemas.nullable$simple$user;
-    /** Labels to associate with this issue; pass one or more label names to replace the set of labels on this issue; send an empty array to clear all labels from the issue; note that the labels are silently dropped for users without push access to the repository */
-    labels: (
-      | string
-      | {
-          id?: number;
-          node_id?: string;
-          url?: string;
-          name?: string;
-          description?: string | null;
-          color?: string | null;
-          default?: boolean;
-        }
-    )[];
-    assignee: Schemas.nullable$simple$user;
-    assignees?: Schemas.simple$user[] | null;
-    milestone: Schemas.nullable$milestone;
-    locked: boolean;
-    active_lock_reason?: string | null;
-    comments: number;
-    pull_request?: {
-      merged_at?: string | null;
-      diff_url: string | null;
-      html_url: string | null;
-      patch_url: string | null;
-      url: string | null;
+  export interface audit$log$event {
+    /** The time the audit log event occurred, given as a [Unix timestamp](http://en.wikipedia.org/wiki/Unix_time). */
+    "@timestamp"?: number;
+    /** The name of the action that was performed, for example `user.login` or `repo.create`. */
+    action?: string;
+    active?: boolean;
+    active_was?: boolean;
+    /** The actor who performed the action. */
+    actor?: string;
+    /** The id of the actor who performed the action. */
+    actor_id?: number;
+    actor_location?: {
+      country_name?: string;
     };
-    closed_at: string | null;
-    created_at: string;
-    updated_at: string;
-    draft?: boolean;
-    closed_by?: Schemas.nullable$simple$user;
-    body_html?: string;
-    body_text?: string;
-    timeline_url?: string;
-    repository?: Schemas.repository;
-    performed_via_github_app?: Schemas.nullable$integration;
-    author_association: Schemas.author_association;
-    reactions?: Schemas.reaction$rollup;
+    data?: {};
+    org_id?: number;
+    /** The username of the account being blocked. */
+    blocked_user?: string;
+    business?: string;
+    config?: {}[];
+    config_was?: {}[];
+    content_type?: string;
+    /** The time the audit log event was recorded, given as a [Unix timestamp](http://en.wikipedia.org/wiki/Unix_time). */
+    created_at?: number;
+    deploy_key_fingerprint?: string;
+    /** A unique identifier for an audit event. */
+    _document_id?: string;
+    emoji?: string;
+    events?: {}[];
+    events_were?: {}[];
+    explanation?: string;
+    fingerprint?: string;
+    hook_id?: number;
+    limited_availability?: boolean;
+    message?: string;
+    name?: string;
+    old_user?: string;
+    openssh_public_key?: string;
+    org?: string;
+    previous_visibility?: string;
+    read_only?: boolean;
+    /** The name of the repository. */
+    repo?: string;
+    /** The name of the repository. */
+    repository?: string;
+    repository_public?: boolean;
+    target_login?: string;
+    team?: string;
+    /** The type of protocol (for example, HTTP or SSH) used to transfer Git data. */
+    transport_protocol?: number;
+    /** A human readable name for the protocol (for example, HTTP or SSH) used to transfer Git data. */
+    transport_protocol_name?: string;
+    /** The user that was affected by the action performed (if available). */
+    user?: string;
+    /** The repository visibility, for example `public` or `private`. */
+    visibility?: string;
   }
-  /** Comments provide a way for people to collaborate on an issue. */
-  export interface issue$comment {
-    /** Unique identifier of the issue comment */
-    id: number;
-    node_id: string;
-    /** URL for the issue comment */
-    url: string;
-    /** Contents of the issue comment */
-    body?: string;
-    body_text?: string;
-    body_html?: string;
-    html_url: string;
-    user: Schemas.nullable$simple$user;
-    created_at: string;
-    updated_at: string;
-    issue_url: string;
-    author_association: Schemas.author_association;
-    performed_via_github_app?: Schemas.nullable$integration;
-    reactions?: Schemas.reaction$rollup;
-  }
-  /** Event */
-  export interface event {
-    id: string;
-    type: string | null;
-    actor: Schemas.actor;
-    repo: {
-      id: number;
-      name: string;
-      url: string;
-    };
-    org?: Schemas.actor;
-    payload: {
-      action?: string;
-      issue?: Schemas.issue;
-      comment?: Schemas.issue$comment;
-      pages?: {
-        page_name?: string;
-        title?: string;
-        summary?: string | null;
-        action?: string;
-        sha?: string;
-        html_url?: string;
-      }[];
-    };
-    public: boolean;
-    created_at: string | null;
-  }
-  /** Hypermedia Link with Type */
-  export interface link$with$type {
-    href: string;
-    type: string;
-  }
-  /** Feed */
-  export interface feed {
-    timeline_url: string;
-    user_url: string;
-    current_user_public_url?: string;
-    current_user_url?: string;
-    current_user_actor_url?: string;
-    current_user_organization_url?: string;
-    current_user_organization_urls?: string[];
-    _links: {
-      timeline: Schemas.link$with$type;
-      user: Schemas.link$with$type;
-      security_advisories?: Schemas.link$with$type;
-      current_user?: Schemas.link$with$type;
-      current_user_public?: Schemas.link$with$type;
-      current_user_actor?: Schemas.link$with$type;
-      current_user_organization?: Schemas.link$with$type;
-      current_user_organizations?: Schemas.link$with$type[];
-    };
-  }
-  /** Base Gist */
-  export interface base$gist {
-    url: string;
-    forks_url: string;
-    commits_url: string;
-    id: string;
-    node_id: string;
-    git_pull_url: string;
-    git_push_url: string;
-    html_url: string;
-    files: {
-      [key: string]: {
-        filename?: string;
-        type?: string;
-        language?: string;
-        raw_url?: string;
-        size?: number;
-      };
-    };
-    public: boolean;
-    created_at: string;
-    updated_at: string;
-    description: string | null;
-    comments: number;
-    user: Schemas.nullable$simple$user;
-    comments_url: string;
-    owner?: Schemas.simple$user;
-    truncated?: boolean;
-    forks?: {}[];
-    history?: {}[];
-  }
-  /** Public User */
-  export interface public$user {
-    login: string;
-    id: number;
-    node_id: string;
-    avatar_url: string;
-    gravatar_id: string | null;
-    url: string;
-    html_url: string;
-    followers_url: string;
-    following_url: string;
-    gists_url: string;
-    starred_url: string;
-    subscriptions_url: string;
-    organizations_url: string;
-    repos_url: string;
-    events_url: string;
-    received_events_url: string;
-    type: string;
-    site_admin: boolean;
-    name: string | null;
-    company: string | null;
-    blog: string | null;
-    location: string | null;
-    email: string | null;
-    hireable: boolean | null;
-    bio: string | null;
-    public_repos: number;
-    public_gists: number;
-    followers: number;
-    following: number;
-    created_at: string;
-    updated_at: string;
-    plan?: {
-      collaborators: number;
-      name: string;
-      space: number;
-      private_repos: number;
-    };
-    suspended_at?: string | null;
-    private_gists?: number;
-    total_private_repos?: number;
-    owned_private_repos?: number;
-    disk_usage?: number;
-    collaborators?: number;
-  }
-  /** Gist History */
-  export interface gist$history {
-    user?: Schemas.nullable$simple$user;
-    version?: string;
-    committed_at?: string;
-    change_status?: {
-      total?: number;
-      additions?: number;
-      deletions?: number;
-    };
-    url?: string;
-  }
-  /** Gist Simple */
-  export interface gist$simple {
-    forks?:
-      | {
-          id?: string;
-          url?: string;
-          user?: Schemas.public$user;
-          created_at?: string;
-          updated_at?: string;
-        }[]
-      | null;
-    history?: Schemas.gist$history[] | null;
-    /** Gist */
-    fork_of?: {
-      url: string;
-      forks_url: string;
-      commits_url: string;
-      id: string;
-      node_id: string;
-      git_pull_url: string;
-      git_push_url: string;
-      html_url: string;
-      files: {
-        [key: string]: {
-          filename?: string;
-          type?: string;
-          language?: string;
-          raw_url?: string;
-          size?: number;
-        };
-      };
-      public: boolean;
-      created_at: string;
-      updated_at: string;
-      description: string | null;
-      comments: number;
-      user: Schemas.nullable$simple$user;
-      comments_url: string;
-      owner?: Schemas.nullable$simple$user;
-      truncated?: boolean;
-      forks?: {}[];
-      history?: {}[];
-    } | null;
-    url?: string;
-    forks_url?: string;
-    commits_url?: string;
-    id?: string;
-    node_id?: string;
-    git_pull_url?: string;
-    git_push_url?: string;
-    html_url?: string;
-    files?: {
-      [key: string]: {
-        filename?: string;
-        type?: string;
-        language?: string;
-        raw_url?: string;
-        size?: number;
-        truncated?: boolean;
-        content?: string;
-      } | null;
-    };
-    public?: boolean;
-    created_at?: string;
-    updated_at?: string;
-    description?: string | null;
-    comments?: number;
-    user?: string | null;
-    comments_url?: string;
-    owner?: Schemas.simple$user;
-    truncated?: boolean;
-  }
-  /** A comment made to a gist. */
-  export interface gist$comment {
-    id: number;
-    node_id: string;
-    url: string;
-    /** The comment text. */
-    body: string;
-    user: Schemas.nullable$simple$user;
-    created_at: string;
-    updated_at: string;
-    author_association: Schemas.author_association;
-  }
-  /** Gist Commit */
-  export interface gist$commit {
-    url: string;
-    version: string;
-    user: Schemas.nullable$simple$user;
-    change_status: {
-      total?: number;
-      additions?: number;
-      deletions?: number;
-    };
-    committed_at: string;
-  }
-  /** Gitignore Template */
-  export interface gitignore$template {
-    name: string;
-    source: string;
-  }
-  /** License Simple */
-  export interface license$simple {
-    key: string;
-    name: string;
-    url: string | null;
-    spdx_id: string | null;
-    node_id: string;
-    html_url?: string;
-  }
-  /** License */
-  export interface license {
-    key: string;
-    name: string;
-    spdx_id: string | null;
-    url: string | null;
-    node_id: string;
-    html_url: string;
-    description: string;
-    implementation: string;
-    permissions: string[];
-    conditions: string[];
-    limitations: string[];
-    body: string;
-    featured: boolean;
-  }
-  /** Api Overview */
-  export interface api$overview {
-    verifiable_password_authentication: boolean;
-    packages?: string[];
-    dependabot?: string[];
-    installed_version?: string;
-  }
+  /** The security alert number. */
+  export type alert$number = number;
+  /** The time that the alert was created in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
+  export type alert$created$at = string;
+  /** The REST API URL of the alert resource. */
+  export type alert$url = string;
+  /** The GitHub URL of the alert resource. */
+  export type alert$html$url = string;
+  /** Sets the state of the secret scanning alert. Can be either `open` or `resolved`. You must provide `resolution` when you set the state to `resolved`. */
+  export type secret$scanning$alert$state = "open" | "resolved";
+  /** **Required when the `state` is `resolved`.** The reason for resolving the alert. Can be one of `false_positive`, `wont_fix`, `revoked`, or `used_in_tests`. */
+  export type secret$scanning$alert$resolution = string;
   /** A git repository */
   export interface nullable$repository {
     /** Unique identifier of the repository */
@@ -1533,6 +1211,7 @@ export namespace Schemas {
       allow_rebase_merge?: boolean;
       temp_clone_token?: string;
       allow_squash_merge?: boolean;
+      allow_auto_merge?: boolean;
       delete_branch_on_merge?: boolean;
       allow_update_branch?: boolean;
       allow_merge_commit?: boolean;
@@ -1542,6 +1221,8 @@ export namespace Schemas {
     temp_clone_token?: string;
     /** Whether to allow squash merges for pull requests. */
     allow_squash_merge?: boolean;
+    /** Whether to allow Auto-merge to be used on pull requests. */
+    allow_auto_merge?: boolean;
     /** Whether to delete head branches when pull requests are merged */
     delete_branch_on_merge?: boolean;
     /** Whether to allow merge commits for pull requests. */
@@ -1654,6 +1335,479 @@ export namespace Schemas {
     watchers?: number;
     allow_forking?: boolean;
   }
+  export interface organization$secret$scanning$alert {
+    number?: Schemas.alert$number;
+    created_at?: Schemas.alert$created$at;
+    url?: Schemas.alert$url;
+    html_url?: Schemas.alert$html$url;
+    /** The REST API URL of the code locations for this alert. */
+    locations_url?: string;
+    state?: Schemas.secret$scanning$alert$state;
+    resolution?: Schemas.secret$scanning$alert$resolution;
+    /** The time that the alert was resolved in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
+    resolved_at?: string | null;
+    resolved_by?: Schemas.nullable$simple$user;
+    /** The type of secret that secret scanning detected. */
+    secret_type?: string;
+    /** The secret that was detected. */
+    secret?: string;
+    repository?: Schemas.minimal$repository;
+  }
+  export interface advanced$security$active$committers$user {
+    user_login: string;
+    last_pushed_date: string;
+  }
+  export interface advanced$security$active$committers$repository {
+    name: string;
+    advanced_security_committers: number;
+    advanced_security_committers_breakdown: Schemas.advanced$security$active$committers$user[];
+  }
+  export interface advanced$security$active$committers {
+    total_advanced_security_committers?: number;
+    repositories: Schemas.advanced$security$active$committers$repository[];
+  }
+  /** Actor */
+  export interface actor {
+    id: number;
+    login: string;
+    display_login?: string;
+    gravatar_id: string | null;
+    url: string;
+    avatar_url: string;
+  }
+  /** A collection of related issues and pull requests. */
+  export interface nullable$milestone {
+    url: string;
+    html_url: string;
+    labels_url: string;
+    id: number;
+    node_id: string;
+    /** The number of the milestone. */
+    number: number;
+    /** The state of the milestone. */
+    state: "open" | "closed";
+    /** The title of the milestone. */
+    title: string;
+    description: string | null;
+    creator: Schemas.nullable$simple$user;
+    open_issues: number;
+    closed_issues: number;
+    created_at: string;
+    updated_at: string;
+    closed_at: string | null;
+    due_on: string | null;
+  }
+  /** GitHub apps are a new way to extend GitHub. They can be installed directly on organizations and user accounts and granted access to specific repositories. They come with granular permissions and built-in webhooks. GitHub apps are first class actors within GitHub. */
+  export interface nullable$integration {
+    /** Unique identifier of the GitHub app */
+    id: number;
+    /** The slug name of the GitHub app */
+    slug?: string;
+    node_id: string;
+    owner: Schemas.nullable$simple$user;
+    /** The name of the GitHub app */
+    name: string;
+    description: string | null;
+    external_url: string;
+    html_url: string;
+    created_at: string;
+    updated_at: string;
+    /** The set of permissions for the GitHub app */
+    permissions: {
+      issues?: string;
+      checks?: string;
+      metadata?: string;
+      contents?: string;
+      deployments?: string;
+    } & {
+      [key: string]: string;
+    };
+    /** The list of events for the GitHub app */
+    events: string[];
+    /** The number of installations associated with the GitHub app */
+    installations_count?: number;
+    client_id?: string;
+    client_secret?: string;
+    webhook_secret?: string | null;
+    pem?: string;
+  }
+  /** How the author is associated with the repository. */
+  export type author_association =
+    | "COLLABORATOR"
+    | "CONTRIBUTOR"
+    | "FIRST_TIMER"
+    | "FIRST_TIME_CONTRIBUTOR"
+    | "MANNEQUIN"
+    | "MEMBER"
+    | "NONE"
+    | "OWNER";
+  export interface reaction$rollup {
+    url: string;
+    total_count: number;
+    "+1": number;
+    "-1": number;
+    laugh: number;
+    confused: number;
+    heart: number;
+    hooray: number;
+    eyes: number;
+    rocket: number;
+  }
+  /** Issues are a great way to keep track of tasks, enhancements, and bugs for your projects. */
+  export interface issue {
+    id: number;
+    node_id: string;
+    /** URL for the issue */
+    url: string;
+    repository_url: string;
+    labels_url: string;
+    comments_url: string;
+    events_url: string;
+    html_url: string;
+    /** Number uniquely identifying the issue within its repository */
+    number: number;
+    /** State of the issue; either 'open' or 'closed' */
+    state: string;
+    /** Title of the issue */
+    title: string;
+    /** Contents of the issue */
+    body?: string | null;
+    user: Schemas.nullable$simple$user;
+    /** Labels to associate with this issue; pass one or more label names to replace the set of labels on this issue; send an empty array to clear all labels from the issue; note that the labels are silently dropped for users without push access to the repository */
+    labels: (
+      | string
+      | {
+          id?: number;
+          node_id?: string;
+          url?: string;
+          name?: string;
+          description?: string | null;
+          color?: string | null;
+          default?: boolean;
+        }
+    )[];
+    assignee: Schemas.nullable$simple$user;
+    assignees?: Schemas.simple$user[] | null;
+    milestone: Schemas.nullable$milestone;
+    locked: boolean;
+    active_lock_reason?: string | null;
+    comments: number;
+    pull_request?: {
+      merged_at?: string | null;
+      diff_url: string | null;
+      html_url: string | null;
+      patch_url: string | null;
+      url: string | null;
+    };
+    closed_at: string | null;
+    created_at: string;
+    updated_at: string;
+    draft?: boolean;
+    closed_by?: Schemas.nullable$simple$user;
+    body_html?: string;
+    body_text?: string;
+    timeline_url?: string;
+    repository?: Schemas.repository;
+    performed_via_github_app?: Schemas.nullable$integration;
+    author_association: Schemas.author_association;
+    reactions?: Schemas.reaction$rollup;
+  }
+  /** Comments provide a way for people to collaborate on an issue. */
+  export interface issue$comment {
+    /** Unique identifier of the issue comment */
+    id: number;
+    node_id: string;
+    /** URL for the issue comment */
+    url: string;
+    /** Contents of the issue comment */
+    body?: string;
+    body_text?: string;
+    body_html?: string;
+    html_url: string;
+    user: Schemas.nullable$simple$user;
+    created_at: string;
+    updated_at: string;
+    issue_url: string;
+    author_association: Schemas.author_association;
+    performed_via_github_app?: Schemas.nullable$integration;
+    reactions?: Schemas.reaction$rollup;
+  }
+  /** Event */
+  export interface event {
+    id: string;
+    type: string | null;
+    actor: Schemas.actor;
+    repo: {
+      id: number;
+      name: string;
+      url: string;
+    };
+    org?: Schemas.actor;
+    payload: {
+      action?: string;
+      issue?: Schemas.issue;
+      comment?: Schemas.issue$comment;
+      pages?: {
+        page_name?: string;
+        title?: string;
+        summary?: string | null;
+        action?: string;
+        sha?: string;
+        html_url?: string;
+      }[];
+    };
+    public: boolean;
+    created_at: string | null;
+  }
+  /** Hypermedia Link with Type */
+  export interface link$with$type {
+    href: string;
+    type: string;
+  }
+  /** Feed */
+  export interface feed {
+    timeline_url: string;
+    user_url: string;
+    current_user_public_url?: string;
+    current_user_url?: string;
+    current_user_actor_url?: string;
+    current_user_organization_url?: string;
+    current_user_organization_urls?: string[];
+    security_advisories_url?: string;
+    _links: {
+      timeline: Schemas.link$with$type;
+      user: Schemas.link$with$type;
+      security_advisories?: Schemas.link$with$type;
+      current_user?: Schemas.link$with$type;
+      current_user_public?: Schemas.link$with$type;
+      current_user_actor?: Schemas.link$with$type;
+      current_user_organization?: Schemas.link$with$type;
+      current_user_organizations?: Schemas.link$with$type[];
+    };
+  }
+  /** Base Gist */
+  export interface base$gist {
+    url: string;
+    forks_url: string;
+    commits_url: string;
+    id: string;
+    node_id: string;
+    git_pull_url: string;
+    git_push_url: string;
+    html_url: string;
+    files: {
+      [key: string]: {
+        filename?: string;
+        type?: string;
+        language?: string;
+        raw_url?: string;
+        size?: number;
+      };
+    };
+    public: boolean;
+    created_at: string;
+    updated_at: string;
+    description: string | null;
+    comments: number;
+    user: Schemas.nullable$simple$user;
+    comments_url: string;
+    owner?: Schemas.simple$user;
+    truncated?: boolean;
+    forks?: {}[];
+    history?: {}[];
+  }
+  /** Public User */
+  export interface public$user {
+    login: string;
+    id: number;
+    node_id: string;
+    avatar_url: string;
+    gravatar_id: string | null;
+    url: string;
+    html_url: string;
+    followers_url: string;
+    following_url: string;
+    gists_url: string;
+    starred_url: string;
+    subscriptions_url: string;
+    organizations_url: string;
+    repos_url: string;
+    events_url: string;
+    received_events_url: string;
+    type: string;
+    site_admin: boolean;
+    name: string | null;
+    company: string | null;
+    blog: string | null;
+    location: string | null;
+    email: string | null;
+    hireable: boolean | null;
+    bio: string | null;
+    twitter_username?: string | null;
+    public_repos: number;
+    public_gists: number;
+    followers: number;
+    following: number;
+    created_at: string;
+    updated_at: string;
+    plan?: {
+      collaborators: number;
+      name: string;
+      space: number;
+      private_repos: number;
+    };
+    suspended_at?: string | null;
+    private_gists?: number;
+    total_private_repos?: number;
+    owned_private_repos?: number;
+    disk_usage?: number;
+    collaborators?: number;
+  }
+  /** Gist History */
+  export interface gist$history {
+    user?: Schemas.nullable$simple$user;
+    version?: string;
+    committed_at?: string;
+    change_status?: {
+      total?: number;
+      additions?: number;
+      deletions?: number;
+    };
+    url?: string;
+  }
+  /** Gist Simple */
+  export interface gist$simple {
+    forks?:
+      | {
+          id?: string;
+          url?: string;
+          user?: Schemas.public$user;
+          created_at?: string;
+          updated_at?: string;
+        }[]
+      | null;
+    history?: Schemas.gist$history[] | null;
+    /** Gist */
+    fork_of?: {
+      url: string;
+      forks_url: string;
+      commits_url: string;
+      id: string;
+      node_id: string;
+      git_pull_url: string;
+      git_push_url: string;
+      html_url: string;
+      files: {
+        [key: string]: {
+          filename?: string;
+          type?: string;
+          language?: string;
+          raw_url?: string;
+          size?: number;
+        };
+      };
+      public: boolean;
+      created_at: string;
+      updated_at: string;
+      description: string | null;
+      comments: number;
+      user: Schemas.nullable$simple$user;
+      comments_url: string;
+      owner?: Schemas.nullable$simple$user;
+      truncated?: boolean;
+      forks?: {}[];
+      history?: {}[];
+    } | null;
+    url?: string;
+    forks_url?: string;
+    commits_url?: string;
+    id?: string;
+    node_id?: string;
+    git_pull_url?: string;
+    git_push_url?: string;
+    html_url?: string;
+    files?: {
+      [key: string]: {
+        filename?: string;
+        type?: string;
+        language?: string;
+        raw_url?: string;
+        size?: number;
+        truncated?: boolean;
+        content?: string;
+      } | null;
+    };
+    public?: boolean;
+    created_at?: string;
+    updated_at?: string;
+    description?: string | null;
+    comments?: number;
+    user?: string | null;
+    comments_url?: string;
+    owner?: Schemas.simple$user;
+    truncated?: boolean;
+  }
+  /** A comment made to a gist. */
+  export interface gist$comment {
+    id: number;
+    node_id: string;
+    url: string;
+    /** The comment text. */
+    body: string;
+    user: Schemas.nullable$simple$user;
+    created_at: string;
+    updated_at: string;
+    author_association: Schemas.author_association;
+  }
+  /** Gist Commit */
+  export interface gist$commit {
+    url: string;
+    version: string;
+    user: Schemas.nullable$simple$user;
+    change_status: {
+      total?: number;
+      additions?: number;
+      deletions?: number;
+    };
+    committed_at: string;
+  }
+  /** Gitignore Template */
+  export interface gitignore$template {
+    name: string;
+    source: string;
+  }
+  /** License Simple */
+  export interface license$simple {
+    key: string;
+    name: string;
+    url: string | null;
+    spdx_id: string | null;
+    node_id: string;
+    html_url?: string;
+  }
+  /** License */
+  export interface license {
+    key: string;
+    name: string;
+    spdx_id: string | null;
+    url: string | null;
+    node_id: string;
+    html_url: string;
+    description: string;
+    implementation: string;
+    permissions: string[];
+    conditions: string[];
+    limitations: string[];
+    body: string;
+    featured: boolean;
+  }
+  /** Api Overview */
+  export interface api$overview {
+    verifiable_password_authentication: boolean;
+    packages?: string[];
+    dependabot?: string[];
+    installed_version?: string;
+  }
   /** Thread */
   export interface thread {
     id: string;
@@ -1680,6 +1834,11 @@ export namespace Schemas {
     url: string;
     thread_url?: string;
     repository_url?: string;
+  }
+  /** Custom repository roles created by organization administrators */
+  export interface organization$custom$repository$role {
+    id: number;
+    name: string;
   }
   /** Organization Full */
   export interface organization$full {
@@ -1781,11 +1940,29 @@ export namespace Schemas {
   }
   /** An object without any properties. */
   export interface empty$object {}
+  /** Secrets for GitHub Dependabot for an organization. */
+  export interface organization$dependabot$secret {
+    /** The name of the secret. */
+    name: string;
+    created_at: string;
+    updated_at: string;
+    /** Visibility of a secret */
+    visibility: "all" | "private" | "selected";
+    selected_repositories_url?: string;
+  }
+  /** The public key used for setting Dependabot Secrets. */
+  export interface dependabot$public$key {
+    /** The identifier for the key. */
+    key_id: string;
+    /** The Base64 encoded public key. */
+    key: string;
+  }
   /** Org Hook */
   export interface org$hook {
     id: number;
     url: string;
     ping_url: string;
+    deliveries_url?: string;
     name: string;
     events: string[];
     active: boolean;
@@ -1812,6 +1989,26 @@ export namespace Schemas {
     permissions?: {
       can_create_repository: boolean;
     };
+  }
+  /** A migration. */
+  export interface migration {
+    id: number;
+    owner: Schemas.nullable$simple$user;
+    guid: string;
+    state: string;
+    lock_repositories: boolean;
+    exclude_metadata: boolean;
+    exclude_git_data: boolean;
+    exclude_attachments: boolean;
+    exclude_releases: boolean;
+    exclude_owner_projects: boolean;
+    repositories: Schemas.repository[];
+    url: string;
+    created_at: string;
+    updated_at: string;
+    node_id: string;
+    archive_url?: string;
+    exclude?: {}[];
   }
   export interface org$pre$receive$hook {
     id?: number;
@@ -2103,6 +2300,8 @@ export namespace Schemas {
     temp_clone_token?: string;
     /** Whether to allow squash merges for pull requests. */
     allow_squash_merge?: boolean;
+    /** Whether to allow Auto-merge to be used on pull requests. */
+    allow_auto_merge?: boolean;
     /** Whether to delete head branches when pull requests are merged */
     delete_branch_on_merge?: boolean;
     /** Whether to allow merge commits for pull requests. */
@@ -2265,6 +2464,7 @@ export namespace Schemas {
     template_repository?: Schemas.nullable$repository;
     temp_clone_token?: string | null;
     allow_squash_merge?: boolean;
+    allow_auto_merge?: boolean;
     delete_branch_on_merge?: boolean;
     allow_merge_commit?: boolean;
     allow_forking?: boolean;
@@ -2281,6 +2481,17 @@ export namespace Schemas {
     /** Whether anonymous git access is allowed. */
     anonymous_access_enabled?: boolean;
     code_of_conduct?: Schemas.code$of$conduct$simple;
+    security_and_analysis?: {
+      advanced_security?: {
+        status?: "enabled" | "disabled";
+      };
+      secret_scanning?: {
+        status?: "enabled" | "disabled";
+      };
+      secret_scanning_push_protection?: {
+        status?: "enabled" | "disabled";
+      };
+    } | null;
   }
   /** An artifact */
   export interface artifact {
@@ -2337,6 +2548,16 @@ export namespace Schemas {
       completed_at?: string | null;
     }[];
     check_run_url: string;
+    /** Labels for the workflow job. Specified by the "runs_on" attribute in the action's workflow file. */
+    labels: string[];
+    /** The ID of the runner to which this job has been assigned. (If a runner hasn't yet been assigned, this will be null.) */
+    runner_id: number | null;
+    /** The name of the runner to which this job has been assigned. (If a runner hasn't yet been assigned, this will be null.) */
+    runner_name: string | null;
+    /** The ID of the runner group to which this job has been assigned. (If a runner hasn't yet been assigned, this will be null.) */
+    runner_group_id: number | null;
+    /** The name of the runner group to which this job has been assigned. (If a runner hasn't yet been assigned, this will be null.) */
+    runner_group_name: string | null;
   }
   /** Whether GitHub Actions is enabled on the repository. */
   export type actions$enabled = boolean;
@@ -2435,6 +2656,80 @@ export namespace Schemas {
     head_repository: Schemas.minimal$repository;
     head_repository_id?: number;
   }
+  /** An entry in the reviews log for environment deployments */
+  export interface environment$approvals {
+    /** The list of environments that were approved or rejected */
+    environments: {
+      /** The id of the environment. */
+      id?: number;
+      node_id?: string;
+      /** The name of the environment. */
+      name?: string;
+      url?: string;
+      html_url?: string;
+      /** The time that the environment was created, in ISO 8601 format. */
+      created_at?: string;
+      /** The time that the environment was last updated, in ISO 8601 format. */
+      updated_at?: string;
+    }[];
+    /** Whether deployment to the environment(s) was approved or rejected */
+    state: "approved" | "rejected";
+    user: Schemas.simple$user;
+    /** The comment submitted with the deployment review */
+    comment: string;
+  }
+  /** The type of reviewer. Must be one of: `User` or `Team` */
+  export type deployment$reviewer$type = "User" | "Team";
+  /** Details of a deployment that is waiting for protection rules to pass */
+  export interface pending$deployment {
+    environment: {
+      /** The id of the environment. */
+      id?: number;
+      node_id?: string;
+      /** The name of the environment. */
+      name?: string;
+      url?: string;
+      html_url?: string;
+    };
+    /** The set duration of the wait timer */
+    wait_timer: number;
+    /** The time that the wait timer began. */
+    wait_timer_started_at: string | null;
+    /** Whether the currently authenticated user can approve the deployment */
+    current_user_can_approve: boolean;
+    /** The people or teams that may approve jobs that reference the environment. You can list up to six users or teams as reviewers. The reviewers must have at least read access to the repository. Only one of the required reviewers needs to approve the job for it to proceed. */
+    reviewers: {
+      type?: Schemas.deployment$reviewer$type;
+      reviewer?: Schemas.simple$user | Schemas.team;
+    }[];
+  }
+  /** A request for a specific ref(branch,sha,tag) to be deployed */
+  export interface deployment {
+    url: string;
+    /** Unique identifier of the deployment */
+    id: number;
+    node_id: string;
+    sha: string;
+    /** The ref to deploy. This can be a branch, tag, or sha. */
+    ref: string;
+    /** Parameter to specify a task to execute */
+    task: string;
+    payload: {} | string;
+    original_environment?: string;
+    /** Name for the target deployment environment. */
+    environment: string;
+    description: string | null;
+    creator: Schemas.nullable$simple$user;
+    created_at: string;
+    updated_at: string;
+    statuses_url: string;
+    repository_url: string;
+    /** Specifies if the given environment is will no longer exist at some point in the future. Default: false. */
+    transient_environment?: boolean;
+    /** Specifies if the given environment is one that end-users directly interact with. Default: false. */
+    production_environment?: boolean;
+    performed_via_github_app?: Schemas.nullable$integration;
+  }
   /** Set secrets for GitHub Actions. */
   export interface actions$secret {
     /** The name of the secret. */
@@ -2456,11 +2751,23 @@ export namespace Schemas {
     badge_url: string;
     deleted_at?: string;
   }
+  /** An autolink reference. */
+  export interface autolink {
+    id: number;
+    /** The prefix of a key that is linkified. */
+    key_prefix: string;
+    /** A template for the target URL that is generated if a key was found. */
+    url_template: string;
+  }
   /** Protected Branch Required Status Check */
   export interface protected$branch$required$status$check {
     url?: string;
     enforcement_level?: string;
     contexts: string[];
+    checks: {
+      context: string;
+      app_id: number | null;
+    }[];
     contexts_url?: string;
     strict?: boolean;
   }
@@ -2480,6 +2787,13 @@ export namespace Schemas {
       url?: string;
       users_url?: string;
       teams_url?: string;
+    };
+    /** Allow specific users or teams to bypass pull request requirements. */
+    bypass_pull_request_allowances?: {
+      /** The list of users allowed to bypass pull request requirements. */
+      users?: Schemas.simple$user[];
+      /** The list of teams allowed to bypass pull request requirements. */
+      teams?: Schemas.team[];
     };
     dismiss_stale_reviews: boolean;
     require_code_owner_reviews: boolean;
@@ -2685,6 +2999,10 @@ export namespace Schemas {
     url: string;
     strict: boolean;
     contexts: string[];
+    checks: {
+      context: string;
+      app_id: number | null;
+    }[];
     contexts_url: string;
   }
   /** Branch protections protect branches */
@@ -2700,6 +3018,10 @@ export namespace Schemas {
         url: string;
         users_url: string;
         teams_url: string;
+        users: Schemas.simple$user[];
+        teams: Schemas.team[];
+      };
+      bypass_pull_request_allowances?: {
         users: Schemas.simple$user[];
         teams: Schemas.team[];
       };
@@ -2852,16 +3174,12 @@ export namespace Schemas {
   export type code$scanning$ref = string;
   /** State of a code scanning alert. */
   export type code$scanning$alert$state = "open" | "closed" | "dismissed" | "fixed";
-  /** The security alert number. */
-  export type alert$number = number;
-  /** The time that the alert was created in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
-  export type alert$created$at = string;
-  /** The REST API URL of the alert resource. */
-  export type alert$url = string;
-  /** The GitHub URL of the alert resource. */
-  export type alert$html$url = string;
+  /** The time that the alert was last updated in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
+  export type alert$updated$at = string;
   /** The REST API URL for fetching the list of instances for an alert. */
   export type alert$instances$url = string;
+  /** The time that the alert was no longer detected and was considered fixed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
+  export type code$scanning$alert$fixed$at = string;
   /** The time that the alert was dismissed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
   export type code$scanning$alert$dismissed$at = string;
   /** **Required when the state is dismissed.** The reason for dismissing or closing the alert. Can be one of: `false positive`, `won't fix`, and `used in tests`. */
@@ -2871,6 +3189,8 @@ export namespace Schemas {
     id?: string | null;
     /** The name of the rule used to detect the alert. */
     name?: string;
+    /** A set of tags applicable for the rule. */
+    tags?: string[] | null;
     /** The severity of the alert. */
     severity?: ("none" | "note" | "warning" | "error") | null;
     /** A short description of the rule used to detect the alert. */
@@ -2920,10 +3240,12 @@ export namespace Schemas {
   export interface code$scanning$alert$items {
     number: Schemas.alert$number;
     created_at: Schemas.alert$created$at;
+    updated_at?: Schemas.alert$updated$at;
     url: Schemas.alert$url;
     html_url: Schemas.alert$html$url;
     instances_url: Schemas.alert$instances$url;
     state: Schemas.code$scanning$alert$state;
+    fixed_at?: Schemas.code$scanning$alert$fixed$at;
     dismissed_by: Schemas.nullable$simple$user;
     dismissed_at: Schemas.code$scanning$alert$dismissed$at;
     dismissed_reason: Schemas.code$scanning$alert$dismissed$reason;
@@ -2938,6 +3260,8 @@ export namespace Schemas {
     name?: string;
     /** The severity of the alert. */
     severity?: ("none" | "note" | "warning" | "error") | null;
+    /** The security severity of the alert. */
+    security_severity_level?: ("low" | "medium" | "high" | "critical") | null;
     /** A short description of the rule used to detect the alert. */
     description?: string;
     /** description of the rule used to detect the alert. */
@@ -2950,17 +3274,18 @@ export namespace Schemas {
   export interface code$scanning$alert {
     number: Schemas.alert$number;
     created_at: Schemas.alert$created$at;
+    updated_at?: Schemas.alert$updated$at;
     url: Schemas.alert$url;
     html_url: Schemas.alert$html$url;
     instances_url: Schemas.alert$instances$url;
     state: Schemas.code$scanning$alert$state;
+    fixed_at?: Schemas.code$scanning$alert$fixed$at;
     dismissed_by: Schemas.nullable$simple$user;
     dismissed_at: Schemas.code$scanning$alert$dismissed$at;
     dismissed_reason: Schemas.code$scanning$alert$dismissed$reason;
     rule: Schemas.code$scanning$alert$rule;
     tool: Schemas.code$scanning$analysis$tool;
     most_recent_instance: Schemas.code$scanning$alert$instance;
-    instances?: any;
   }
   /** Sets the state of the code scanning alert. Can be one of `open` or `dismissed`. You must provide `dismissed_reason` when you set the state to `dismissed`. */
   export type code$scanning$alert$set$state = "open" | "dismissed";
@@ -2994,14 +3319,28 @@ export namespace Schemas {
     deletable: boolean;
     /** Warning generated when processing the analysis */
     warning: string;
-    tool_name?: string;
   }
-  /** A Base64 string representing the SARIF file to upload. You must first compress your SARIF file using [`gzip`](http://www.gnu.org/software/gzip/manual/gzip.html) and then translate the contents of the file into a Base64 encoding string. For more information, see "[SARIF support for code scanning](https://docs.github.com/enterprise-server@3.0/code-security/secure-coding/sarif-support-for-code-scanning)." */
+  /** Successful deletion of a code scanning analysis */
+  export interface code$scanning$analysis$deletion {
+    /** Next deletable analysis in chain, without last analysis deletion confirmation */
+    next_analysis_url: string | null;
+    /** Next deletable analysis in chain, with last analysis deletion confirmation */
+    confirm_delete_url: string | null;
+  }
+  /** A Base64 string representing the SARIF file to upload. You must first compress your SARIF file using [`gzip`](http://www.gnu.org/software/gzip/manual/gzip.html) and then translate the contents of the file into a Base64 encoding string. For more information, see "[SARIF support for code scanning](https://docs.github.com/enterprise-server@3.4/code-security/secure-coding/sarif-support-for-code-scanning)." */
   export type code$scanning$analysis$sarif$file = string;
   export interface code$scanning$sarifs$receipt {
     id?: Schemas.code$scanning$analysis$sarif$id;
     /** The REST API URL for checking the status of the upload. */
     url?: string;
+  }
+  export interface code$scanning$sarifs$status {
+    /** `pending` files have not yet been processed, while `complete` means results from the SARIF have been stored. `failed` files have either not been processed at all, or could only be partially processed. */
+    processing_status?: "pending" | "complete" | "failed";
+    /** The REST API URL for getting the analyses associated with the upload. */
+    analyses_url?: string | null;
+    /** Any errors that ocurred during processing of the delivery. */
+    errors?: string[] | null;
   }
   /** Collaborator */
   export interface collaborator {
@@ -3102,15 +3441,6 @@ export namespace Schemas {
     author_association: Schemas.author_association;
     reactions?: Schemas.reaction$rollup;
   }
-  /** Scim Error */
-  export interface scim$error {
-    message?: string | null;
-    documentation_url?: string | null;
-    detail?: string | null;
-    status?: number;
-    scimType?: string | null;
-    schemas?: string[];
-  }
   /** Branch Short */
   export interface branch$short {
     name: string;
@@ -3123,6 +3453,16 @@ export namespace Schemas {
   /** Hypermedia Link */
   export interface link {
     href: string;
+  }
+  /** The status of auto merging a pull request. */
+  export interface auto_merge {
+    enabled_by: Schemas.simple$user;
+    /** The merge method to use. */
+    merge_method: "merge" | "squash" | "rebase";
+    /** Title for the merge commit message. */
+    commit_title: string;
+    /** Commit message for the merge commit. */
+    commit_message: string;
   }
   /** Pull Request Simple */
   export interface pull$request$simple {
@@ -3189,6 +3529,7 @@ export namespace Schemas {
       self: Schemas.link;
     };
     author_association: Schemas.author_association;
+    auto_merge: Schemas.auto_merge;
     /** Indicates whether or not the pull request is a draft. */
     draft?: boolean;
   }
@@ -3244,17 +3585,6 @@ export namespace Schemas {
     total_commits: number;
     commits: Schemas.commit[];
     files?: Schemas.diff$entry[];
-  }
-  /** Content Reference attachments allow you to provide context around URLs posted in comments */
-  export interface content$reference$attachment {
-    /** The ID of the attachment */
-    id: number;
-    /** The title of the attachment */
-    title: string;
-    /** The body of the attachment */
-    body: string;
-    /** The node_id of the content attachment */
-    node_id?: string;
   }
   /** Content Tree */
   export interface content$tree {
@@ -3440,32 +3770,12 @@ export namespace Schemas {
     email?: string;
     name?: string;
   }
-  /** A request for a specific ref(branch,sha,tag) to be deployed */
-  export interface deployment {
-    url: string;
-    /** Unique identifier of the deployment */
-    id: number;
-    node_id: string;
-    sha: string;
-    /** The ref to deploy. This can be a branch, tag, or sha. */
-    ref: string;
-    /** Parameter to specify a task to execute */
-    task: string;
-    payload: {} | string;
-    original_environment?: string;
-    /** Name for the target deployment environment. */
-    environment: string;
-    description: string | null;
-    creator: Schemas.nullable$simple$user;
+  /** Set secrets for Dependabot. */
+  export interface dependabot$secret {
+    /** The name of the secret. */
+    name: string;
     created_at: string;
     updated_at: string;
-    statuses_url: string;
-    repository_url: string;
-    /** Specifies if the given environment is will no longer exist at some point in the future. Default: false. */
-    transient_environment?: boolean;
-    /** Specifies if the given environment is one that end-users directly interact with. Default: false. */
-    production_environment?: boolean;
-    performed_via_github_app?: Schemas.nullable$integration;
   }
   /** The status of a deployment. */
   export interface deployment$status {
@@ -3490,6 +3800,53 @@ export namespace Schemas {
     /** The URL to associate with this status. */
     log_url?: string;
     performed_via_github_app?: Schemas.nullable$integration;
+  }
+  /** The amount of time to delay a job after the job is initially triggered. The time (in minutes) must be an integer between 0 and 43,200 (30 days). */
+  export type wait$timer = number;
+  /** The type of deployment branch policy for this environment. To allow all branches to deploy, set to `null`. */
+  export interface deployment_branch_policy {
+    /** Whether only branches with branch protection rules can deploy to this environment. If `protected_branches` is `true`, `custom_branch_policies` must be `false`; if `protected_branches` is `false`, `custom_branch_policies` must be `true`. */
+    protected_branches: boolean;
+    /** Whether only branches that match the specified name patterns can deploy to this environment.  If `custom_branch_policies` is `true`, `protected_branches` must be `false`; if `custom_branch_policies` is `false`, `protected_branches` must be `true`. */
+    custom_branch_policies: boolean;
+  }
+  /** Details of a deployment environment */
+  export interface environment {
+    /** The id of the environment. */
+    id: number;
+    node_id: string;
+    /** The name of the environment. */
+    name: string;
+    url: string;
+    html_url: string;
+    /** The time that the environment was created, in ISO 8601 format. */
+    created_at: string;
+    /** The time that the environment was last updated, in ISO 8601 format. */
+    updated_at: string;
+    protection_rules?: (
+      | {
+          id: number;
+          node_id: string;
+          type: string;
+          wait_timer?: Schemas.wait$timer;
+        }
+      | {
+          id: number;
+          node_id: string;
+          type: string;
+          /** The people or teams that may approve jobs that reference the environment. You can list up to six users or teams as reviewers. The reviewers must have at least read access to the repository. Only one of the required reviewers needs to approve the job for it to proceed. */
+          reviewers?: {
+            type?: Schemas.deployment$reviewer$type;
+            reviewer?: Schemas.simple$user | Schemas.team;
+          }[];
+        }
+      | {
+          id: number;
+          node_id: string;
+          type: string;
+        }
+    )[];
+    deployment_branch_policy?: Schemas.deployment_branch_policy;
   }
   /** Short Blob */
   export interface short$blob {
@@ -3633,6 +3990,7 @@ export namespace Schemas {
     url: string;
     test_url: string;
     ping_url: string;
+    deliveries_url?: string;
     last_response: Schemas.hook$response;
   }
   /** Issues are a great way to keep track of tasks, enhancements, and bugs for your projects. */
@@ -4299,6 +4657,12 @@ export namespace Schemas {
     };
     license: Schemas.nullable$license$simple;
   }
+  /** Results of a successful merge upstream request */
+  export interface merged$upstream {
+    message?: string;
+    merge_type?: "merge" | "fast-forward" | "none";
+    base_branch?: string;
+  }
   /** A collection of related issues and pull requests. */
   export interface milestone {
     url: string;
@@ -4745,6 +5109,7 @@ export namespace Schemas {
       self: Schemas.link;
     };
     author_association: Schemas.author_association;
+    auto_merge: Schemas.auto_merge;
     /** Indicates whether or not the pull request is a draft. */
     draft?: boolean;
     merged: boolean;
@@ -4883,7 +5248,58 @@ export namespace Schemas {
     assets: Schemas.release$asset[];
     body_html?: string;
     body_text?: string;
+    mentions_count?: number;
     reactions?: Schemas.reaction$rollup;
+  }
+  /** Generated name and body describing a release */
+  export interface release$notes$content {
+    /** The generated name of the release */
+    name: string;
+    /** The generated body describing the contents of the release supporting markdown formatting */
+    body: string;
+  }
+  export interface secret$scanning$alert {
+    number?: Schemas.alert$number;
+    created_at?: Schemas.alert$created$at;
+    url?: Schemas.alert$url;
+    html_url?: Schemas.alert$html$url;
+    /** The REST API URL of the code locations for this alert. */
+    locations_url?: string;
+    state?: Schemas.secret$scanning$alert$state;
+    resolution?: Schemas.secret$scanning$alert$resolution;
+    /** The time that the alert was resolved in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
+    resolved_at?: string | null;
+    resolved_by?: Schemas.nullable$simple$user;
+    /** The type of secret that secret scanning detected. */
+    secret_type?: string;
+    /** The secret that was detected. */
+    secret?: string;
+  }
+  /** Represents a 'commit' secret scanning location type. This location type shows that a secret was detected inside a commit to a repository. */
+  export interface secret$scanning$location$commit {
+    /** The file path in the repository */
+    path: string;
+    /** Line number at which the secret starts in the file */
+    start_line: number;
+    /** Line number at which the secret ends in the file */
+    end_line: number;
+    /** The column at which the secret starts within the start line when the file is interpreted as 8BIT ASCII */
+    start_column: number;
+    /** The column at which the secret ends within the end line when the file is interpreted as 8BIT ASCII */
+    end_column: number;
+    /** SHA-1 hash ID of the associated blob */
+    blob_sha: string;
+    /** The API URL to get the associated blob resource */
+    blob_url: string;
+    /** SHA-1 hash ID of the associated commit */
+    commit_sha: string;
+    /** The API URL to get the associated commit resource */
+    commit_url: string;
+  }
+  export interface secret$scanning$location {
+    /** The location type. Because secrets may be found in different types of resources (ie. code, comments, issues), this field identifies the type of resource where the secret was found. */
+    type: "commit";
+    details: Schemas.secret$scanning$location$commit;
   }
   /** Stargazer */
   export interface stargazer {
@@ -5155,6 +5571,7 @@ export namespace Schemas {
     allow_merge_commit?: boolean;
     allow_squash_merge?: boolean;
     allow_rebase_merge?: boolean;
+    allow_auto_merge?: boolean;
     delete_branch_on_merge?: boolean;
     allow_forking?: boolean;
     is_template?: boolean;
@@ -5417,6 +5834,7 @@ export namespace Schemas {
     email: string | null;
     hireable: boolean | null;
     bio: string | null;
+    twitter_username?: string | null;
     public_repos: number;
     public_gists: number;
     followers: number;
@@ -5529,6 +5947,25 @@ export namespace Responses {
       "application/json": Schemas.validation$error$simple;
     }
   }
+  /** Bad Request */
+  export namespace bad_request {
+    export interface Content {
+      "application/json": Schemas.basic$error;
+      "application/scim+json": Schemas.scim$error;
+    }
+  }
+  /** Validation failed */
+  export namespace validation_failed {
+    export interface Content {
+      "application/json": Schemas.validation$error;
+    }
+  }
+  /** Accepted */
+  export namespace accepted {
+    export interface Content {
+      "application/json": {};
+    }
+  }
   /** Preview header missing */
   export namespace preview_header_missing {
     export interface Content {
@@ -5550,18 +5987,30 @@ export namespace Responses {
       "application/json": Schemas.basic$error;
     }
   }
-  /** Validation failed */
-  export namespace validation_failed {
-    export interface Content {
-      "application/json": Schemas.validation$error;
-    }
-  }
   /** Not modified */
   export namespace not_modified {}
   /** Gone */
   export namespace gone {
     export interface Content {
       "application/json": Schemas.basic$error;
+    }
+  }
+  /** Response */
+  export namespace actions_runner_labels {
+    export interface Content {
+      "application/json": {
+        total_count: number;
+        labels: Schemas.runner$label[];
+      };
+    }
+  }
+  /** Response */
+  export namespace actions_runner_labels_readonly {
+    export interface Content {
+      "application/json": {
+        total_count: number;
+        labels: Schemas.runner$label[];
+      };
     }
   }
   /** Service unavailable */
@@ -5572,6 +6021,12 @@ export namespace Responses {
         message?: string;
         documentation_url?: string;
       };
+    }
+  }
+  /** Response if GitHub Advanced Security is not enabled for this repository */
+  export namespace code_scanning_forbidden_read {
+    export interface Content {
+      "application/json": Schemas.basic$error;
     }
   }
   /** Forbidden Gist */
@@ -5612,33 +6067,14 @@ export namespace Responses {
       "application/json": Schemas.basic$error;
     }
   }
-  /** Response if GitHub Advanced Security is not enabled for this repository */
-  export namespace code_scanning_forbidden_read {
-    export interface Content {
-      "application/json": Schemas.basic$error;
-    }
-  }
   /** Response if the repository is archived or if github advanced security is not enabled for this repository */
   export namespace code_scanning_forbidden_write {
     export interface Content {
       "application/json": Schemas.basic$error;
     }
   }
-  /** Bad Request */
-  export namespace bad_request {
-    export interface Content {
-      "application/json": Schemas.basic$error;
-      "application/scim+json": Schemas.scim$error;
-    }
-  }
   /** Found */
   export namespace found {}
-  /** Accepted */
-  export namespace accepted {
-    export interface Content {
-      "application/json": {};
-    }
-  }
   /** A header with no content is returned. */
   export namespace no_content {}
 }
@@ -5658,6 +6094,9 @@ export namespace Parameters {
   /** pre_receive_hook_id parameter */
   export type pre$receive$hook$id = number;
   export type token$id = number;
+  /** Used for pagination: the starting delivery from which the page of deliveries is fetched. Refer to the `link` header for the next and previous page cursors. */
+  export type cursor = string;
+  export type delivery$id = number;
   /** Only show notifications updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. */
   export type since = string;
   /** installation_id parameter */
@@ -5666,7 +6105,6 @@ export namespace Parameters {
   export type grant$id = number;
   /** The client ID of your GitHub app. */
   export type client$id = string;
-  export type access$token = string;
   export type app$slug = string;
   /** authorization_id parameter */
   export type authorization$id = number;
@@ -5678,6 +6116,44 @@ export namespace Parameters {
   export type runner$group$id = number;
   /** Unique identifier of the self-hosted runner. */
   export type runner$id = number;
+  /** The name of a self-hosted runner's custom label. */
+  export type runner$label$name = string;
+  /** A search phrase. For more information, see [Searching the audit log](https://docs.github.com/enterprise-server@3.4/github/setting-up-and-managing-organizations-and-teams/reviewing-the-audit-log-for-your-organization#searching-the-audit-log). */
+  export type audit$log$phrase = string;
+  /**
+   * The event types to include:
+   *
+   * - `web` - returns web (non-Git) events.
+   * - `git` - returns Git events.
+   * - `all` - returns both web and Git events.
+   *
+   * The default is `web`.
+   */
+  export type audit$log$include = "web" | "git" | "all";
+  /** A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#link-header). If specified, the query only searches for events after this cursor. */
+  export type audit$log$after = string;
+  /** A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#link-header). If specified, the query only searches for events before this cursor. */
+  export type audit$log$before = string;
+  /**
+   * The order of audit log events. To list newest events first, specify `desc`. To list oldest events first, specify `asc`.
+   *
+   * The default is `desc`.
+   */
+  export type audit$log$order = "desc" | "asc";
+  /** Set to `open` or `resolved` to only list secret scanning alerts in a specific state. */
+  export type secret$scanning$alert$state = "open" | "resolved";
+  /**
+   * A comma-separated list of secret types to return. By default all secret types are returned.
+   * See "[Secret scanning patterns](https://docs.github.com/enterprise-server@3.4/code-security/secret-scanning/secret-scanning-patterns#supported-secrets-for-advanced-security)"
+   * for a complete list of secret types (API slug).
+   */
+  export type secret$scanning$alert$secret$type = string;
+  /** A comma-separated list of resolutions. Only secret scanning alerts with one of these resolutions are listed. Valid resolutions are `false_positive`, `wont_fix`, `revoked`, `pattern_edited`, `pattern_deleted` or `used_in_tests`. */
+  export type secret$scanning$alert$resolution = string;
+  /** A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#link-header). If specified, the query only searches for events before this cursor. */
+  export type pagination$before = string;
+  /** A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#link-header). If specified, the query only searches for events after this cursor. */
+  export type pagination$after = string;
   /** gist_id parameter */
   export type gist$id = string;
   /** comment_id parameter */
@@ -5699,6 +6175,8 @@ export namespace Parameters {
   export type repository$id = number;
   /** secret_name parameter */
   export type secret$name = string;
+  /** migration_id parameter */
+  export type migration$id = number;
   /** team_slug parameter */
   export type team$slug = string;
   export type discussion$number = number;
@@ -5719,7 +6197,7 @@ export namespace Parameters {
   export type workflow$run$branch = string;
   /** Returns workflow run triggered by the event you specify. For example, `push`, `pull_request` or `issue`. For more information, see "[Events that trigger workflows](https://docs.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows)." */
   export type event = string;
-  /** Returns workflow runs with the check run `status` or `conclusion` that you specify. For example, a conclusion can be `success` or a status can be `in_progress`. Only GitHub can set a status of `waiting` or `requested`. For a list of the possible `status` and `conclusion` options, see "[Create a check run](https://docs.github.com/enterprise-server@3.0/rest/reference/checks#create-a-check-run)." */
+  /** Returns workflow runs with the check run `status` or `conclusion` that you specify. For example, a conclusion can be `success` or a status can be `in_progress`. Only GitHub can set a status of `waiting` or `requested`. For a list of the possible `status` and `conclusion` options, see "[Create a check run](https://docs.github.com/enterprise-server@3.4/rest/reference/checks#create-a-check-run)." */
   export type workflow$run$status =
     | "completed"
     | "action_required"
@@ -5734,7 +6212,7 @@ export namespace Parameters {
     | "queued"
     | "requested"
     | "waiting";
-  /** Returns workflow runs created within the given date-time range. For more information on the syntax, see "[Understanding the search syntax](https://docs.github.com/enterprise-server@3.0/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)." */
+  /** Returns workflow runs created within the given date-time range. For more information on the syntax, see "[Understanding the search syntax](https://docs.github.com/enterprise-server@3.4/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)." */
   export type created = string;
   /** If `true` pull requests are omitted from the response (empty array). */
   export type exclude$pull$requests = boolean;
@@ -5742,6 +6220,8 @@ export namespace Parameters {
   export type run$id = number;
   /** The ID of the workflow. You can also pass the workflow file name as a string. */
   export type workflow$id = number | string;
+  /** autolink_id parameter */
+  export type autolink$id = number;
   /** The name of the branch. */
   export type branch = string;
   /** check_run_id parameter */
@@ -5764,6 +6244,8 @@ export namespace Parameters {
   export type commit$sha = string;
   /** deployment_id parameter */
   export type deployment$id = number;
+  /** The name of the environment */
+  export type environment$name = string;
   /** invitation_id parameter */
   export type invitation$id = number;
   /** One of `created` (when the repository was starred) or `updated` (when it was last pushed to). */
@@ -5838,10 +6320,6 @@ export interface Parameter$enterprise$admin$list$global$webhooks {
 export interface Response$enterprise$admin$list$global$webhooks$Status$200 {
   "application/json": Schemas.global$hook[];
 }
-export interface Parameter$enterprise$admin$create$global$webhook {
-  /** This API is under preview and subject to change. */
-  accept: string;
-}
 export interface RequestBody$enterprise$admin$create$global$webhook {
   "application/json": {
     /** Must be passed as "web". */
@@ -5852,12 +6330,12 @@ export interface RequestBody$enterprise$admin$create$global$webhook {
       url: string;
       /** The media type used to serialize the payloads. Supported values include `json` and `form`. The default is `form`. */
       content_type?: string;
-      /** If provided, the `secret` will be used as the `key` to generate the HMAC hex digest value in the [`X-Hub-Signature`](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads/#delivery-headers) header. */
+      /** If provided, the `secret` will be used as the `key` to generate the HMAC hex digest value in the [`X-Hub-Signature`](https://docs.github.com/enterprise-server@3.4/webhooks/event-payloads/#delivery-headers) header. */
       secret?: string;
       /** Determines whether the SSL certificate of the host for `url` will be verified when delivering payloads. Supported values include `0` (verification is performed) and `1` (verification is not performed). The default is `0`. **We strongly recommend not setting this to `1` as you are subject to man-in-the-middle and other attacks.** */
       insecure_ssl?: string;
     };
-    /** The [events](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads) that trigger this webhook. A global webhook can be triggered by `user` and `organization` events. Default: `user` and `organization`. */
+    /** The [events](https://docs.github.com/enterprise-server@3.4/webhooks/event-payloads) that trigger this webhook. A global webhook can be triggered by `user` and `organization` events. Default: `user` and `organization`. */
     events?: string[];
     /** Determines if notifications are sent when the webhook is triggered. Set to `true` to send notifications. */
     active?: boolean;
@@ -5867,8 +6345,6 @@ export interface Response$enterprise$admin$create$global$webhook$Status$201 {
   "application/json": Schemas.global$hook;
 }
 export interface Parameter$enterprise$admin$get$global$webhook {
-  /** This API is under preview and subject to change. */
-  accept: string;
   hook_id: Parameters.hook$id;
 }
 export interface Response$enterprise$admin$get$global$webhook$Status$200 {
@@ -5880,8 +6356,6 @@ export interface Parameter$enterprise$admin$delete$global$webhook {
   hook_id: Parameters.hook$id;
 }
 export interface Parameter$enterprise$admin$update$global$webhook {
-  /** This API is under preview and subject to change. */
-  accept: string;
   hook_id: Parameters.hook$id;
 }
 export interface RequestBody$enterprise$admin$update$global$webhook {
@@ -5892,12 +6366,12 @@ export interface RequestBody$enterprise$admin$update$global$webhook {
       url: string;
       /** The media type used to serialize the payloads. Supported values include `json` and `form`. The default is `form`. */
       content_type?: string;
-      /** If provided, the `secret` will be used as the `key` to generate the HMAC hex digest value in the [`X-Hub-Signature`](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads/#delivery-headers) header. */
+      /** If provided, the `secret` will be used as the `key` to generate the HMAC hex digest value in the [`X-Hub-Signature`](https://docs.github.com/enterprise-server@3.4/webhooks/event-payloads/#delivery-headers) header. */
       secret?: string;
       /** Determines whether the SSL certificate of the host for `url` will be verified when delivering payloads. Supported values include `0` (verification is performed) and `1` (verification is not performed). The default is `0`. **We strongly recommend not setting this to `1` as you are subject to man-in-the-middle and other attacks.** */
       insecure_ssl?: string;
     };
-    /** The [events](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads) that trigger this webhook. A global webhook can be triggered by `user` and `organization` events. Default: `user` and `organization`. */
+    /** The [events](https://docs.github.com/enterprise-server@3.4/webhooks/event-payloads) that trigger this webhook. A global webhook can be triggered by `user` and `organization` events. Default: `user` and `organization`. */
     events?: string[];
     /** Determines if notifications are sent when the webhook is triggered. Set to `true` to send notifications. */
     active?: boolean;
@@ -6196,7 +6670,7 @@ export interface Parameter$enterprise$admin$create$impersonation$o$auth$token {
 }
 export interface RequestBody$enterprise$admin$create$impersonation$o$auth$token {
   "application/json": {
-    /** A list of [scopes](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). */
+    /** A list of [scopes](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). */
     scopes?: string[];
   };
 }
@@ -6234,6 +6708,31 @@ export interface RequestBody$apps$update$webhook$config$for$app {
 export interface Response$apps$update$webhook$config$for$app$Status$200 {
   "application/json": Schemas.webhook$config;
 }
+export interface Parameter$apps$list$webhook$deliveries {
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Used for pagination: the starting delivery from which the page of deliveries is fetched. Refer to the `link` header for the next and previous page cursors. */
+  cursor?: Parameters.cursor;
+}
+export interface Response$apps$list$webhook$deliveries$Status$200 {
+  "application/json": Schemas.hook$delivery$item[];
+}
+export type Response$apps$list$webhook$deliveries$Status$400 = Responses.bad_request.Content;
+export type Response$apps$list$webhook$deliveries$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$apps$get$webhook$delivery {
+  delivery_id: Parameters.delivery$id;
+}
+export interface Response$apps$get$webhook$delivery$Status$200 {
+  "application/json": Schemas.hook$delivery;
+}
+export type Response$apps$get$webhook$delivery$Status$400 = Responses.bad_request.Content;
+export type Response$apps$get$webhook$delivery$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$apps$redeliver$webhook$delivery {
+  delivery_id: Parameters.delivery$id;
+}
+export type Response$apps$redeliver$webhook$delivery$Status$202 = Responses.accepted.Content;
+export type Response$apps$redeliver$webhook$delivery$Status$400 = Responses.bad_request.Content;
+export type Response$apps$redeliver$webhook$delivery$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$apps$list$installations {
   /** Results per page (max 100) */
   per_page?: Parameters.per$page;
@@ -6331,11 +6830,6 @@ export interface RequestBody$apps$delete$authorization {
   };
 }
 export type Response$apps$delete$authorization$Status$422 = Responses.validation_failed.Content;
-export interface Parameter$apps$revoke$grant$for$application {
-  /** The client ID of your GitHub app. */
-  client_id: Parameters.client$id;
-  access_token: Parameters.access$token;
-}
 export interface Parameter$apps$check$token {
   /** The client ID of your GitHub app. */
   client_id: Parameters.client$id;
@@ -6402,28 +6896,6 @@ export type Response$apps$scope$token$Status$401 = Responses.requires_authentica
 export type Response$apps$scope$token$Status$403 = Responses.forbidden.Content;
 export type Response$apps$scope$token$Status$404 = Responses.not_found.Content;
 export type Response$apps$scope$token$Status$422 = Responses.validation_failed.Content;
-export interface Parameter$apps$check$authorization {
-  /** The client ID of your GitHub app. */
-  client_id: Parameters.client$id;
-  access_token: Parameters.access$token;
-}
-export interface Response$apps$check$authorization$Status$200 {
-  "application/json": Schemas.nullable$authorization;
-}
-export type Response$apps$check$authorization$Status$404 = Responses.not_found.Content;
-export interface Parameter$apps$reset$authorization {
-  /** The client ID of your GitHub app. */
-  client_id: Parameters.client$id;
-  access_token: Parameters.access$token;
-}
-export interface Response$apps$reset$authorization$Status$200 {
-  "application/json": Schemas.authorization;
-}
-export interface Parameter$apps$revoke$authorization$for$application {
-  /** The client ID of your GitHub app. */
-  client_id: Parameters.client$id;
-  access_token: Parameters.access$token;
-}
 export interface Parameter$apps$get$by$slug {
   app_slug: Parameters.app$slug;
 }
@@ -6894,6 +7366,142 @@ export interface Parameter$enterprise$admin$delete$self$hosted$runner$from$enter
   /** Unique identifier of the self-hosted runner. */
   runner_id: Parameters.runner$id;
 }
+export interface Parameter$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise {
+  /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
+  enterprise: Parameters.enterprise;
+  /** Unique identifier of the self-hosted runner. */
+  runner_id: Parameters.runner$id;
+}
+export type Response$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise$Status$200 = Responses.actions_runner_labels.Content;
+export type Response$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise$Status$404 = Responses.not_found.Content;
+export interface Parameter$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise {
+  /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
+  enterprise: Parameters.enterprise;
+  /** Unique identifier of the self-hosted runner. */
+  runner_id: Parameters.runner$id;
+}
+export interface RequestBody$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise {
+  "application/json": {
+    /** The names of the custom labels to set for the runner. You can pass an empty array to remove all custom labels. */
+    labels: string[];
+  };
+}
+export type Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$200 =
+  Responses.actions_runner_labels.Content;
+export type Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$404 = Responses.not_found.Content;
+export type Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$422 =
+  Responses.validation_failed_simple.Content;
+export interface Parameter$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise {
+  /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
+  enterprise: Parameters.enterprise;
+  /** Unique identifier of the self-hosted runner. */
+  runner_id: Parameters.runner$id;
+}
+export interface RequestBody$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise {
+  "application/json": {
+    /** The names of the custom labels to add to the runner. */
+    labels: string[];
+  };
+}
+export type Response$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise$Status$200 =
+  Responses.actions_runner_labels.Content;
+export type Response$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise$Status$404 = Responses.not_found.Content;
+export type Response$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise$Status$422 =
+  Responses.validation_failed_simple.Content;
+export interface Parameter$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise {
+  /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
+  enterprise: Parameters.enterprise;
+  /** Unique identifier of the self-hosted runner. */
+  runner_id: Parameters.runner$id;
+}
+export type Response$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise$Status$200 =
+  Responses.actions_runner_labels_readonly.Content;
+export type Response$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise$Status$404 = Responses.not_found.Content;
+export type Response$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise$Status$422 =
+  Responses.validation_failed_simple.Content;
+export interface Parameter$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise {
+  /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
+  enterprise: Parameters.enterprise;
+  /** Unique identifier of the self-hosted runner. */
+  runner_id: Parameters.runner$id;
+  /** The name of a self-hosted runner's custom label. */
+  name: Parameters.runner$label$name;
+}
+export type Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$200 =
+  Responses.actions_runner_labels.Content;
+export type Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$404 = Responses.not_found.Content;
+export type Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$422 =
+  Responses.validation_failed_simple.Content;
+export interface Parameter$enterprise$admin$get$audit$log {
+  /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
+  enterprise: Parameters.enterprise;
+  /** A search phrase. For more information, see [Searching the audit log](https://docs.github.com/enterprise-server@3.4/github/setting-up-and-managing-organizations-and-teams/reviewing-the-audit-log-for-your-organization#searching-the-audit-log). */
+  phrase?: Parameters.audit$log$phrase;
+  /**
+   * The event types to include:
+   *
+   * - `web` - returns web (non-Git) events.
+   * - `git` - returns Git events.
+   * - `all` - returns both web and Git events.
+   *
+   * The default is `web`.
+   */
+  include?: Parameters.audit$log$include;
+  /** A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#link-header). If specified, the query only searches for events after this cursor. */
+  after?: Parameters.audit$log$after;
+  /** A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#link-header). If specified, the query only searches for events before this cursor. */
+  before?: Parameters.audit$log$before;
+  /**
+   * The order of audit log events. To list newest events first, specify `desc`. To list oldest events first, specify `asc`.
+   *
+   * The default is `desc`.
+   */
+  order?: Parameters.audit$log$order;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+}
+export interface Response$enterprise$admin$get$audit$log$Status$200 {
+  "application/json": Schemas.audit$log$event[];
+}
+export interface Parameter$secret$scanning$list$alerts$for$enterprise {
+  /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
+  enterprise: Parameters.enterprise;
+  /** Set to `open` or `resolved` to only list secret scanning alerts in a specific state. */
+  state?: Parameters.secret$scanning$alert$state;
+  /**
+   * A comma-separated list of secret types to return. By default all secret types are returned.
+   * See "[Secret scanning patterns](https://docs.github.com/enterprise-server@3.4/code-security/secret-scanning/secret-scanning-patterns#supported-secrets-for-advanced-security)"
+   * for a complete list of secret types (API slug).
+   */
+  secret_type?: Parameters.secret$scanning$alert$secret$type;
+  /** A comma-separated list of resolutions. Only secret scanning alerts with one of these resolutions are listed. Valid resolutions are `false_positive`, `wont_fix`, `revoked`, `pattern_edited`, `pattern_deleted` or `used_in_tests`. */
+  resolution?: Parameters.secret$scanning$alert$resolution;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#link-header). If specified, the query only searches for events before this cursor. */
+  before?: Parameters.pagination$before;
+  /** A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#link-header). If specified, the query only searches for events after this cursor. */
+  after?: Parameters.pagination$after;
+}
+export interface Response$secret$scanning$list$alerts$for$enterprise$Status$200 {
+  "application/json": Schemas.organization$secret$scanning$alert[];
+}
+export type Response$secret$scanning$list$alerts$for$enterprise$Status$404 = Responses.not_found.Content;
+export type Response$secret$scanning$list$alerts$for$enterprise$Status$503 = Responses.service_unavailable.Content;
+export interface Parameter$billing$get$github$advanced$security$billing$ghe {
+  /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
+  enterprise: Parameters.enterprise;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+}
+export interface Response$billing$get$github$advanced$security$billing$ghe$Status$200 {
+  "application/json": Schemas.advanced$security$active$committers;
+}
+export type Response$billing$get$github$advanced$security$billing$ghe$Status$403 = Responses.code_scanning_forbidden_read.Content;
 export interface Parameter$activity$list$public$events {
   /** Results per page (max 100) */
   per_page?: Parameters.per$page;
@@ -7340,6 +7948,16 @@ export interface Parameter$orgs$list {
 export interface Response$orgs$list$Status$200 {
   "application/json": Schemas.organization$simple[];
 }
+export interface Parameter$orgs$list$custom$roles {
+  organization_id: string;
+}
+export interface Response$orgs$list$custom$roles$Status$200 {
+  "application/json": {
+    /** The number of custom roles in this organization */
+    total_count?: number;
+    custom_roles?: Schemas.organization$custom$repository$role[];
+  };
+}
 export interface Parameter$orgs$get {
   org: Parameters.org;
 }
@@ -7680,6 +8298,59 @@ export interface Parameter$actions$delete$self$hosted$runner$from$org {
   /** Unique identifier of the self-hosted runner. */
   runner_id: Parameters.runner$id;
 }
+export interface Parameter$actions$list$labels$for$self$hosted$runner$for$org {
+  org: Parameters.org;
+  /** Unique identifier of the self-hosted runner. */
+  runner_id: Parameters.runner$id;
+}
+export type Response$actions$list$labels$for$self$hosted$runner$for$org$Status$200 = Responses.actions_runner_labels.Content;
+export type Response$actions$list$labels$for$self$hosted$runner$for$org$Status$404 = Responses.not_found.Content;
+export interface Parameter$actions$set$custom$labels$for$self$hosted$runner$for$org {
+  org: Parameters.org;
+  /** Unique identifier of the self-hosted runner. */
+  runner_id: Parameters.runner$id;
+}
+export interface RequestBody$actions$set$custom$labels$for$self$hosted$runner$for$org {
+  "application/json": {
+    /** The names of the custom labels to set for the runner. You can pass an empty array to remove all custom labels. */
+    labels: string[];
+  };
+}
+export type Response$actions$set$custom$labels$for$self$hosted$runner$for$org$Status$200 = Responses.actions_runner_labels.Content;
+export type Response$actions$set$custom$labels$for$self$hosted$runner$for$org$Status$404 = Responses.not_found.Content;
+export type Response$actions$set$custom$labels$for$self$hosted$runner$for$org$Status$422 = Responses.validation_failed_simple.Content;
+export interface Parameter$actions$add$custom$labels$to$self$hosted$runner$for$org {
+  org: Parameters.org;
+  /** Unique identifier of the self-hosted runner. */
+  runner_id: Parameters.runner$id;
+}
+export interface RequestBody$actions$add$custom$labels$to$self$hosted$runner$for$org {
+  "application/json": {
+    /** The names of the custom labels to add to the runner. */
+    labels: string[];
+  };
+}
+export type Response$actions$add$custom$labels$to$self$hosted$runner$for$org$Status$200 = Responses.actions_runner_labels.Content;
+export type Response$actions$add$custom$labels$to$self$hosted$runner$for$org$Status$404 = Responses.not_found.Content;
+export type Response$actions$add$custom$labels$to$self$hosted$runner$for$org$Status$422 = Responses.validation_failed_simple.Content;
+export interface Parameter$actions$remove$all$custom$labels$from$self$hosted$runner$for$org {
+  org: Parameters.org;
+  /** Unique identifier of the self-hosted runner. */
+  runner_id: Parameters.runner$id;
+}
+export type Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$org$Status$200 =
+  Responses.actions_runner_labels_readonly.Content;
+export type Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$org$Status$404 = Responses.not_found.Content;
+export interface Parameter$actions$remove$custom$label$from$self$hosted$runner$for$org {
+  org: Parameters.org;
+  /** Unique identifier of the self-hosted runner. */
+  runner_id: Parameters.runner$id;
+  /** The name of a self-hosted runner's custom label. */
+  name: Parameters.runner$label$name;
+}
+export type Response$actions$remove$custom$label$from$self$hosted$runner$for$org$Status$200 = Responses.actions_runner_labels.Content;
+export type Response$actions$remove$custom$label$from$self$hosted$runner$for$org$Status$404 = Responses.not_found.Content;
+export type Response$actions$remove$custom$label$from$self$hosted$runner$for$org$Status$422 = Responses.validation_failed_simple.Content;
 export interface Parameter$actions$list$org$secrets {
   org: Parameters.org;
   /** Results per page (max 100) */
@@ -7714,7 +8385,7 @@ export interface Parameter$actions$create$or$update$org$secret {
 }
 export interface RequestBody$actions$create$or$update$org$secret {
   "application/json": {
-    /** Value for your secret, encrypted with [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages) using the public key retrieved from the [Get an organization public key](https://docs.github.com/enterprise-server@3.0/rest/reference/actions#get-an-organization-public-key) endpoint. */
+    /** Value for your secret, encrypted with [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages) using the public key retrieved from the [Get an organization public key](https://docs.github.com/enterprise-server@3.4/rest/reference/actions#get-an-organization-public-key) endpoint. */
     encrypted_value?: string;
     /** ID of the key you used to encrypt the secret. */
     key_id?: string;
@@ -7725,7 +8396,7 @@ export interface RequestBody$actions$create$or$update$org$secret {
      * \- `selected` - Only specific repositories can access the secret.
      */
     visibility: "all" | "private" | "selected";
-    /** An array of repository ids that can access the organization secret. You can only provide a list of repository ids when the `visibility` is set to `selected`. You can manage the list of selected repositories using the [List selected repositories for an organization secret](https://docs.github.com/enterprise-server@3.0/rest/reference/actions#list-selected-repositories-for-an-organization-secret), [Set selected repositories for an organization secret](https://docs.github.com/enterprise-server@3.0/rest/reference/actions#set-selected-repositories-for-an-organization-secret), and [Remove selected repository from an organization secret](https://docs.github.com/enterprise-server@3.0/rest/reference/actions#remove-selected-repository-from-an-organization-secret) endpoints. */
+    /** An array of repository ids that can access the organization secret. You can only provide a list of repository ids when the `visibility` is set to `selected`. You can manage the list of selected repositories using the [List selected repositories for an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/actions#list-selected-repositories-for-an-organization-secret), [Set selected repositories for an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/actions#set-selected-repositories-for-an-organization-secret), and [Remove selected repository from an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/actions#remove-selected-repository-from-an-organization-secret) endpoints. */
     selected_repository_ids?: string[];
   };
 }
@@ -7759,7 +8430,7 @@ export interface Parameter$actions$set$selected$repos$for$org$secret {
 }
 export interface RequestBody$actions$set$selected$repos$for$org$secret {
   "application/json": {
-    /** An array of repository ids that can access the organization secret. You can only provide a list of repository ids when the `visibility` is set to `selected`. You can add and remove individual repositories using the [Set selected repositories for an organization secret](https://docs.github.com/enterprise-server@3.0/rest/reference/actions#set-selected-repositories-for-an-organization-secret) and [Remove selected repository from an organization secret](https://docs.github.com/enterprise-server@3.0/rest/reference/actions#remove-selected-repository-from-an-organization-secret) endpoints. */
+    /** An array of repository ids that can access the organization secret. You can only provide a list of repository ids when the `visibility` is set to `selected`. You can add and remove individual repositories using the [Set selected repositories for an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/actions#set-selected-repositories-for-an-organization-secret) and [Remove selected repository from an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/actions#remove-selected-repository-from-an-organization-secret) endpoints. */
     selected_repository_ids: number[];
   };
 }
@@ -7770,6 +8441,133 @@ export interface Parameter$actions$add$selected$repo$to$org$secret {
   repository_id: number;
 }
 export interface Parameter$actions$remove$selected$repo$from$org$secret {
+  org: Parameters.org;
+  /** secret_name parameter */
+  secret_name: Parameters.secret$name;
+  repository_id: number;
+}
+export interface Parameter$orgs$get$audit$log {
+  org: Parameters.org;
+  /** A search phrase. For more information, see [Searching the audit log](https://docs.github.com/enterprise-server@3.4/github/setting-up-and-managing-organizations-and-teams/reviewing-the-audit-log-for-your-organization#searching-the-audit-log). */
+  phrase?: Parameters.audit$log$phrase;
+  /**
+   * The event types to include:
+   *
+   * - `web` - returns web (non-Git) events.
+   * - `git` - returns Git events.
+   * - `all` - returns both web and Git events.
+   *
+   * The default is `web`.
+   */
+  include?: Parameters.audit$log$include;
+  /** A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#link-header). If specified, the query only searches for events after this cursor. */
+  after?: Parameters.audit$log$after;
+  /** A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#link-header). If specified, the query only searches for events before this cursor. */
+  before?: Parameters.audit$log$before;
+  /**
+   * The order of audit log events. To list newest events first, specify `desc`. To list oldest events first, specify `asc`.
+   *
+   * The default is `desc`.
+   */
+  order?: Parameters.audit$log$order;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+}
+export interface Response$orgs$get$audit$log$Status$200 {
+  "application/json": Schemas.audit$log$event[];
+}
+export interface Parameter$dependabot$list$org$secrets {
+  org: Parameters.org;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+}
+export interface Response$dependabot$list$org$secrets$Status$200 {
+  "application/json": {
+    total_count: number;
+    secrets: Schemas.organization$dependabot$secret[];
+  };
+}
+export interface Parameter$dependabot$get$org$public$key {
+  org: Parameters.org;
+}
+export interface Response$dependabot$get$org$public$key$Status$200 {
+  "application/json": Schemas.dependabot$public$key;
+}
+export interface Parameter$dependabot$get$org$secret {
+  org: Parameters.org;
+  /** secret_name parameter */
+  secret_name: Parameters.secret$name;
+}
+export interface Response$dependabot$get$org$secret$Status$200 {
+  "application/json": Schemas.organization$dependabot$secret;
+}
+export interface Parameter$dependabot$create$or$update$org$secret {
+  org: Parameters.org;
+  /** secret_name parameter */
+  secret_name: Parameters.secret$name;
+}
+export interface RequestBody$dependabot$create$or$update$org$secret {
+  "application/json": {
+    /** Value for your secret, encrypted with [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages) using the public key retrieved from the [Get an organization public key](https://docs.github.com/enterprise-server@3.4/rest/reference/dependabot#get-an-organization-public-key) endpoint. */
+    encrypted_value?: string;
+    /** ID of the key you used to encrypt the secret. */
+    key_id?: string;
+    /**
+     * Configures the access that repositories have to the organization secret. Can be one of:
+     * \- `all` - All repositories in an organization can access the secret.
+     * \- `private` - Private repositories in an organization can access the secret.
+     * \- `selected` - Only specific repositories can access the secret.
+     */
+    visibility: "all" | "private" | "selected";
+    /** An array of repository ids that can access the organization secret. You can only provide a list of repository ids when the `visibility` is set to `selected`. You can manage the list of selected repositories using the [List selected repositories for an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/dependabot#list-selected-repositories-for-an-organization-secret), [Set selected repositories for an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/dependabot#set-selected-repositories-for-an-organization-secret), and [Remove selected repository from an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/dependabot#remove-selected-repository-from-an-organization-secret) endpoints. */
+    selected_repository_ids?: string[];
+  };
+}
+export interface Response$dependabot$create$or$update$org$secret$Status$201 {
+  "application/json": Schemas.empty$object;
+}
+export interface Parameter$dependabot$delete$org$secret {
+  org: Parameters.org;
+  /** secret_name parameter */
+  secret_name: Parameters.secret$name;
+}
+export interface Parameter$dependabot$list$selected$repos$for$org$secret {
+  org: Parameters.org;
+  /** secret_name parameter */
+  secret_name: Parameters.secret$name;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+}
+export interface Response$dependabot$list$selected$repos$for$org$secret$Status$200 {
+  "application/json": {
+    total_count: number;
+    repositories: Schemas.minimal$repository[];
+  };
+}
+export interface Parameter$dependabot$set$selected$repos$for$org$secret {
+  org: Parameters.org;
+  /** secret_name parameter */
+  secret_name: Parameters.secret$name;
+}
+export interface RequestBody$dependabot$set$selected$repos$for$org$secret {
+  "application/json": {
+    /** An array of repository ids that can access the organization secret. You can only provide a list of repository ids when the `visibility` is set to `selected`. You can add and remove individual repositories using the [Set selected repositories for an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/dependabot#set-selected-repositories-for-an-organization-secret) and [Remove selected repository from an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/dependabot#remove-selected-repository-from-an-organization-secret) endpoints. */
+    selected_repository_ids: number[];
+  };
+}
+export interface Parameter$dependabot$add$selected$repo$to$org$secret {
+  org: Parameters.org;
+  /** secret_name parameter */
+  secret_name: Parameters.secret$name;
+  repository_id: number;
+}
+export interface Parameter$dependabot$remove$selected$repo$from$org$secret {
   org: Parameters.org;
   /** secret_name parameter */
   secret_name: Parameters.secret$name;
@@ -7803,7 +8601,7 @@ export interface RequestBody$orgs$create$webhook {
   "application/json": {
     /** Must be passed as "web". */
     name: string;
-    /** Key/value pairs to provide settings for this webhook. [These are defined below](https://docs.github.com/enterprise-server@3.0/rest/reference/orgs#create-hook-config-params). */
+    /** Key/value pairs to provide settings for this webhook. [These are defined below](https://docs.github.com/enterprise-server@3.4/rest/reference/orgs#create-hook-config-params). */
     config: {
       url: Schemas.webhook$config$url;
       content_type?: Schemas.webhook$config$content$type;
@@ -7812,7 +8610,7 @@ export interface RequestBody$orgs$create$webhook {
       username?: string;
       password?: string;
     };
-    /** Determines what [events](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads) the hook is triggered for. */
+    /** Determines what [events](https://docs.github.com/enterprise-server@3.4/webhooks/event-payloads) the hook is triggered for. */
     events?: string[];
     /** Determines if notifications are sent when the webhook is triggered. Set to `true` to send notifications. */
     active?: boolean;
@@ -7842,14 +8640,14 @@ export interface Parameter$orgs$update$webhook {
 }
 export interface RequestBody$orgs$update$webhook {
   "application/json": {
-    /** Key/value pairs to provide settings for this webhook. [These are defined below](https://docs.github.com/enterprise-server@3.0/rest/reference/orgs#update-hook-config-params). */
+    /** Key/value pairs to provide settings for this webhook. [These are defined below](https://docs.github.com/enterprise-server@3.4/rest/reference/orgs#update-hook-config-params). */
     config?: {
       url: Schemas.webhook$config$url;
       content_type?: Schemas.webhook$config$content$type;
       secret?: Schemas.webhook$config$secret;
       insecure_ssl?: Schemas.webhook$config$insecure$ssl;
     };
-    /** Determines what [events](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads) the hook is triggered for. */
+    /** Determines what [events](https://docs.github.com/enterprise-server@3.4/webhooks/event-payloads) the hook is triggered for. */
     events?: string[];
     /** Determines if notifications are sent when the webhook is triggered. Set to `true` to send notifications. */
     active?: boolean;
@@ -7883,6 +8681,37 @@ export interface RequestBody$orgs$update$webhook$config$for$org {
 export interface Response$orgs$update$webhook$config$for$org$Status$200 {
   "application/json": Schemas.webhook$config;
 }
+export interface Parameter$orgs$list$webhook$deliveries {
+  org: Parameters.org;
+  hook_id: Parameters.hook$id;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Used for pagination: the starting delivery from which the page of deliveries is fetched. Refer to the `link` header for the next and previous page cursors. */
+  cursor?: Parameters.cursor;
+}
+export interface Response$orgs$list$webhook$deliveries$Status$200 {
+  "application/json": Schemas.hook$delivery$item[];
+}
+export type Response$orgs$list$webhook$deliveries$Status$400 = Responses.bad_request.Content;
+export type Response$orgs$list$webhook$deliveries$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$orgs$get$webhook$delivery {
+  org: Parameters.org;
+  hook_id: Parameters.hook$id;
+  delivery_id: Parameters.delivery$id;
+}
+export interface Response$orgs$get$webhook$delivery$Status$200 {
+  "application/json": Schemas.hook$delivery;
+}
+export type Response$orgs$get$webhook$delivery$Status$400 = Responses.bad_request.Content;
+export type Response$orgs$get$webhook$delivery$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$orgs$redeliver$webhook$delivery {
+  org: Parameters.org;
+  hook_id: Parameters.hook$id;
+  delivery_id: Parameters.delivery$id;
+}
+export type Response$orgs$redeliver$webhook$delivery$Status$202 = Responses.accepted.Content;
+export type Response$orgs$redeliver$webhook$delivery$Status$400 = Responses.bad_request.Content;
+export type Response$orgs$redeliver$webhook$delivery$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$orgs$ping$webhook {
   org: Parameters.org;
   hook_id: Parameters.hook$id;
@@ -8004,6 +8833,52 @@ export interface Parameter$orgs$remove$membership$for$user {
 }
 export type Response$orgs$remove$membership$for$user$Status$403 = Responses.forbidden.Content;
 export type Response$orgs$remove$membership$for$user$Status$404 = Responses.not_found.Content;
+export interface Parameter$migrations$list$for$org {
+  org: Parameters.org;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+  /** Exclude attributes from the API response to improve performance */
+  exclude?: "repositories"[];
+}
+export interface Response$migrations$list$for$org$Status$200 {
+  "application/json": Schemas.migration[];
+}
+export interface Parameter$migrations$start$for$org {
+  org: Parameters.org;
+}
+export interface RequestBody$migrations$start$for$org {
+  "application/json": {
+    /** A list of arrays indicating which repositories should be migrated. */
+    repositories: string[];
+    /** Indicates whether repositories should be locked (to prevent manipulation) while migrating data. */
+    lock_repositories?: boolean;
+    /** Indicates whether attachments should be excluded from the migration (to reduce migration archive file size). */
+    exclude_attachments?: boolean;
+    /** Indicates whether releases should be excluded from the migration (to reduce migration archive file size). */
+    exclude_releases?: boolean;
+    /** Indicates whether projects owned by the organization or users should be excluded. from the migration. */
+    exclude_owner_projects?: boolean;
+    exclude?: "repositories"[];
+  };
+}
+export interface Response$migrations$start$for$org$Status$201 {
+  "application/json": Schemas.migration;
+}
+export type Response$migrations$start$for$org$Status$404 = Responses.not_found.Content;
+export type Response$migrations$start$for$org$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$migrations$get$status$for$org {
+  org: Parameters.org;
+  /** migration_id parameter */
+  migration_id: Parameters.migration$id;
+  /** Exclude attributes from the API response to improve performance */
+  exclude?: "repositories"[];
+}
+export interface Response$migrations$get$status$for$org$Status$200 {
+  "application/json": Schemas.migration;
+}
+export type Response$migrations$get$status$for$org$Status$404 = Responses.not_found.Content;
 export interface Parameter$orgs$list$outside$collaborators {
   org: Parameters.org;
   /**
@@ -8168,10 +9043,7 @@ export interface RequestBody$repos$create$in$org {
     homepage?: string;
     /** Whether the repository is private. */
     private?: boolean;
-    /**
-     * Can be `public` or `private`. If your organization is associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+, `visibility` can also be `internal`. Note: For GitHub Enterprise Server and GitHub AE, this endpoint will only list repositories available to all users on the enterprise. For more information, see "[Creating an internal repository](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-repository-visibility#about-internal-repositories)" in the GitHub Help documentation.
-     * The `visibility` parameter overrides the `private` parameter when you use both parameters with the `nebula-preview` preview header.
-     */
+    /** Can be `public` or `private`. If your organization is associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+, `visibility` can also be `internal`. Note: For GitHub Enterprise Server and GitHub AE, this endpoint will only list repositories available to all users on the enterprise. For more information, see "[Creating an internal repository](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-repository-visibility#about-internal-repositories)" in the GitHub Help documentation. */
     visibility?: "public" | "private" | "internal";
     /** Either `true` to enable issues for this repository or `false` to disable them. */
     has_issues?: boolean;
@@ -8195,6 +9067,8 @@ export interface RequestBody$repos$create$in$org {
     allow_merge_commit?: boolean;
     /** Either `true` to allow rebase-merging pull requests, or `false` to prevent rebase-merging. */
     allow_rebase_merge?: boolean;
+    /** Either `true` to allow auto-merge on pull requests, or `false` to disallow auto-merge. */
+    allow_auto_merge?: boolean;
     /** Either `true` to allow automatically deleting head branches when pull requests are merged, or `false` to prevent automatic deletion. */
     delete_branch_on_merge?: boolean;
   };
@@ -8204,6 +9078,39 @@ export interface Response$repos$create$in$org$Status$201 {
 }
 export type Response$repos$create$in$org$Status$403 = Responses.forbidden.Content;
 export type Response$repos$create$in$org$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$secret$scanning$list$alerts$for$org {
+  org: Parameters.org;
+  /** Set to `open` or `resolved` to only list secret scanning alerts in a specific state. */
+  state?: Parameters.secret$scanning$alert$state;
+  /**
+   * A comma-separated list of secret types to return. By default all secret types are returned.
+   * See "[Secret scanning patterns](https://docs.github.com/enterprise-server@3.4/code-security/secret-scanning/secret-scanning-patterns#supported-secrets-for-advanced-security)"
+   * for a complete list of secret types (API slug).
+   */
+  secret_type?: Parameters.secret$scanning$alert$secret$type;
+  /** A comma-separated list of resolutions. Only secret scanning alerts with one of these resolutions are listed. Valid resolutions are `false_positive`, `wont_fix`, `revoked`, `pattern_edited`, `pattern_deleted` or `used_in_tests`. */
+  resolution?: Parameters.secret$scanning$alert$resolution;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+}
+export interface Response$secret$scanning$list$alerts$for$org$Status$200 {
+  "application/json": Schemas.organization$secret$scanning$alert[];
+}
+export type Response$secret$scanning$list$alerts$for$org$Status$404 = Responses.not_found.Content;
+export type Response$secret$scanning$list$alerts$for$org$Status$503 = Responses.service_unavailable.Content;
+export interface Parameter$billing$get$github$advanced$security$billing$org {
+  org: Parameters.org;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+}
+export interface Response$billing$get$github$advanced$security$billing$org$Status$200 {
+  "application/json": Schemas.advanced$security$active$committers;
+}
+export type Response$billing$get$github$advanced$security$billing$org$Status$403 = Responses.code_scanning_forbidden_read.Content;
 export interface Parameter$teams$list {
   org: Parameters.org;
   /** Results per page (max 100) */
@@ -8247,7 +9154,7 @@ export interface RequestBody$teams$create {
     permission?: "pull" | "push";
     /** The ID of a team to set as the parent team. */
     parent_team_id?: number;
-    /** The [distinguished name](https://www.ldap.com/ldap-dns-and-rdns) (DN) of the LDAP entry to map to a team. LDAP synchronization must be enabled to map LDAP entries to a team. Use the "[Update LDAP mapping for a team](https://docs.github.com/enterprise-server@3.0/rest/reference/enterprise-admin#update-ldap-mapping-for-a-team)" endpoint to change the LDAP DN. For more information, see "[Using LDAP](https://docs.github.com/enterprise-server@3.0/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap#enabling-ldap-sync)." */
+    /** The [distinguished name](https://www.ldap.com/ldap-dns-and-rdns) (DN) of the LDAP entry to map to a team. LDAP synchronization must be enabled to map LDAP entries to a team. Use the "[Update LDAP mapping for a team](https://docs.github.com/enterprise-server@3.4/rest/reference/enterprise-admin#update-ldap-mapping-for-a-team)" endpoint to change the LDAP DN. For more information, see "[Using LDAP](https://docs.github.com/enterprise-server@3.4/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap#enabling-ldap-sync)." */
     ldap_dn?: string;
   };
 }
@@ -8439,7 +9346,7 @@ export interface Parameter$reactions$list$for$team$discussion$comment$in$org {
   team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
   comment_number: Parameters.comment$number;
-  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a team discussion comment. */
+  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a team discussion comment. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
   per_page?: Parameters.per$page;
@@ -8458,7 +9365,7 @@ export interface Parameter$reactions$create$for$team$discussion$comment$in$org {
 }
 export interface RequestBody$reactions$create$for$team$discussion$comment$in$org {
   "application/json": {
-    /** The [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types) to add to the team discussion comment. */
+    /** The [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types) to add to the team discussion comment. */
     content: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   };
 }
@@ -8481,7 +9388,7 @@ export interface Parameter$reactions$list$for$team$discussion$in$org {
   /** team_slug parameter */
   team_slug: Parameters.team$slug;
   discussion_number: Parameters.discussion$number;
-  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a team discussion. */
+  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a team discussion. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
   per_page?: Parameters.per$page;
@@ -8499,7 +9406,7 @@ export interface Parameter$reactions$create$for$team$discussion$in$org {
 }
 export interface RequestBody$reactions$create$for$team$discussion$in$org {
   "application/json": {
-    /** The [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types) to add to the team discussion. */
+    /** The [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types) to add to the team discussion. */
     content: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   };
 }
@@ -8603,7 +9510,7 @@ export interface RequestBody$teams$add$or$update$project$permissions$in$org {
      * \* `read` - team members can read, but not write to or administer this project.
      * \* `write` - team members can read and write, but not administer this project.
      * \* `admin` - team members can read, write and administer this project.
-     * Default: the team's `permission` attribute will be used to determine what permission to grant the team on this project. Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
+     * Default: the team's `permission` attribute will be used to determine what permission to grant the team on this project. Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#http-verbs)."
      */
     permission?: "read" | "write" | "admin";
   } | null;
@@ -9046,6 +9953,24 @@ export interface RequestBody$repos$update {
     private?: boolean;
     /** Can be `public` or `private`. If your organization is associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+, `visibility` can also be `internal`." */
     visibility?: "public" | "private" | "internal";
+    /** Specify which security and analysis features to enable or disable. For example, to enable GitHub Advanced Security, use this data in the body of the PATCH request: `{"security_and_analysis": {"advanced_security": {"status": "enabled"}}}`. If you have admin permissions for a private repository covered by an Advanced Security license, you can check which security and analysis features are currently enabled by using a `GET /repos/{owner}/{repo}` request. */
+    security_and_analysis?: {
+      /** Use the `status` property to enable or disable GitHub Advanced Security for this repository. For more information, see "[About GitHub Advanced Security](/github/getting-started-with-github/learning-about-github/about-github-advanced-security)." */
+      advanced_security?: {
+        /** Can be `enabled` or `disabled`. */
+        status?: string;
+      };
+      /** Use the `status` property to enable or disable secret scanning for this repository. For more information, see "[About secret scanning](/code-security/secret-security/about-secret-scanning)." */
+      secret_scanning?: {
+        /** Can be `enabled` or `disabled`. */
+        status?: string;
+      };
+      /** Use the `status` property to enable or disable secret scanning push protection for this repository. For more information, see "[About push protection](/enterprise-cloud@latest/early-access/code-security/secret-scanning/protecting-pushes-with-secret-scanning)." */
+      secret_scanning_push_protection?: {
+        /** Can be `enabled` or `disabled`. */
+        status?: string;
+      };
+    } | null;
     /** Either `true` to enable issues for this repository or `false` to disable them. */
     has_issues?: boolean;
     /** Either `true` to enable projects for this repository or `false` to disable them. **Note:** If you're creating a repository in an organization that has disabled repository projects, the default is `false`, and if you pass `true`, the API returns an error. */
@@ -9062,6 +9987,8 @@ export interface RequestBody$repos$update {
     allow_merge_commit?: boolean;
     /** Either `true` to allow rebase-merging pull requests, or `false` to prevent rebase-merging. */
     allow_rebase_merge?: boolean;
+    /** Either `true` to allow auto-merge on pull requests, or `false` to disallow auto-merge. */
+    allow_auto_merge?: boolean;
     /** Either `true` to allow automatically deleting head branches when pull requests are merged, or `false` to prevent automatic deletion. */
     delete_branch_on_merge?: boolean;
     /** `true` to archive this repository. **Note**: You cannot unarchive repositories through the API. */
@@ -9209,6 +10136,64 @@ export interface Parameter$actions$delete$self$hosted$runner$from$repo {
   /** Unique identifier of the self-hosted runner. */
   runner_id: Parameters.runner$id;
 }
+export interface Parameter$actions$list$labels$for$self$hosted$runner$for$repo {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** Unique identifier of the self-hosted runner. */
+  runner_id: Parameters.runner$id;
+}
+export type Response$actions$list$labels$for$self$hosted$runner$for$repo$Status$200 = Responses.actions_runner_labels.Content;
+export type Response$actions$list$labels$for$self$hosted$runner$for$repo$Status$404 = Responses.not_found.Content;
+export interface Parameter$actions$set$custom$labels$for$self$hosted$runner$for$repo {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** Unique identifier of the self-hosted runner. */
+  runner_id: Parameters.runner$id;
+}
+export interface RequestBody$actions$set$custom$labels$for$self$hosted$runner$for$repo {
+  "application/json": {
+    /** The names of the custom labels to set for the runner. You can pass an empty array to remove all custom labels. */
+    labels: string[];
+  };
+}
+export type Response$actions$set$custom$labels$for$self$hosted$runner$for$repo$Status$200 = Responses.actions_runner_labels.Content;
+export type Response$actions$set$custom$labels$for$self$hosted$runner$for$repo$Status$404 = Responses.not_found.Content;
+export type Response$actions$set$custom$labels$for$self$hosted$runner$for$repo$Status$422 = Responses.validation_failed_simple.Content;
+export interface Parameter$actions$add$custom$labels$to$self$hosted$runner$for$repo {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** Unique identifier of the self-hosted runner. */
+  runner_id: Parameters.runner$id;
+}
+export interface RequestBody$actions$add$custom$labels$to$self$hosted$runner$for$repo {
+  "application/json": {
+    /** The names of the custom labels to add to the runner. */
+    labels: string[];
+  };
+}
+export type Response$actions$add$custom$labels$to$self$hosted$runner$for$repo$Status$200 = Responses.actions_runner_labels.Content;
+export type Response$actions$add$custom$labels$to$self$hosted$runner$for$repo$Status$404 = Responses.not_found.Content;
+export type Response$actions$add$custom$labels$to$self$hosted$runner$for$repo$Status$422 = Responses.validation_failed_simple.Content;
+export interface Parameter$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** Unique identifier of the self-hosted runner. */
+  runner_id: Parameters.runner$id;
+}
+export type Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo$Status$200 =
+  Responses.actions_runner_labels_readonly.Content;
+export type Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo$Status$404 = Responses.not_found.Content;
+export interface Parameter$actions$remove$custom$label$from$self$hosted$runner$for$repo {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** Unique identifier of the self-hosted runner. */
+  runner_id: Parameters.runner$id;
+  /** The name of a self-hosted runner's custom label. */
+  name: Parameters.runner$label$name;
+}
+export type Response$actions$remove$custom$label$from$self$hosted$runner$for$repo$Status$200 = Responses.actions_runner_labels.Content;
+export type Response$actions$remove$custom$label$from$self$hosted$runner$for$repo$Status$404 = Responses.not_found.Content;
+export type Response$actions$remove$custom$label$from$self$hosted$runner$for$repo$Status$422 = Responses.validation_failed_simple.Content;
 export interface Parameter$actions$list$workflow$runs$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -9218,13 +10203,13 @@ export interface Parameter$actions$list$workflow$runs$for$repo {
   branch?: Parameters.workflow$run$branch;
   /** Returns workflow run triggered by the event you specify. For example, `push`, `pull_request` or `issue`. For more information, see "[Events that trigger workflows](https://docs.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows)." */
   event?: Parameters.event;
-  /** Returns workflow runs with the check run `status` or `conclusion` that you specify. For example, a conclusion can be `success` or a status can be `in_progress`. Only GitHub can set a status of `waiting` or `requested`. For a list of the possible `status` and `conclusion` options, see "[Create a check run](https://docs.github.com/enterprise-server@3.0/rest/reference/checks#create-a-check-run)." */
+  /** Returns workflow runs with the check run `status` or `conclusion` that you specify. For example, a conclusion can be `success` or a status can be `in_progress`. Only GitHub can set a status of `waiting` or `requested`. For a list of the possible `status` and `conclusion` options, see "[Create a check run](https://docs.github.com/enterprise-server@3.4/rest/reference/checks#create-a-check-run)." */
   status?: Parameters.workflow$run$status;
   /** Results per page (max 100) */
   per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
-  /** Returns workflow runs created within the given date-time range. For more information on the syntax, see "[Understanding the search syntax](https://docs.github.com/enterprise-server@3.0/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)." */
+  /** Returns workflow runs created within the given date-time range. For more information on the syntax, see "[Understanding the search syntax](https://docs.github.com/enterprise-server@3.4/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)." */
   created?: Parameters.created;
   /** If `true` pull requests are omitted from the response (empty array). */
   exclude_pull_requests?: Parameters.exclude$pull$requests;
@@ -9252,6 +10237,15 @@ export interface Parameter$actions$delete$workflow$run {
   /** The id of the workflow run. */
   run_id: Parameters.run$id;
 }
+export interface Parameter$actions$get$reviews$for$run {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** The id of the workflow run. */
+  run_id: Parameters.run$id;
+}
+export interface Response$actions$get$reviews$for$run$Status$200 {
+  "application/json": Schemas.environment$approvals[];
+}
 export interface Parameter$actions$list$workflow$run$artifacts {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -9277,6 +10271,7 @@ export interface Parameter$actions$cancel$workflow$run {
 export interface Response$actions$cancel$workflow$run$Status$202 {
   "application/json": {};
 }
+export type Response$actions$cancel$workflow$run$Status$409 = Responses.conflict.Content;
 export interface Parameter$actions$list$jobs$for$workflow$run {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -9313,6 +10308,34 @@ export interface Parameter$actions$delete$workflow$run$logs {
 }
 export type Response$actions$delete$workflow$run$logs$Status$403 = Responses.forbidden.Content;
 export type Response$actions$delete$workflow$run$logs$Status$500 = Responses.internal_error.Content;
+export interface Parameter$actions$get$pending$deployments$for$run {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** The id of the workflow run. */
+  run_id: Parameters.run$id;
+}
+export interface Response$actions$get$pending$deployments$for$run$Status$200 {
+  "application/json": Schemas.pending$deployment[];
+}
+export interface Parameter$actions$review$pending$deployments$for$run {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** The id of the workflow run. */
+  run_id: Parameters.run$id;
+}
+export interface RequestBody$actions$review$pending$deployments$for$run {
+  "application/json": {
+    /** The list of environment ids to approve or reject */
+    environment_ids: number[];
+    /** Whether to approve or reject deployment to the specified environments. Must be one of: `approved` or `rejected` */
+    state: "approved" | "rejected";
+    /** A comment to accompany the deployment review */
+    comment: string;
+  };
+}
+export interface Response$actions$review$pending$deployments$for$run$Status$200 {
+  "application/json": Schemas.deployment[];
+}
 export interface Parameter$actions$re$run$workflow {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -9360,7 +10383,7 @@ export interface Parameter$actions$create$or$update$repo$secret {
 }
 export interface RequestBody$actions$create$or$update$repo$secret {
   "application/json": {
-    /** Value for your secret, encrypted with [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages) using the public key retrieved from the [Get a repository public key](https://docs.github.com/enterprise-server@3.0/rest/reference/actions#get-a-repository-public-key) endpoint. */
+    /** Value for your secret, encrypted with [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages) using the public key retrieved from the [Get a repository public key](https://docs.github.com/enterprise-server@3.4/rest/reference/actions#get-a-repository-public-key) endpoint. */
     encrypted_value?: string;
     /** ID of the key you used to encrypt the secret. */
     key_id?: string;
@@ -9437,13 +10460,13 @@ export interface Parameter$actions$list$workflow$runs {
   branch?: Parameters.workflow$run$branch;
   /** Returns workflow run triggered by the event you specify. For example, `push`, `pull_request` or `issue`. For more information, see "[Events that trigger workflows](https://docs.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows)." */
   event?: Parameters.event;
-  /** Returns workflow runs with the check run `status` or `conclusion` that you specify. For example, a conclusion can be `success` or a status can be `in_progress`. Only GitHub can set a status of `waiting` or `requested`. For a list of the possible `status` and `conclusion` options, see "[Create a check run](https://docs.github.com/enterprise-server@3.0/rest/reference/checks#create-a-check-run)." */
+  /** Returns workflow runs with the check run `status` or `conclusion` that you specify. For example, a conclusion can be `success` or a status can be `in_progress`. Only GitHub can set a status of `waiting` or `requested`. For a list of the possible `status` and `conclusion` options, see "[Create a check run](https://docs.github.com/enterprise-server@3.4/rest/reference/checks#create-a-check-run)." */
   status?: Parameters.workflow$run$status;
   /** Results per page (max 100) */
   per_page?: Parameters.per$page;
   /** Page number of the results to fetch. */
   page?: Parameters.page;
-  /** Returns workflow runs created within the given date-time range. For more information on the syntax, see "[Understanding the search syntax](https://docs.github.com/enterprise-server@3.0/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)." */
+  /** Returns workflow runs created within the given date-time range. For more information on the syntax, see "[Understanding the search syntax](https://docs.github.com/enterprise-server@3.4/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)." */
   created?: Parameters.created;
   /** If `true` pull requests are omitted from the response (empty array). */
   exclude_pull_requests?: Parameters.exclude$pull$requests;
@@ -9474,6 +10497,48 @@ export interface Parameter$issues$check$user$can$be$assigned {
 export interface Response$issues$check$user$can$be$assigned$Status$404 {
   "application/json": Schemas.basic$error;
 }
+export interface Parameter$repos$list$autolinks {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+}
+export interface Response$repos$list$autolinks$Status$200 {
+  "application/json": Schemas.autolink[];
+}
+export interface Parameter$repos$create$autolink {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+}
+export interface RequestBody$repos$create$autolink {
+  "application/json": {
+    /** The prefix appended by a number will generate a link any time it is found in an issue, pull request, or commit. */
+    key_prefix: string;
+    /** The URL must contain <num> for the reference number. */
+    url_template: string;
+  };
+}
+export interface Response$repos$create$autolink$Status$201 {
+  "application/json": Schemas.autolink;
+}
+export type Response$repos$create$autolink$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$repos$get$autolink {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** autolink_id parameter */
+  autolink_id: Parameters.autolink$id;
+}
+export interface Response$repos$get$autolink$Status$200 {
+  "application/json": Schemas.autolink;
+}
+export type Response$repos$get$autolink$Status$404 = Responses.not_found.Content;
+export interface Parameter$repos$delete$autolink {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** autolink_id parameter */
+  autolink_id: Parameters.autolink$id;
+}
+export type Response$repos$delete$autolink$Status$404 = Responses.not_found.Content;
 export interface Parameter$repos$list$branches {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -9547,8 +10612,15 @@ export interface RequestBody$repos$update$branch$protection {
       dismiss_stale_reviews?: boolean;
       /** Blocks merging pull requests until [code owners](https://docs.github.com/articles/about-code-owners/) review them. */
       require_code_owner_reviews?: boolean;
-      /** Specify the number of reviewers required to approve pull requests. Use a number between 1 and 6. */
+      /** Specify the number of reviewers required to approve pull requests. Use a number between 1 and 6 or 0 to not require reviewers. */
       required_approving_review_count?: number;
+      /** Allow specific users or teams to bypass pull request requirements. */
+      bypass_pull_request_allowances?: {
+        /** The list of user `login`s allowed to bypass pull request requirements. */
+        users?: string[];
+        /** The list of team `slug`s allowed to bypass pull request requirements. */
+        teams?: string[];
+      };
     } | null;
     /** Restrict who can push to the protected branch. User, app, and team `restrictions` are only available for organization-owned repositories. Set to `null` to disable. */
     restrictions: {
@@ -9567,8 +10639,6 @@ export interface RequestBody$repos$update$branch$protection {
     allow_deletions?: boolean;
     /** Requires all conversations on code to be resolved before a pull request can be merged into a branch that matches this rule. Set to `false` to disable. Default: `false`. */
     required_conversation_resolution?: boolean;
-    /** The list of status checks to require in order to merge into this branch. */
-    contexts?: string[];
   };
 }
 export interface Response$repos$update$branch$protection$Status$200 {
@@ -9644,8 +10714,15 @@ export interface RequestBody$repos$update$pull$request$review$protection {
     dismiss_stale_reviews?: boolean;
     /** Blocks merging pull requests until [code owners](https://docs.github.com/articles/about-code-owners/) have reviewed. */
     require_code_owner_reviews?: boolean;
-    /** Specifies the number of reviewers required to approve pull requests. Use a number between 1 and 6. */
+    /** Specifies the number of reviewers required to approve pull requests. Use a number between 1 and 6 or 0 to not require reviewers. */
     required_approving_review_count?: number;
+    /** Allow specific users or teams to bypass pull request requirements. */
+    bypass_pull_request_allowances?: {
+      /** The list of user `login`s allowed to bypass pull request requirements. */
+      users?: string[];
+      /** The list of team `slug`s allowed to bypass pull request requirements. */
+      teams?: string[];
+    };
   };
 }
 export interface Response$repos$update$pull$request$review$protection$Status$200 {
@@ -9705,8 +10782,15 @@ export interface RequestBody$repos$update$status$check$protection {
   "application/json": {
     /** Require branches to be up to date before merging. */
     strict?: boolean;
-    /** The list of status checks to require in order to merge into this branch */
+    /** **Deprecated**: The list of status checks to require in order to merge into this branch. If any of these checks have recently been set by a particular GitHub App, they will be required to come from that app in future for the branch to merge. Use `checks` instead of `contexts` for more fine-grained control. */
     contexts?: string[];
+    /** The list of status checks to require in order to merge into this branch. */
+    checks?: {
+      /** The name of the required check */
+      context: string;
+      /** The ID of the GitHub App that must provide this check. Omit this field to automatically select the GitHub App that has recently provided this check, or any app if it was not set by a GitHub App. Pass -1 to explicitly allow any app to set the status. */
+      app_id?: number;
+    }[];
   };
 }
 export interface Response$repos$update$status$check$protection$Status$200 {
@@ -9990,6 +11074,24 @@ export interface Response$repos$remove$user$access$restrictions$Status$200 {
   "application/json": Schemas.simple$user[];
 }
 export type Response$repos$remove$user$access$restrictions$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$repos$rename$branch {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** The name of the branch. */
+  branch: Parameters.branch;
+}
+export interface RequestBody$repos$rename$branch {
+  "application/json": {
+    /** The new name of the branch. */
+    new_name: string;
+  };
+}
+export interface Response$repos$rename$branch$Status$201 {
+  "application/json": Schemas.branch$with$protection;
+}
+export type Response$repos$rename$branch$Status$403 = Responses.forbidden.Content;
+export type Response$repos$rename$branch$Status$404 = Responses.not_found.Content;
+export type Response$repos$rename$branch$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$checks$create {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -10034,6 +11136,22 @@ export interface Parameter$checks$list$annotations {
 export interface Response$checks$list$annotations$Status$200 {
   "application/json": Schemas.check$annotation[];
 }
+export interface Parameter$checks$rerequest$run {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** check_run_id parameter */
+  check_run_id: Parameters.check$run$id;
+}
+export interface Response$checks$rerequest$run$Status$201 {
+  "application/json": {};
+}
+export interface Response$checks$rerequest$run$Status$403 {
+  "application/json": Schemas.basic$error;
+}
+export type Response$checks$rerequest$run$Status$404 = Responses.not_found.Content;
+export interface Response$checks$rerequest$run$Status$422 {
+  "application/json": Schemas.basic$error;
+}
 export interface Parameter$checks$create$suite {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -10056,7 +11174,7 @@ export interface Parameter$checks$set$suites$preferences {
 }
 export interface RequestBody$checks$set$suites$preferences {
   "application/json": {
-    /** Enables or disables automatic creation of CheckSuite events upon pushes to the repository. Enabled by default. See the [`auto_trigger_checks` object](https://docs.github.com/enterprise-server@3.0/rest/reference/checks#auto_trigger_checks-object) description for details. */
+    /** Enables or disables automatic creation of CheckSuite events upon pushes to the repository. Enabled by default. See the [`auto_trigger_checks` object](https://docs.github.com/enterprise-server@3.4/rest/reference/checks#auto_trigger_checks-object) description for details. */
     auto_trigger_checks?: {
       /** The `id` of the GitHub App. */
       app_id: number;
@@ -10121,7 +11239,11 @@ export interface Parameter$code$scanning$list$alerts$for$repo {
   per_page?: Parameters.per$page;
   /** The Git reference for the results you want to list. The `ref` for a branch can be formatted either as `refs/heads/<branch name>` or simply `<branch name>`. To reference a pull request use `refs/pull/<number>/merge`. */
   ref?: Parameters.git$ref;
-  /** Set to `open`, `fixed`, or `dismissed` to list code scanning alerts in a specific state. */
+  /** One of `asc` (ascending) or `desc` (descending). */
+  direction?: Parameters.direction;
+  /** Can be one of `created`, `updated`, `number`. */
+  sort?: "created" | "updated" | "number";
+  /** Set to `open`, `closed, `fixed`, or `dismissed` to list code scanning alerts in a specific state. */
   state?: Schemas.code$scanning$alert$state;
 }
 export interface Response$code$scanning$list$alerts$for$repo$Status$200 {
@@ -10160,6 +11282,24 @@ export interface Response$code$scanning$update$alert$Status$200 {
 export type Response$code$scanning$update$alert$Status$403 = Responses.code_scanning_forbidden_write.Content;
 export type Response$code$scanning$update$alert$Status$404 = Responses.not_found.Content;
 export type Response$code$scanning$update$alert$Status$503 = Responses.service_unavailable.Content;
+export interface Parameter$code$scanning$list$alert$instances {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** The number that identifies an alert. You can find this at the end of the URL for a code scanning alert within GitHub, and in the `number` field in the response from the `GET /repos/{owner}/{repo}/code-scanning/alerts` operation. */
+  alert_number: Parameters.alert$number;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** The Git reference for the results you want to list. The `ref` for a branch can be formatted either as `refs/heads/<branch name>` or simply `<branch name>`. To reference a pull request use `refs/pull/<number>/merge`. */
+  ref?: Parameters.git$ref;
+}
+export interface Response$code$scanning$list$alert$instances$Status$200 {
+  "application/json": Schemas.code$scanning$alert$instance[];
+}
+export type Response$code$scanning$list$alert$instances$Status$403 = Responses.code_scanning_forbidden_read.Content;
+export type Response$code$scanning$list$alert$instances$Status$404 = Responses.not_found.Content;
+export type Response$code$scanning$list$alert$instances$Status$503 = Responses.service_unavailable.Content;
 export interface Parameter$code$scanning$list$recent$analyses {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -10182,6 +11322,34 @@ export interface Response$code$scanning$list$recent$analyses$Status$200 {
 export type Response$code$scanning$list$recent$analyses$Status$403 = Responses.code_scanning_forbidden_read.Content;
 export type Response$code$scanning$list$recent$analyses$Status$404 = Responses.not_found.Content;
 export type Response$code$scanning$list$recent$analyses$Status$503 = Responses.service_unavailable.Content;
+export interface Parameter$code$scanning$get$analysis {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** The ID of the analysis, as returned from the `GET /repos/{owner}/{repo}/code-scanning/analyses` operation. */
+  analysis_id: number;
+}
+export interface Response$code$scanning$get$analysis$Status$200 {
+  "application/json+sarif": string;
+  "application/json": Schemas.code$scanning$analysis;
+}
+export type Response$code$scanning$get$analysis$Status$403 = Responses.code_scanning_forbidden_read.Content;
+export type Response$code$scanning$get$analysis$Status$404 = Responses.not_found.Content;
+export type Response$code$scanning$get$analysis$Status$503 = Responses.service_unavailable.Content;
+export interface Parameter$code$scanning$delete$analysis {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** The ID of the analysis, as returned from the `GET /repos/{owner}/{repo}/code-scanning/analyses` operation. */
+  analysis_id: number;
+  /** Allow deletion if the specified analysis is the last in a set. If you attempt to delete the final analysis in a set without setting this parameter to `true`, you'll get a 400 response with the message: `Analysis is last of its type and deletion may result in the loss of historical alert data. Please specify confirm_delete.` */
+  confirm_delete?: string | null;
+}
+export interface Response$code$scanning$delete$analysis$Status$200 {
+  "application/json": Schemas.code$scanning$analysis$deletion;
+}
+export type Response$code$scanning$delete$analysis$Status$400 = Responses.bad_request.Content;
+export type Response$code$scanning$delete$analysis$Status$403 = Responses.code_scanning_forbidden_write.Content;
+export type Response$code$scanning$delete$analysis$Status$404 = Responses.not_found.Content;
+export type Response$code$scanning$delete$analysis$Status$503 = Responses.service_unavailable.Content;
 export interface Parameter$code$scanning$upload$sarif {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -10208,6 +11376,17 @@ export interface Response$code$scanning$upload$sarif$Status$202 {
 export type Response$code$scanning$upload$sarif$Status$403 = Responses.code_scanning_forbidden_write.Content;
 export type Response$code$scanning$upload$sarif$Status$404 = Responses.not_found.Content;
 export type Response$code$scanning$upload$sarif$Status$503 = Responses.service_unavailable.Content;
+export interface Parameter$code$scanning$get$sarif {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** The SARIF ID obtained after uploading. */
+  sarif_id: string;
+}
+export interface Response$code$scanning$get$sarif$Status$200 {
+  "application/json": Schemas.code$scanning$sarifs$status;
+}
+export type Response$code$scanning$get$sarif$Status$403 = Responses.code_scanning_forbidden_read.Content;
+export type Response$code$scanning$get$sarif$Status$503 = Responses.service_unavailable.Content;
 export interface Parameter$repos$list$collaborators {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -10319,7 +11498,7 @@ export interface Parameter$reactions$list$for$commit$comment {
   repo: Parameters.repo;
   /** comment_id parameter */
   comment_id: Parameters.comment$id;
-  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a commit comment. */
+  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a commit comment. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
   per_page?: Parameters.per$page;
@@ -10338,7 +11517,7 @@ export interface Parameter$reactions$create$for$commit$comment {
 }
 export interface RequestBody$reactions$create$for$commit$comment {
   "application/json": {
-    /** The [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types) to add to the commit comment. */
+    /** The [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types) to add to the commit comment. */
     content: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   };
 }
@@ -10531,6 +11710,10 @@ export type Response$repos$list$commit$statuses$for$ref$Status$301 = Responses.m
 export interface Parameter$repos$compare$commits {
   owner: Parameters.owner;
   repo: Parameters.repo;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
   /** The base branch and head branch to compare. This parameter expects the format `{base}...{head}`. */
   basehead: string;
 }
@@ -10539,30 +11722,6 @@ export interface Response$repos$compare$commits$Status$200 {
 }
 export type Response$repos$compare$commits$Status$404 = Responses.not_found.Content;
 export type Response$repos$compare$commits$Status$500 = Responses.internal_error.Content;
-export interface Parameter$apps$create$content$attachment {
-  /** The owner of the repository. Determined from the `repository` `full_name` of the `content_reference` event. */
-  owner: string;
-  /** The name of the repository. Determined from the `repository` `full_name` of the `content_reference` event. */
-  repo: string;
-  /** The `id` of the `content_reference` event. */
-  content_reference_id: number;
-}
-export interface RequestBody$apps$create$content$attachment {
-  "application/json": {
-    /** The title of the attachment */
-    title: string;
-    /** The body of the attachment */
-    body: string;
-  };
-}
-export interface Response$apps$create$content$attachment$Status$200 {
-  "application/json": Schemas.content$reference$attachment;
-}
-export type Response$apps$create$content$attachment$Status$403 = Responses.forbidden.Content;
-export type Response$apps$create$content$attachment$Status$404 = Responses.not_found.Content;
-export type Response$apps$create$content$attachment$Status$410 = Responses.gone.Content;
-export type Response$apps$create$content$attachment$Status$415 = Responses.preview_header_missing.Content;
-export type Response$apps$create$content$attachment$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$repos$get$content {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -10672,6 +11831,59 @@ export interface Response$repos$list$contributors$Status$200 {
 }
 export type Response$repos$list$contributors$Status$403 = Responses.forbidden.Content;
 export type Response$repos$list$contributors$Status$404 = Responses.not_found.Content;
+export interface Parameter$dependabot$list$repo$secrets {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+}
+export interface Response$dependabot$list$repo$secrets$Status$200 {
+  "application/json": {
+    total_count: number;
+    secrets: Schemas.dependabot$secret[];
+  };
+}
+export interface Parameter$dependabot$get$repo$public$key {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+}
+export interface Response$dependabot$get$repo$public$key$Status$200 {
+  "application/json": Schemas.dependabot$public$key;
+}
+export interface Parameter$dependabot$get$repo$secret {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** secret_name parameter */
+  secret_name: Parameters.secret$name;
+}
+export interface Response$dependabot$get$repo$secret$Status$200 {
+  "application/json": Schemas.dependabot$secret;
+}
+export interface Parameter$dependabot$create$or$update$repo$secret {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** secret_name parameter */
+  secret_name: Parameters.secret$name;
+}
+export interface RequestBody$dependabot$create$or$update$repo$secret {
+  "application/json": {
+    /** Value for your secret, encrypted with [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages) using the public key retrieved from the [Get a repository public key](https://docs.github.com/enterprise-server@3.4/rest/reference/dependabot#get-a-repository-public-key) endpoint. */
+    encrypted_value?: string;
+    /** ID of the key you used to encrypt the secret. */
+    key_id?: string;
+  };
+}
+export interface Response$dependabot$create$or$update$repo$secret$Status$201 {
+  "application/json": {};
+}
+export interface Parameter$dependabot$delete$repo$secret {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** secret_name parameter */
+  secret_name: Parameters.secret$name;
+}
 export interface Parameter$repos$list$deployments {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -10703,22 +11915,16 @@ export interface RequestBody$repos$create$deployment {
     task?: string;
     /** Attempts to automatically merge the default branch into the requested ref, if it's behind the default branch. */
     auto_merge?: boolean;
-    /** The [status](https://docs.github.com/enterprise-server@3.0/rest/reference/commits#commit-statuses) contexts to verify against commit status checks. If you omit this parameter, GitHub verifies all unique contexts before creating a deployment. To bypass checking entirely, pass an empty array. Defaults to all unique contexts. */
+    /** The [status](https://docs.github.com/enterprise-server@3.4/rest/reference/commits#commit-statuses) contexts to verify against commit status checks. If you omit this parameter, GitHub verifies all unique contexts before creating a deployment. To bypass checking entirely, pass an empty array. Defaults to all unique contexts. */
     required_contexts?: string[];
     payload?: {} | string;
     /** Name for the target deployment environment (e.g., `production`, `staging`, `qa`). */
     environment?: string;
     /** Short description of the deployment. */
     description?: string | null;
-    /**
-     * Specifies if the given environment is specific to the deployment and will no longer exist at some point in the future. Default: `false`
-     * **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type.
-     */
+    /** Specifies if the given environment is specific to the deployment and will no longer exist at some point in the future. Default: `false` */
     transient_environment?: boolean;
-    /**
-     * Specifies if the given environment is one that end-users directly interact with. Default: `true` when `environment` is `production` and `false` otherwise.
-     * **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type.
-     */
+    /** Specifies if the given environment is one that end-users directly interact with. Default: `true` when `environment` is `production` and `false` otherwise. */
     production_environment?: boolean;
   };
 }
@@ -10771,28 +11977,19 @@ export interface Parameter$repos$create$deployment$status {
 }
 export interface RequestBody$repos$create$deployment$status {
   "application/json": {
-    /** The state of the status. Can be one of `error`, `failure`, `inactive`, `in_progress`, `queued`, `pending`, or `success`. **Note:** To use the `inactive` state, you must provide the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type. When you set a transient deployment to `inactive`, the deployment will be shown as `destroyed` in GitHub. */
+    /** The state of the status. Can be one of `error`, `failure`, `inactive`, `in_progress`, `queued`, `pending`, or `success`. When you set a transient deployment to `inactive`, the deployment will be shown as `destroyed` in GitHub. */
     state: "error" | "failure" | "inactive" | "in_progress" | "queued" | "pending" | "success";
     /** The target URL to associate with this status. This URL should contain output to keep the user updated while the task is running or serve as historical information for what happened in the deployment. **Note:** It's recommended to use the `log_url` parameter, which replaces `target_url`. */
     target_url?: string;
-    /**
-     * The full URL of the deployment's output. This parameter replaces `target_url`. We will continue to accept `target_url` to support legacy uses, but we recommend replacing `target_url` with `log_url`. Setting `log_url` will automatically set `target_url` to the same value. Default: `""`
-     * **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type.
-     */
+    /** The full URL of the deployment's output. This parameter replaces `target_url`. We will continue to accept `target_url` to support legacy uses, but we recommend replacing `target_url` with `log_url`. Setting `log_url` will automatically set `target_url` to the same value. Default: `""` */
     log_url?: string;
     /** A short description of the status. The maximum description length is 140 characters. */
     description?: string;
     /** Name for the target deployment environment, which can be changed when setting a deploy status. For example, `production`, `staging`, or `qa`. */
     environment?: "production" | "staging" | "qa";
-    /**
-     * Sets the URL for accessing your environment. Default: `""`
-     * **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type.
-     */
+    /** Sets the URL for accessing your environment. Default: `""` */
     environment_url?: string;
-    /**
-     * Adds a new `inactive` status to all prior non-transient, non-production environment deployments with the same repository and `environment` name as the created status's deployment. An `inactive` status is only added to deployments that had a `success` state. Default: `true`
-     * **Note:** This parameter requires you to use the [`application/vnd.github.ant-man-preview+json`](https://docs.github.com/enterprise-server@3.0/rest/overview/api-previews#enhanced-deployments) custom media type.
-     */
+    /** Adds a new `inactive` status to all prior non-transient, non-production environment deployments with the same repository and `environment` name as the created status's deployment. An `inactive` status is only added to deployments that had a `success` state. Default: `true` */
     auto_inactive?: boolean;
   };
 }
@@ -10824,6 +12021,58 @@ export interface RequestBody$repos$create$dispatch$event {
   };
 }
 export type Response$repos$create$dispatch$event$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$repos$get$all$environments {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+}
+export interface Response$repos$get$all$environments$Status$200 {
+  "application/json": {
+    /** The number of environments in this repository */
+    total_count?: number;
+    environments?: Schemas.environment[];
+  };
+}
+export interface Parameter$repos$get$environment {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** The name of the environment */
+  environment_name: Parameters.environment$name;
+}
+export interface Response$repos$get$environment$Status$200 {
+  "application/json": Schemas.environment;
+}
+export interface Parameter$repos$create$or$update$environment {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** The name of the environment */
+  environment_name: Parameters.environment$name;
+}
+export interface RequestBody$repos$create$or$update$environment {
+  "application/json": {
+    wait_timer?: Schemas.wait$timer;
+    /** The people or teams that may review jobs that reference the environment. You can list up to six users or teams as reviewers. The reviewers must have at least read access to the repository. Only one of the required reviewers needs to approve the job for it to proceed. */
+    reviewers?:
+      | {
+          type?: Schemas.deployment$reviewer$type;
+          /** The id of the user or team who can review the deployment */
+          id?: number;
+        }[]
+      | null;
+    deployment_branch_policy?: Schemas.deployment_branch_policy;
+  } | null;
+}
+export interface Response$repos$create$or$update$environment$Status$200 {
+  "application/json": Schemas.environment;
+}
+export interface Response$repos$create$or$update$environment$Status$422 {
+  "application/json": Schemas.basic$error;
+}
+export interface Parameter$repos$delete$an$environment {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** The name of the environment */
+  environment_name: Parameters.environment$name;
+}
 export interface Parameter$activity$list$repo$events {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -11120,7 +12369,7 @@ export interface RequestBody$repos$create$webhook {
   "application/json": {
     /** Use `web` to create a webhook. Default: `web`. This parameter only accepts the value `web`. */
     name?: string;
-    /** Key/value pairs to provide settings for this webhook. [These are defined below](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#create-hook-config-params). */
+    /** Key/value pairs to provide settings for this webhook. [These are defined below](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#create-hook-config-params). */
     config?: {
       url?: Schemas.webhook$config$url;
       content_type?: Schemas.webhook$config$content$type;
@@ -11129,7 +12378,7 @@ export interface RequestBody$repos$create$webhook {
       token?: string;
       digest?: string;
     };
-    /** Determines what [events](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads) the hook is triggered for. */
+    /** Determines what [events](https://docs.github.com/enterprise-server@3.4/webhooks/event-payloads) the hook is triggered for. */
     events?: string[];
     /** Determines if notifications are sent when the webhook is triggered. Set to `true` to send notifications. */
     active?: boolean;
@@ -11163,7 +12412,7 @@ export interface Parameter$repos$update$webhook {
 }
 export interface RequestBody$repos$update$webhook {
   "application/json": {
-    /** Key/value pairs to provide settings for this webhook. [These are defined below](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#create-hook-config-params). */
+    /** Key/value pairs to provide settings for this webhook. [These are defined below](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#create-hook-config-params). */
     config?: {
       url: Schemas.webhook$config$url;
       content_type?: Schemas.webhook$config$content$type;
@@ -11172,7 +12421,7 @@ export interface RequestBody$repos$update$webhook {
       address?: string;
       room?: string;
     };
-    /** Determines what [events](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads) the hook is triggered for. This replaces the entire array of events. */
+    /** Determines what [events](https://docs.github.com/enterprise-server@3.4/webhooks/event-payloads) the hook is triggered for. This replaces the entire array of events. */
     events?: string[];
     /** Determines a list of events to be added to the list of events that the Hook triggers for. */
     add_events?: string[];
@@ -11211,6 +12460,40 @@ export interface RequestBody$repos$update$webhook$config$for$repo {
 export interface Response$repos$update$webhook$config$for$repo$Status$200 {
   "application/json": Schemas.webhook$config;
 }
+export interface Parameter$repos$list$webhook$deliveries {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  hook_id: Parameters.hook$id;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Used for pagination: the starting delivery from which the page of deliveries is fetched. Refer to the `link` header for the next and previous page cursors. */
+  cursor?: Parameters.cursor;
+}
+export interface Response$repos$list$webhook$deliveries$Status$200 {
+  "application/json": Schemas.hook$delivery$item[];
+}
+export type Response$repos$list$webhook$deliveries$Status$400 = Responses.bad_request.Content;
+export type Response$repos$list$webhook$deliveries$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$repos$get$webhook$delivery {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  hook_id: Parameters.hook$id;
+  delivery_id: Parameters.delivery$id;
+}
+export interface Response$repos$get$webhook$delivery$Status$200 {
+  "application/json": Schemas.hook$delivery;
+}
+export type Response$repos$get$webhook$delivery$Status$400 = Responses.bad_request.Content;
+export type Response$repos$get$webhook$delivery$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$repos$redeliver$webhook$delivery {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  hook_id: Parameters.hook$id;
+  delivery_id: Parameters.delivery$id;
+}
+export type Response$repos$redeliver$webhook$delivery$Status$202 = Responses.accepted.Content;
+export type Response$repos$redeliver$webhook$delivery$Status$400 = Responses.bad_request.Content;
+export type Response$repos$redeliver$webhook$delivery$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$repos$ping$webhook {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -11387,7 +12670,7 @@ export interface Parameter$reactions$list$for$issue$comment {
   repo: Parameters.repo;
   /** comment_id parameter */
   comment_id: Parameters.comment$id;
-  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to an issue comment. */
+  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to an issue comment. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
   per_page?: Parameters.per$page;
@@ -11406,7 +12689,7 @@ export interface Parameter$reactions$create$for$issue$comment {
 }
 export interface RequestBody$reactions$create$for$issue$comment {
   "application/json": {
-    /** The [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types) to add to the issue comment. */
+    /** The [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types) to add to the issue comment. */
     content: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   };
 }
@@ -11602,7 +12885,7 @@ export interface Parameter$issues$set$labels {
 export interface RequestBody$issues$set$labels {
   "application/json":
     | {
-        /** The names of the labels to set for the issue. The labels you set replace any existing labels. You can pass an empty array to remove all labels. Alternatively, you can pass a single label as a `string` or an `array` of labels directly, but GitHub recommends passing an object with the `labels` key. You can also add labels to the existing labels for an issue. For more information, see "[Add labels to an issue](https://docs.github.com/enterprise-server@3.0/rest/reference/issues#add-labels-to-an-issue)." */
+        /** The names of the labels to set for the issue. The labels you set replace any existing labels. You can pass an empty array to remove all labels. Alternatively, you can pass a single label as a `string` or an `array` of labels directly, but GitHub recommends passing an object with the `labels` key. You can also add labels to the existing labels for an issue. For more information, see "[Add labels to an issue](https://docs.github.com/enterprise-server@3.4/rest/reference/issues#add-labels-to-an-issue)." */
         labels?: string[];
       }
     | string[]
@@ -11630,7 +12913,7 @@ export interface Parameter$issues$add$labels {
 export interface RequestBody$issues$add$labels {
   "application/json":
     | {
-        /** The names of the labels to add to the issue's existing labels. You can pass an empty array to remove all labels. Alternatively, you can pass a single label as a `string` or an `array` of labels directly, but GitHub recommends passing an object with the `labels` key. You can also replace all of the labels for an issue. For more information, see "[Set labels for an issue](https://docs.github.com/enterprise-server@3.0/rest/reference/issues#set-labels-for-an-issue)." */
+        /** The names of the labels to add to the issue's existing labels. You can pass an empty array to remove all labels. Alternatively, you can pass a single label as a `string` or an `array` of labels directly, but GitHub recommends passing an object with the `labels` key. You can also replace all of the labels for an issue. For more information, see "[Set labels for an issue](https://docs.github.com/enterprise-server@3.4/rest/reference/issues#set-labels-for-an-issue)." */
         labels?: string[];
       }
     | string[]
@@ -11703,7 +12986,7 @@ export interface Parameter$reactions$list$for$issue {
   repo: Parameters.repo;
   /** issue_number parameter */
   issue_number: Parameters.issue$number;
-  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to an issue. */
+  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to an issue. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
   per_page?: Parameters.per$page;
@@ -11723,7 +13006,7 @@ export interface Parameter$reactions$create$for$issue {
 }
 export interface RequestBody$reactions$create$for$issue {
   "application/json": {
-    /** The [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types) to add to the issue. */
+    /** The [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types) to add to the issue. */
     content: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   };
 }
@@ -11875,12 +13158,34 @@ export interface Parameter$repos$list$languages {
 export interface Response$repos$list$languages$Status$200 {
   "application/json": Schemas.language;
 }
+export interface Parameter$repos$enable$lfs$for$repo {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+}
+export type Response$repos$enable$lfs$for$repo$Status$202 = Responses.accepted.Content;
+export interface Parameter$repos$disable$lfs$for$repo {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+}
 export interface Parameter$licenses$get$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
 }
 export interface Response$licenses$get$for$repo$Status$200 {
   "application/json": Schemas.license$content;
+}
+export interface Parameter$repos$merge$upstream {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+}
+export interface RequestBody$repos$merge$upstream {
+  "application/json": {
+    /** The name of the branch which should be updated to match upstream. */
+    branch: string;
+  };
+}
+export interface Response$repos$merge$upstream$Status$200 {
+  "application/json": Schemas.merged$upstream;
 }
 export interface Parameter$repos$merge {
   owner: Parameters.owner;
@@ -12301,7 +13606,7 @@ export interface Parameter$reactions$list$for$pull$request$review$comment {
   repo: Parameters.repo;
   /** comment_id parameter */
   comment_id: Parameters.comment$id;
-  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a pull request review comment. */
+  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a pull request review comment. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
   per_page?: Parameters.per$page;
@@ -12320,7 +13625,7 @@ export interface Parameter$reactions$create$for$pull$request$review$comment {
 }
 export interface RequestBody$reactions$create$for$pull$request$review$comment {
   "application/json": {
-    /** The [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types) to add to the pull request review comment. */
+    /** The [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types) to add to the pull request review comment. */
     content: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   };
 }
@@ -12403,15 +13708,15 @@ export interface RequestBody$pulls$create$review$comment {
     commit_id?: string;
     /** The relative path to the file that necessitates a comment. */
     path?: string;
-    /** **Required without `comfort-fade` preview**. The position in the diff where you want to add a review comment. Note this value is not the same as the line number in the file. For help finding the position value, read the note above. */
+    /** **Required without `comfort-fade` preview unless using `in_reply_to`**. The position in the diff where you want to add a review comment. Note this value is not the same as the line number in the file. For help finding the position value, read the note above. */
     position?: number;
-    /** **Required with `comfort-fade` preview**. In a split diff view, the side of the diff that the pull request's changes appear on. Can be `LEFT` or `RIGHT`. Use `LEFT` for deletions that appear in red. Use `RIGHT` for additions that appear in green or unchanged lines that appear in white and are shown for context. For a multi-line comment, side represents whether the last line of the comment range is a deletion or addition. For more information, see "[Diff view options](https://docs.github.com/en/articles/about-comparing-branches-in-pull-requests#diff-view-options)" in the GitHub Help documentation. */
+    /** **Required with `comfort-fade` preview unless using `in_reply_to`**. In a split diff view, the side of the diff that the pull request's changes appear on. Can be `LEFT` or `RIGHT`. Use `LEFT` for deletions that appear in red. Use `RIGHT` for additions that appear in green or unchanged lines that appear in white and are shown for context. For a multi-line comment, side represents whether the last line of the comment range is a deletion or addition. For more information, see "[Diff view options](https://docs.github.com/en/articles/about-comparing-branches-in-pull-requests#diff-view-options)" in the GitHub Help documentation. */
     side?: "LEFT" | "RIGHT";
-    /** **Required with `comfort-fade` preview**. The line of the blob in the pull request diff that the comment applies to. For a multi-line comment, the last line of the range that your comment applies to. */
+    /** **Required with `comfort-fade` preview unless using `in_reply_to`**. The line of the blob in the pull request diff that the comment applies to. For a multi-line comment, the last line of the range that your comment applies to. */
     line?: number;
-    /** **Required when using multi-line comments**. To create multi-line comments, you must use the `comfort-fade` preview header. The `start_line` is the first line in the pull request diff that your multi-line comment applies to. To learn more about multi-line comments, see "[Commenting on a pull request](https://docs.github.com/en/articles/commenting-on-a-pull-request#adding-line-comments-to-a-pull-request)" in the GitHub Help documentation. */
+    /** **Required when using multi-line comments unless using `in_reply_to`**. To create multi-line comments, you must use the `comfort-fade` preview header. The `start_line` is the first line in the pull request diff that your multi-line comment applies to. To learn more about multi-line comments, see "[Commenting on a pull request](https://docs.github.com/en/articles/commenting-on-a-pull-request#adding-line-comments-to-a-pull-request)" in the GitHub Help documentation. */
     start_line?: number;
-    /** **Required when using multi-line comments**. To create multi-line comments, you must use the `comfort-fade` preview header. The `start_side` is the starting side of the diff that the comment applies to. Can be `LEFT` or `RIGHT`. To learn more about multi-line comments, see "[Commenting on a pull request](https://docs.github.com/en/articles/commenting-on-a-pull-request#adding-line-comments-to-a-pull-request)" in the GitHub Help documentation. See `side` in this table for additional context. */
+    /** **Required when using multi-line comments unless using `in_reply_to`**. To create multi-line comments, you must use the `comfort-fade` preview header. The `start_side` is the starting side of the diff that the comment applies to. Can be `LEFT` or `RIGHT`. To learn more about multi-line comments, see "[Commenting on a pull request](https://docs.github.com/en/articles/commenting-on-a-pull-request#adding-line-comments-to-a-pull-request)" in the GitHub Help documentation. See `side` in this table for additional context. */
     start_side?: "LEFT" | "RIGHT" | "side";
     /** The ID of the review comment to reply to. To find the ID of a review comment with ["List review comments on a pull request"](#list-review-comments-on-a-pull-request). When specified, all parameters other than `body` in the request body are ignored. */
     in_reply_to?: number;
@@ -12575,7 +13880,7 @@ export interface RequestBody$pulls$create$review {
     commit_id?: string;
     /** **Required** when using `REQUEST_CHANGES` or `COMMENT` for the `event` parameter. The body text of the pull request review. */
     body?: string;
-    /** The review action you want to perform. The review actions include: `APPROVE`, `REQUEST_CHANGES`, or `COMMENT`. By leaving this blank, you set the review action state to `PENDING`, which means you will need to [submit the pull request review](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#submit-a-review-for-a-pull-request) when you are ready. */
+    /** The review action you want to perform. The review actions include: `APPROVE`, `REQUEST_CHANGES`, or `COMMENT`. By leaving this blank, you set the review action state to `PENDING`, which means you will need to [submit the pull request review](https://docs.github.com/enterprise-server@3.4/rest/reference/pulls#submit-a-review-for-a-pull-request) when you are ready. */
     event?: "APPROVE" | "REQUEST_CHANGES" | "COMMENT";
     /** Use the following table to specify the location, destination, and contents of the draft review comment. */
     comments?: {
@@ -12699,7 +14004,7 @@ export interface Parameter$pulls$update$branch {
 }
 export interface RequestBody$pulls$update$branch {
   "application/json": {
-    /** The expected SHA of the pull request's HEAD ref. This is the most recent commit on the pull request's branch. If the expected SHA does not match the pull request's HEAD, you will receive a `422 Unprocessable Entity` status. You can use the "[List commits](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#list-commits)" endpoint to find the most recent commit SHA. Default: SHA of the pull request's current HEAD ref. */
+    /** The expected SHA of the pull request's HEAD ref. This is the most recent commit on the pull request's branch. If the expected SHA does not match the pull request's HEAD, you will receive a `422 Unprocessable Entity` status. You can use the "[List commits](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#list-commits)" endpoint to find the most recent commit SHA. Default: SHA of the pull request's current HEAD ref. */
     expected_head_sha?: string;
   } | null;
 }
@@ -12765,6 +14070,8 @@ export interface RequestBody$repos$create$release {
     draft?: boolean;
     /** `true` to identify the release as a prerelease. `false` to identify the release as a full release. */
     prerelease?: boolean;
+    /** Whether to automatically generate the name and body for this release. If `name` is specified, the specified name will be used; otherwise, a name will be automatically generated. If `body` is specified, the body will be pre-pended to the automatically generated notes. */
+    generate_release_notes?: boolean;
   };
 }
 export interface Response$repos$create$release$Status$201 {
@@ -12806,6 +14113,26 @@ export interface RequestBody$repos$update$release$asset {
 export interface Response$repos$update$release$asset$Status$200 {
   "application/json": Schemas.release$asset;
 }
+export interface Parameter$repos$generate$release$notes {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+}
+export interface RequestBody$repos$generate$release$notes {
+  "application/json": {
+    /** The tag name for the release. This can be an existing tag or a new one. */
+    tag_name: string;
+    /** Specifies the commitish value that will be the target for the release's tag. Required if the supplied tag_name does not reference an existing tag. Ignored if the tag_name already exists. */
+    target_commitish?: string;
+    /** The name of the previous tag to use as the starting point for the release notes. Use to manually specify the range for the set of changes considered as part this release. */
+    previous_tag_name?: string;
+    /** Specifies a path to a file in the repository containing configuration settings used for generating the release notes. If unspecified, the configuration file located in the repository at '.github/release.yml' or '.github/release.yaml' will be used. If that is not present, the default configuration will be used. */
+    configuration_file_path?: string;
+  };
+}
+export interface Response$repos$generate$release$notes$Status$200 {
+  "application/json": Schemas.release$notes$content;
+}
+export type Response$repos$generate$release$notes$Status$404 = Responses.not_found.Content;
 export interface Parameter$repos$get$latest$release {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -12892,6 +14219,108 @@ export interface RequestBody$repos$upload$release$asset {
 export interface Response$repos$upload$release$asset$Status$201 {
   "application/json": Schemas.release$asset;
 }
+export interface Parameter$reactions$create$for$release {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** release_id parameter */
+  release_id: Parameters.release$id;
+}
+export interface RequestBody$reactions$create$for$release {
+  "application/json": {
+    /** The [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types) to add to the release. */
+    content: "+1" | "laugh" | "heart" | "hooray" | "rocket" | "eyes";
+  };
+}
+export interface Response$reactions$create$for$release$Status$200 {
+  "application/json": Schemas.reaction;
+}
+export interface Response$reactions$create$for$release$Status$201 {
+  "application/json": Schemas.reaction;
+}
+export type Response$reactions$create$for$release$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$repos$list$cache$info {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+}
+export interface Response$repos$list$cache$info$Status$200 {
+  "application/json": {
+    host: string;
+    location: string;
+    git: {
+      sync_status: "offline" | "inactive" | "in_sync" | "not_in_sync";
+      last_sync: string;
+    };
+  }[];
+}
+export type Response$repos$list$cache$info$Status$403 = Responses.forbidden.Content;
+export type Response$repos$list$cache$info$Status$404 = Responses.not_found.Content;
+export interface Parameter$secret$scanning$list$alerts$for$repo {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** Set to `open` or `resolved` to only list secret scanning alerts in a specific state. */
+  state?: Parameters.secret$scanning$alert$state;
+  /**
+   * A comma-separated list of secret types to return. By default all secret types are returned.
+   * See "[Secret scanning patterns](https://docs.github.com/enterprise-server@3.4/code-security/secret-scanning/secret-scanning-patterns#supported-secrets-for-advanced-security)"
+   * for a complete list of secret types (API slug).
+   */
+  secret_type?: Parameters.secret$scanning$alert$secret$type;
+  /** A comma-separated list of resolutions. Only secret scanning alerts with one of these resolutions are listed. Valid resolutions are `false_positive`, `wont_fix`, `revoked`, `pattern_edited`, `pattern_deleted` or `used_in_tests`. */
+  resolution?: Parameters.secret$scanning$alert$resolution;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+}
+export interface Response$secret$scanning$list$alerts$for$repo$Status$200 {
+  "application/json": Schemas.secret$scanning$alert[];
+}
+export type Response$secret$scanning$list$alerts$for$repo$Status$503 = Responses.service_unavailable.Content;
+export interface Parameter$secret$scanning$get$alert {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** The number that identifies an alert. You can find this at the end of the URL for a code scanning alert within GitHub, and in the `number` field in the response from the `GET /repos/{owner}/{repo}/code-scanning/alerts` operation. */
+  alert_number: Parameters.alert$number;
+}
+export interface Response$secret$scanning$get$alert$Status$200 {
+  "application/json": Schemas.secret$scanning$alert;
+}
+export type Response$secret$scanning$get$alert$Status$503 = Responses.service_unavailable.Content;
+export interface Parameter$secret$scanning$update$alert {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** The number that identifies an alert. You can find this at the end of the URL for a code scanning alert within GitHub, and in the `number` field in the response from the `GET /repos/{owner}/{repo}/code-scanning/alerts` operation. */
+  alert_number: Parameters.alert$number;
+}
+export interface RequestBody$secret$scanning$update$alert {
+  "application/json": {
+    state: Schemas.secret$scanning$alert$state;
+    resolution?: Schemas.secret$scanning$alert$resolution;
+  };
+}
+export interface Response$secret$scanning$update$alert$Status$200 {
+  "application/json": Schemas.secret$scanning$alert;
+}
+export type Response$secret$scanning$update$alert$Status$503 = Responses.service_unavailable.Content;
+export interface Parameter$secret$scanning$list$locations$for$alert {
+  owner: Parameters.owner;
+  repo: Parameters.repo;
+  /** The number that identifies an alert. You can find this at the end of the URL for a code scanning alert within GitHub, and in the `number` field in the response from the `GET /repos/{owner}/{repo}/code-scanning/alerts` operation. */
+  alert_number: Parameters.alert$number;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+}
+export interface Response$secret$scanning$list$locations$for$alert$Status$200 {
+  /** List of locations where the secret was detected */
+  "application/json": Schemas.secret$scanning$location[];
+}
+export type Response$secret$scanning$list$locations$for$alert$Status$503 = Responses.service_unavailable.Content;
 export interface Parameter$activity$list$stargazers$for$repo {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -13044,7 +14473,6 @@ export interface Response$repos$get$all$topics$Status$200 {
   "application/json": Schemas.topic;
 }
 export type Response$repos$get$all$topics$Status$404 = Responses.not_found.Content;
-export type Response$repos$get$all$topics$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$repos$replace$all$topics {
   owner: Parameters.owner;
   repo: Parameters.repo;
@@ -13059,7 +14487,6 @@ export interface Response$repos$replace$all$topics$Status$200 {
   "application/json": Schemas.topic;
 }
 export type Response$repos$replace$all$topics$Status$404 = Responses.not_found.Content;
-export type Response$repos$replace$all$topics$Status$415 = Responses.preview_header_missing.Content;
 export type Response$repos$replace$all$topics$Status$422 = Responses.validation_failed_simple.Content;
 export interface Parameter$repos$transfer {
   owner: Parameters.owner;
@@ -13112,10 +14539,68 @@ export interface Response$repos$list$public$Status$200 {
   "application/json": Schemas.minimal$repository[];
 }
 export type Response$repos$list$public$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$actions$list$environment$secrets {
+  repository_id: Parameters.repository$id;
+  /** The name of the environment */
+  environment_name: Parameters.environment$name;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+}
+export interface Response$actions$list$environment$secrets$Status$200 {
+  "application/json": {
+    total_count: number;
+    secrets: Schemas.actions$secret[];
+  };
+}
+export interface Parameter$actions$get$environment$public$key {
+  repository_id: Parameters.repository$id;
+  /** The name of the environment */
+  environment_name: Parameters.environment$name;
+}
+export interface Response$actions$get$environment$public$key$Status$200 {
+  "application/json": Schemas.actions$public$key;
+}
+export interface Parameter$actions$get$environment$secret {
+  repository_id: Parameters.repository$id;
+  /** The name of the environment */
+  environment_name: Parameters.environment$name;
+  /** secret_name parameter */
+  secret_name: Parameters.secret$name;
+}
+export interface Response$actions$get$environment$secret$Status$200 {
+  "application/json": Schemas.actions$secret;
+}
+export interface Parameter$actions$create$or$update$environment$secret {
+  repository_id: Parameters.repository$id;
+  /** The name of the environment */
+  environment_name: Parameters.environment$name;
+  /** secret_name parameter */
+  secret_name: Parameters.secret$name;
+}
+export interface RequestBody$actions$create$or$update$environment$secret {
+  "application/json": {
+    /** Value for your secret, encrypted with [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages) using the public key retrieved from the [Get an environment public key](https://docs.github.com/enterprise-server@3.4/rest/reference/actions#get-an-environment-public-key) endpoint. */
+    encrypted_value: string;
+    /** ID of the key you used to encrypt the secret. */
+    key_id: string;
+  };
+}
+export interface Response$actions$create$or$update$environment$secret$Status$201 {
+  "application/json": Schemas.empty$object;
+}
+export interface Parameter$actions$delete$environment$secret {
+  repository_id: Parameters.repository$id;
+  /** The name of the environment */
+  environment_name: Parameters.environment$name;
+  /** secret_name parameter */
+  secret_name: Parameters.secret$name;
+}
 export interface Parameter$search$code {
-  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). See "[Searching code](https://docs.github.com/articles/searching-code/)" for a detailed list of qualifiers. */
+  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.4/rest/reference/search#constructing-a-search-query). See "[Searching code](https://docs.github.com/articles/searching-code/)" for a detailed list of qualifiers. */
   q: string;
-  /** Sorts the results of your query. Can only be `indexed`, which indicates how recently a file has been indexed by the GitHub Enterprise Server search infrastructure. Default: [best match](https://docs.github.com/enterprise-server@3.0/rest/reference/search#ranking-search-results) */
+  /** Sorts the results of your query. Can only be `indexed`, which indicates how recently a file has been indexed by the GitHub Enterprise Server search infrastructure. Default: [best match](https://docs.github.com/enterprise-server@3.4/rest/reference/search#ranking-search-results) */
   sort?: "indexed";
   /** Determines whether the first search result returned is the highest number of matches (`desc`) or lowest number of matches (`asc`). This parameter is ignored unless you provide `sort`. */
   order?: Parameters.order;
@@ -13135,9 +14620,9 @@ export type Response$search$code$Status$403 = Responses.forbidden.Content;
 export type Response$search$code$Status$422 = Responses.validation_failed.Content;
 export type Response$search$code$Status$503 = Responses.service_unavailable.Content;
 export interface Parameter$search$commits {
-  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). See "[Searching commits](https://docs.github.com/articles/searching-commits/)" for a detailed list of qualifiers. */
+  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.4/rest/reference/search#constructing-a-search-query). See "[Searching commits](https://docs.github.com/articles/searching-commits/)" for a detailed list of qualifiers. */
   q: string;
-  /** Sorts the results of your query by `author-date` or `committer-date`. Default: [best match](https://docs.github.com/enterprise-server@3.0/rest/reference/search#ranking-search-results) */
+  /** Sorts the results of your query by `author-date` or `committer-date`. Default: [best match](https://docs.github.com/enterprise-server@3.4/rest/reference/search#ranking-search-results) */
   sort?: "author-date" | "committer-date";
   /** Determines whether the first search result returned is the highest number of matches (`desc`) or lowest number of matches (`asc`). This parameter is ignored unless you provide `sort`. */
   order?: Parameters.order;
@@ -13154,9 +14639,9 @@ export interface Response$search$commits$Status$200 {
   };
 }
 export interface Parameter$search$issues$and$pull$requests {
-  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). See "[Searching issues and pull requests](https://docs.github.com/articles/searching-issues-and-pull-requests/)" for a detailed list of qualifiers. */
+  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.4/rest/reference/search#constructing-a-search-query). See "[Searching issues and pull requests](https://docs.github.com/articles/searching-issues-and-pull-requests/)" for a detailed list of qualifiers. */
   q: string;
-  /** Sorts the results of your query by the number of `comments`, `reactions`, `reactions-+1`, `reactions--1`, `reactions-smile`, `reactions-thinking_face`, `reactions-heart`, `reactions-tada`, or `interactions`. You can also sort results by how recently the items were `created` or `updated`, Default: [best match](https://docs.github.com/enterprise-server@3.0/rest/reference/search#ranking-search-results) */
+  /** Sorts the results of your query by the number of `comments`, `reactions`, `reactions-+1`, `reactions--1`, `reactions-smile`, `reactions-thinking_face`, `reactions-heart`, `reactions-tada`, or `interactions`. You can also sort results by how recently the items were `created` or `updated`, Default: [best match](https://docs.github.com/enterprise-server@3.4/rest/reference/search#ranking-search-results) */
   sort?:
     | "comments"
     | "reactions"
@@ -13189,9 +14674,9 @@ export type Response$search$issues$and$pull$requests$Status$503 = Responses.serv
 export interface Parameter$search$labels {
   /** The id of the repository. */
   repository_id: number;
-  /** The search keywords. This endpoint does not accept qualifiers in the query. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). */
+  /** The search keywords. This endpoint does not accept qualifiers in the query. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.4/rest/reference/search#constructing-a-search-query). */
   q: string;
-  /** Sorts the results of your query by when the label was `created` or `updated`. Default: [best match](https://docs.github.com/enterprise-server@3.0/rest/reference/search#ranking-search-results) */
+  /** Sorts the results of your query by when the label was `created` or `updated`. Default: [best match](https://docs.github.com/enterprise-server@3.4/rest/reference/search#ranking-search-results) */
   sort?: "created" | "updated";
   /** Determines whether the first search result returned is the highest number of matches (`desc`) or lowest number of matches (`asc`). This parameter is ignored unless you provide `sort`. */
   order?: Parameters.order;
@@ -13211,9 +14696,9 @@ export type Response$search$labels$Status$403 = Responses.forbidden.Content;
 export type Response$search$labels$Status$404 = Responses.not_found.Content;
 export type Response$search$labels$Status$422 = Responses.validation_failed.Content;
 export interface Parameter$search$repos {
-  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). See "[Searching for repositories](https://docs.github.com/articles/searching-for-repositories/)" for a detailed list of qualifiers. */
+  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.4/rest/reference/search#constructing-a-search-query). See "[Searching for repositories](https://docs.github.com/articles/searching-for-repositories/)" for a detailed list of qualifiers. */
   q: string;
-  /** Sorts the results of your query by number of `stars`, `forks`, or `help-wanted-issues` or how recently the items were `updated`. Default: [best match](https://docs.github.com/enterprise-server@3.0/rest/reference/search#ranking-search-results) */
+  /** Sorts the results of your query by number of `stars`, `forks`, or `help-wanted-issues` or how recently the items were `updated`. Default: [best match](https://docs.github.com/enterprise-server@3.4/rest/reference/search#ranking-search-results) */
   sort?: "stars" | "forks" | "help-wanted-issues" | "updated";
   /** Determines whether the first search result returned is the highest number of matches (`desc`) or lowest number of matches (`asc`). This parameter is ignored unless you provide `sort`. */
   order?: Parameters.order;
@@ -13232,7 +14717,7 @@ export interface Response$search$repos$Status$200 {
 export type Response$search$repos$Status$422 = Responses.validation_failed.Content;
 export type Response$search$repos$Status$503 = Responses.service_unavailable.Content;
 export interface Parameter$search$topics {
-  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). */
+  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.4/rest/reference/search#constructing-a-search-query). */
   q: string;
   /** Results per page (max 100) */
   per_page?: Parameters.per$page;
@@ -13246,11 +14731,10 @@ export interface Response$search$topics$Status$200 {
     items: Schemas.topic$search$result$item[];
   };
 }
-export type Response$search$topics$Status$415 = Responses.preview_header_missing.Content;
 export interface Parameter$search$users {
-  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.0/rest/reference/search#constructing-a-search-query). See "[Searching users](https://docs.github.com/articles/searching-users/)" for a detailed list of qualifiers. */
+  /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.4/rest/reference/search#constructing-a-search-query). See "[Searching users](https://docs.github.com/articles/searching-users/)" for a detailed list of qualifiers. */
   q: string;
-  /** Sorts the results of your query by number of `followers` or `repositories`, or when the person `joined` GitHub Enterprise Server. Default: [best match](https://docs.github.com/enterprise-server@3.0/rest/reference/search#ranking-search-results) */
+  /** Sorts the results of your query by number of `followers` or `repositories`, or when the person `joined` GitHub Enterprise Server. Default: [best match](https://docs.github.com/enterprise-server@3.4/rest/reference/search#ranking-search-results) */
   sort?: "followers" | "repositories" | "joined";
   /** Determines whether the first search result returned is the highest number of matches (`desc`) or lowest number of matches (`asc`). This parameter is ignored unless you provide `sort`. */
   order?: Parameters.order;
@@ -13294,7 +14778,7 @@ export interface Response$enterprise$admin$get$settings$Status$200 {
 }
 export interface RequestBody$enterprise$admin$set$settings {
   "application/x-www-form-urlencoded": {
-    /** A JSON string with the new settings. Note that you only need to pass the specific settings you want to modify. For a list of the available settings, see the [Get settings endpoint](https://docs.github.com/enterprise-server@3.0/rest/reference/enterprise-admin#get-settings). */
+    /** A JSON string with the new settings. Note that you only need to pass the specific settings you want to modify. For a list of the available settings, see the [Get settings endpoint](https://docs.github.com/enterprise-server@3.4/rest/reference/enterprise-admin#get-settings). */
     settings: string;
   };
 }
@@ -13325,7 +14809,7 @@ export interface RequestBody$enterprise$admin$create$enterprise$server$license {
     license: string;
     /** You **must** provide a password _only if_ you are uploading your license for the first time. If you previously set a password through the web interface, you don't need this parameter. */
     password?: string;
-    /** An optional JSON string containing the installation settings. For a list of the available settings, see the [Get settings endpoint](https://docs.github.com/enterprise-server@3.0/rest/reference/enterprise-admin#get-settings). */
+    /** An optional JSON string containing the installation settings. For a list of the available settings, see the [Get settings endpoint](https://docs.github.com/enterprise-server@3.4/rest/reference/enterprise-admin#get-settings). */
     settings?: string;
   };
 }
@@ -13496,7 +14980,7 @@ export interface Parameter$reactions$list$for$team$discussion$comment$legacy {
   team_id: Parameters.team$id;
   discussion_number: Parameters.discussion$number;
   comment_number: Parameters.comment$number;
-  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a team discussion comment. */
+  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a team discussion comment. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
   per_page?: Parameters.per$page;
@@ -13513,7 +14997,7 @@ export interface Parameter$reactions$create$for$team$discussion$comment$legacy {
 }
 export interface RequestBody$reactions$create$for$team$discussion$comment$legacy {
   "application/json": {
-    /** The [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types) to add to the team discussion comment. */
+    /** The [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types) to add to the team discussion comment. */
     content: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   };
 }
@@ -13523,7 +15007,7 @@ export interface Response$reactions$create$for$team$discussion$comment$legacy$St
 export interface Parameter$reactions$list$for$team$discussion$legacy {
   team_id: Parameters.team$id;
   discussion_number: Parameters.discussion$number;
-  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a team discussion. */
+  /** Returns a single [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types). Omit this parameter to list all reactions to a team discussion. */
   content?: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   /** Results per page (max 100) */
   per_page?: Parameters.per$page;
@@ -13539,7 +15023,7 @@ export interface Parameter$reactions$create$for$team$discussion$legacy {
 }
 export interface RequestBody$reactions$create$for$team$discussion$legacy {
   "application/json": {
-    /** The [reaction type](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#reaction-types) to add to the team discussion. */
+    /** The [reaction type](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#reaction-types) to add to the team discussion. */
     content: "+1" | "-1" | "laugh" | "confused" | "heart" | "hooray" | "rocket" | "eyes";
   };
 }
@@ -13636,7 +15120,7 @@ export interface RequestBody$teams$add$or$update$project$permissions$legacy {
      * \* `read` - team members can read, but not write to or administer this project.
      * \* `write` - team members can read and write, but not administer this project.
      * \* `admin` - team members can read, write and administer this project.
-     * Default: the team's `permission` attribute will be used to determine what permission to grant the team on this project. Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
+     * Default: the team's `permission` attribute will be used to determine what permission to grant the team on this project. Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#http-verbs)."
      */
     permission?: "read" | "write" | "admin";
   };
@@ -14027,6 +15511,56 @@ export interface Response$orgs$update$membership$for$authenticated$user$Status$2
 export type Response$orgs$update$membership$for$authenticated$user$Status$403 = Responses.forbidden.Content;
 export type Response$orgs$update$membership$for$authenticated$user$Status$404 = Responses.not_found.Content;
 export type Response$orgs$update$membership$for$authenticated$user$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$migrations$list$for$authenticated$user {
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+}
+export interface Response$migrations$list$for$authenticated$user$Status$200 {
+  "application/json": Schemas.migration[];
+}
+export type Response$migrations$list$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$migrations$list$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export interface RequestBody$migrations$start$for$authenticated$user {
+  "application/json": {
+    /** Lock the repositories being migrated at the start of the migration */
+    lock_repositories?: boolean;
+    /** Do not include attachments in the migration */
+    exclude_attachments?: boolean;
+    /** Do not include releases in the migration */
+    exclude_releases?: boolean;
+    /** Indicates whether projects owned by the organization or users should be excluded. */
+    exclude_owner_projects?: boolean;
+    /** Exclude attributes from the API response to improve performance */
+    exclude?: "repositories"[];
+    repositories: string[];
+  };
+}
+export interface Response$migrations$start$for$authenticated$user$Status$201 {
+  "application/json": Schemas.migration;
+}
+export type Response$migrations$start$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$migrations$start$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export type Response$migrations$start$for$authenticated$user$Status$422 = Responses.validation_failed.Content;
+export interface Parameter$migrations$get$archive$for$authenticated$user {
+  /** migration_id parameter */
+  migration_id: Parameters.migration$id;
+}
+export type Response$migrations$get$archive$for$authenticated$user$Status$401 = Responses.requires_authentication.Content;
+export type Response$migrations$get$archive$for$authenticated$user$Status$403 = Responses.forbidden.Content;
+export interface Parameter$migrations$list$repos$for$authenticated$user {
+  /** migration_id parameter */
+  migration_id: Parameters.migration$id;
+  /** Results per page (max 100) */
+  per_page?: Parameters.per$page;
+  /** Page number of the results to fetch. */
+  page?: Parameters.page;
+}
+export interface Response$migrations$list$repos$for$authenticated$user$Status$200 {
+  "application/json": Schemas.minimal$repository[];
+}
+export type Response$migrations$list$repos$for$authenticated$user$Status$404 = Responses.not_found.Content;
 export interface Parameter$orgs$list$for$authenticated$user {
   /** Results per page (max 100) */
   per_page?: Parameters.per$page;
@@ -14130,6 +15664,8 @@ export interface RequestBody$repos$create$for$authenticated$user {
     allow_merge_commit?: boolean;
     /** Whether to allow rebase merges for pull requests. */
     allow_rebase_merge?: boolean;
+    /** Whether to allow Auto-merge to be used on pull requests. */
+    allow_auto_merge?: boolean;
     /** Whether to delete head branches when pull requests are merged */
     delete_branch_on_merge?: boolean;
     /** Whether downloads are enabled. */
@@ -14473,7 +16009,6 @@ export interface Params$enterprise$admin$list$global$webhooks {
 export type RequestContentType$enterprise$admin$create$global$webhook = keyof RequestBody$enterprise$admin$create$global$webhook;
 export type ResponseContentType$enterprise$admin$create$global$webhook = keyof Response$enterprise$admin$create$global$webhook$Status$201;
 export interface Params$enterprise$admin$create$global$webhook {
-  parameter: Parameter$enterprise$admin$create$global$webhook;
   requestBody: RequestBody$enterprise$admin$create$global$webhook["application/json"];
 }
 export type ResponseContentType$enterprise$admin$get$global$webhook = keyof Response$enterprise$admin$get$global$webhook$Status$200;
@@ -14640,6 +16175,18 @@ export type ResponseContentType$apps$update$webhook$config$for$app = keyof Respo
 export interface Params$apps$update$webhook$config$for$app {
   requestBody: RequestBody$apps$update$webhook$config$for$app["application/json"];
 }
+export type ResponseContentType$apps$list$webhook$deliveries = keyof Response$apps$list$webhook$deliveries$Status$200;
+export interface Params$apps$list$webhook$deliveries {
+  parameter: Parameter$apps$list$webhook$deliveries;
+}
+export type ResponseContentType$apps$get$webhook$delivery = keyof Response$apps$get$webhook$delivery$Status$200;
+export interface Params$apps$get$webhook$delivery {
+  parameter: Parameter$apps$get$webhook$delivery;
+}
+export type ResponseContentType$apps$redeliver$webhook$delivery = keyof Response$apps$redeliver$webhook$delivery$Status$202;
+export interface Params$apps$redeliver$webhook$delivery {
+  parameter: Parameter$apps$redeliver$webhook$delivery;
+}
 export type ResponseContentType$apps$list$installations = keyof Response$apps$list$installations$Status$200;
 export interface Params$apps$list$installations {
   parameter: Parameter$apps$list$installations;
@@ -14679,9 +16226,6 @@ export interface Params$apps$delete$authorization {
   parameter: Parameter$apps$delete$authorization;
   requestBody: RequestBody$apps$delete$authorization["application/json"];
 }
-export interface Params$apps$revoke$grant$for$application {
-  parameter: Parameter$apps$revoke$grant$for$application;
-}
 export type RequestContentType$apps$check$token = keyof RequestBody$apps$check$token;
 export type ResponseContentType$apps$check$token = keyof Response$apps$check$token$Status$200;
 export interface Params$apps$check$token {
@@ -14704,17 +16248,6 @@ export type ResponseContentType$apps$scope$token = keyof Response$apps$scope$tok
 export interface Params$apps$scope$token {
   parameter: Parameter$apps$scope$token;
   requestBody: RequestBody$apps$scope$token["application/json"];
-}
-export type ResponseContentType$apps$check$authorization = keyof Response$apps$check$authorization$Status$200;
-export interface Params$apps$check$authorization {
-  parameter: Parameter$apps$check$authorization;
-}
-export type ResponseContentType$apps$reset$authorization = keyof Response$apps$reset$authorization$Status$200;
-export interface Params$apps$reset$authorization {
-  parameter: Parameter$apps$reset$authorization;
-}
-export interface Params$apps$revoke$authorization$for$application {
-  parameter: Parameter$apps$revoke$authorization$for$application;
 }
 export type ResponseContentType$apps$get$by$slug = keyof Response$apps$get$by$slug$Status$200;
 export interface Params$apps$get$by$slug {
@@ -14912,6 +16445,51 @@ export interface Params$enterprise$admin$get$self$hosted$runner$for$enterprise {
 export interface Params$enterprise$admin$delete$self$hosted$runner$from$enterprise {
   parameter: Parameter$enterprise$admin$delete$self$hosted$runner$from$enterprise;
 }
+export type ResponseContentType$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise =
+  keyof Response$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise$Status$200;
+export interface Params$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise {
+  parameter: Parameter$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise;
+}
+export type RequestContentType$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise =
+  keyof RequestBody$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise;
+export type ResponseContentType$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise =
+  keyof Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$200;
+export interface Params$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise {
+  parameter: Parameter$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise;
+  requestBody: RequestBody$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise["application/json"];
+}
+export type RequestContentType$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise =
+  keyof RequestBody$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise;
+export type ResponseContentType$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise =
+  keyof Response$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise$Status$200;
+export interface Params$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise {
+  parameter: Parameter$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise;
+  requestBody: RequestBody$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise["application/json"];
+}
+export type ResponseContentType$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise =
+  keyof Response$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise$Status$200;
+export interface Params$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise {
+  parameter: Parameter$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise;
+}
+export type ResponseContentType$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise =
+  keyof Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$200;
+export interface Params$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise {
+  parameter: Parameter$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise;
+}
+export type ResponseContentType$enterprise$admin$get$audit$log = keyof Response$enterprise$admin$get$audit$log$Status$200;
+export interface Params$enterprise$admin$get$audit$log {
+  parameter: Parameter$enterprise$admin$get$audit$log;
+}
+export type ResponseContentType$secret$scanning$list$alerts$for$enterprise =
+  keyof Response$secret$scanning$list$alerts$for$enterprise$Status$200;
+export interface Params$secret$scanning$list$alerts$for$enterprise {
+  parameter: Parameter$secret$scanning$list$alerts$for$enterprise;
+}
+export type ResponseContentType$billing$get$github$advanced$security$billing$ghe =
+  keyof Response$billing$get$github$advanced$security$billing$ghe$Status$200;
+export interface Params$billing$get$github$advanced$security$billing$ghe {
+  parameter: Parameter$billing$get$github$advanced$security$billing$ghe;
+}
 export type ResponseContentType$activity$list$public$events = keyof Response$activity$list$public$events$Status$200;
 export interface Params$activity$list$public$events {
   parameter: Parameter$activity$list$public$events;
@@ -15075,6 +16653,10 @@ export type ResponseContentType$orgs$list = keyof Response$orgs$list$Status$200;
 export interface Params$orgs$list {
   parameter: Parameter$orgs$list;
 }
+export type ResponseContentType$orgs$list$custom$roles = keyof Response$orgs$list$custom$roles$Status$200;
+export interface Params$orgs$list$custom$roles {
+  parameter: Parameter$orgs$list$custom$roles;
+}
 export type ResponseContentType$orgs$get = keyof Response$orgs$get$Status$200;
 export interface Params$orgs$get {
   parameter: Parameter$orgs$get;
@@ -15208,6 +16790,37 @@ export interface Params$actions$get$self$hosted$runner$for$org {
 export interface Params$actions$delete$self$hosted$runner$from$org {
   parameter: Parameter$actions$delete$self$hosted$runner$from$org;
 }
+export type ResponseContentType$actions$list$labels$for$self$hosted$runner$for$org =
+  keyof Response$actions$list$labels$for$self$hosted$runner$for$org$Status$200;
+export interface Params$actions$list$labels$for$self$hosted$runner$for$org {
+  parameter: Parameter$actions$list$labels$for$self$hosted$runner$for$org;
+}
+export type RequestContentType$actions$set$custom$labels$for$self$hosted$runner$for$org =
+  keyof RequestBody$actions$set$custom$labels$for$self$hosted$runner$for$org;
+export type ResponseContentType$actions$set$custom$labels$for$self$hosted$runner$for$org =
+  keyof Response$actions$set$custom$labels$for$self$hosted$runner$for$org$Status$200;
+export interface Params$actions$set$custom$labels$for$self$hosted$runner$for$org {
+  parameter: Parameter$actions$set$custom$labels$for$self$hosted$runner$for$org;
+  requestBody: RequestBody$actions$set$custom$labels$for$self$hosted$runner$for$org["application/json"];
+}
+export type RequestContentType$actions$add$custom$labels$to$self$hosted$runner$for$org =
+  keyof RequestBody$actions$add$custom$labels$to$self$hosted$runner$for$org;
+export type ResponseContentType$actions$add$custom$labels$to$self$hosted$runner$for$org =
+  keyof Response$actions$add$custom$labels$to$self$hosted$runner$for$org$Status$200;
+export interface Params$actions$add$custom$labels$to$self$hosted$runner$for$org {
+  parameter: Parameter$actions$add$custom$labels$to$self$hosted$runner$for$org;
+  requestBody: RequestBody$actions$add$custom$labels$to$self$hosted$runner$for$org["application/json"];
+}
+export type ResponseContentType$actions$remove$all$custom$labels$from$self$hosted$runner$for$org =
+  keyof Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$org$Status$200;
+export interface Params$actions$remove$all$custom$labels$from$self$hosted$runner$for$org {
+  parameter: Parameter$actions$remove$all$custom$labels$from$self$hosted$runner$for$org;
+}
+export type ResponseContentType$actions$remove$custom$label$from$self$hosted$runner$for$org =
+  keyof Response$actions$remove$custom$label$from$self$hosted$runner$for$org$Status$200;
+export interface Params$actions$remove$custom$label$from$self$hosted$runner$for$org {
+  parameter: Parameter$actions$remove$custom$label$from$self$hosted$runner$for$org;
+}
 export type ResponseContentType$actions$list$org$secrets = keyof Response$actions$list$org$secrets$Status$200;
 export interface Params$actions$list$org$secrets {
   parameter: Parameter$actions$list$org$secrets;
@@ -15244,6 +16857,47 @@ export interface Params$actions$add$selected$repo$to$org$secret {
 }
 export interface Params$actions$remove$selected$repo$from$org$secret {
   parameter: Parameter$actions$remove$selected$repo$from$org$secret;
+}
+export type ResponseContentType$orgs$get$audit$log = keyof Response$orgs$get$audit$log$Status$200;
+export interface Params$orgs$get$audit$log {
+  parameter: Parameter$orgs$get$audit$log;
+}
+export type ResponseContentType$dependabot$list$org$secrets = keyof Response$dependabot$list$org$secrets$Status$200;
+export interface Params$dependabot$list$org$secrets {
+  parameter: Parameter$dependabot$list$org$secrets;
+}
+export type ResponseContentType$dependabot$get$org$public$key = keyof Response$dependabot$get$org$public$key$Status$200;
+export interface Params$dependabot$get$org$public$key {
+  parameter: Parameter$dependabot$get$org$public$key;
+}
+export type ResponseContentType$dependabot$get$org$secret = keyof Response$dependabot$get$org$secret$Status$200;
+export interface Params$dependabot$get$org$secret {
+  parameter: Parameter$dependabot$get$org$secret;
+}
+export type RequestContentType$dependabot$create$or$update$org$secret = keyof RequestBody$dependabot$create$or$update$org$secret;
+export type ResponseContentType$dependabot$create$or$update$org$secret = keyof Response$dependabot$create$or$update$org$secret$Status$201;
+export interface Params$dependabot$create$or$update$org$secret {
+  parameter: Parameter$dependabot$create$or$update$org$secret;
+  requestBody: RequestBody$dependabot$create$or$update$org$secret["application/json"];
+}
+export interface Params$dependabot$delete$org$secret {
+  parameter: Parameter$dependabot$delete$org$secret;
+}
+export type ResponseContentType$dependabot$list$selected$repos$for$org$secret =
+  keyof Response$dependabot$list$selected$repos$for$org$secret$Status$200;
+export interface Params$dependabot$list$selected$repos$for$org$secret {
+  parameter: Parameter$dependabot$list$selected$repos$for$org$secret;
+}
+export type RequestContentType$dependabot$set$selected$repos$for$org$secret = keyof RequestBody$dependabot$set$selected$repos$for$org$secret;
+export interface Params$dependabot$set$selected$repos$for$org$secret {
+  parameter: Parameter$dependabot$set$selected$repos$for$org$secret;
+  requestBody: RequestBody$dependabot$set$selected$repos$for$org$secret["application/json"];
+}
+export interface Params$dependabot$add$selected$repo$to$org$secret {
+  parameter: Parameter$dependabot$add$selected$repo$to$org$secret;
+}
+export interface Params$dependabot$remove$selected$repo$from$org$secret {
+  parameter: Parameter$dependabot$remove$selected$repo$from$org$secret;
 }
 export type ResponseContentType$activity$list$public$org$events = keyof Response$activity$list$public$org$events$Status$200;
 export interface Params$activity$list$public$org$events {
@@ -15282,6 +16936,18 @@ export interface Params$orgs$update$webhook$config$for$org {
   parameter: Parameter$orgs$update$webhook$config$for$org;
   requestBody: RequestBody$orgs$update$webhook$config$for$org["application/json"];
 }
+export type ResponseContentType$orgs$list$webhook$deliveries = keyof Response$orgs$list$webhook$deliveries$Status$200;
+export interface Params$orgs$list$webhook$deliveries {
+  parameter: Parameter$orgs$list$webhook$deliveries;
+}
+export type ResponseContentType$orgs$get$webhook$delivery = keyof Response$orgs$get$webhook$delivery$Status$200;
+export interface Params$orgs$get$webhook$delivery {
+  parameter: Parameter$orgs$get$webhook$delivery;
+}
+export type ResponseContentType$orgs$redeliver$webhook$delivery = keyof Response$orgs$redeliver$webhook$delivery$Status$202;
+export interface Params$orgs$redeliver$webhook$delivery {
+  parameter: Parameter$orgs$redeliver$webhook$delivery;
+}
 export interface Params$orgs$ping$webhook {
   parameter: Parameter$orgs$ping$webhook;
 }
@@ -15319,6 +16985,20 @@ export interface Params$orgs$set$membership$for$user {
 }
 export interface Params$orgs$remove$membership$for$user {
   parameter: Parameter$orgs$remove$membership$for$user;
+}
+export type ResponseContentType$migrations$list$for$org = keyof Response$migrations$list$for$org$Status$200;
+export interface Params$migrations$list$for$org {
+  parameter: Parameter$migrations$list$for$org;
+}
+export type RequestContentType$migrations$start$for$org = keyof RequestBody$migrations$start$for$org;
+export type ResponseContentType$migrations$start$for$org = keyof Response$migrations$start$for$org$Status$201;
+export interface Params$migrations$start$for$org {
+  parameter: Parameter$migrations$start$for$org;
+  requestBody: RequestBody$migrations$start$for$org["application/json"];
+}
+export type ResponseContentType$migrations$get$status$for$org = keyof Response$migrations$get$status$for$org$Status$200;
+export interface Params$migrations$get$status$for$org {
+  parameter: Parameter$migrations$get$status$for$org;
 }
 export type ResponseContentType$orgs$list$outside$collaborators = keyof Response$orgs$list$outside$collaborators$Status$200;
 export interface Params$orgs$list$outside$collaborators {
@@ -15387,6 +17067,15 @@ export type ResponseContentType$repos$create$in$org = keyof Response$repos$creat
 export interface Params$repos$create$in$org {
   parameter: Parameter$repos$create$in$org;
   requestBody: RequestBody$repos$create$in$org["application/json"];
+}
+export type ResponseContentType$secret$scanning$list$alerts$for$org = keyof Response$secret$scanning$list$alerts$for$org$Status$200;
+export interface Params$secret$scanning$list$alerts$for$org {
+  parameter: Parameter$secret$scanning$list$alerts$for$org;
+}
+export type ResponseContentType$billing$get$github$advanced$security$billing$org =
+  keyof Response$billing$get$github$advanced$security$billing$org$Status$200;
+export interface Params$billing$get$github$advanced$security$billing$org {
+  parameter: Parameter$billing$get$github$advanced$security$billing$org;
 }
 export type ResponseContentType$teams$list = keyof Response$teams$list$Status$200;
 export interface Params$teams$list {
@@ -15713,6 +17402,37 @@ export interface Params$actions$get$self$hosted$runner$for$repo {
 export interface Params$actions$delete$self$hosted$runner$from$repo {
   parameter: Parameter$actions$delete$self$hosted$runner$from$repo;
 }
+export type ResponseContentType$actions$list$labels$for$self$hosted$runner$for$repo =
+  keyof Response$actions$list$labels$for$self$hosted$runner$for$repo$Status$200;
+export interface Params$actions$list$labels$for$self$hosted$runner$for$repo {
+  parameter: Parameter$actions$list$labels$for$self$hosted$runner$for$repo;
+}
+export type RequestContentType$actions$set$custom$labels$for$self$hosted$runner$for$repo =
+  keyof RequestBody$actions$set$custom$labels$for$self$hosted$runner$for$repo;
+export type ResponseContentType$actions$set$custom$labels$for$self$hosted$runner$for$repo =
+  keyof Response$actions$set$custom$labels$for$self$hosted$runner$for$repo$Status$200;
+export interface Params$actions$set$custom$labels$for$self$hosted$runner$for$repo {
+  parameter: Parameter$actions$set$custom$labels$for$self$hosted$runner$for$repo;
+  requestBody: RequestBody$actions$set$custom$labels$for$self$hosted$runner$for$repo["application/json"];
+}
+export type RequestContentType$actions$add$custom$labels$to$self$hosted$runner$for$repo =
+  keyof RequestBody$actions$add$custom$labels$to$self$hosted$runner$for$repo;
+export type ResponseContentType$actions$add$custom$labels$to$self$hosted$runner$for$repo =
+  keyof Response$actions$add$custom$labels$to$self$hosted$runner$for$repo$Status$200;
+export interface Params$actions$add$custom$labels$to$self$hosted$runner$for$repo {
+  parameter: Parameter$actions$add$custom$labels$to$self$hosted$runner$for$repo;
+  requestBody: RequestBody$actions$add$custom$labels$to$self$hosted$runner$for$repo["application/json"];
+}
+export type ResponseContentType$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo =
+  keyof Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo$Status$200;
+export interface Params$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo {
+  parameter: Parameter$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo;
+}
+export type ResponseContentType$actions$remove$custom$label$from$self$hosted$runner$for$repo =
+  keyof Response$actions$remove$custom$label$from$self$hosted$runner$for$repo$Status$200;
+export interface Params$actions$remove$custom$label$from$self$hosted$runner$for$repo {
+  parameter: Parameter$actions$remove$custom$label$from$self$hosted$runner$for$repo;
+}
 export type ResponseContentType$actions$list$workflow$runs$for$repo = keyof Response$actions$list$workflow$runs$for$repo$Status$200;
 export interface Params$actions$list$workflow$runs$for$repo {
   parameter: Parameter$actions$list$workflow$runs$for$repo;
@@ -15723,6 +17443,10 @@ export interface Params$actions$get$workflow$run {
 }
 export interface Params$actions$delete$workflow$run {
   parameter: Parameter$actions$delete$workflow$run;
+}
+export type ResponseContentType$actions$get$reviews$for$run = keyof Response$actions$get$reviews$for$run$Status$200;
+export interface Params$actions$get$reviews$for$run {
+  parameter: Parameter$actions$get$reviews$for$run;
 }
 export type ResponseContentType$actions$list$workflow$run$artifacts = keyof Response$actions$list$workflow$run$artifacts$Status$200;
 export interface Params$actions$list$workflow$run$artifacts {
@@ -15741,6 +17465,17 @@ export interface Params$actions$download$workflow$run$logs {
 }
 export interface Params$actions$delete$workflow$run$logs {
   parameter: Parameter$actions$delete$workflow$run$logs;
+}
+export type ResponseContentType$actions$get$pending$deployments$for$run = keyof Response$actions$get$pending$deployments$for$run$Status$200;
+export interface Params$actions$get$pending$deployments$for$run {
+  parameter: Parameter$actions$get$pending$deployments$for$run;
+}
+export type RequestContentType$actions$review$pending$deployments$for$run = keyof RequestBody$actions$review$pending$deployments$for$run;
+export type ResponseContentType$actions$review$pending$deployments$for$run =
+  keyof Response$actions$review$pending$deployments$for$run$Status$200;
+export interface Params$actions$review$pending$deployments$for$run {
+  parameter: Parameter$actions$review$pending$deployments$for$run;
+  requestBody: RequestBody$actions$review$pending$deployments$for$run["application/json"];
 }
 export type ResponseContentType$actions$re$run$workflow = keyof Response$actions$re$run$workflow$Status$201;
 export interface Params$actions$re$run$workflow {
@@ -15796,6 +17531,23 @@ export interface Params$issues$list$assignees {
 }
 export interface Params$issues$check$user$can$be$assigned {
   parameter: Parameter$issues$check$user$can$be$assigned;
+}
+export type ResponseContentType$repos$list$autolinks = keyof Response$repos$list$autolinks$Status$200;
+export interface Params$repos$list$autolinks {
+  parameter: Parameter$repos$list$autolinks;
+}
+export type RequestContentType$repos$create$autolink = keyof RequestBody$repos$create$autolink;
+export type ResponseContentType$repos$create$autolink = keyof Response$repos$create$autolink$Status$201;
+export interface Params$repos$create$autolink {
+  parameter: Parameter$repos$create$autolink;
+  requestBody: RequestBody$repos$create$autolink["application/json"];
+}
+export type ResponseContentType$repos$get$autolink = keyof Response$repos$get$autolink$Status$200;
+export interface Params$repos$get$autolink {
+  parameter: Parameter$repos$get$autolink;
+}
+export interface Params$repos$delete$autolink {
+  parameter: Parameter$repos$delete$autolink;
 }
 export type ResponseContentType$repos$list$branches = keyof Response$repos$list$branches$Status$200;
 export interface Params$repos$list$branches {
@@ -15965,6 +17717,12 @@ export interface Params$repos$remove$user$access$restrictions {
   parameter: Parameter$repos$remove$user$access$restrictions;
   requestBody: RequestBody$repos$remove$user$access$restrictions["application/json"];
 }
+export type RequestContentType$repos$rename$branch = keyof RequestBody$repos$rename$branch;
+export type ResponseContentType$repos$rename$branch = keyof Response$repos$rename$branch$Status$201;
+export interface Params$repos$rename$branch {
+  parameter: Parameter$repos$rename$branch;
+  requestBody: RequestBody$repos$rename$branch["application/json"];
+}
 export type RequestContentType$checks$create = keyof RequestBody$checks$create;
 export type ResponseContentType$checks$create = keyof Response$checks$create$Status$201;
 export interface Params$checks$create {
@@ -15984,6 +17742,10 @@ export interface Params$checks$update {
 export type ResponseContentType$checks$list$annotations = keyof Response$checks$list$annotations$Status$200;
 export interface Params$checks$list$annotations {
   parameter: Parameter$checks$list$annotations;
+}
+export type ResponseContentType$checks$rerequest$run = keyof Response$checks$rerequest$run$Status$201;
+export interface Params$checks$rerequest$run {
+  parameter: Parameter$checks$rerequest$run;
 }
 export type RequestContentType$checks$create$suite = keyof RequestBody$checks$create$suite;
 export type ResponseContentType$checks$create$suite = keyof Response$checks$create$suite$Status$200;
@@ -16023,15 +17785,34 @@ export interface Params$code$scanning$update$alert {
   parameter: Parameter$code$scanning$update$alert;
   requestBody: RequestBody$code$scanning$update$alert["application/json"];
 }
+export type ResponseContentType$code$scanning$list$alert$instances = keyof Response$code$scanning$list$alert$instances$Status$200;
+export interface Params$code$scanning$list$alert$instances {
+  parameter: Parameter$code$scanning$list$alert$instances;
+}
 export type ResponseContentType$code$scanning$list$recent$analyses = keyof Response$code$scanning$list$recent$analyses$Status$200;
 export interface Params$code$scanning$list$recent$analyses {
   parameter: Parameter$code$scanning$list$recent$analyses;
+}
+export type ResponseContentType$code$scanning$get$analysis = keyof Response$code$scanning$get$analysis$Status$200;
+export interface Params$code$scanning$get$analysis<U extends ResponseContentType$code$scanning$get$analysis> {
+  headers: {
+    Accept: U;
+  };
+  parameter: Parameter$code$scanning$get$analysis;
+}
+export type ResponseContentType$code$scanning$delete$analysis = keyof Response$code$scanning$delete$analysis$Status$200;
+export interface Params$code$scanning$delete$analysis {
+  parameter: Parameter$code$scanning$delete$analysis;
 }
 export type RequestContentType$code$scanning$upload$sarif = keyof RequestBody$code$scanning$upload$sarif;
 export type ResponseContentType$code$scanning$upload$sarif = keyof Response$code$scanning$upload$sarif$Status$202;
 export interface Params$code$scanning$upload$sarif {
   parameter: Parameter$code$scanning$upload$sarif;
   requestBody: RequestBody$code$scanning$upload$sarif["application/json"];
+}
+export type ResponseContentType$code$scanning$get$sarif = keyof Response$code$scanning$get$sarif$Status$200;
+export interface Params$code$scanning$get$sarif {
+  parameter: Parameter$code$scanning$get$sarif;
 }
 export type ResponseContentType$repos$list$collaborators = keyof Response$repos$list$collaborators$Status$200;
 export interface Params$repos$list$collaborators {
@@ -16130,12 +17911,6 @@ export type ResponseContentType$repos$compare$commits = keyof Response$repos$com
 export interface Params$repos$compare$commits {
   parameter: Parameter$repos$compare$commits;
 }
-export type RequestContentType$apps$create$content$attachment = keyof RequestBody$apps$create$content$attachment;
-export type ResponseContentType$apps$create$content$attachment = keyof Response$apps$create$content$attachment$Status$200;
-export interface Params$apps$create$content$attachment {
-  parameter: Parameter$apps$create$content$attachment;
-  requestBody: RequestBody$apps$create$content$attachment["application/json"];
-}
 export type ResponseContentType$repos$get$content = keyof Response$repos$get$content$Status$200;
 export interface Params$repos$get$content<U extends ResponseContentType$repos$get$content> {
   headers: {
@@ -16158,6 +17933,27 @@ export interface Params$repos$delete$file {
 export type ResponseContentType$repos$list$contributors = keyof Response$repos$list$contributors$Status$200;
 export interface Params$repos$list$contributors {
   parameter: Parameter$repos$list$contributors;
+}
+export type ResponseContentType$dependabot$list$repo$secrets = keyof Response$dependabot$list$repo$secrets$Status$200;
+export interface Params$dependabot$list$repo$secrets {
+  parameter: Parameter$dependabot$list$repo$secrets;
+}
+export type ResponseContentType$dependabot$get$repo$public$key = keyof Response$dependabot$get$repo$public$key$Status$200;
+export interface Params$dependabot$get$repo$public$key {
+  parameter: Parameter$dependabot$get$repo$public$key;
+}
+export type ResponseContentType$dependabot$get$repo$secret = keyof Response$dependabot$get$repo$secret$Status$200;
+export interface Params$dependabot$get$repo$secret {
+  parameter: Parameter$dependabot$get$repo$secret;
+}
+export type RequestContentType$dependabot$create$or$update$repo$secret = keyof RequestBody$dependabot$create$or$update$repo$secret;
+export type ResponseContentType$dependabot$create$or$update$repo$secret = keyof Response$dependabot$create$or$update$repo$secret$Status$201;
+export interface Params$dependabot$create$or$update$repo$secret {
+  parameter: Parameter$dependabot$create$or$update$repo$secret;
+  requestBody: RequestBody$dependabot$create$or$update$repo$secret["application/json"];
+}
+export interface Params$dependabot$delete$repo$secret {
+  parameter: Parameter$dependabot$delete$repo$secret;
 }
 export type ResponseContentType$repos$list$deployments = keyof Response$repos$list$deployments$Status$200;
 export interface Params$repos$list$deployments {
@@ -16194,6 +17990,23 @@ export type RequestContentType$repos$create$dispatch$event = keyof RequestBody$r
 export interface Params$repos$create$dispatch$event {
   parameter: Parameter$repos$create$dispatch$event;
   requestBody: RequestBody$repos$create$dispatch$event["application/json"];
+}
+export type ResponseContentType$repos$get$all$environments = keyof Response$repos$get$all$environments$Status$200;
+export interface Params$repos$get$all$environments {
+  parameter: Parameter$repos$get$all$environments;
+}
+export type ResponseContentType$repos$get$environment = keyof Response$repos$get$environment$Status$200;
+export interface Params$repos$get$environment {
+  parameter: Parameter$repos$get$environment;
+}
+export type RequestContentType$repos$create$or$update$environment = keyof RequestBody$repos$create$or$update$environment;
+export type ResponseContentType$repos$create$or$update$environment = keyof Response$repos$create$or$update$environment$Status$200;
+export interface Params$repos$create$or$update$environment {
+  parameter: Parameter$repos$create$or$update$environment;
+  requestBody: RequestBody$repos$create$or$update$environment["application/json"];
+}
+export interface Params$repos$delete$an$environment {
+  parameter: Parameter$repos$delete$an$environment;
 }
 export type ResponseContentType$activity$list$repo$events = keyof Response$activity$list$repo$events$Status$200;
 export interface Params$activity$list$repo$events {
@@ -16304,6 +18117,18 @@ export type ResponseContentType$repos$update$webhook$config$for$repo = keyof Res
 export interface Params$repos$update$webhook$config$for$repo {
   parameter: Parameter$repos$update$webhook$config$for$repo;
   requestBody: RequestBody$repos$update$webhook$config$for$repo["application/json"];
+}
+export type ResponseContentType$repos$list$webhook$deliveries = keyof Response$repos$list$webhook$deliveries$Status$200;
+export interface Params$repos$list$webhook$deliveries {
+  parameter: Parameter$repos$list$webhook$deliveries;
+}
+export type ResponseContentType$repos$get$webhook$delivery = keyof Response$repos$get$webhook$delivery$Status$200;
+export interface Params$repos$get$webhook$delivery {
+  parameter: Parameter$repos$get$webhook$delivery;
+}
+export type ResponseContentType$repos$redeliver$webhook$delivery = keyof Response$repos$redeliver$webhook$delivery$Status$202;
+export interface Params$repos$redeliver$webhook$delivery {
+  parameter: Parameter$repos$redeliver$webhook$delivery;
 }
 export interface Params$repos$ping$webhook {
   parameter: Parameter$repos$ping$webhook;
@@ -16504,9 +18329,22 @@ export type ResponseContentType$repos$list$languages = keyof Response$repos$list
 export interface Params$repos$list$languages {
   parameter: Parameter$repos$list$languages;
 }
+export type ResponseContentType$repos$enable$lfs$for$repo = keyof Response$repos$enable$lfs$for$repo$Status$202;
+export interface Params$repos$enable$lfs$for$repo {
+  parameter: Parameter$repos$enable$lfs$for$repo;
+}
+export interface Params$repos$disable$lfs$for$repo {
+  parameter: Parameter$repos$disable$lfs$for$repo;
+}
 export type ResponseContentType$licenses$get$for$repo = keyof Response$licenses$get$for$repo$Status$200;
 export interface Params$licenses$get$for$repo {
   parameter: Parameter$licenses$get$for$repo;
+}
+export type RequestContentType$repos$merge$upstream = keyof RequestBody$repos$merge$upstream;
+export type ResponseContentType$repos$merge$upstream = keyof Response$repos$merge$upstream$Status$200;
+export interface Params$repos$merge$upstream {
+  parameter: Parameter$repos$merge$upstream;
+  requestBody: RequestBody$repos$merge$upstream["application/json"];
 }
 export type RequestContentType$repos$merge = keyof RequestBody$repos$merge;
 export type ResponseContentType$repos$merge = keyof Response$repos$merge$Status$201;
@@ -16798,6 +18636,12 @@ export interface Params$repos$update$release$asset {
   parameter: Parameter$repos$update$release$asset;
   requestBody: RequestBody$repos$update$release$asset["application/json"];
 }
+export type RequestContentType$repos$generate$release$notes = keyof RequestBody$repos$generate$release$notes;
+export type ResponseContentType$repos$generate$release$notes = keyof Response$repos$generate$release$notes$Status$200;
+export interface Params$repos$generate$release$notes {
+  parameter: Parameter$repos$generate$release$notes;
+  requestBody: RequestBody$repos$generate$release$notes["application/json"];
+}
 export type ResponseContentType$repos$get$latest$release = keyof Response$repos$get$latest$release$Status$200;
 export interface Params$repos$get$latest$release {
   parameter: Parameter$repos$get$latest$release;
@@ -16828,6 +18672,34 @@ export type ResponseContentType$repos$upload$release$asset = keyof Response$repo
 export interface Params$repos$upload$release$asset {
   parameter: Parameter$repos$upload$release$asset;
   requestBody: RequestBody$repos$upload$release$asset["*/*"];
+}
+export type RequestContentType$reactions$create$for$release = keyof RequestBody$reactions$create$for$release;
+export type ResponseContentType$reactions$create$for$release = keyof Response$reactions$create$for$release$Status$200;
+export interface Params$reactions$create$for$release {
+  parameter: Parameter$reactions$create$for$release;
+  requestBody: RequestBody$reactions$create$for$release["application/json"];
+}
+export type ResponseContentType$repos$list$cache$info = keyof Response$repos$list$cache$info$Status$200;
+export interface Params$repos$list$cache$info {
+  parameter: Parameter$repos$list$cache$info;
+}
+export type ResponseContentType$secret$scanning$list$alerts$for$repo = keyof Response$secret$scanning$list$alerts$for$repo$Status$200;
+export interface Params$secret$scanning$list$alerts$for$repo {
+  parameter: Parameter$secret$scanning$list$alerts$for$repo;
+}
+export type ResponseContentType$secret$scanning$get$alert = keyof Response$secret$scanning$get$alert$Status$200;
+export interface Params$secret$scanning$get$alert {
+  parameter: Parameter$secret$scanning$get$alert;
+}
+export type RequestContentType$secret$scanning$update$alert = keyof RequestBody$secret$scanning$update$alert;
+export type ResponseContentType$secret$scanning$update$alert = keyof Response$secret$scanning$update$alert$Status$200;
+export interface Params$secret$scanning$update$alert {
+  parameter: Parameter$secret$scanning$update$alert;
+  requestBody: RequestBody$secret$scanning$update$alert["application/json"];
+}
+export type ResponseContentType$secret$scanning$list$locations$for$alert = keyof Response$secret$scanning$list$locations$for$alert$Status$200;
+export interface Params$secret$scanning$list$locations$for$alert {
+  parameter: Parameter$secret$scanning$list$locations$for$alert;
 }
 export type ResponseContentType$activity$list$stargazers$for$repo = keyof Response$activity$list$stargazers$for$repo$Status$200;
 export interface Params$activity$list$stargazers$for$repo {
@@ -16915,6 +18787,28 @@ export interface Params$repos$create$using$template {
 export type ResponseContentType$repos$list$public = keyof Response$repos$list$public$Status$200;
 export interface Params$repos$list$public {
   parameter: Parameter$repos$list$public;
+}
+export type ResponseContentType$actions$list$environment$secrets = keyof Response$actions$list$environment$secrets$Status$200;
+export interface Params$actions$list$environment$secrets {
+  parameter: Parameter$actions$list$environment$secrets;
+}
+export type ResponseContentType$actions$get$environment$public$key = keyof Response$actions$get$environment$public$key$Status$200;
+export interface Params$actions$get$environment$public$key {
+  parameter: Parameter$actions$get$environment$public$key;
+}
+export type ResponseContentType$actions$get$environment$secret = keyof Response$actions$get$environment$secret$Status$200;
+export interface Params$actions$get$environment$secret {
+  parameter: Parameter$actions$get$environment$secret;
+}
+export type RequestContentType$actions$create$or$update$environment$secret = keyof RequestBody$actions$create$or$update$environment$secret;
+export type ResponseContentType$actions$create$or$update$environment$secret =
+  keyof Response$actions$create$or$update$environment$secret$Status$201;
+export interface Params$actions$create$or$update$environment$secret {
+  parameter: Parameter$actions$create$or$update$environment$secret;
+  requestBody: RequestBody$actions$create$or$update$environment$secret["application/json"];
+}
+export interface Params$actions$delete$environment$secret {
+  parameter: Parameter$actions$delete$environment$secret;
 }
 export type ResponseContentType$search$code = keyof Response$search$code$Status$200;
 export interface Params$search$code {
@@ -17241,6 +19135,23 @@ export interface Params$orgs$update$membership$for$authenticated$user {
   parameter: Parameter$orgs$update$membership$for$authenticated$user;
   requestBody: RequestBody$orgs$update$membership$for$authenticated$user["application/json"];
 }
+export type ResponseContentType$migrations$list$for$authenticated$user = keyof Response$migrations$list$for$authenticated$user$Status$200;
+export interface Params$migrations$list$for$authenticated$user {
+  parameter: Parameter$migrations$list$for$authenticated$user;
+}
+export type RequestContentType$migrations$start$for$authenticated$user = keyof RequestBody$migrations$start$for$authenticated$user;
+export type ResponseContentType$migrations$start$for$authenticated$user = keyof Response$migrations$start$for$authenticated$user$Status$201;
+export interface Params$migrations$start$for$authenticated$user {
+  requestBody: RequestBody$migrations$start$for$authenticated$user["application/json"];
+}
+export interface Params$migrations$get$archive$for$authenticated$user {
+  parameter: Parameter$migrations$get$archive$for$authenticated$user;
+}
+export type ResponseContentType$migrations$list$repos$for$authenticated$user =
+  keyof Response$migrations$list$repos$for$authenticated$user$Status$200;
+export interface Params$migrations$list$repos$for$authenticated$user {
+  parameter: Parameter$migrations$list$repos$for$authenticated$user;
+}
 export type ResponseContentType$orgs$list$for$authenticated$user = keyof Response$orgs$list$for$authenticated$user$Status$200;
 export interface Params$orgs$list$for$authenticated$user {
   parameter: Parameter$orgs$list$for$authenticated$user;
@@ -17445,6 +19356,9 @@ export type SuccessResponses =
   | Response$apps$create$from$manifest$Status$201
   | Response$apps$get$webhook$config$for$app$Status$200
   | Response$apps$update$webhook$config$for$app$Status$200
+  | Response$apps$list$webhook$deliveries$Status$200
+  | Response$apps$get$webhook$delivery$Status$200
+  | Response$apps$redeliver$webhook$delivery$Status$202
   | Response$apps$list$installations$Status$200
   | Response$apps$get$installation$Status$200
   | Response$apps$create$installation$access$token$Status$201
@@ -17453,8 +19367,6 @@ export type SuccessResponses =
   | Response$apps$check$token$Status$200
   | Response$apps$reset$token$Status$200
   | Response$apps$scope$token$Status$200
-  | Response$apps$check$authorization$Status$200
-  | Response$apps$reset$authorization$Status$200
   | Response$apps$get$by$slug$Status$200
   | Response$oauth$authorizations$list$authorizations$Status$200
   | Response$oauth$authorizations$create$authorization$Status$201
@@ -17495,6 +19407,14 @@ export type SuccessResponses =
   | Response$enterprise$admin$create$registration$token$for$enterprise$Status$201
   | Response$enterprise$admin$create$remove$token$for$enterprise$Status$201
   | Response$enterprise$admin$get$self$hosted$runner$for$enterprise$Status$200
+  | Response$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise$Status$200
+  | Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$200
+  | Response$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise$Status$200
+  | Response$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise$Status$200
+  | Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$200
+  | Response$enterprise$admin$get$audit$log$Status$200
+  | Response$secret$scanning$list$alerts$for$enterprise$Status$200
+  | Response$billing$get$github$advanced$security$billing$ghe$Status$200
   | Response$activity$list$public$events$Status$200
   | Response$activity$get$feeds$Status$200
   | Response$gists$list$Status$200
@@ -17528,6 +19448,7 @@ export type SuccessResponses =
   | Response$activity$set$thread$subscription$Status$200
   | Response$meta$get$octocat$Status$200
   | Response$orgs$list$Status$200
+  | Response$orgs$list$custom$roles$Status$200
   | Response$orgs$get$Status$200
   | Response$orgs$update$Status$200
   | Response$actions$get$github$actions$permissions$organization$Status$200
@@ -17544,11 +19465,22 @@ export type SuccessResponses =
   | Response$actions$create$registration$token$for$org$Status$201
   | Response$actions$create$remove$token$for$org$Status$201
   | Response$actions$get$self$hosted$runner$for$org$Status$200
+  | Response$actions$list$labels$for$self$hosted$runner$for$org$Status$200
+  | Response$actions$set$custom$labels$for$self$hosted$runner$for$org$Status$200
+  | Response$actions$add$custom$labels$to$self$hosted$runner$for$org$Status$200
+  | Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$org$Status$200
+  | Response$actions$remove$custom$label$from$self$hosted$runner$for$org$Status$200
   | Response$actions$list$org$secrets$Status$200
   | Response$actions$get$org$public$key$Status$200
   | Response$actions$get$org$secret$Status$200
   | Response$actions$create$or$update$org$secret$Status$201
   | Response$actions$list$selected$repos$for$org$secret$Status$200
+  | Response$orgs$get$audit$log$Status$200
+  | Response$dependabot$list$org$secrets$Status$200
+  | Response$dependabot$get$org$public$key$Status$200
+  | Response$dependabot$get$org$secret$Status$200
+  | Response$dependabot$create$or$update$org$secret$Status$201
+  | Response$dependabot$list$selected$repos$for$org$secret$Status$200
   | Response$activity$list$public$org$events$Status$200
   | Response$orgs$list$webhooks$Status$200
   | Response$orgs$create$webhook$Status$201
@@ -17556,12 +19488,18 @@ export type SuccessResponses =
   | Response$orgs$update$webhook$Status$200
   | Response$orgs$get$webhook$config$for$org$Status$200
   | Response$orgs$update$webhook$config$for$org$Status$200
+  | Response$orgs$list$webhook$deliveries$Status$200
+  | Response$orgs$get$webhook$delivery$Status$200
+  | Response$orgs$redeliver$webhook$delivery$Status$202
   | Response$apps$get$org$installation$Status$200
   | Response$orgs$list$app$installations$Status$200
   | Response$issues$list$for$org$Status$200
   | Response$orgs$list$members$Status$200
   | Response$orgs$get$membership$for$user$Status$200
   | Response$orgs$set$membership$for$user$Status$200
+  | Response$migrations$list$for$org$Status$200
+  | Response$migrations$start$for$org$Status$201
+  | Response$migrations$get$status$for$org$Status$200
   | Response$orgs$list$outside$collaborators$Status$200
   | Response$orgs$convert$member$to$outside$collaborator$Status$202
   | Response$enterprise$admin$list$pre$receive$hooks$for$org$Status$200
@@ -17573,6 +19511,8 @@ export type SuccessResponses =
   | Response$orgs$list$public$members$Status$200
   | Response$repos$list$for$org$Status$200
   | Response$repos$create$in$org$Status$201
+  | Response$secret$scanning$list$alerts$for$org$Status$200
+  | Response$billing$get$github$advanced$security$billing$org$Status$200
   | Response$teams$list$Status$200
   | Response$teams$create$Status$201
   | Response$teams$get$by$name$Status$200
@@ -17626,11 +19566,19 @@ export type SuccessResponses =
   | Response$actions$create$registration$token$for$repo$Status$201
   | Response$actions$create$remove$token$for$repo$Status$201
   | Response$actions$get$self$hosted$runner$for$repo$Status$200
+  | Response$actions$list$labels$for$self$hosted$runner$for$repo$Status$200
+  | Response$actions$set$custom$labels$for$self$hosted$runner$for$repo$Status$200
+  | Response$actions$add$custom$labels$to$self$hosted$runner$for$repo$Status$200
+  | Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo$Status$200
+  | Response$actions$remove$custom$label$from$self$hosted$runner$for$repo$Status$200
   | Response$actions$list$workflow$runs$for$repo$Status$200
   | Response$actions$get$workflow$run$Status$200
+  | Response$actions$get$reviews$for$run$Status$200
   | Response$actions$list$workflow$run$artifacts$Status$200
   | Response$actions$cancel$workflow$run$Status$202
   | Response$actions$list$jobs$for$workflow$run$Status$200
+  | Response$actions$get$pending$deployments$for$run$Status$200
+  | Response$actions$review$pending$deployments$for$run$Status$200
   | Response$actions$re$run$workflow$Status$201
   | Response$actions$list$repo$secrets$Status$200
   | Response$actions$get$repo$public$key$Status$200
@@ -17640,6 +19588,9 @@ export type SuccessResponses =
   | Response$actions$get$workflow$Status$200
   | Response$actions$list$workflow$runs$Status$200
   | Response$issues$list$assignees$Status$200
+  | Response$repos$list$autolinks$Status$200
+  | Response$repos$create$autolink$Status$201
+  | Response$repos$get$autolink$Status$200
   | Response$repos$list$branches$Status$200
   | Response$repos$get$branch$Status$200
   | Response$repos$get$branch$protection$Status$200
@@ -17669,10 +19620,12 @@ export type SuccessResponses =
   | Response$repos$set$user$access$restrictions$Status$200
   | Response$repos$add$user$access$restrictions$Status$200
   | Response$repos$remove$user$access$restrictions$Status$200
+  | Response$repos$rename$branch$Status$201
   | Response$checks$create$Status$201
   | Response$checks$get$Status$200
   | Response$checks$update$Status$200
   | Response$checks$list$annotations$Status$200
+  | Response$checks$rerequest$run$Status$201
   | Response$checks$create$suite$Status$200
   | Response$checks$create$suite$Status$201
   | Response$checks$set$suites$preferences$Status$200
@@ -17682,8 +19635,12 @@ export type SuccessResponses =
   | Response$code$scanning$list$alerts$for$repo$Status$200
   | Response$code$scanning$get$alert$Status$200
   | Response$code$scanning$update$alert$Status$200
+  | Response$code$scanning$list$alert$instances$Status$200
   | Response$code$scanning$list$recent$analyses$Status$200
+  | Response$code$scanning$get$analysis$Status$200
+  | Response$code$scanning$delete$analysis$Status$200
   | Response$code$scanning$upload$sarif$Status$202
+  | Response$code$scanning$get$sarif$Status$200
   | Response$repos$list$collaborators$Status$200
   | Response$repos$add$collaborator$Status$201
   | Response$repos$get$collaborator$permission$level$Status$200
@@ -17704,12 +19661,15 @@ export type SuccessResponses =
   | Response$repos$get$combined$status$for$ref$Status$200
   | Response$repos$list$commit$statuses$for$ref$Status$200
   | Response$repos$compare$commits$Status$200
-  | Response$apps$create$content$attachment$Status$200
   | Response$repos$get$content$Status$200
   | Response$repos$create$or$update$file$contents$Status$200
   | Response$repos$create$or$update$file$contents$Status$201
   | Response$repos$delete$file$Status$200
   | Response$repos$list$contributors$Status$200
+  | Response$dependabot$list$repo$secrets$Status$200
+  | Response$dependabot$get$repo$public$key$Status$200
+  | Response$dependabot$get$repo$secret$Status$200
+  | Response$dependabot$create$or$update$repo$secret$Status$201
   | Response$repos$list$deployments$Status$200
   | Response$repos$create$deployment$Status$201
   | Response$repos$create$deployment$Status$202
@@ -17717,6 +19677,9 @@ export type SuccessResponses =
   | Response$repos$list$deployment$statuses$Status$200
   | Response$repos$create$deployment$status$Status$201
   | Response$repos$get$deployment$status$Status$200
+  | Response$repos$get$all$environments$Status$200
+  | Response$repos$get$environment$Status$200
+  | Response$repos$create$or$update$environment$Status$200
   | Response$activity$list$repo$events$Status$200
   | Response$repos$list$forks$Status$200
   | Response$repos$create$fork$Status$202
@@ -17738,6 +19701,9 @@ export type SuccessResponses =
   | Response$repos$update$webhook$Status$200
   | Response$repos$get$webhook$config$for$repo$Status$200
   | Response$repos$update$webhook$config$for$repo$Status$200
+  | Response$repos$list$webhook$deliveries$Status$200
+  | Response$repos$get$webhook$delivery$Status$200
+  | Response$repos$redeliver$webhook$delivery$Status$202
   | Response$apps$get$repo$installation$Status$200
   | Response$repos$list$invitations$Status$200
   | Response$repos$update$invitation$Status$200
@@ -17774,7 +19740,9 @@ export type SuccessResponses =
   | Response$issues$get$label$Status$200
   | Response$issues$update$label$Status$200
   | Response$repos$list$languages$Status$200
+  | Response$repos$enable$lfs$for$repo$Status$202
   | Response$licenses$get$for$repo$Status$200
+  | Response$repos$merge$upstream$Status$200
   | Response$repos$merge$Status$201
   | Response$issues$list$milestones$Status$200
   | Response$issues$create$milestone$Status$201
@@ -17829,12 +19797,20 @@ export type SuccessResponses =
   | Response$repos$create$release$Status$201
   | Response$repos$get$release$asset$Status$200
   | Response$repos$update$release$asset$Status$200
+  | Response$repos$generate$release$notes$Status$200
   | Response$repos$get$latest$release$Status$200
   | Response$repos$get$release$by$tag$Status$200
   | Response$repos$get$release$Status$200
   | Response$repos$update$release$Status$200
   | Response$repos$list$release$assets$Status$200
   | Response$repos$upload$release$asset$Status$201
+  | Response$reactions$create$for$release$Status$200
+  | Response$reactions$create$for$release$Status$201
+  | Response$repos$list$cache$info$Status$200
+  | Response$secret$scanning$list$alerts$for$repo$Status$200
+  | Response$secret$scanning$get$alert$Status$200
+  | Response$secret$scanning$update$alert$Status$200
+  | Response$secret$scanning$list$locations$for$alert$Status$200
   | Response$activity$list$stargazers$for$repo$Status$200
   | Response$repos$get$code$frequency$stats$Status$200
   | Response$repos$get$code$frequency$stats$Status$202
@@ -17855,6 +19831,10 @@ export type SuccessResponses =
   | Response$repos$transfer$Status$202
   | Response$repos$create$using$template$Status$201
   | Response$repos$list$public$Status$200
+  | Response$actions$list$environment$secrets$Status$200
+  | Response$actions$get$environment$public$key$Status$200
+  | Response$actions$get$environment$secret$Status$200
+  | Response$actions$create$or$update$environment$secret$Status$201
   | Response$search$code$Status$200
   | Response$search$commits$Status$200
   | Response$search$issues$and$pull$requests$Status$200
@@ -17910,6 +19890,9 @@ export type SuccessResponses =
   | Response$orgs$list$memberships$for$authenticated$user$Status$200
   | Response$orgs$get$membership$for$authenticated$user$Status$200
   | Response$orgs$update$membership$for$authenticated$user$Status$200
+  | Response$migrations$list$for$authenticated$user$Status$200
+  | Response$migrations$start$for$authenticated$user$Status$201
+  | Response$migrations$list$repos$for$authenticated$user$Status$200
   | Response$orgs$list$for$authenticated$user$Status$200
   | Response$projects$create$for$authenticated$user$Status$201
   | Response$users$list$public$emails$for$authenticated$user$Status$200
@@ -17979,6 +19962,13 @@ export namespace ErrorResponse {
   export type apps$create$from$manifest = Response$apps$create$from$manifest$Status$404 | Response$apps$create$from$manifest$Status$422;
   export type apps$get$webhook$config$for$app = void;
   export type apps$update$webhook$config$for$app = void;
+  export type apps$list$webhook$deliveries =
+    | Response$apps$list$webhook$deliveries$Status$400
+    | Response$apps$list$webhook$deliveries$Status$422;
+  export type apps$get$webhook$delivery = Response$apps$get$webhook$delivery$Status$400 | Response$apps$get$webhook$delivery$Status$422;
+  export type apps$redeliver$webhook$delivery =
+    | Response$apps$redeliver$webhook$delivery$Status$400
+    | Response$apps$redeliver$webhook$delivery$Status$422;
   export type apps$list$installations = void;
   export type apps$get$installation = Response$apps$get$installation$Status$404 | Response$apps$get$installation$Status$415;
   export type apps$delete$installation = Response$apps$delete$installation$Status$404;
@@ -18001,7 +19991,6 @@ export namespace ErrorResponse {
     | Response$oauth$authorizations$delete$grant$Status$401
     | Response$oauth$authorizations$delete$grant$Status$403;
   export type apps$delete$authorization = Response$apps$delete$authorization$Status$422;
-  export type apps$revoke$grant$for$application = void;
   export type apps$check$token = Response$apps$check$token$Status$404 | Response$apps$check$token$Status$422;
   export type apps$delete$token = Response$apps$delete$token$Status$422;
   export type apps$reset$token = Response$apps$reset$token$Status$422;
@@ -18010,9 +19999,6 @@ export namespace ErrorResponse {
     | Response$apps$scope$token$Status$403
     | Response$apps$scope$token$Status$404
     | Response$apps$scope$token$Status$422;
-  export type apps$check$authorization = Response$apps$check$authorization$Status$404;
-  export type apps$reset$authorization = void;
-  export type apps$revoke$authorization$for$application = void;
   export type apps$get$by$slug =
     | Response$apps$get$by$slug$Status$403
     | Response$apps$get$by$slug$Status$404
@@ -18084,6 +20070,25 @@ export namespace ErrorResponse {
   export type enterprise$admin$create$remove$token$for$enterprise = void;
   export type enterprise$admin$get$self$hosted$runner$for$enterprise = void;
   export type enterprise$admin$delete$self$hosted$runner$from$enterprise = void;
+  export type enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise =
+    Response$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise$Status$404;
+  export type enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise =
+    | Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$404
+    | Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$422;
+  export type enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise =
+    | Response$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise$Status$404
+    | Response$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise$Status$422;
+  export type enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise =
+    | Response$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise$Status$404
+    | Response$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise$Status$422;
+  export type enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise =
+    | Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$404
+    | Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$422;
+  export type enterprise$admin$get$audit$log = void;
+  export type secret$scanning$list$alerts$for$enterprise =
+    | Response$secret$scanning$list$alerts$for$enterprise$Status$404
+    | Response$secret$scanning$list$alerts$for$enterprise$Status$503;
+  export type billing$get$github$advanced$security$billing$ghe = Response$billing$get$github$advanced$security$billing$ghe$Status$403;
   export type activity$list$public$events = Response$activity$list$public$events$Status$403 | Response$activity$list$public$events$Status$503;
   export type activity$get$feeds = void;
   export type gists$list = Response$gists$list$Status$403;
@@ -18143,6 +20148,7 @@ export namespace ErrorResponse {
     | Response$activity$delete$thread$subscription$Status$403;
   export type meta$get$octocat = void;
   export type orgs$list = void;
+  export type orgs$list$custom$roles = void;
   export type orgs$get = Response$orgs$get$Status$404;
   export type orgs$update = Response$orgs$update$Status$409 | Response$orgs$update$Status$422;
   export type actions$get$github$actions$permissions$organization = void;
@@ -18172,6 +20178,18 @@ export namespace ErrorResponse {
   export type actions$create$remove$token$for$org = void;
   export type actions$get$self$hosted$runner$for$org = void;
   export type actions$delete$self$hosted$runner$from$org = void;
+  export type actions$list$labels$for$self$hosted$runner$for$org = Response$actions$list$labels$for$self$hosted$runner$for$org$Status$404;
+  export type actions$set$custom$labels$for$self$hosted$runner$for$org =
+    | Response$actions$set$custom$labels$for$self$hosted$runner$for$org$Status$404
+    | Response$actions$set$custom$labels$for$self$hosted$runner$for$org$Status$422;
+  export type actions$add$custom$labels$to$self$hosted$runner$for$org =
+    | Response$actions$add$custom$labels$to$self$hosted$runner$for$org$Status$404
+    | Response$actions$add$custom$labels$to$self$hosted$runner$for$org$Status$422;
+  export type actions$remove$all$custom$labels$from$self$hosted$runner$for$org =
+    Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$org$Status$404;
+  export type actions$remove$custom$label$from$self$hosted$runner$for$org =
+    | Response$actions$remove$custom$label$from$self$hosted$runner$for$org$Status$404
+    | Response$actions$remove$custom$label$from$self$hosted$runner$for$org$Status$422;
   export type actions$list$org$secrets = void;
   export type actions$get$org$public$key = void;
   export type actions$get$org$secret = void;
@@ -18181,6 +20199,16 @@ export namespace ErrorResponse {
   export type actions$set$selected$repos$for$org$secret = void;
   export type actions$add$selected$repo$to$org$secret = void;
   export type actions$remove$selected$repo$from$org$secret = void;
+  export type orgs$get$audit$log = void;
+  export type dependabot$list$org$secrets = void;
+  export type dependabot$get$org$public$key = void;
+  export type dependabot$get$org$secret = void;
+  export type dependabot$create$or$update$org$secret = void;
+  export type dependabot$delete$org$secret = void;
+  export type dependabot$list$selected$repos$for$org$secret = void;
+  export type dependabot$set$selected$repos$for$org$secret = void;
+  export type dependabot$add$selected$repo$to$org$secret = void;
+  export type dependabot$remove$selected$repo$from$org$secret = void;
   export type activity$list$public$org$events = void;
   export type orgs$list$webhooks = Response$orgs$list$webhooks$Status$404;
   export type orgs$create$webhook = Response$orgs$create$webhook$Status$404 | Response$orgs$create$webhook$Status$422;
@@ -18189,6 +20217,13 @@ export namespace ErrorResponse {
   export type orgs$update$webhook = Response$orgs$update$webhook$Status$404 | Response$orgs$update$webhook$Status$422;
   export type orgs$get$webhook$config$for$org = void;
   export type orgs$update$webhook$config$for$org = void;
+  export type orgs$list$webhook$deliveries =
+    | Response$orgs$list$webhook$deliveries$Status$400
+    | Response$orgs$list$webhook$deliveries$Status$422;
+  export type orgs$get$webhook$delivery = Response$orgs$get$webhook$delivery$Status$400 | Response$orgs$get$webhook$delivery$Status$422;
+  export type orgs$redeliver$webhook$delivery =
+    | Response$orgs$redeliver$webhook$delivery$Status$400
+    | Response$orgs$redeliver$webhook$delivery$Status$422;
   export type orgs$ping$webhook = Response$orgs$ping$webhook$Status$404;
   export type apps$get$org$installation = void;
   export type orgs$list$app$installations = void;
@@ -18205,6 +20240,9 @@ export namespace ErrorResponse {
   export type orgs$remove$membership$for$user =
     | Response$orgs$remove$membership$for$user$Status$403
     | Response$orgs$remove$membership$for$user$Status$404;
+  export type migrations$list$for$org = void;
+  export type migrations$start$for$org = Response$migrations$start$for$org$Status$404 | Response$migrations$start$for$org$Status$422;
+  export type migrations$get$status$for$org = Response$migrations$get$status$for$org$Status$404;
   export type orgs$list$outside$collaborators = void;
   export type orgs$convert$member$to$outside$collaborator = Response$orgs$convert$member$to$outside$collaborator$Status$404;
   export type orgs$remove$outside$collaborator = Response$orgs$remove$outside$collaborator$Status$422;
@@ -18225,6 +20263,10 @@ export namespace ErrorResponse {
   export type orgs$remove$public$membership$for$authenticated$user = void;
   export type repos$list$for$org = void;
   export type repos$create$in$org = Response$repos$create$in$org$Status$403 | Response$repos$create$in$org$Status$422;
+  export type secret$scanning$list$alerts$for$org =
+    | Response$secret$scanning$list$alerts$for$org$Status$404
+    | Response$secret$scanning$list$alerts$for$org$Status$503;
+  export type billing$get$github$advanced$security$billing$org = Response$billing$get$github$advanced$security$billing$org$Status$403;
   export type teams$list = Response$teams$list$Status$403;
   export type teams$create = Response$teams$create$Status$403 | Response$teams$create$Status$422;
   export type teams$get$by$name = Response$teams$get$by$name$Status$404;
@@ -18353,16 +20395,31 @@ export namespace ErrorResponse {
   export type actions$create$remove$token$for$repo = void;
   export type actions$get$self$hosted$runner$for$repo = void;
   export type actions$delete$self$hosted$runner$from$repo = void;
+  export type actions$list$labels$for$self$hosted$runner$for$repo = Response$actions$list$labels$for$self$hosted$runner$for$repo$Status$404;
+  export type actions$set$custom$labels$for$self$hosted$runner$for$repo =
+    | Response$actions$set$custom$labels$for$self$hosted$runner$for$repo$Status$404
+    | Response$actions$set$custom$labels$for$self$hosted$runner$for$repo$Status$422;
+  export type actions$add$custom$labels$to$self$hosted$runner$for$repo =
+    | Response$actions$add$custom$labels$to$self$hosted$runner$for$repo$Status$404
+    | Response$actions$add$custom$labels$to$self$hosted$runner$for$repo$Status$422;
+  export type actions$remove$all$custom$labels$from$self$hosted$runner$for$repo =
+    Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo$Status$404;
+  export type actions$remove$custom$label$from$self$hosted$runner$for$repo =
+    | Response$actions$remove$custom$label$from$self$hosted$runner$for$repo$Status$404
+    | Response$actions$remove$custom$label$from$self$hosted$runner$for$repo$Status$422;
   export type actions$list$workflow$runs$for$repo = void;
   export type actions$get$workflow$run = void;
   export type actions$delete$workflow$run = void;
+  export type actions$get$reviews$for$run = void;
   export type actions$list$workflow$run$artifacts = void;
-  export type actions$cancel$workflow$run = void;
+  export type actions$cancel$workflow$run = Response$actions$cancel$workflow$run$Status$409;
   export type actions$list$jobs$for$workflow$run = void;
   export type actions$download$workflow$run$logs = void;
   export type actions$delete$workflow$run$logs =
     | Response$actions$delete$workflow$run$logs$Status$403
     | Response$actions$delete$workflow$run$logs$Status$500;
+  export type actions$get$pending$deployments$for$run = void;
+  export type actions$review$pending$deployments$for$run = void;
   export type actions$re$run$workflow = void;
   export type actions$list$repo$secrets = void;
   export type actions$get$repo$public$key = void;
@@ -18377,6 +20434,10 @@ export namespace ErrorResponse {
   export type actions$list$workflow$runs = void;
   export type issues$list$assignees = Response$issues$list$assignees$Status$404;
   export type issues$check$user$can$be$assigned = Response$issues$check$user$can$be$assigned$Status$404;
+  export type repos$list$autolinks = void;
+  export type repos$create$autolink = Response$repos$create$autolink$Status$422;
+  export type repos$get$autolink = Response$repos$get$autolink$Status$404;
+  export type repos$delete$autolink = Response$repos$delete$autolink$Status$404;
   export type repos$list$branches = Response$repos$list$branches$Status$404;
   export type repos$get$branch = Response$repos$get$branch$Status$404 | Response$repos$get$branch$Status$415;
   export type repos$get$branch$protection = Response$repos$get$branch$protection$Status$404;
@@ -18424,10 +20485,18 @@ export namespace ErrorResponse {
   export type repos$set$user$access$restrictions = Response$repos$set$user$access$restrictions$Status$422;
   export type repos$add$user$access$restrictions = Response$repos$add$user$access$restrictions$Status$422;
   export type repos$remove$user$access$restrictions = Response$repos$remove$user$access$restrictions$Status$422;
+  export type repos$rename$branch =
+    | Response$repos$rename$branch$Status$403
+    | Response$repos$rename$branch$Status$404
+    | Response$repos$rename$branch$Status$422;
   export type checks$create = void;
   export type checks$get = void;
   export type checks$update = void;
   export type checks$list$annotations = void;
+  export type checks$rerequest$run =
+    | Response$checks$rerequest$run$Status$403
+    | Response$checks$rerequest$run$Status$404
+    | Response$checks$rerequest$run$Status$422;
   export type checks$create$suite = void;
   export type checks$set$suites$preferences = void;
   export type checks$get$suite = void;
@@ -18445,14 +20514,28 @@ export namespace ErrorResponse {
     | Response$code$scanning$update$alert$Status$403
     | Response$code$scanning$update$alert$Status$404
     | Response$code$scanning$update$alert$Status$503;
+  export type code$scanning$list$alert$instances =
+    | Response$code$scanning$list$alert$instances$Status$403
+    | Response$code$scanning$list$alert$instances$Status$404
+    | Response$code$scanning$list$alert$instances$Status$503;
   export type code$scanning$list$recent$analyses =
     | Response$code$scanning$list$recent$analyses$Status$403
     | Response$code$scanning$list$recent$analyses$Status$404
     | Response$code$scanning$list$recent$analyses$Status$503;
+  export type code$scanning$get$analysis =
+    | Response$code$scanning$get$analysis$Status$403
+    | Response$code$scanning$get$analysis$Status$404
+    | Response$code$scanning$get$analysis$Status$503;
+  export type code$scanning$delete$analysis =
+    | Response$code$scanning$delete$analysis$Status$400
+    | Response$code$scanning$delete$analysis$Status$403
+    | Response$code$scanning$delete$analysis$Status$404
+    | Response$code$scanning$delete$analysis$Status$503;
   export type code$scanning$upload$sarif =
     | Response$code$scanning$upload$sarif$Status$403
     | Response$code$scanning$upload$sarif$Status$404
     | Response$code$scanning$upload$sarif$Status$503;
+  export type code$scanning$get$sarif = Response$code$scanning$get$sarif$Status$403 | Response$code$scanning$get$sarif$Status$503;
   export type repos$list$collaborators = Response$repos$list$collaborators$Status$404;
   export type repos$check$collaborator = void;
   export type repos$add$collaborator = Response$repos$add$collaborator$Status$403 | Response$repos$add$collaborator$Status$422;
@@ -18485,12 +20568,6 @@ export namespace ErrorResponse {
   export type repos$get$combined$status$for$ref = Response$repos$get$combined$status$for$ref$Status$404;
   export type repos$list$commit$statuses$for$ref = void;
   export type repos$compare$commits = Response$repos$compare$commits$Status$404 | Response$repos$compare$commits$Status$500;
-  export type apps$create$content$attachment =
-    | Response$apps$create$content$attachment$Status$403
-    | Response$apps$create$content$attachment$Status$404
-    | Response$apps$create$content$attachment$Status$410
-    | Response$apps$create$content$attachment$Status$415
-    | Response$apps$create$content$attachment$Status$422;
   export type repos$get$content = Response$repos$get$content$Status$403 | Response$repos$get$content$Status$404;
   export type repos$create$or$update$file$contents =
     | Response$repos$create$or$update$file$contents$Status$404
@@ -18502,6 +20579,11 @@ export namespace ErrorResponse {
     | Response$repos$delete$file$Status$422
     | Response$repos$delete$file$Status$503;
   export type repos$list$contributors = Response$repos$list$contributors$Status$403 | Response$repos$list$contributors$Status$404;
+  export type dependabot$list$repo$secrets = void;
+  export type dependabot$get$repo$public$key = void;
+  export type dependabot$get$repo$secret = void;
+  export type dependabot$create$or$update$repo$secret = void;
+  export type dependabot$delete$repo$secret = void;
   export type repos$list$deployments = void;
   export type repos$create$deployment = Response$repos$create$deployment$Status$422;
   export type repos$get$deployment = Response$repos$get$deployment$Status$404;
@@ -18510,6 +20592,10 @@ export namespace ErrorResponse {
   export type repos$create$deployment$status = Response$repos$create$deployment$status$Status$422;
   export type repos$get$deployment$status = Response$repos$get$deployment$status$Status$404;
   export type repos$create$dispatch$event = Response$repos$create$dispatch$event$Status$422;
+  export type repos$get$all$environments = void;
+  export type repos$get$environment = void;
+  export type repos$create$or$update$environment = Response$repos$create$or$update$environment$Status$422;
+  export type repos$delete$an$environment = void;
   export type activity$list$repo$events = void;
   export type repos$list$forks = Response$repos$list$forks$Status$400;
   export type repos$create$fork =
@@ -18544,6 +20630,13 @@ export namespace ErrorResponse {
   export type repos$update$webhook = Response$repos$update$webhook$Status$404 | Response$repos$update$webhook$Status$422;
   export type repos$get$webhook$config$for$repo = void;
   export type repos$update$webhook$config$for$repo = void;
+  export type repos$list$webhook$deliveries =
+    | Response$repos$list$webhook$deliveries$Status$400
+    | Response$repos$list$webhook$deliveries$Status$422;
+  export type repos$get$webhook$delivery = Response$repos$get$webhook$delivery$Status$400 | Response$repos$get$webhook$delivery$Status$422;
+  export type repos$redeliver$webhook$delivery =
+    | Response$repos$redeliver$webhook$delivery$Status$400
+    | Response$repos$redeliver$webhook$delivery$Status$422;
   export type repos$ping$webhook = Response$repos$ping$webhook$Status$404;
   export type repos$test$push$webhook = Response$repos$test$push$webhook$Status$404;
   export type apps$get$repo$installation = Response$apps$get$repo$installation$Status$404;
@@ -18614,7 +20707,10 @@ export namespace ErrorResponse {
   export type issues$delete$label = void;
   export type issues$update$label = void;
   export type repos$list$languages = void;
+  export type repos$enable$lfs$for$repo = void;
+  export type repos$disable$lfs$for$repo = void;
   export type licenses$get$for$repo = void;
+  export type repos$merge$upstream = void;
   export type repos$merge = Response$repos$merge$Status$403 | Response$repos$merge$Status$422;
   export type issues$list$milestones = Response$issues$list$milestones$Status$404;
   export type issues$create$milestone = Response$issues$create$milestone$Status$404 | Response$issues$create$milestone$Status$422;
@@ -18697,6 +20793,7 @@ export namespace ErrorResponse {
   export type repos$get$release$asset = Response$repos$get$release$asset$Status$404 | Response$repos$get$release$asset$Status$415;
   export type repos$delete$release$asset = void;
   export type repos$update$release$asset = void;
+  export type repos$generate$release$notes = Response$repos$generate$release$notes$Status$404;
   export type repos$get$latest$release = void;
   export type repos$get$release$by$tag = Response$repos$get$release$by$tag$Status$404;
   export type repos$get$release = Response$repos$get$release$Status$404;
@@ -18704,6 +20801,12 @@ export namespace ErrorResponse {
   export type repos$update$release = void;
   export type repos$list$release$assets = void;
   export type repos$upload$release$asset = void;
+  export type reactions$create$for$release = Response$reactions$create$for$release$Status$422;
+  export type repos$list$cache$info = Response$repos$list$cache$info$Status$403 | Response$repos$list$cache$info$Status$404;
+  export type secret$scanning$list$alerts$for$repo = Response$secret$scanning$list$alerts$for$repo$Status$503;
+  export type secret$scanning$get$alert = Response$secret$scanning$get$alert$Status$503;
+  export type secret$scanning$update$alert = Response$secret$scanning$update$alert$Status$503;
+  export type secret$scanning$list$locations$for$alert = Response$secret$scanning$list$locations$for$alert$Status$503;
   export type activity$list$stargazers$for$repo = Response$activity$list$stargazers$for$repo$Status$422;
   export type repos$get$code$frequency$stats = void;
   export type repos$get$commit$activity$stats = void;
@@ -18718,15 +20821,17 @@ export namespace ErrorResponse {
   export type repos$list$tags = void;
   export type repos$download$tarball$archive = void;
   export type repos$list$teams = void;
-  export type repos$get$all$topics = Response$repos$get$all$topics$Status$404 | Response$repos$get$all$topics$Status$415;
-  export type repos$replace$all$topics =
-    | Response$repos$replace$all$topics$Status$404
-    | Response$repos$replace$all$topics$Status$415
-    | Response$repos$replace$all$topics$Status$422;
+  export type repos$get$all$topics = Response$repos$get$all$topics$Status$404;
+  export type repos$replace$all$topics = Response$repos$replace$all$topics$Status$404 | Response$repos$replace$all$topics$Status$422;
   export type repos$transfer = void;
   export type repos$download$zipball$archive = void;
   export type repos$create$using$template = void;
   export type repos$list$public = Response$repos$list$public$Status$422;
+  export type actions$list$environment$secrets = void;
+  export type actions$get$environment$public$key = void;
+  export type actions$get$environment$secret = void;
+  export type actions$create$or$update$environment$secret = void;
+  export type actions$delete$environment$secret = void;
   export type search$code = Response$search$code$Status$403 | Response$search$code$Status$422 | Response$search$code$Status$503;
   export type search$commits = void;
   export type search$issues$and$pull$requests =
@@ -18735,7 +20840,7 @@ export namespace ErrorResponse {
     | Response$search$issues$and$pull$requests$Status$503;
   export type search$labels = Response$search$labels$Status$403 | Response$search$labels$Status$404 | Response$search$labels$Status$422;
   export type search$repos = Response$search$repos$Status$422 | Response$search$repos$Status$503;
-  export type search$topics = Response$search$topics$Status$415;
+  export type search$topics = void;
   export type search$users = Response$search$users$Status$422 | Response$search$users$Status$503;
   export type enterprise$admin$get$configuration$status = void;
   export type enterprise$admin$start$configuration$process = void;
@@ -18887,6 +20992,17 @@ export namespace ErrorResponse {
     | Response$orgs$update$membership$for$authenticated$user$Status$403
     | Response$orgs$update$membership$for$authenticated$user$Status$404
     | Response$orgs$update$membership$for$authenticated$user$Status$422;
+  export type migrations$list$for$authenticated$user =
+    | Response$migrations$list$for$authenticated$user$Status$401
+    | Response$migrations$list$for$authenticated$user$Status$403;
+  export type migrations$start$for$authenticated$user =
+    | Response$migrations$start$for$authenticated$user$Status$401
+    | Response$migrations$start$for$authenticated$user$Status$403
+    | Response$migrations$start$for$authenticated$user$Status$422;
+  export type migrations$get$archive$for$authenticated$user =
+    | Response$migrations$get$archive$for$authenticated$user$Status$401
+    | Response$migrations$get$archive$for$authenticated$user$Status$403;
+  export type migrations$list$repos$for$authenticated$user = Response$migrations$list$repos$for$authenticated$user$Status$404;
   export type orgs$list$for$authenticated$user =
     | Response$orgs$list$for$authenticated$user$Status$401
     | Response$orgs$list$for$authenticated$user$Status$403;
@@ -19029,7 +21145,6 @@ export class Client<RequestOption> {
     const headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
-      accept: params.parameter.accept,
     };
     return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
   }
@@ -19045,7 +21160,6 @@ export class Client<RequestOption> {
     const url = this.baseUrl + `/admin/hooks/${params.parameter.hook_id}`;
     const headers = {
       Accept: "application/json",
-      accept: params.parameter.accept,
     };
     return this.apiClient.request("GET", url, headers, undefined, undefined, option);
   }
@@ -19078,13 +21192,12 @@ export class Client<RequestOption> {
     const headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
-      accept: params.parameter.accept,
     };
     return this.apiClient.request("PATCH", url, headers, params.requestBody, undefined, option);
   }
   /**
    * Ping a global webhook
-   * This will trigger a [ping event](https://docs.github.com/enterprise-server@3.0/webhooks/#ping-event) to be sent to the webhook.
+   * This will trigger a [ping event](https://docs.github.com/enterprise-server@3.4/webhooks/#ping-event) to be sent to the webhook.
    * operationId: enterprise-admin/ping-global-webhook
    * Request URI: /admin/hooks/{hook_id}/pings
    */
@@ -19132,9 +21245,7 @@ export class Client<RequestOption> {
   }
   /**
    * Update LDAP mapping for a team
-   * Updates the [distinguished name](https://www.ldap.com/ldap-dns-and-rdns) (DN) of the LDAP entry to map to a team. [LDAP synchronization](https://docs.github.com/enterprise/admin/guides/user-management/using-ldap/#enabling-ldap-sync) must be enabled to map LDAP entries to a team. Use the [Create a team](https://docs.github.com/enterprise-server@3.0/rest/reference/teams/#create-a-team) endpoint to create a team with LDAP mapping.
-   *
-   * If you pass the `hellcat-preview` media type, you can also update the LDAP mapping of a child team.
+   * Updates the [distinguished name](https://www.ldap.com/ldap-dns-and-rdns) (DN) of the LDAP entry to map to a team. [LDAP synchronization](https://docs.github.com/enterprise/admin/guides/user-management/using-ldap/#enabling-ldap-sync) must be enabled to map LDAP entries to a team. Use the [Create a team](https://docs.github.com/enterprise-server@3.4/rest/reference/teams/#create-a-team) endpoint to create a team with LDAP mapping.
    * operationId: enterprise-admin/update-ldap-mapping-for-team
    * Request URI: /admin/ldap/teams/{team_id}/mapping
    */
@@ -19474,7 +21585,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create a user
-   * If an external authentication mechanism is used, the login name should match the login name in the external system. If you are using LDAP authentication, you should also [update the LDAP mapping](https://docs.github.com/enterprise-server@3.0/rest/reference/enterprise-admin#update-ldap-mapping-for-a-user) for the user.
+   * If an external authentication mechanism is used, the login name should match the login name in the external system. If you are using LDAP authentication, you should also [update the LDAP mapping](https://docs.github.com/enterprise-server@3.4/rest/reference/enterprise-admin#update-ldap-mapping-for-a-user) for the user.
    *
    * The login name will be normalized to only contain alphanumeric characters or single hyphens. For example, if you send `"octo_cat"` as the login, a user named `"octo-cat"` will be created.
    *
@@ -19495,7 +21606,7 @@ export class Client<RequestOption> {
   }
   /**
    * Delete a user
-   * Deleting a user will delete all their repositories, gists, applications, and personal settings. [Suspending a user](https://docs.github.com/enterprise-server@3.0/rest/reference/enterprise-admin#suspend-a-user) is often a better option.
+   * Deleting a user will delete all their repositories, gists, applications, and personal settings. [Suspending a user](https://docs.github.com/enterprise-server@3.4/rest/reference/enterprise-admin#suspend-a-user) is often a better option.
    *
    * You can delete any user account except your own.
    * operationId: enterprise-admin/delete-user
@@ -19553,9 +21664,9 @@ export class Client<RequestOption> {
   }
   /**
    * Get the authenticated app
-   * Returns the GitHub App associated with the authentication credentials used. To see how many app installations are associated with this GitHub App, see the `installations_count` in the response. For more details about your app's installations, see the "[List installations for the authenticated app](https://docs.github.com/enterprise-server@3.0/rest/reference/apps#list-installations-for-the-authenticated-app)" endpoint.
+   * Returns the GitHub App associated with the authentication credentials used. To see how many app installations are associated with this GitHub App, see the `installations_count` in the response. For more details about your app's installations, see the "[List installations for the authenticated app](https://docs.github.com/enterprise-server@3.4/rest/reference/apps#list-installations-for-the-authenticated-app)" endpoint.
    *
-   * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
    * operationId: apps/get-authenticated
    * Request URI: /app
    */
@@ -19568,7 +21679,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create a GitHub App from a manifest
-   * Use this endpoint to complete the handshake necessary when implementing the [GitHub App Manifest flow](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/creating-github-apps-from-a-manifest/). When you create a GitHub App with the manifest flow, you receive a temporary `code` used to retrieve the GitHub App's `id`, `pem` (private key), and `webhook_secret`.
+   * Use this endpoint to complete the handshake necessary when implementing the [GitHub App Manifest flow](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/creating-github-apps-from-a-manifest/). When you create a GitHub App with the manifest flow, you receive a temporary `code` used to retrieve the GitHub App's `id`, `pem` (private key), and `webhook_secret`.
    * operationId: apps/create-from-manifest
    * Request URI: /app-manifests/{code}/conversions
    */
@@ -19587,7 +21698,7 @@ export class Client<RequestOption> {
    * Get a webhook configuration for an app
    * Returns the webhook configuration for a GitHub App. For more information about configuring a webhook for your app, see "[Creating a GitHub App](/developers/apps/creating-a-github-app)."
    *
-   * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
    * operationId: apps/get-webhook-config-for-app
    * Request URI: /app/hook/config
    */
@@ -19604,7 +21715,7 @@ export class Client<RequestOption> {
    * Update a webhook configuration for an app
    * Updates the webhook configuration for a GitHub App. For more information about configuring a webhook for your app, see "[Creating a GitHub App](/developers/apps/creating-a-github-app)."
    *
-   * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
    * operationId: apps/update-webhook-config-for-app
    * Request URI: /app/hook/config
    */
@@ -19620,8 +21731,66 @@ export class Client<RequestOption> {
     return this.apiClient.request("PATCH", url, headers, params.requestBody, undefined, option);
   }
   /**
+   * List deliveries for an app webhook
+   * Returns a list of webhook deliveries for the webhook configured for a GitHub App.
+   *
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * operationId: apps/list-webhook-deliveries
+   * Request URI: /app/hook/deliveries
+   */
+  public async apps$list$webhook$deliveries(
+    params: Params$apps$list$webhook$deliveries,
+    option?: RequestOption,
+  ): Promise<Response$apps$list$webhook$deliveries$Status$200["application/json"]> {
+    const url = this.baseUrl + `/app/hook/deliveries`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      per_page: { value: params.parameter.per_page, explode: false },
+      cursor: { value: params.parameter.cursor, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * Get a delivery for an app webhook
+   * Returns a delivery for the webhook configured for a GitHub App.
+   *
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * operationId: apps/get-webhook-delivery
+   * Request URI: /app/hook/deliveries/{delivery_id}
+   */
+  public async apps$get$webhook$delivery(
+    params: Params$apps$get$webhook$delivery,
+    option?: RequestOption,
+  ): Promise<Response$apps$get$webhook$delivery$Status$200["application/json"]> {
+    const url = this.baseUrl + `/app/hook/deliveries/${params.parameter.delivery_id}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Redeliver a delivery for an app webhook
+   * Redeliver a delivery for the webhook configured for a GitHub App.
+   *
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * operationId: apps/redeliver-webhook-delivery
+   * Request URI: /app/hook/deliveries/{delivery_id}/attempts
+   */
+  public async apps$redeliver$webhook$delivery(
+    params: Params$apps$redeliver$webhook$delivery,
+    option?: RequestOption,
+  ): Promise<Response$apps$redeliver$webhook$delivery$Status$202["application/json"]> {
+    const url = this.baseUrl + `/app/hook/deliveries/${params.parameter.delivery_id}/attempts`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, undefined, undefined, option);
+  }
+  /**
    * List installations for the authenticated app
-   * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
    *
    * The permissions the installation has are included under the `permissions` key.
    * operationId: apps/list-installations
@@ -19647,7 +21816,7 @@ export class Client<RequestOption> {
    * Get an installation for the authenticated app
    * Enables an authenticated GitHub App to find an installation's information using the installation id.
    *
-   * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
    * operationId: apps/get-installation
    * Request URI: /app/installations/{installation_id}
    */
@@ -19663,9 +21832,9 @@ export class Client<RequestOption> {
   }
   /**
    * Delete an installation for the authenticated app
-   * Uninstalls a GitHub App on a user, organization, or business account. If you prefer to temporarily suspend an app's access to your account's resources, then we recommend the "[Suspend an app installation](https://docs.github.com/enterprise-server@3.0/rest/reference/apps/#suspend-an-app-installation)" endpoint.
+   * Uninstalls a GitHub App on a user, organization, or business account. If you prefer to temporarily suspend an app's access to your account's resources, then we recommend the "[Suspend an app installation](https://docs.github.com/enterprise-server@3.4/rest/reference/apps/#suspend-an-app-installation)" endpoint.
    *
-   * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
    * operationId: apps/delete-installation
    * Request URI: /app/installations/{installation_id}
    */
@@ -19678,7 +21847,7 @@ export class Client<RequestOption> {
    * Create an installation access token for an app
    * Creates an installation access token that enables a GitHub App to make authenticated API requests for the app's installation on an organization or individual account. Installation tokens expire one hour from the time you create them. Using an expired token produces a status code of `401 - Unauthorized`, and requires creating a new installation token. By default the installation token has access to all repositories that the installation can access. To restrict the access to specific repositories, you can provide the `repository_ids` when creating the token. When you omit `repository_ids`, the response does not contain the `repositories` key.
    *
-   * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
    * operationId: apps/create-installation-access-token
    * Request URI: /app/installations/{installation_id}/access_tokens
    */
@@ -19697,7 +21866,7 @@ export class Client<RequestOption> {
    * Suspend an app installation
    * Suspends a GitHub App on a user, organization, or business account, which blocks the app from accessing the account's resources. When a GitHub App is suspended, the app's access to the GitHub Enterprise Server API or webhook events is blocked for that account.
    *
-   * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
    * operationId: apps/suspend-installation
    * Request URI: /app/installations/{installation_id}/suspended
    */
@@ -19710,7 +21879,7 @@ export class Client<RequestOption> {
    * Unsuspend an app installation
    * Removes a GitHub App installation suspension.
    *
-   * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
    * operationId: apps/unsuspend-installation
    * Request URI: /app/installations/{installation_id}/suspended
    */
@@ -19722,9 +21891,9 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * List your grants
-   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.0/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
+   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.4/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
    *
-   * You can use this API to list the set of OAuth applications that have been granted access to your account. Unlike the [list your authorizations](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations#list-your-authorizations) API, this API does not manage individual tokens. This API will return one entry for each OAuth application that has been granted access to your account, regardless of the number of tokens an application has generated for your user. The list of OAuth applications returned matches what is shown on [the application authorizations settings screen within GitHub](https://github.com/settings/applications#authorized). The `scopes` returned are the union of scopes authorized for the application. For example, if an application has one token with `repo` scope and another token with `user` scope, the grant will return `["repo", "user"]`.
+   * You can use this API to list the set of OAuth applications that have been granted access to your account. Unlike the [list your authorizations](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations#list-your-authorizations) API, this API does not manage individual tokens. This API will return one entry for each OAuth application that has been granted access to your account, regardless of the number of tokens an application has generated for your user. The list of OAuth applications returned matches what is shown on [the application authorizations settings screen within GitHub](https://github.com/settings/applications#authorized). The `scopes` returned are the union of scopes authorized for the application. For example, if an application has one token with `repo` scope and another token with `user` scope, the grant will return `["repo", "user"]`.
    * operationId: oauth-authorizations/list-grants
    * Request URI: /applications/grants
    */
@@ -19746,7 +21915,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Get a single grant
-   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
+   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
    * operationId: oauth-authorizations/get-grant
    * Request URI: /applications/grants/{grant_id}
    */
@@ -19763,7 +21932,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Delete a grant
-   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.0/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations/) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
+   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.4/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations/) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
    *
    * Deleting an OAuth application's grant will also delete all OAuth tokens associated with the application for your user. Once deleted, the application has no access to your account and is no longer listed on [the application authorizations settings screen within GitHub](https://github.com/settings/applications#authorized).
    * operationId: oauth-authorizations/delete-grant
@@ -19776,7 +21945,7 @@ export class Client<RequestOption> {
   }
   /**
    * Delete an app authorization
-   * OAuth application owners can revoke a grant for their OAuth application and a specific user. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password. You must also provide a valid OAuth `access_token` as an input parameter and the grant for the token's owner will be deleted.
+   * OAuth application owners can revoke a grant for their OAuth application and a specific user. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.4/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password. You must also provide a valid OAuth `access_token` as an input parameter and the grant for the token's owner will be deleted.
    * Deleting an OAuth application's grant will also delete all OAuth tokens associated with the application for the user. Once deleted, the application will have no access to the user's account and will no longer be listed on [the application authorizations settings screen within GitHub](https://github.com/settings/applications#authorized).
    * operationId: apps/delete-authorization
    * Request URI: /applications/{client_id}/grant
@@ -19789,24 +21958,8 @@ export class Client<RequestOption> {
     return this.apiClient.request("DELETE", url, headers, params.requestBody, undefined, option);
   }
   /**
-   * @deprecated
-   * Revoke a grant for an application
-   * **Deprecation Notice:** GitHub Enterprise Server will discontinue OAuth endpoints that contain `access_token` in the path parameter. We have introduced new endpoints that allow you to securely manage tokens for OAuth Apps by moving `access_token` to the request body. For more information, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-app-endpoint/).
-   *
-   * OAuth application owners can revoke a grant for their OAuth application and a specific user. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password. You must also provide a valid token as `:access_token` and the grant for the token's owner will be deleted.
-   *
-   * Deleting an OAuth application's grant will also delete all OAuth tokens associated with the application for the user. Once deleted, the application will have no access to the user's account and will no longer be listed on [the Applications settings page under "Authorized OAuth Apps" on GitHub Enterprise Server](https://github.com/settings/applications#authorized).
-   * operationId: apps/revoke-grant-for-application
-   * Request URI: /applications/{client_id}/grants/{access_token}
-   */
-  public async apps$revoke$grant$for$application(params: Params$apps$revoke$grant$for$application, option?: RequestOption): Promise<void> {
-    const url = this.baseUrl + `/applications/${params.parameter.client_id}/grants/${params.parameter.access_token}`;
-    const headers = {};
-    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
-  }
-  /**
    * Check a token
-   * OAuth applications can use a special API method for checking OAuth token validity without exceeding the normal rate limits for failed login attempts. Authentication works differently with this particular endpoint. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication) to use this endpoint, where the username is the OAuth application `client_id` and the password is its `client_secret`. Invalid tokens will return `404 NOT FOUND`.
+   * OAuth applications can use a special API method for checking OAuth token validity without exceeding the normal rate limits for failed login attempts. Authentication works differently with this particular endpoint. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.4/rest/overview/other-authentication-methods#basic-authentication) to use this endpoint, where the username is the OAuth application `client_id` and the password is its `client_secret`. Invalid tokens will return `404 NOT FOUND`.
    * operationId: apps/check-token
    * Request URI: /applications/{client_id}/token
    */
@@ -19823,7 +21976,7 @@ export class Client<RequestOption> {
   }
   /**
    * Delete an app token
-   * OAuth application owners can revoke a single token for an OAuth application. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password.
+   * OAuth application owners can revoke a single token for an OAuth application. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.4/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password.
    * operationId: apps/delete-token
    * Request URI: /applications/{client_id}/token
    */
@@ -19836,7 +21989,7 @@ export class Client<RequestOption> {
   }
   /**
    * Reset a token
-   * OAuth applications can use this API method to reset a valid OAuth token without end-user involvement. Applications must save the "token" property in the response because changes take effect immediately. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password. Invalid tokens will return `404 NOT FOUND`.
+   * OAuth applications can use this API method to reset a valid OAuth token without end-user involvement. Applications must save the "token" property in the response because changes take effect immediately. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.4/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password. Invalid tokens will return `404 NOT FOUND`.
    * operationId: apps/reset-token
    * Request URI: /applications/{client_id}/token
    */
@@ -19853,7 +22006,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create a scoped access token
-   * Use a non-scoped user-to-server OAuth access token to create a repository scoped and/or permission scoped user-to-server OAuth access token. You can specify which repositories the token can access and which permissions are granted to the token. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password. Invalid tokens will return `404 NOT FOUND`.
+   * Use a non-scoped user-to-server OAuth access token to create a repository scoped and/or permission scoped user-to-server OAuth access token. You can specify which repositories the token can access and which permissions are granted to the token. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.4/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password. Invalid tokens will return `404 NOT FOUND`.
    * operationId: apps/scope-token
    * Request URI: /applications/{client_id}/token/scoped
    */
@@ -19869,65 +22022,10 @@ export class Client<RequestOption> {
     return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
   }
   /**
-   * @deprecated
-   * Check an authorization
-   * **Deprecation Notice:** GitHub Enterprise Server will discontinue OAuth endpoints that contain `access_token` in the path parameter. We have introduced new endpoints that allow you to securely manage tokens for OAuth Apps by moving `access_token` to the request body. For more information, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-app-endpoint/).
-   *
-   * OAuth applications can use a special API method for checking OAuth token validity without exceeding the normal rate limits for failed login attempts. Authentication works differently with this particular endpoint. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password. Invalid tokens will return `404 NOT FOUND`.
-   * operationId: apps/check-authorization
-   * Request URI: /applications/{client_id}/tokens/{access_token}
-   */
-  public async apps$check$authorization(
-    params: Params$apps$check$authorization,
-    option?: RequestOption,
-  ): Promise<Response$apps$check$authorization$Status$200["application/json"]> {
-    const url = this.baseUrl + `/applications/${params.parameter.client_id}/tokens/${params.parameter.access_token}`;
-    const headers = {
-      Accept: "application/json",
-    };
-    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
-  }
-  /**
-   * @deprecated
-   * Reset an authorization
-   * **Deprecation Notice:** GitHub Enterprise Server will discontinue OAuth endpoints that contain `access_token` in the path parameter. We have introduced new endpoints that allow you to securely manage tokens for OAuth Apps by moving `access_token` to the request body. For more information, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-app-endpoint/).
-   *
-   * OAuth applications can use this API method to reset a valid OAuth token without end-user involvement. Applications must save the "token" property in the response because changes take effect immediately. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password. Invalid tokens will return `404 NOT FOUND`.
-   * operationId: apps/reset-authorization
-   * Request URI: /applications/{client_id}/tokens/{access_token}
-   */
-  public async apps$reset$authorization(
-    params: Params$apps$reset$authorization,
-    option?: RequestOption,
-  ): Promise<Response$apps$reset$authorization$Status$200["application/json"]> {
-    const url = this.baseUrl + `/applications/${params.parameter.client_id}/tokens/${params.parameter.access_token}`;
-    const headers = {
-      Accept: "application/json",
-    };
-    return this.apiClient.request("POST", url, headers, undefined, undefined, option);
-  }
-  /**
-   * @deprecated
-   * Revoke an authorization for an application
-   * **Deprecation Notice:** GitHub Enterprise Server will discontinue OAuth endpoints that contain `access_token` in the path parameter. We have introduced new endpoints that allow you to securely manage tokens for OAuth Apps by moving `access_token` to the request body. For more information, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-app-endpoint/).
-   *
-   * OAuth application owners can revoke a single token for an OAuth application. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password.
-   * operationId: apps/revoke-authorization-for-application
-   * Request URI: /applications/{client_id}/tokens/{access_token}
-   */
-  public async apps$revoke$authorization$for$application(
-    params: Params$apps$revoke$authorization$for$application,
-    option?: RequestOption,
-  ): Promise<void> {
-    const url = this.baseUrl + `/applications/${params.parameter.client_id}/tokens/${params.parameter.access_token}`;
-    const headers = {};
-    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
-  }
-  /**
    * Get an app
    * **Note**: The `:app_slug` is just the URL-friendly name of your GitHub App. You can find this on the settings page for your GitHub App (e.g., `https://github.com/settings/apps/:app_slug`).
    *
-   * If the GitHub App you specify is public, you can access this endpoint without authenticating. If the GitHub App you specify is private, you must authenticate with a [personal access token](https://docs.github.com/articles/creating-a-personal-access-token-for-the-command-line/) or an [installation access token](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation) to access this endpoint.
+   * If the GitHub App you specify is public, you can access this endpoint without authenticating. If the GitHub App you specify is private, you must authenticate with a [personal access token](https://docs.github.com/articles/creating-a-personal-access-token-for-the-command-line/) or an [installation access token](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation) to access this endpoint.
    * operationId: apps/get-by-slug
    * Request URI: /apps/{app_slug}
    */
@@ -19944,7 +22042,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * List your authorizations
-   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
+   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
    * operationId: oauth-authorizations/list-authorizations
    * Request URI: /authorizations
    */
@@ -19966,11 +22064,11 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Create a new authorization
-   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.0/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
+   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.4/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
    *
-   * **Warning:** Apps must use the [web application flow](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow) to obtain OAuth tokens that work with GitHub Enterprise Server SAML organizations. OAuth tokens created using the Authorizations API will be unable to access GitHub Enterprise Server SAML organizations. For more information, see the [blog post](https://developer.github.com/changes/2019-11-05-deprecated-passwords-and-authorizations-api).
+   * **Warning:** Apps must use the [web application flow](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow) to obtain OAuth tokens that work with GitHub Enterprise Server SAML organizations. OAuth tokens created using the Authorizations API will be unable to access GitHub Enterprise Server SAML organizations. For more information, see the [blog post](https://developer.github.com/changes/2019-11-05-deprecated-passwords-and-authorizations-api).
    *
-   * Creates OAuth tokens using [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication). If you have two-factor authentication setup, Basic Authentication for this endpoint requires that you use a one-time password (OTP) and your username and password instead of tokens. For more information, see "[Working with two-factor authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#working-with-two-factor-authentication)."
+   * Creates OAuth tokens using [Basic Authentication](https://docs.github.com/enterprise-server@3.4/rest/overview/other-authentication-methods#basic-authentication). If you have two-factor authentication setup, Basic Authentication for this endpoint requires that you use a one-time password (OTP) and your username and password instead of tokens. For more information, see "[Working with two-factor authentication](https://docs.github.com/enterprise-server@3.4/rest/overview/other-authentication-methods#working-with-two-factor-authentication)."
    *
    * To create tokens for a particular OAuth application using this endpoint, you must authenticate as the user you want to create an authorization for and provide the app's client ID and secret, found on your OAuth application's settings page. If your OAuth application intends to create multiple tokens for one user, use `fingerprint` to differentiate between them.
    *
@@ -19994,15 +22092,15 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Get-or-create an authorization for a specific app
-   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.0/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
+   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.4/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
    *
-   * **Warning:** Apps must use the [web application flow](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow) to obtain OAuth tokens that work with GitHub Enterprise Server SAML organizations. OAuth tokens created using the Authorizations API will be unable to access GitHub Enterprise Server SAML organizations. For more information, see the [blog post](https://developer.github.com/changes/2019-11-05-deprecated-passwords-and-authorizations-api).
+   * **Warning:** Apps must use the [web application flow](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow) to obtain OAuth tokens that work with GitHub Enterprise Server SAML organizations. OAuth tokens created using the Authorizations API will be unable to access GitHub Enterprise Server SAML organizations. For more information, see the [blog post](https://developer.github.com/changes/2019-11-05-deprecated-passwords-and-authorizations-api).
    *
    * Creates a new authorization for the specified OAuth application, only if an authorization for that application doesn't already exist for the user. The URL includes the 20 character client ID for the OAuth app that is requesting the token. It returns the user's existing authorization for the application if one is present. Otherwise, it creates and returns a new one.
    *
-   * If you have two-factor authentication setup, Basic Authentication for this endpoint requires that you use a one-time password (OTP) and your username and password instead of tokens. For more information, see "[Working with two-factor authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#working-with-two-factor-authentication)."
+   * If you have two-factor authentication setup, Basic Authentication for this endpoint requires that you use a one-time password (OTP) and your username and password instead of tokens. For more information, see "[Working with two-factor authentication](https://docs.github.com/enterprise-server@3.4/rest/overview/other-authentication-methods#working-with-two-factor-authentication)."
    *
-   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.0/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
+   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.4/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
    * operationId: oauth-authorizations/get-or-create-authorization-for-app
    * Request URI: /authorizations/clients/{client_id}
    */
@@ -20025,13 +22123,13 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Get-or-create an authorization for a specific app and fingerprint
-   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.0/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
+   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.4/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
    *
-   * **Warning:** Apps must use the [web application flow](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow) to obtain OAuth tokens that work with GitHub Enterprise Server SAML organizations. OAuth tokens created using the Authorizations API will be unable to access GitHub Enterprise Server SAML organizations. For more information, see the [blog post](https://developer.github.com/changes/2019-11-05-deprecated-passwords-and-authorizations-api).
+   * **Warning:** Apps must use the [web application flow](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow) to obtain OAuth tokens that work with GitHub Enterprise Server SAML organizations. OAuth tokens created using the Authorizations API will be unable to access GitHub Enterprise Server SAML organizations. For more information, see the [blog post](https://developer.github.com/changes/2019-11-05-deprecated-passwords-and-authorizations-api).
    *
    * This method will create a new authorization for the specified OAuth application, only if an authorization for that application and fingerprint do not already exist for the user. The URL includes the 20 character client ID for the OAuth app that is requesting the token. `fingerprint` is a unique string to distinguish an authorization from others created for the same client ID and user. It returns the user's existing authorization for the application if one is present. Otherwise, it creates and returns a new one.
    *
-   * If you have two-factor authentication setup, Basic Authentication for this endpoint requires that you use a one-time password (OTP) and your username and password instead of tokens. For more information, see "[Working with two-factor authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#working-with-two-factor-authentication)."
+   * If you have two-factor authentication setup, Basic Authentication for this endpoint requires that you use a one-time password (OTP) and your username and password instead of tokens. For more information, see "[Working with two-factor authentication](https://docs.github.com/enterprise-server@3.4/rest/overview/other-authentication-methods#working-with-two-factor-authentication)."
    * operationId: oauth-authorizations/get-or-create-authorization-for-app-and-fingerprint
    * Request URI: /authorizations/clients/{client_id}/{fingerprint}
    */
@@ -20054,7 +22152,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Get a single authorization
-   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
+   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
    * operationId: oauth-authorizations/get-authorization
    * Request URI: /authorizations/{authorization_id}
    */
@@ -20071,7 +22169,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Delete an authorization
-   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
+   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
    * operationId: oauth-authorizations/delete-authorization
    * Request URI: /authorizations/{authorization_id}
    */
@@ -20086,9 +22184,9 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Update an existing authorization
-   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.0/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.0/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
+   * **Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.4/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.4/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
    *
-   * If you have two-factor authentication setup, Basic Authentication for this endpoint requires that you use a one-time password (OTP) and your username and password instead of tokens. For more information, see "[Working with two-factor authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#working-with-two-factor-authentication)."
+   * If you have two-factor authentication setup, Basic Authentication for this endpoint requires that you use a one-time password (OTP) and your username and password instead of tokens. For more information, see "[Working with two-factor authentication](https://docs.github.com/enterprise-server@3.4/rest/overview/other-authentication-methods#working-with-two-factor-authentication)."
    *
    * You can only send one of these scope keys at a time.
    * operationId: oauth-authorizations/update-authorization
@@ -20506,7 +22604,7 @@ export class Client<RequestOption> {
    * List self-hosted runner groups for an enterprise
    * Lists all self-hosted runner groups for an enterprise.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/list-self-hosted-runner-groups-for-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runner-groups
    */
@@ -20528,7 +22626,7 @@ export class Client<RequestOption> {
    * Create a self-hosted runner group for an enterprise
    * Creates a new self-hosted runner group for an enterprise.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/create-self-hosted-runner-group-for-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runner-groups
    */
@@ -20547,7 +22645,7 @@ export class Client<RequestOption> {
    * Get a self-hosted runner group for an enterprise
    * Gets a specific self-hosted runner group for an enterprise.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/get-self-hosted-runner-group-for-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}
    */
@@ -20565,7 +22663,7 @@ export class Client<RequestOption> {
    * Delete a self-hosted runner group from an enterprise
    * Deletes a self-hosted runner group for an enterprise.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/delete-self-hosted-runner-group-from-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}
    */
@@ -20581,7 +22679,7 @@ export class Client<RequestOption> {
    * Update a self-hosted runner group for an enterprise
    * Updates the `name` and `visibility` of a self-hosted runner group in an enterprise.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/update-self-hosted-runner-group-for-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}
    */
@@ -20600,7 +22698,7 @@ export class Client<RequestOption> {
    * List organization access to a self-hosted runner group in an enterprise
    * Lists the organizations with access to a self-hosted runner group.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/list-org-access-to-self-hosted-runner-group-in-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations
    */
@@ -20623,7 +22721,7 @@ export class Client<RequestOption> {
    * Set organization access for a self-hosted runner group in an enterprise
    * Replaces the list of organizations that have access to a self-hosted runner configured in an enterprise.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/set-org-access-to-self-hosted-runner-group-in-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations
    */
@@ -20642,7 +22740,7 @@ export class Client<RequestOption> {
    * Add organization access to a self-hosted runner group in an enterprise
    * Adds an organization to the list of selected organizations that can access a self-hosted runner group. The runner group must have `visibility` set to `selected`. For more information, see "[Create a self-hosted runner group for an enterprise](#create-a-self-hosted-runner-group-for-an-enterprise)."
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/add-org-access-to-self-hosted-runner-group-in-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations/{org_id}
    */
@@ -20660,7 +22758,7 @@ export class Client<RequestOption> {
    * Remove organization access to a self-hosted runner group in an enterprise
    * Removes an organization from the list of selected organizations that can access a self-hosted runner group. The runner group must have `visibility` set to `selected`. For more information, see "[Create a self-hosted runner group for an enterprise](#create-a-self-hosted-runner-group-for-an-enterprise)."
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/remove-org-access-to-self-hosted-runner-group-in-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations/{org_id}
    */
@@ -20678,7 +22776,7 @@ export class Client<RequestOption> {
    * List self-hosted runners in a group for an enterprise
    * Lists the self-hosted runners that are in a specific enterprise group.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/list-self-hosted-runners-in-group-for-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners
    */
@@ -20700,7 +22798,7 @@ export class Client<RequestOption> {
    * Set self-hosted runners in a group for an enterprise
    * Replaces the list of self-hosted runners that are part of an enterprise runner group.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/set-self-hosted-runners-in-group-for-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners
    */
@@ -20718,7 +22816,7 @@ export class Client<RequestOption> {
    * Add a self-hosted runner to a group for an enterprise
    * Adds a self-hosted runner to a runner group configured in an enterprise.
    *
-   * You must authenticate using an access token with the `admin:enterprise`
+   * You must authenticate using an access token with the `manage_runners:enterprise`
    * scope to use this endpoint.
    * operationId: enterprise-admin/add-self-hosted-runner-to-group-for-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners/{runner_id}
@@ -20737,7 +22835,7 @@ export class Client<RequestOption> {
    * Remove a self-hosted runner from a group for an enterprise
    * Removes a self-hosted runner from a group configured in an enterprise. The runner is then returned to the default group.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/remove-self-hosted-runner-from-group-for-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners/{runner_id}
    */
@@ -20755,7 +22853,7 @@ export class Client<RequestOption> {
    * List self-hosted runners for an enterprise
    * Lists all self-hosted runners configured for an enterprise.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/list-self-hosted-runners-for-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runners
    */
@@ -20777,7 +22875,7 @@ export class Client<RequestOption> {
    * List runner applications for an enterprise
    * Lists binaries for the runner application that you can download and run.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/list-runner-applications-for-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runners/downloads
    */
@@ -20795,7 +22893,7 @@ export class Client<RequestOption> {
    * Create a registration token for an enterprise
    * Returns a token that you can pass to the `config` script. The token expires after one hour.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    *
    * #### Example using registration token
    *
@@ -20821,7 +22919,7 @@ export class Client<RequestOption> {
    * Create a remove token for an enterprise
    * Returns a token that you can pass to the `config` script to remove a self-hosted runner from an enterprise. The token expires after one hour.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    *
    * #### Example using remove token
    *
@@ -20848,7 +22946,7 @@ export class Client<RequestOption> {
    * Get a self-hosted runner for an enterprise
    * Gets a specific self-hosted runner configured in an enterprise.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/get-self-hosted-runner-for-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runners/{runner_id}
    */
@@ -20866,7 +22964,7 @@ export class Client<RequestOption> {
    * Delete a self-hosted runner from an enterprise
    * Forces the removal of a self-hosted runner from an enterprise. You can use this endpoint to completely remove the runner when the machine you were using no longer exists.
    *
-   * You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
    * operationId: enterprise-admin/delete-self-hosted-runner-from-enterprise
    * Request URI: /enterprises/{enterprise}/actions/runners/{runner_id}
    */
@@ -20877,6 +22975,177 @@ export class Client<RequestOption> {
     const url = this.baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}`;
     const headers = {};
     return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
+  }
+  /**
+   * List labels for a self-hosted runner for an enterprise
+   * Lists all labels for a self-hosted runner configured in an enterprise.
+   *
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
+   * operationId: enterprise-admin/list-labels-for-self-hosted-runner-for-enterprise
+   * Request URI: /enterprises/{enterprise}/actions/runners/{runner_id}/labels
+   */
+  public async enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise(
+    params: Params$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise,
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}/labels`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Set custom labels for a self-hosted runner for an enterprise
+   * Remove all previous custom labels and set the new custom labels for a specific
+   * self-hosted runner configured in an enterprise.
+   *
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
+   * operationId: enterprise-admin/set-custom-labels-for-self-hosted-runner-for-enterprise
+   * Request URI: /enterprises/{enterprise}/actions/runners/{runner_id}/labels
+   */
+  public async enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise(
+    params: Params$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise,
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}/labels`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("PUT", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Add custom labels to a self-hosted runner for an enterprise
+   * Add custom labels to a self-hosted runner configured in an enterprise.
+   *
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
+   * operationId: enterprise-admin/add-custom-labels-to-self-hosted-runner-for-enterprise
+   * Request URI: /enterprises/{enterprise}/actions/runners/{runner_id}/labels
+   */
+  public async enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise(
+    params: Params$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise,
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}/labels`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Remove all custom labels from a self-hosted runner for an enterprise
+   * Remove all custom labels from a self-hosted runner configured in an
+   * enterprise. Returns the remaining read-only labels from the runner.
+   *
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
+   * operationId: enterprise-admin/remove-all-custom-labels-from-self-hosted-runner-for-enterprise
+   * Request URI: /enterprises/{enterprise}/actions/runners/{runner_id}/labels
+   */
+  public async enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise(
+    params: Params$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise,
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}/labels`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Remove a custom label from a self-hosted runner for an enterprise
+   * Remove a custom label from a self-hosted runner configured
+   * in an enterprise. Returns the remaining labels from the runner.
+   *
+   * This endpoint returns a `404 Not Found` status if the custom label is not
+   * present on the runner.
+   *
+   * You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
+   * operationId: enterprise-admin/remove-custom-label-from-self-hosted-runner-for-enterprise
+   * Request URI: /enterprises/{enterprise}/actions/runners/{runner_id}/labels/{name}
+   */
+  public async enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise(
+    params: Params$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise,
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$200["application/json"]> {
+    const url =
+      this.baseUrl +
+      `/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}/labels/${params.parameter.name}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get the audit log for an enterprise
+   * Gets the audit log for an enterprise. To use this endpoint, you must be an enterprise admin, and you must use an access token with the `admin:enterprise` scope.
+   * operationId: enterprise-admin/get-audit-log
+   * Request URI: /enterprises/{enterprise}/audit-log
+   */
+  public async enterprise$admin$get$audit$log(
+    params: Params$enterprise$admin$get$audit$log,
+    option?: RequestOption,
+  ): Promise<Response$enterprise$admin$get$audit$log$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprises/${params.parameter.enterprise}/audit-log`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      phrase: { value: params.parameter.phrase, explode: false },
+      include: { value: params.parameter.include, explode: false },
+      after: { value: params.parameter.after, explode: false },
+      before: { value: params.parameter.before, explode: false },
+      order: { value: params.parameter.order, explode: false },
+      page: { value: params.parameter.page, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * List secret scanning alerts for an enterprise
+   * Lists secret scanning alerts for eligible repositories in an enterprise, from newest to oldest.
+   * To use this endpoint, you must be a member of the enterprise, and you must use an access token with the `repo` scope or `security_events` scope. Alerts are only returned for organizations in the enterprise for which you are an organization owner or a [security manager](https://docs.github.com/enterprise-server@3.4/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization).
+   * operationId: secret-scanning/list-alerts-for-enterprise
+   * Request URI: /enterprises/{enterprise}/secret-scanning/alerts
+   */
+  public async secret$scanning$list$alerts$for$enterprise(
+    params: Params$secret$scanning$list$alerts$for$enterprise,
+    option?: RequestOption,
+  ): Promise<Response$secret$scanning$list$alerts$for$enterprise$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprises/${params.parameter.enterprise}/secret-scanning/alerts`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      state: { value: params.parameter.state, explode: false },
+      secret_type: { value: params.parameter.secret_type, explode: false },
+      resolution: { value: params.parameter.resolution, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
+      before: { value: params.parameter.before, explode: false },
+      after: { value: params.parameter.after, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * Get GitHub Advanced Security active committers for an enterprise
+   * Gets the GitHub Advanced Security active committers for an enterprise per repository.
+   * Each distinct user login across all repositories is counted as a single Advanced Security seat, so the total_advanced_security_committers is not the sum of active_users for each repository.
+   * operationId: billing/get-github-advanced-security-billing-ghe
+   * Request URI: /enterprises/{enterprise}/settings/billing/advanced-security
+   */
+  public async billing$get$github$advanced$security$billing$ghe(
+    params: Params$billing$get$github$advanced$security$billing$ghe,
+    option?: RequestOption,
+  ): Promise<Response$billing$get$github$advanced$security$billing$ghe$Status$200["application/json"]> {
+    const url = this.baseUrl + `/enterprises/${params.parameter.enterprise}/settings/billing/advanced-security`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      per_page: { value: params.parameter.per_page, explode: false },
+      page: { value: params.parameter.page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
    * List public events
@@ -20903,14 +23172,14 @@ export class Client<RequestOption> {
    * GitHub Enterprise Server provides several timeline resources in [Atom](http://en.wikipedia.org/wiki/Atom_(standard)) format. The Feeds API lists all the feeds available to the authenticated user:
    *
    * *   **Timeline**: The GitHub Enterprise Server global public timeline
-   * *   **User**: The public timeline for any user, using [URI template](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#hypermedia)
+   * *   **User**: The public timeline for any user, using [URI template](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#hypermedia)
    * *   **Current user public**: The public timeline for the authenticated user
    * *   **Current user**: The private timeline for the authenticated user
    * *   **Current user actor**: The private timeline for activity created by the authenticated user
    * *   **Current user organizations**: The private timeline for the organizations the authenticated user is a member of.
    * *   **Security advisories**: A collection of public announcements that provide information about security-related vulnerabilities in software on GitHub Enterprise Server.
    *
-   * **Note**: Private feeds are only returned when [authenticating via Basic Auth](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication) since current feed URIs use the older, non revocable auth tokens.
+   * **Note**: Private feeds are only returned when [authenticating via Basic Auth](https://docs.github.com/enterprise-server@3.4/rest/overview/other-authentication-methods#basic-authentication) since current feed URIs use the older, non revocable auth tokens.
    * operationId: activity/get-feeds
    * Request URI: /feeds
    */
@@ -20962,7 +23231,7 @@ export class Client<RequestOption> {
    * List public gists
    * List public gists sorted by most recently updated to least recently updated.
    *
-   * Note: With [pagination](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#pagination), you can fetch up to 3000 gists. For example, you can fetch 100 pages with 30 gists per page or 30 pages with 100 gists per page.
+   * Note: With [pagination](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#pagination), you can fetch up to 3000 gists. For example, you can fetch 100 pages with 30 gists per page or 30 pages with 100 gists per page.
    * operationId: gists/list-public
    * Request URI: /gists/public
    */
@@ -21180,7 +23449,7 @@ export class Client<RequestOption> {
   }
   /**
    * Star a gist
-   * Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
+   * Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#http-verbs)."
    * operationId: gists/star
    * Request URI: /gists/{gist_id}/star
    */
@@ -21216,7 +23485,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get all gitignore templates
-   * List all templates available to pass as an option when [creating a repository](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#create-a-repository-for-the-authenticated-user).
+   * List all templates available to pass as an option when [creating a repository](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#create-a-repository-for-the-authenticated-user).
    * operationId: gitignore/get-all-templates
    * Request URI: /gitignore/templates
    */
@@ -21232,7 +23501,7 @@ export class Client<RequestOption> {
   /**
    * Get a gitignore template
    * The API also allows fetching the source of a single template.
-   * Use the raw [media type](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types/) to get the raw contents.
+   * Use the raw [media type](https://docs.github.com/enterprise-server@3.4/rest/overview/media-types/) to get the raw contents.
    * operationId: gitignore/get-template
    * Request URI: /gitignore/templates/{name}
    */
@@ -21250,7 +23519,7 @@ export class Client<RequestOption> {
    * List repositories accessible to the app installation
    * List repositories that an app installation can access.
    *
-   * You must use an [installation access token](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation) to access this endpoint.
+   * You must use an [installation access token](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation) to access this endpoint.
    * operationId: apps/list-repos-accessible-to-installation
    * Request URI: /installation/repositories
    */
@@ -21272,9 +23541,9 @@ export class Client<RequestOption> {
    * Revoke an installation access token
    * Revokes the installation token you're using to authenticate as an installation and access this endpoint.
    *
-   * Once an installation token is revoked, the token is invalidated and cannot be used. Other endpoints that require the revoked installation token must have a new installation token to work. You can create a new token using the "[Create an installation access token for an app](https://docs.github.com/enterprise-server@3.0/rest/reference/apps#create-an-installation-access-token-for-an-app)" endpoint.
+   * Once an installation token is revoked, the token is invalidated and cannot be used. Other endpoints that require the revoked installation token must have a new installation token to work. You can create a new token using the "[Create an installation access token for an app](https://docs.github.com/enterprise-server@3.4/rest/reference/apps#create-an-installation-access-token-for-an-app)" endpoint.
    *
-   * You must use an [installation access token](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation) to access this endpoint.
+   * You must use an [installation access token](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation) to access this endpoint.
    * operationId: apps/revoke-installation-access-token
    * Request URI: /installation/token
    */
@@ -21293,7 +23562,7 @@ export class Client<RequestOption> {
    * **Note**: GitHub's REST API v3 considers every pull request an issue, but not every issue is a pull request. For this
    * reason, "Issues" endpoints may return both issues and pull requests in the response. You can identify pull requests by
    * the `pull_request` key. Be aware that the `id` of a pull request returned from "Issues" endpoints will be an _issue id_. To find out the pull
-   * request id, use the "[List pull requests](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#list-pull-requests)" endpoint.
+   * request id, use the "[List pull requests](https://docs.github.com/enterprise-server@3.4/rest/reference/pulls#list-pull-requests)" endpoint.
    * operationId: issues/list
    * Request URI: /issues
    */
@@ -21443,7 +23712,7 @@ export class Client<RequestOption> {
   }
   /**
    * Mark notifications as read
-   * Marks all notifications as "read" removes it from the [default view on GitHub Enterprise Server](https://github.com/notifications). If the number of notifications is too large to complete in one request, you will receive a `202 Accepted` status and GitHub Enterprise Server will run an asynchronous process to mark notifications as "read." To check whether any "unread" notifications remain, you can use the [List notifications for the authenticated user](https://docs.github.com/enterprise-server@3.0/rest/reference/activity#list-notifications-for-the-authenticated-user) endpoint and pass the query parameter `all=false`.
+   * Marks all notifications as "read" removes it from the [default view on GitHub Enterprise Server](https://github.com/notifications). If the number of notifications is too large to complete in one request, you will receive a `202 Accepted` status and GitHub Enterprise Server will run an asynchronous process to mark notifications as "read." To check whether any "unread" notifications remain, you can use the [List notifications for the authenticated user](https://docs.github.com/enterprise-server@3.4/rest/reference/activity#list-notifications-for-the-authenticated-user) endpoint and pass the query parameter `all=false`.
    * operationId: activity/mark-notifications-as-read
    * Request URI: /notifications
    */
@@ -21485,7 +23754,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get a thread subscription for the authenticated user
-   * This checks to see if the current user is subscribed to a thread. You can also [get a repository subscription](https://docs.github.com/enterprise-server@3.0/rest/reference/activity#get-a-repository-subscription).
+   * This checks to see if the current user is subscribed to a thread. You can also [get a repository subscription](https://docs.github.com/enterprise-server@3.4/rest/reference/activity#get-a-repository-subscription).
    *
    * Note that subscriptions are only generated if a user is participating in a conversation--for example, they've replied to the thread, were **@mentioned**, or manually subscribe to a thread.
    * operationId: activity/get-thread-subscription-for-authenticated-user
@@ -21507,7 +23776,7 @@ export class Client<RequestOption> {
    *
    * You can also use this endpoint to subscribe to threads that you are currently not receiving notifications for or to subscribed to threads that you have previously ignored.
    *
-   * Unsubscribing from a conversation in a repository that you are not watching is functionally equivalent to the [Delete a thread subscription](https://docs.github.com/enterprise-server@3.0/rest/reference/activity#delete-a-thread-subscription) endpoint.
+   * Unsubscribing from a conversation in a repository that you are not watching is functionally equivalent to the [Delete a thread subscription](https://docs.github.com/enterprise-server@3.4/rest/reference/activity#delete-a-thread-subscription) endpoint.
    * operationId: activity/set-thread-subscription
    * Request URI: /notifications/threads/{thread_id}/subscription
    */
@@ -21524,7 +23793,7 @@ export class Client<RequestOption> {
   }
   /**
    * Delete a thread subscription
-   * Mutes all future notifications for a conversation until you comment on the thread or get an **@mention**. If you are watching the repository of the thread, you will still receive notifications. To ignore future notifications for a repository you are watching, use the [Set a thread subscription](https://docs.github.com/enterprise-server@3.0/rest/reference/activity#set-a-thread-subscription) endpoint and set `ignore` to `true`.
+   * Mutes all future notifications for a conversation until you comment on the thread or get an **@mention**. If you are watching the repository of the thread, you will still receive notifications. To ignore future notifications for a repository you are watching, use the [Set a thread subscription](https://docs.github.com/enterprise-server@3.4/rest/reference/activity#set-a-thread-subscription) endpoint and set `ignore` to `true`.
    * operationId: activity/delete-thread-subscription
    * Request URI: /notifications/threads/{thread_id}/subscription
    */
@@ -21556,7 +23825,7 @@ export class Client<RequestOption> {
    * List organizations
    * Lists all organizations, in the order that they were created on GitHub Enterprise Server.
    *
-   * **Note:** Pagination is powered exclusively by the `since` parameter. Use the [Link header](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#link-header) to get the URL for the next page of organizations.
+   * **Note:** Pagination is powered exclusively by the `since` parameter. Use the [Link header](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#link-header) to get the URL for the next page of organizations.
    * operationId: orgs/list
    * Request URI: /organizations
    */
@@ -21572,10 +23841,29 @@ export class Client<RequestOption> {
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
+   * List custom repository roles in an organization
+   * List the custom repository roles available in this organization. In order to see custom
+   * repository roles in an organization, the authenticated user must be an organization owner.
+   *
+   * For more information on custom repository roles, see "[Managing custom repository roles for an organization](https://docs.github.com/enterprise-server@3.4/organizations/managing-peoples-access-to-your-organization-with-roles/managing-custom-repository-roles-for-an-organization)".
+   * operationId: orgs/list-custom-roles
+   * Request URI: /organizations/{organization_id}/custom_roles
+   */
+  public async orgs$list$custom$roles(
+    params: Params$orgs$list$custom$roles,
+    option?: RequestOption,
+  ): Promise<Response$orgs$list$custom$roles$Status$200["application/json"]> {
+    const url = this.baseUrl + `/organizations/${params.parameter.organization_id}/custom_roles`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
    * Get an organization
    * To see many of the organization response values, you need to be an authenticated organization owner with the `admin:org` scope. When the value of `two_factor_requirement_enabled` is `true`, the organization requires all members, billing managers, and outside collaborators to enable [two-factor authentication](https://docs.github.com/articles/securing-your-account-with-two-factor-authentication-2fa/).
    *
-   * GitHub Apps with the `Organization plan` permission can use this endpoint to retrieve information about an organization's GitHub Enterprise Server plan. See "[Authenticating with GitHub Apps](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/)" for details. For an example response, see 'Response with GitHub Enterprise Server plan information' below."
+   * GitHub Apps with the `Organization plan` permission can use this endpoint to retrieve information about an organization's GitHub Enterprise Server plan. See "[Authenticating with GitHub Apps](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/)" for details. For an example response, see 'Response with GitHub Enterprise Server plan information' below."
    * operationId: orgs/get
    * Request URI: /orgs/{org}
    */
@@ -22119,6 +24407,104 @@ export class Client<RequestOption> {
     return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
   }
   /**
+   * List labels for a self-hosted runner for an organization
+   * Lists all labels for a self-hosted runner configured in an organization.
+   *
+   * You must authenticate using an access token with the `admin:org` scope to use this endpoint.
+   * operationId: actions/list-labels-for-self-hosted-runner-for-org
+   * Request URI: /orgs/{org}/actions/runners/{runner_id}/labels
+   */
+  public async actions$list$labels$for$self$hosted$runner$for$org(
+    params: Params$actions$list$labels$for$self$hosted$runner$for$org,
+    option?: RequestOption,
+  ): Promise<Response$actions$list$labels$for$self$hosted$runner$for$org$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}/labels`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Set custom labels for a self-hosted runner for an organization
+   * Remove all previous custom labels and set the new custom labels for a specific
+   * self-hosted runner configured in an organization.
+   *
+   * You must authenticate using an access token with the `admin:org` scope to use this endpoint.
+   * operationId: actions/set-custom-labels-for-self-hosted-runner-for-org
+   * Request URI: /orgs/{org}/actions/runners/{runner_id}/labels
+   */
+  public async actions$set$custom$labels$for$self$hosted$runner$for$org(
+    params: Params$actions$set$custom$labels$for$self$hosted$runner$for$org,
+    option?: RequestOption,
+  ): Promise<Response$actions$set$custom$labels$for$self$hosted$runner$for$org$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}/labels`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("PUT", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Add custom labels to a self-hosted runner for an organization
+   * Add custom labels to a self-hosted runner configured in an organization.
+   *
+   * You must authenticate using an access token with the `admin:org` scope to use this endpoint.
+   * operationId: actions/add-custom-labels-to-self-hosted-runner-for-org
+   * Request URI: /orgs/{org}/actions/runners/{runner_id}/labels
+   */
+  public async actions$add$custom$labels$to$self$hosted$runner$for$org(
+    params: Params$actions$add$custom$labels$to$self$hosted$runner$for$org,
+    option?: RequestOption,
+  ): Promise<Response$actions$add$custom$labels$to$self$hosted$runner$for$org$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}/labels`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Remove all custom labels from a self-hosted runner for an organization
+   * Remove all custom labels from a self-hosted runner configured in an
+   * organization. Returns the remaining read-only labels from the runner.
+   *
+   * You must authenticate using an access token with the `admin:org` scope to use this endpoint.
+   * operationId: actions/remove-all-custom-labels-from-self-hosted-runner-for-org
+   * Request URI: /orgs/{org}/actions/runners/{runner_id}/labels
+   */
+  public async actions$remove$all$custom$labels$from$self$hosted$runner$for$org(
+    params: Params$actions$remove$all$custom$labels$from$self$hosted$runner$for$org,
+    option?: RequestOption,
+  ): Promise<Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$org$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}/labels`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Remove a custom label from a self-hosted runner for an organization
+   * Remove a custom label from a self-hosted runner configured
+   * in an organization. Returns the remaining labels from the runner.
+   *
+   * This endpoint returns a `404 Not Found` status if the custom label is not
+   * present on the runner.
+   *
+   * You must authenticate using an access token with the `admin:org` scope to use this endpoint.
+   * operationId: actions/remove-custom-label-from-self-hosted-runner-for-org
+   * Request URI: /orgs/{org}/actions/runners/{runner_id}/labels/{name}
+   */
+  public async actions$remove$custom$label$from$self$hosted$runner$for$org(
+    params: Params$actions$remove$custom$label$from$self$hosted$runner$for$org,
+    option?: RequestOption,
+  ): Promise<Response$actions$remove$custom$label$from$self$hosted$runner$for$org$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}/labels/${params.parameter.name}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
+  }
+  /**
    * List organization secrets
    * Lists all secrets available in an organization without revealing their encrypted values. You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to use this endpoint.
    * operationId: actions/list-org-secrets
@@ -22294,7 +24680,7 @@ export class Client<RequestOption> {
   }
   /**
    * Set selected repositories for an organization secret
-   * Replaces all repositories for an organization secret when the `visibility` for repository access is set to `selected`. The visibility is set when you [Create or update an organization secret](https://docs.github.com/enterprise-server@3.0/rest/reference/actions#create-or-update-an-organization-secret). You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to use this endpoint.
+   * Replaces all repositories for an organization secret when the `visibility` for repository access is set to `selected`. The visibility is set when you [Create or update an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/actions#create-or-update-an-organization-secret). You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to use this endpoint.
    * operationId: actions/set-selected-repos-for-org-secret
    * Request URI: /orgs/{org}/actions/secrets/{secret_name}/repositories
    */
@@ -22310,7 +24696,7 @@ export class Client<RequestOption> {
   }
   /**
    * Add selected repository to an organization secret
-   * Adds a repository to an organization secret when the `visibility` for repository access is set to `selected`. The visibility is set when you [Create or update an organization secret](https://docs.github.com/enterprise-server@3.0/rest/reference/actions#create-or-update-an-organization-secret). You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to use this endpoint.
+   * Adds a repository to an organization secret when the `visibility` for repository access is set to `selected`. The visibility is set when you [Create or update an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/actions#create-or-update-an-organization-secret). You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to use this endpoint.
    * operationId: actions/add-selected-repo-to-org-secret
    * Request URI: /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}
    */
@@ -22326,7 +24712,7 @@ export class Client<RequestOption> {
   }
   /**
    * Remove selected repository from an organization secret
-   * Removes a repository from an organization secret when the `visibility` for repository access is set to `selected`. The visibility is set when you [Create or update an organization secret](https://docs.github.com/enterprise-server@3.0/rest/reference/actions#create-or-update-an-organization-secret). You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to use this endpoint.
+   * Removes a repository from an organization secret when the `visibility` for repository access is set to `selected`. The visibility is set when you [Create or update an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/actions#create-or-update-an-organization-secret). You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to use this endpoint.
    * operationId: actions/remove-selected-repo-from-org-secret
    * Request URI: /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}
    */
@@ -22337,6 +24723,255 @@ export class Client<RequestOption> {
     const url =
       this.baseUrl +
       `/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}/repositories/${params.parameter.repository_id}`;
+    const headers = {};
+    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get the audit log for an organization
+   * Gets the audit log for an organization. For more information, see "[Reviewing the audit log for your organization](https://docs.github.com/enterprise-server@3.4/github/setting-up-and-managing-organizations-and-teams/reviewing-the-audit-log-for-your-organization)."
+   *
+   * To use this endpoint, you must be an organization owner, and you must use an access token with the `admin:org` scope. GitHub Apps must have the `organization_administration` read permission to use this endpoint.
+   * operationId: orgs/get-audit-log
+   * Request URI: /orgs/{org}/audit-log
+   */
+  public async orgs$get$audit$log(
+    params: Params$orgs$get$audit$log,
+    option?: RequestOption,
+  ): Promise<Response$orgs$get$audit$log$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/audit-log`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      phrase: { value: params.parameter.phrase, explode: false },
+      include: { value: params.parameter.include, explode: false },
+      after: { value: params.parameter.after, explode: false },
+      before: { value: params.parameter.before, explode: false },
+      order: { value: params.parameter.order, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
+      page: { value: params.parameter.page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * List organization secrets
+   * Lists all secrets available in an organization without revealing their encrypted values. You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `dependabot_secrets` organization permission to use this endpoint.
+   * operationId: dependabot/list-org-secrets
+   * Request URI: /orgs/{org}/dependabot/secrets
+   */
+  public async dependabot$list$org$secrets(
+    params: Params$dependabot$list$org$secrets,
+    option?: RequestOption,
+  ): Promise<Response$dependabot$list$org$secrets$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      per_page: { value: params.parameter.per_page, explode: false },
+      page: { value: params.parameter.page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * Get an organization public key
+   * Gets your public key, which you need to encrypt secrets. You need to encrypt a secret before you can create or update secrets. You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `dependabot_secrets` organization permission to use this endpoint.
+   * operationId: dependabot/get-org-public-key
+   * Request URI: /orgs/{org}/dependabot/secrets/public-key
+   */
+  public async dependabot$get$org$public$key(
+    params: Params$dependabot$get$org$public$key,
+    option?: RequestOption,
+  ): Promise<Response$dependabot$get$org$public$key$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets/public-key`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get an organization secret
+   * Gets a single organization secret without revealing its encrypted value. You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `dependabot_secrets` organization permission to use this endpoint.
+   * operationId: dependabot/get-org-secret
+   * Request URI: /orgs/{org}/dependabot/secrets/{secret_name}
+   */
+  public async dependabot$get$org$secret(
+    params: Params$dependabot$get$org$secret,
+    option?: RequestOption,
+  ): Promise<Response$dependabot$get$org$secret$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Create or update an organization secret
+   * Creates or updates an organization secret with an encrypted value. Encrypt your secret using
+   * [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages). You must authenticate using an access
+   * token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `dependabot_secrets` organization
+   * permission to use this endpoint.
+   *
+   * #### Example encrypting a secret using Node.js
+   *
+   * Encrypt your secret using the [tweetsodium](https://github.com/github/tweetsodium) library.
+   *
+   * ```
+   * const sodium = require('tweetsodium');
+   *
+   * const key = "base64-encoded-public-key";
+   * const value = "plain-text-secret";
+   *
+   * // Convert the message and key to Uint8Array's (Buffer implements that interface)
+   * const messageBytes = Buffer.from(value);
+   * const keyBytes = Buffer.from(key, 'base64');
+   *
+   * // Encrypt using LibSodium.
+   * const encryptedBytes = sodium.seal(messageBytes, keyBytes);
+   *
+   * // Base64 the encrypted secret
+   * const encrypted = Buffer.from(encryptedBytes).toString('base64');
+   *
+   * console.log(encrypted);
+   * ```
+   *
+   *
+   * #### Example encrypting a secret using Python
+   *
+   * Encrypt your secret using [pynacl](https://pynacl.readthedocs.io/en/latest/public/#nacl-public-sealedbox) with Python 3.
+   *
+   * ```
+   * from base64 import b64encode
+   * from nacl import encoding, public
+   *
+   * def encrypt(public_key: str, secret_value: str) -> str:
+   *   """Encrypt a Unicode string using the public key."""
+   *   public_key = public.PublicKey(public_key.encode("utf-8"), encoding.Base64Encoder())
+   *   sealed_box = public.SealedBox(public_key)
+   *   encrypted = sealed_box.encrypt(secret_value.encode("utf-8"))
+   *   return b64encode(encrypted).decode("utf-8")
+   * ```
+   *
+   * #### Example encrypting a secret using C#
+   *
+   * Encrypt your secret using the [Sodium.Core](https://www.nuget.org/packages/Sodium.Core/) package.
+   *
+   * ```
+   * var secretValue = System.Text.Encoding.UTF8.GetBytes("mySecret");
+   * var publicKey = Convert.FromBase64String("2Sg8iYjAxxmI2LvUXpJjkYrMxURPc8r+dB7TJyvvcCU=");
+   *
+   * var sealedPublicKeyBox = Sodium.SealedPublicKeyBox.Create(secretValue, publicKey);
+   *
+   * Console.WriteLine(Convert.ToBase64String(sealedPublicKeyBox));
+   * ```
+   *
+   * #### Example encrypting a secret using Ruby
+   *
+   * Encrypt your secret using the [rbnacl](https://github.com/RubyCrypto/rbnacl) gem.
+   *
+   * ```ruby
+   * require "rbnacl"
+   * require "base64"
+   *
+   * key = Base64.decode64("+ZYvJDZMHUfBkJdyq5Zm9SKqeuBQ4sj+6sfjlH4CgG0=")
+   * public_key = RbNaCl::PublicKey.new(key)
+   *
+   * box = RbNaCl::Boxes::Sealed.from_public_key(public_key)
+   * encrypted_secret = box.encrypt("my_secret")
+   *
+   * # Print the base64 encoded secret
+   * puts Base64.strict_encode64(encrypted_secret)
+   * ```
+   * operationId: dependabot/create-or-update-org-secret
+   * Request URI: /orgs/{org}/dependabot/secrets/{secret_name}
+   */
+  public async dependabot$create$or$update$org$secret(
+    params: Params$dependabot$create$or$update$org$secret,
+    option?: RequestOption,
+  ): Promise<Response$dependabot$create$or$update$org$secret$Status$201["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("PUT", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Delete an organization secret
+   * Deletes a secret in an organization using the secret name. You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `dependabot_secrets` organization permission to use this endpoint.
+   * operationId: dependabot/delete-org-secret
+   * Request URI: /orgs/{org}/dependabot/secrets/{secret_name}
+   */
+  public async dependabot$delete$org$secret(params: Params$dependabot$delete$org$secret, option?: RequestOption): Promise<void> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}`;
+    const headers = {};
+    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
+  }
+  /**
+   * List selected repositories for an organization secret
+   * Lists all repositories that have been selected when the `visibility` for repository access to a secret is set to `selected`. You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `dependabot_secrets` organization permission to use this endpoint.
+   * operationId: dependabot/list-selected-repos-for-org-secret
+   * Request URI: /orgs/{org}/dependabot/secrets/{secret_name}/repositories
+   */
+  public async dependabot$list$selected$repos$for$org$secret(
+    params: Params$dependabot$list$selected$repos$for$org$secret,
+    option?: RequestOption,
+  ): Promise<Response$dependabot$list$selected$repos$for$org$secret$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}/repositories`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      page: { value: params.parameter.page, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * Set selected repositories for an organization secret
+   * Replaces all repositories for an organization secret when the `visibility` for repository access is set to `selected`. The visibility is set when you [Create or update an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/dependabot#create-or-update-an-organization-secret). You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `dependabot_secrets` organization permission to use this endpoint.
+   * operationId: dependabot/set-selected-repos-for-org-secret
+   * Request URI: /orgs/{org}/dependabot/secrets/{secret_name}/repositories
+   */
+  public async dependabot$set$selected$repos$for$org$secret(
+    params: Params$dependabot$set$selected$repos$for$org$secret,
+    option?: RequestOption,
+  ): Promise<void> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}/repositories`;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    return this.apiClient.request("PUT", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Add selected repository to an organization secret
+   * Adds a repository to an organization secret when the `visibility` for repository access is set to `selected`. The visibility is set when you [Create or update an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/dependabot#create-or-update-an-organization-secret). You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `dependabot_secrets` organization permission to use this endpoint.
+   * operationId: dependabot/add-selected-repo-to-org-secret
+   * Request URI: /orgs/{org}/dependabot/secrets/{secret_name}/repositories/{repository_id}
+   */
+  public async dependabot$add$selected$repo$to$org$secret(
+    params: Params$dependabot$add$selected$repo$to$org$secret,
+    option?: RequestOption,
+  ): Promise<void> {
+    const url =
+      this.baseUrl +
+      `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}/repositories/${params.parameter.repository_id}`;
+    const headers = {};
+    return this.apiClient.request("PUT", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Remove selected repository from an organization secret
+   * Removes a repository from an organization secret when the `visibility` for repository access is set to `selected`. The visibility is set when you [Create or update an organization secret](https://docs.github.com/enterprise-server@3.4/rest/reference/dependabot#create-or-update-an-organization-secret). You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `dependabot_secrets` organization permission to use this endpoint.
+   * operationId: dependabot/remove-selected-repo-from-org-secret
+   * Request URI: /orgs/{org}/dependabot/secrets/{secret_name}/repositories/{repository_id}
+   */
+  public async dependabot$remove$selected$repo$from$org$secret(
+    params: Params$dependabot$remove$selected$repo$from$org$secret,
+    option?: RequestOption,
+  ): Promise<void> {
+    const url =
+      this.baseUrl +
+      `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}/repositories/${params.parameter.repository_id}`;
     const headers = {};
     return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
   }
@@ -22476,8 +25111,61 @@ export class Client<RequestOption> {
     return this.apiClient.request("PATCH", url, headers, params.requestBody, undefined, option);
   }
   /**
+   * List deliveries for an organization webhook
+   * Returns a list of webhook deliveries for a webhook configured in an organization.
+   * operationId: orgs/list-webhook-deliveries
+   * Request URI: /orgs/{org}/hooks/{hook_id}/deliveries
+   */
+  public async orgs$list$webhook$deliveries(
+    params: Params$orgs$list$webhook$deliveries,
+    option?: RequestOption,
+  ): Promise<Response$orgs$list$webhook$deliveries$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}/deliveries`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      per_page: { value: params.parameter.per_page, explode: false },
+      cursor: { value: params.parameter.cursor, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * Get a webhook delivery for an organization webhook
+   * Returns a delivery for a webhook configured in an organization.
+   * operationId: orgs/get-webhook-delivery
+   * Request URI: /orgs/{org}/hooks/{hook_id}/deliveries/{delivery_id}
+   */
+  public async orgs$get$webhook$delivery(
+    params: Params$orgs$get$webhook$delivery,
+    option?: RequestOption,
+  ): Promise<Response$orgs$get$webhook$delivery$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}/deliveries/${params.parameter.delivery_id}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Redeliver a delivery for an organization webhook
+   * Redeliver a delivery for a webhook configured in an organization.
+   * operationId: orgs/redeliver-webhook-delivery
+   * Request URI: /orgs/{org}/hooks/{hook_id}/deliveries/{delivery_id}/attempts
+   */
+  public async orgs$redeliver$webhook$delivery(
+    params: Params$orgs$redeliver$webhook$delivery,
+    option?: RequestOption,
+  ): Promise<Response$orgs$redeliver$webhook$delivery$Status$202["application/json"]> {
+    const url =
+      this.baseUrl + `/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}/deliveries/${params.parameter.delivery_id}/attempts`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, undefined, undefined, option);
+  }
+  /**
    * Ping an organization webhook
-   * This will trigger a [ping event](https://docs.github.com/enterprise-server@3.0/webhooks/#ping-event) to be sent to the hook.
+   * This will trigger a [ping event](https://docs.github.com/enterprise-server@3.4/webhooks/#ping-event) to be sent to the hook.
    * operationId: orgs/ping-webhook
    * Request URI: /orgs/{org}/hooks/{hook_id}/pings
    */
@@ -22490,7 +25178,7 @@ export class Client<RequestOption> {
    * Get an organization installation for the authenticated app
    * Enables an authenticated GitHub App to find the organization's installation information.
    *
-   * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
    * operationId: apps/get-org-installation
    * Request URI: /orgs/{org}/installation
    */
@@ -22531,7 +25219,7 @@ export class Client<RequestOption> {
    * **Note**: GitHub's REST API v3 considers every pull request an issue, but not every issue is a pull request. For this
    * reason, "Issues" endpoints may return both issues and pull requests in the response. You can identify pull requests by
    * the `pull_request` key. Be aware that the `id` of a pull request returned from "Issues" endpoints will be an _issue id_. To find out the pull
-   * request id, use the "[List pull requests](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#list-pull-requests)" endpoint.
+   * request id, use the "[List pull requests](https://docs.github.com/enterprise-server@3.4/rest/reference/pulls#list-pull-requests)" endpoint.
    * operationId: issues/list-for-org
    * Request URI: /orgs/{org}/issues
    */
@@ -22619,7 +25307,7 @@ export class Client<RequestOption> {
    * Set organization membership for a user
    * Only authenticated organization owners can add a member to the organization or update the member's role.
    *
-   * *   If the authenticated user is _adding_ a member to the organization, the invited user will receive an email inviting them to the organization. The user's [membership status](https://docs.github.com/enterprise-server@3.0/rest/reference/orgs#get-organization-membership-for-a-user) will be `pending` until they accept the invitation.
+   * *   If the authenticated user is _adding_ a member to the organization, the invited user will receive an email inviting them to the organization. The user's [membership status](https://docs.github.com/enterprise-server@3.4/rest/reference/orgs#get-organization-membership-for-a-user) will be `pending` until they accept the invitation.
    *
    * *   Authenticated users can _update_ a user's membership by passing the `role` parameter. If the authenticated user changes a member's role to `admin`, the affected user will receive an email notifying them that they've been made an organization owner. If the authenticated user changes an owner's role to `member`, no email will be sent.
    *
@@ -22652,6 +25340,70 @@ export class Client<RequestOption> {
     const url = this.baseUrl + `/orgs/${params.parameter.org}/memberships/${params.parameter.username}`;
     const headers = {};
     return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
+  }
+  /**
+   * List organization migrations
+   * Lists the most recent migrations.
+   * operationId: migrations/list-for-org
+   * Request URI: /orgs/{org}/migrations
+   */
+  public async migrations$list$for$org(
+    params: Params$migrations$list$for$org,
+    option?: RequestOption,
+  ): Promise<Response$migrations$list$for$org$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/migrations`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      per_page: { value: params.parameter.per_page, explode: false },
+      page: { value: params.parameter.page, explode: false },
+      exclude: { value: params.parameter.exclude, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * Start an organization migration
+   * Initiates the generation of a migration archive.
+   * operationId: migrations/start-for-org
+   * Request URI: /orgs/{org}/migrations
+   */
+  public async migrations$start$for$org(
+    params: Params$migrations$start$for$org,
+    option?: RequestOption,
+  ): Promise<Response$migrations$start$for$org$Status$201["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/migrations`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Get an organization migration status
+   * Fetches the status of a migration.
+   *
+   * The `state` of a migration can be one of the following values:
+   *
+   * *   `pending`, which means the migration hasn't started yet.
+   * *   `exporting`, which means the migration is in progress.
+   * *   `exported`, which means the migration finished successfully.
+   * *   `failed`, which means the migration failed.
+   * operationId: migrations/get-status-for-org
+   * Request URI: /orgs/{org}/migrations/{migration_id}
+   */
+  public async migrations$get$status$for$org(
+    params: Params$migrations$get$status$for$org,
+    option?: RequestOption,
+  ): Promise<Response$migrations$get$status$for$org$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/migrations/${params.parameter.migration_id}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      exclude: { value: params.parameter.exclude, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
    * List outside collaborators for an organization
@@ -22846,7 +25598,7 @@ export class Client<RequestOption> {
    * Set public organization membership for the authenticated user
    * The user can publicize their own membership. (A user cannot publicize the membership for another user.)
    *
-   * Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
+   * Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#http-verbs)."
    * operationId: orgs/set-public-membership-for-authenticated-user
    * Request URI: /orgs/{org}/public_members/{username}
    */
@@ -22900,7 +25652,7 @@ export class Client<RequestOption> {
    *
    * **OAuth scope requirements**
    *
-   * When using [OAuth](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/), authorizations must include:
+   * When using [OAuth](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/), authorizations must include:
    *
    * *   `public_repo` scope or `repo` scope to create a public repository. Note: For GitHub AE, use `repo` scope to create an internal repository.
    * *   `repo` scope to create a private repository
@@ -22917,6 +25669,54 @@ export class Client<RequestOption> {
       Accept: "application/json",
     };
     return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * List secret scanning alerts for an organization
+   * Lists secret scanning alerts for eligible repositories in an organization, from newest to oldest.
+   * To use this endpoint, you must be an administrator or security manager for the organization, and you must use an access token with the `repo` scope or `security_events` scope.
+   *
+   * GitHub Apps must have the `secret_scanning_alerts` read permission to use this endpoint.
+   * operationId: secret-scanning/list-alerts-for-org
+   * Request URI: /orgs/{org}/secret-scanning/alerts
+   */
+  public async secret$scanning$list$alerts$for$org(
+    params: Params$secret$scanning$list$alerts$for$org,
+    option?: RequestOption,
+  ): Promise<Response$secret$scanning$list$alerts$for$org$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/secret-scanning/alerts`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      state: { value: params.parameter.state, explode: false },
+      secret_type: { value: params.parameter.secret_type, explode: false },
+      resolution: { value: params.parameter.resolution, explode: false },
+      page: { value: params.parameter.page, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * Get GitHub Advanced Security active committers for an organization
+   * Gets the GitHub Advanced Security active committers for an organization per repository.
+   * Each distinct user login across all repositories is counted as a single Advanced Security seat, so the total_advanced_security_committers is not the sum of advanced_security_committers for each repository.
+   * If this organization defers to an enterprise for billing, the total_advanced_security_committers returned from the organization API may include some users that are in more than one organization, so they will only consume a single Advanced Security seat at the enterprise level.
+   * operationId: billing/get-github-advanced-security-billing-org
+   * Request URI: /orgs/{org}/settings/billing/advanced-security
+   */
+  public async billing$get$github$advanced$security$billing$org(
+    params: Params$billing$get$github$advanced$security$billing$org,
+    option?: RequestOption,
+  ): Promise<Response$billing$get$github$advanced$security$billing$org$Status$200["application/json"]> {
+    const url = this.baseUrl + `/orgs/${params.parameter.org}/settings/billing/advanced-security`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      per_page: { value: params.parameter.per_page, explode: false },
+      page: { value: params.parameter.page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
    * List teams
@@ -23008,7 +25808,7 @@ export class Client<RequestOption> {
   }
   /**
    * List discussions
-   * List all discussions on a team's page. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * List all discussions on a team's page. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `GET /organizations/{org_id}/team/{team_id}/discussions`.
    * operationId: teams/list-discussions-in-org
@@ -23032,9 +25832,9 @@ export class Client<RequestOption> {
   }
   /**
    * Create a discussion
-   * Creates a new discussion post on a team's page. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Creates a new discussion post on a team's page. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `POST /organizations/{org_id}/team/{team_id}/discussions`.
    * operationId: teams/create-discussion-in-org
@@ -23053,7 +25853,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get a discussion
-   * Get a specific discussion on a team's page. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Get a specific discussion on a team's page. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `GET /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}`.
    * operationId: teams/get-discussion-in-org
@@ -23072,7 +25872,7 @@ export class Client<RequestOption> {
   }
   /**
    * Delete a discussion
-   * Delete a discussion from a team's page. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Delete a discussion from a team's page. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `DELETE /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}`.
    * operationId: teams/delete-discussion-in-org
@@ -23086,7 +25886,7 @@ export class Client<RequestOption> {
   }
   /**
    * Update a discussion
-   * Edits the title and body text of a discussion post. Only the parameters you provide are updated. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Edits the title and body text of a discussion post. Only the parameters you provide are updated. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `PATCH /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}`.
    * operationId: teams/update-discussion-in-org
@@ -23106,7 +25906,7 @@ export class Client<RequestOption> {
   }
   /**
    * List discussion comments
-   * List all comments on a team discussion. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * List all comments on a team discussion. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `GET /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}/comments`.
    * operationId: teams/list-discussion-comments-in-org
@@ -23131,9 +25931,9 @@ export class Client<RequestOption> {
   }
   /**
    * Create a discussion comment
-   * Creates a new comment on a team discussion. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Creates a new comment on a team discussion. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `POST /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}/comments`.
    * operationId: teams/create-discussion-comment-in-org
@@ -23154,7 +25954,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get a discussion comment
-   * Get a specific comment on a team discussion. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Get a specific comment on a team discussion. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `GET /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}/comments/{comment_number}`.
    * operationId: teams/get-discussion-comment-in-org
@@ -23174,7 +25974,7 @@ export class Client<RequestOption> {
   }
   /**
    * Delete a discussion comment
-   * Deletes a comment on a team discussion. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Deletes a comment on a team discussion. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `DELETE /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}/comments/{comment_number}`.
    * operationId: teams/delete-discussion-comment-in-org
@@ -23192,7 +25992,7 @@ export class Client<RequestOption> {
   }
   /**
    * Update a discussion comment
-   * Edits the body text of a discussion comment. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Edits the body text of a discussion comment. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `PATCH /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}/comments/{comment_number}`.
    * operationId: teams/update-discussion-comment-in-org
@@ -23213,7 +26013,7 @@ export class Client<RequestOption> {
   }
   /**
    * List reactions for a team discussion comment
-   * List the reactions to a [team discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussion-comments/). OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * List the reactions to a [team discussion comment](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#discussion-comments/). OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `GET /organizations/:org_id/team/:team_id/discussions/:discussion_number/comments/:comment_number/reactions`.
    * operationId: reactions/list-for-team-discussion-comment-in-org
@@ -23238,7 +26038,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create reaction for a team discussion comment
-   * Create a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussion-comments). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with an HTTP `200` status means that you already added the reaction type to this team discussion comment.
+   * Create a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#discussion-comments). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with an HTTP `200` status means that you already added the reaction type to this team discussion comment.
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `POST /organizations/:org_id/team/:team_id/discussions/:discussion_number/comments/:comment_number/reactions`.
    * operationId: reactions/create-for-team-discussion-comment-in-org
@@ -23266,7 +26066,7 @@ export class Client<RequestOption> {
    * Delete team discussion comment reaction
    * **Note:** You can also specify a team or organization with `team_id` and `org_id` using the route `DELETE /organizations/:org_id/team/:team_id/discussions/:discussion_number/comments/:comment_number/reactions/:reaction_id`.
    *
-   * Delete a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussion-comments). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Delete a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#discussion-comments). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: reactions/delete-for-team-discussion-comment
    * Request URI: /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions/{reaction_id}
    */
@@ -23282,7 +26082,7 @@ export class Client<RequestOption> {
   }
   /**
    * List reactions for a team discussion
-   * List the reactions to a [team discussion](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussions). OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * List the reactions to a [team discussion](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#discussions). OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `GET /organizations/:org_id/team/:team_id/discussions/:discussion_number/reactions`.
    * operationId: reactions/list-for-team-discussion-in-org
@@ -23307,7 +26107,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create reaction for a team discussion
-   * Create a reaction to a [team discussion](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussions). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with an HTTP `200` status means that you already added the reaction type to this team discussion.
+   * Create a reaction to a [team discussion](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#discussions). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with an HTTP `200` status means that you already added the reaction type to this team discussion.
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `POST /organizations/:org_id/team/:team_id/discussions/:discussion_number/reactions`.
    * operationId: reactions/create-for-team-discussion-in-org
@@ -23335,7 +26135,7 @@ export class Client<RequestOption> {
    * Delete team discussion reaction
    * **Note:** You can also specify a team or organization with `team_id` and `org_id` using the route `DELETE /organizations/:org_id/team/:team_id/discussions/:discussion_number/reactions/:reaction_id`.
    *
-   * Delete a reaction to a [team discussion](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussions). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Delete a reaction to a [team discussion](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#discussions). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: reactions/delete-for-team-discussion
    * Request URI: /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions/{reaction_id}
    */
@@ -23383,7 +26183,7 @@ export class Client<RequestOption> {
    * **Note:**
    * The response contains the `state` of the membership and the member's `role`.
    *
-   * The `role` for organization owners is set to `maintainer`. For more information about `maintainer` roles, see see [Create a team](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#create-a-team).
+   * The `role` for organization owners is set to `maintainer`. For more information about `maintainer` roles, see see [Create a team](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#create-a-team).
    * operationId: teams/get-membership-for-user-in-org
    * Request URI: /orgs/{org}/teams/{team_slug}/memberships/{username}
    */
@@ -23541,7 +26341,7 @@ export class Client<RequestOption> {
    * Check team permissions for a repository
    * Checks whether a team has `admin`, `push`, `maintain`, `triage`, or `pull` permission for a repository. Repositories inherited through a parent team will also be checked.
    *
-   * You can also get information about the specified repository, including what permissions the team grants on it, by passing the following custom [media type](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types/) via the `application/vnd.github.v3.repository+json` accept header.
+   * You can also get information about the specified repository, including what permissions the team grants on it, by passing the following custom [media type](https://docs.github.com/enterprise-server@3.4/rest/overview/media-types/) via the `application/vnd.github.v3.repository+json` accept header.
    *
    * If a team doesn't have permission for the repository, you will receive a `404 Not Found` response status.
    *
@@ -23563,7 +26363,7 @@ export class Client<RequestOption> {
   }
   /**
    * Add or update team repository permissions
-   * To add a repository to a team or update the team's permission on a repository, the authenticated user must have admin access to the repository, and must be able to see the team. The repository must be owned by the organization, or a direct fork of a repository owned by the organization. You will get a `422 Unprocessable Entity` status if you attempt to add a repository to a team that is not owned by the organization. Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
+   * To add a repository to a team or update the team's permission on a repository, the authenticated user must have admin access to the repository, and must be able to see the team. The repository must be owned by the organization, or a direct fork of a repository owned by the organization. You will get a `422 Unprocessable Entity` status if you attempt to add a repository to a team that is not owned by the organization. Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#http-verbs)."
    *
    * **Note:** You can also specify a team by `org_id` and `team_id` using the route `PUT /organizations/{org_id}/team/{team_id}/repos/{owner}/{repo}`.
    *
@@ -23930,7 +26730,7 @@ export class Client<RequestOption> {
    * Delete a reaction (Legacy)
    * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Reactions API. We recommend migrating your existing code to use the new delete reactions endpoints. For more information, see this [blog post](https://developer.github.com/changes/2020-02-26-new-delete-reactions-endpoints/).
    *
-   * OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/), when deleting a [team discussion](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussions) or [team discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussion-comments).
+   * OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/), when deleting a [team discussion](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#discussions) or [team discussion comment](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#discussion-comments).
    * operationId: reactions/delete-legacy
    * Request URI: /reactions/{reaction_id}
    */
@@ -23941,8 +26741,6 @@ export class Client<RequestOption> {
   }
   /**
    * Get a repository
-   * When you pass the `scarlet-witch-preview` media type, requests to get a repository will also return the repository's code of conduct if it can be detected from the repository's code of conduct file.
-   *
    * The `parent` and `source` objects are present when the repository is a fork. `parent` is the repository this repository was forked from, `source` is the ultimate source for the network.
    * operationId: repos/get
    * Request URI: /repos/{owner}/{repo}
@@ -23970,7 +26768,7 @@ export class Client<RequestOption> {
   }
   /**
    * Update a repository
-   * **Note**: To edit a repository's topics, use the [Replace all repository topics](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#replace-all-repository-topics) endpoint.
+   * **Note**: To edit a repository's topics, use the [Replace all repository topics](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#replace-all-repository-topics) endpoint.
    * operationId: repos/update
    * Request URI: /repos/{owner}/{repo}
    */
@@ -24285,8 +27083,113 @@ export class Client<RequestOption> {
     return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
   }
   /**
+   * List labels for a self-hosted runner for a repository
+   * Lists all labels for a self-hosted runner configured in a repository.
+   *
+   * You must authenticate using an access token with the `repo` scope to use this
+   * endpoint.
+   * operationId: actions/list-labels-for-self-hosted-runner-for-repo
+   * Request URI: /repos/{owner}/{repo}/actions/runners/{runner_id}/labels
+   */
+  public async actions$list$labels$for$self$hosted$runner$for$repo(
+    params: Params$actions$list$labels$for$self$hosted$runner$for$repo,
+    option?: RequestOption,
+  ): Promise<Response$actions$list$labels$for$self$hosted$runner$for$repo$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}/labels`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Set custom labels for a self-hosted runner for a repository
+   * Remove all previous custom labels and set the new custom labels for a specific
+   * self-hosted runner configured in a repository.
+   *
+   * You must authenticate using an access token with the `repo` scope to use this
+   * endpoint.
+   * operationId: actions/set-custom-labels-for-self-hosted-runner-for-repo
+   * Request URI: /repos/{owner}/{repo}/actions/runners/{runner_id}/labels
+   */
+  public async actions$set$custom$labels$for$self$hosted$runner$for$repo(
+    params: Params$actions$set$custom$labels$for$self$hosted$runner$for$repo,
+    option?: RequestOption,
+  ): Promise<Response$actions$set$custom$labels$for$self$hosted$runner$for$repo$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}/labels`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("PUT", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Add custom labels to a self-hosted runner for a repository
+   * Add custom labels to a self-hosted runner configured in a repository.
+   *
+   * You must authenticate using an access token with the `repo` scope to use this
+   * endpoint.
+   * operationId: actions/add-custom-labels-to-self-hosted-runner-for-repo
+   * Request URI: /repos/{owner}/{repo}/actions/runners/{runner_id}/labels
+   */
+  public async actions$add$custom$labels$to$self$hosted$runner$for$repo(
+    params: Params$actions$add$custom$labels$to$self$hosted$runner$for$repo,
+    option?: RequestOption,
+  ): Promise<Response$actions$add$custom$labels$to$self$hosted$runner$for$repo$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}/labels`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Remove all custom labels from a self-hosted runner for a repository
+   * Remove all custom labels from a self-hosted runner configured in a
+   * repository. Returns the remaining read-only labels from the runner.
+   *
+   * You must authenticate using an access token with the `repo` scope to use this
+   * endpoint.
+   * operationId: actions/remove-all-custom-labels-from-self-hosted-runner-for-repo
+   * Request URI: /repos/{owner}/{repo}/actions/runners/{runner_id}/labels
+   */
+  public async actions$remove$all$custom$labels$from$self$hosted$runner$for$repo(
+    params: Params$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo,
+    option?: RequestOption,
+  ): Promise<Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}/labels`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Remove a custom label from a self-hosted runner for a repository
+   * Remove a custom label from a self-hosted runner configured
+   * in a repository. Returns the remaining labels from the runner.
+   *
+   * This endpoint returns a `404 Not Found` status if the custom label is not
+   * present on the runner.
+   *
+   * You must authenticate using an access token with the `repo` scope to use this
+   * endpoint.
+   * operationId: actions/remove-custom-label-from-self-hosted-runner-for-repo
+   * Request URI: /repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}
+   */
+  public async actions$remove$custom$label$from$self$hosted$runner$for$repo(
+    params: Params$actions$remove$custom$label$from$self$hosted$runner$for$repo,
+    option?: RequestOption,
+  ): Promise<Response$actions$remove$custom$label$from$self$hosted$runner$for$repo$Status$200["application/json"]> {
+    const url =
+      this.baseUrl +
+      `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}/labels/${params.parameter.name}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
+  }
+  /**
    * List workflow runs for a repository
-   * Lists all workflow runs for a repository. You can use parameters to narrow the list of results. For more information about using parameters, see [Parameters](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#parameters).
+   * Lists all workflow runs for a repository. You can use parameters to narrow the list of results. For more information about using parameters, see [Parameters](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#parameters).
    *
    * Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint.
    * operationId: actions/list-workflow-runs-for-repo
@@ -24345,6 +27248,22 @@ export class Client<RequestOption> {
     return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
   }
   /**
+   * Get the review history for a workflow run
+   * Anyone with read access to the repository can use this endpoint. If the repository is private, you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint.
+   * operationId: actions/get-reviews-for-run
+   * Request URI: /repos/{owner}/{repo}/actions/runs/{run_id}/approvals
+   */
+  public async actions$get$reviews$for$run(
+    params: Params$actions$get$reviews$for$run,
+    option?: RequestOption,
+  ): Promise<Response$actions$get$reviews$for$run$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/approvals`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
    * List workflow run artifacts
    * Lists artifacts for a workflow run. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint.
    * operationId: actions/list-workflow-run-artifacts
@@ -24382,7 +27301,7 @@ export class Client<RequestOption> {
   }
   /**
    * List jobs for a workflow run
-   * Lists jobs for a workflow run. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint. You can use parameters to narrow the list of results. For more information about using parameters, see [Parameters](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#parameters).
+   * Lists jobs for a workflow run. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint. You can use parameters to narrow the list of results. For more information about using parameters, see [Parameters](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#parameters).
    * operationId: actions/list-jobs-for-workflow-run
    * Request URI: /repos/{owner}/{repo}/actions/runs/{run_id}/jobs
    */
@@ -24425,6 +27344,45 @@ export class Client<RequestOption> {
     const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/logs`;
     const headers = {};
     return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get pending deployments for a workflow run
+   * Get all deployment environments for a workflow run that are waiting for protection rules to pass.
+   *
+   * Anyone with read access to the repository can use this endpoint. If the repository is private, you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint.
+   * operationId: actions/get-pending-deployments-for-run
+   * Request URI: /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments
+   */
+  public async actions$get$pending$deployments$for$run(
+    params: Params$actions$get$pending$deployments$for$run,
+    option?: RequestOption,
+  ): Promise<Response$actions$get$pending$deployments$for$run$Status$200["application/json"]> {
+    const url =
+      this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/pending_deployments`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Review pending deployments for a workflow run
+   * Approve or reject pending deployments that are waiting on approval by a required reviewer.
+   *
+   * Anyone with read access to the repository contents and deployments can use this endpoint.
+   * operationId: actions/review-pending-deployments-for-run
+   * Request URI: /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments
+   */
+  public async actions$review$pending$deployments$for$run(
+    params: Params$actions$review$pending$deployments$for$run,
+    option?: RequestOption,
+  ): Promise<Response$actions$review$pending$deployments$for$run$Status$200["application/json"]> {
+    const url =
+      this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/pending_deployments`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
   }
   /**
    * @deprecated
@@ -24681,7 +27639,7 @@ export class Client<RequestOption> {
   }
   /**
    * List workflow runs
-   * List all workflow runs for a workflow. You can replace `workflow_id` with the workflow file name. For example, you could use `main.yaml`. You can use parameters to narrow the list of results. For more information about using parameters, see [Parameters](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#parameters).
+   * List all workflow runs for a workflow. You can replace `workflow_id` with the workflow file name. For example, you could use `main.yaml`. You can use parameters to narrow the list of results. For more information about using parameters, see [Parameters](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#parameters).
    *
    * Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope.
    * operationId: actions/list-workflow-runs
@@ -24742,6 +27700,75 @@ export class Client<RequestOption> {
     const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/assignees/${params.parameter.assignee}`;
     const headers = {};
     return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * List all autolinks of a repository
+   * This returns a list of autolinks configured for the given repository.
+   *
+   * Information about autolinks are only available to repository administrators.
+   * operationId: repos/list-autolinks
+   * Request URI: /repos/{owner}/{repo}/autolinks
+   */
+  public async repos$list$autolinks(
+    params: Params$repos$list$autolinks,
+    option?: RequestOption,
+  ): Promise<Response$repos$list$autolinks$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/autolinks`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      page: { value: params.parameter.page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * Create an autolink reference for a repository
+   * Users with admin access to the repository can create an autolink.
+   * operationId: repos/create-autolink
+   * Request URI: /repos/{owner}/{repo}/autolinks
+   */
+  public async repos$create$autolink(
+    params: Params$repos$create$autolink,
+    option?: RequestOption,
+  ): Promise<Response$repos$create$autolink$Status$201["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/autolinks`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Get an autolink reference of a repository
+   * This returns a single autolink reference by ID that was configured for the given repository.
+   *
+   * Information about autolinks are only available to repository administrators.
+   * operationId: repos/get-autolink
+   * Request URI: /repos/{owner}/{repo}/autolinks/{autolink_id}
+   */
+  public async repos$get$autolink(
+    params: Params$repos$get$autolink,
+    option?: RequestOption,
+  ): Promise<Response$repos$get$autolink$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/autolinks/${params.parameter.autolink_id}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Delete an autolink reference from a repository
+   * This deletes a single autolink reference by ID that was configured for the given repository.
+   *
+   * Information about autolinks are only available to repository administrators.
+   * operationId: repos/delete-autolink
+   * Request URI: /repos/{owner}/{repo}/autolinks/{autolink_id}
+   */
+  public async repos$delete$autolink(params: Params$repos$delete$autolink, option?: RequestOption): Promise<void> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/autolinks/${params.parameter.autolink_id}`;
+    const headers = {};
+    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
   }
   /**
    * List branches
@@ -25449,6 +28476,37 @@ export class Client<RequestOption> {
     return this.apiClient.request("DELETE", url, headers, params.requestBody, undefined, option);
   }
   /**
+   * Rename a branch
+   * Renames a branch in a repository.
+   *
+   * **Note:** Although the API responds immediately, the branch rename process might take some extra time to complete in the background. You won't be able to push to the old branch name while the rename process is in progress. For more information, see "[Renaming a branch](https://docs.github.com/enterprise-server@3.4/github/administering-a-repository/renaming-a-branch)".
+   *
+   * The permissions required to use this endpoint depends on whether you are renaming the default branch.
+   *
+   * To rename a non-default branch:
+   *
+   * * Users must have push access.
+   * * GitHub Apps must have the `contents:write` repository permission.
+   *
+   * To rename the default branch:
+   *
+   * * Users must have admin or owner permissions.
+   * * GitHub Apps must have the `administration:write` repository permission.
+   * operationId: repos/rename-branch
+   * Request URI: /repos/{owner}/{repo}/branches/{branch}/rename
+   */
+  public async repos$rename$branch(
+    params: Params$repos$rename$branch,
+    option?: RequestOption,
+  ): Promise<Response$repos$rename$branch$Status$201["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/rename`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
+  }
+  /**
    * Create a check run
    * **Note:** The Checks API only looks for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty `pull_requests` array.
    *
@@ -25525,10 +28583,29 @@ export class Client<RequestOption> {
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
+   * Rerequest a check run
+   * Triggers GitHub to rerequest an existing check run, without pushing new code to a repository. This endpoint will trigger the [`check_run` webhook](https://docs.github.com/enterprise-server@3.4/webhooks/event-payloads/#check_run) event with the action `rerequested`. When a check run is `rerequested`, its `status` is reset to `queued` and the `conclusion` is cleared.
+   *
+   * To rerequest a check run, your GitHub App must have the `checks:read` permission on a private repository or pull access to a public repository.
+   * operationId: checks/rerequest-run
+   * Request URI: /repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest
+   */
+  public async checks$rerequest$run(
+    params: Params$checks$rerequest$run,
+    option?: RequestOption,
+  ): Promise<Response$checks$rerequest$run$Status$201["application/json"]> {
+    const url =
+      this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/check-runs/${params.parameter.check_run_id}/rerequest`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, undefined, undefined, option);
+  }
+  /**
    * Create a check suite
    * **Note:** The Checks API only looks for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty `pull_requests` array and a `null` value for `head_branch`.
    *
-   * By default, check suites are automatically created when you create a [check run](https://docs.github.com/enterprise-server@3.0/rest/reference/checks#check-runs). You only need to use this endpoint for manually creating check suites when you've disabled automatic creation using "[Update repository preferences for check suites](https://docs.github.com/enterprise-server@3.0/rest/reference/checks#update-repository-preferences-for-check-suites)". Your GitHub App must have the `checks:write` permission to create check suites.
+   * By default, check suites are automatically created when you create a [check run](https://docs.github.com/enterprise-server@3.4/rest/reference/checks#check-runs). You only need to use this endpoint for manually creating check suites when you've disabled automatic creation using "[Update repository preferences for check suites](https://docs.github.com/enterprise-server@3.4/rest/reference/checks#update-repository-preferences-for-check-suites)". Your GitHub App must have the `checks:write` permission to create check suites.
    * operationId: checks/create-suite
    * Request URI: /repos/{owner}/{repo}/check-suites
    */
@@ -25545,7 +28622,7 @@ export class Client<RequestOption> {
   }
   /**
    * Update repository preferences for check suites
-   * Changes the default automatic flow when creating check suites. By default, a check suite is automatically created each time code is pushed to a repository. When you disable the automatic creation of check suites, you can manually [Create a check suite](https://docs.github.com/enterprise-server@3.0/rest/reference/checks#create-a-check-suite). You must have admin permissions in the repository to set preferences for check suites.
+   * Changes the default automatic flow when creating check suites. By default, a check suite is automatically created each time code is pushed to a repository. When you disable the automatic creation of check suites, you can manually [Create a check suite](https://docs.github.com/enterprise-server@3.4/rest/reference/checks#create-a-check-suite). You must have admin permissions in the repository to set preferences for check suites.
    * operationId: checks/set-suites-preferences
    * Request URI: /repos/{owner}/{repo}/check-suites/preferences
    */
@@ -25606,7 +28683,7 @@ export class Client<RequestOption> {
   }
   /**
    * Rerequest a check suite
-   * Triggers GitHub to rerequest an existing check suite, without pushing new code to a repository. This endpoint will trigger the [`check_suite` webhook](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads/#check_suite) event with the action `rerequested`. When a check suite is `rerequested`, its `status` is reset to `queued` and the `conclusion` is cleared.
+   * Triggers GitHub to rerequest an existing check suite, without pushing new code to a repository. This endpoint will trigger the [`check_suite` webhook](https://docs.github.com/enterprise-server@3.4/webhooks/event-payloads/#check_suite) event with the action `rerequested`. When a check suite is `rerequested`, its `status` is reset to `queued` and the `conclusion` is cleared.
    *
    * To rerequest a check suite, your GitHub App must have the `checks:read` permission on a private repository or pull access to a public repository.
    * operationId: checks/rerequest-suite
@@ -25627,8 +28704,9 @@ export class Client<RequestOption> {
    * List code scanning alerts for a repository
    * Lists all open code scanning alerts for the default branch (usually `main`
    * or `master`). You must use an access token with the `security_events` scope to use
-   * this endpoint. GitHub Apps must have the `security_events` read permission to use
-   * this endpoint.
+   * this endpoint with private repos, the `public_repo` scope also grants permission to read
+   * security events on public repos only. GitHub Apps must have the `security_events` read
+   * permission to use this endpoint.
    *
    * The response includes a `most_recent_instance` object.
    * This provides details of the most recent instance of this alert
@@ -25651,13 +28729,15 @@ export class Client<RequestOption> {
       page: { value: params.parameter.page, explode: false },
       per_page: { value: params.parameter.per_page, explode: false },
       ref: { value: params.parameter.ref, explode: false },
+      direction: { value: params.parameter.direction, explode: false },
+      sort: { value: params.parameter.sort, explode: false },
       state: { value: params.parameter.state, explode: false },
     };
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
    * Get a code scanning alert
-   * Gets a single code scanning alert. You must use an access token with the `security_events` scope to use this endpoint. GitHub Apps must have the `security_events` read permission to use this endpoint.
+   * Gets a single code scanning alert. You must use an access token with the `security_events` scope to use this endpoint with private repos, the `public_repo` scope also grants permission to read security events on public repos only. GitHub Apps must have the `security_events` read permission to use this endpoint.
    *
    * **Deprecation notice**:
    * The instances field is deprecated and will, in future, not be included in the response for this endpoint. The example response reflects this change. The same information can now be retrieved via a GET request to the URL specified by `instances_url`.
@@ -25677,7 +28757,7 @@ export class Client<RequestOption> {
   }
   /**
    * Update a code scanning alert
-   * Updates the status of a single code scanning alert. You must use an access token with the `security_events` scope to use this endpoint. GitHub Apps must have the `security_events` write permission to use this endpoint.
+   * Updates the status of a single code scanning alert. You must use an access token with the `security_events` scope to use this endpoint with private repositories. You can also use tokens with the `public_repo` scope for public repositories only. GitHub Apps must have the `security_events` write permission to use this endpoint.
    * operationId: code-scanning/update-alert
    * Request URI: /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}
    */
@@ -25694,6 +28774,32 @@ export class Client<RequestOption> {
     return this.apiClient.request("PATCH", url, headers, params.requestBody, undefined, option);
   }
   /**
+   * List instances of a code scanning alert
+   * Lists all instances of the specified code scanning alert.
+   * You must use an access token with the `security_events` scope to use this endpoint with private repos,
+   * the `public_repo` scope also grants permission to read security events on public repos only.
+   * GitHub Apps must have the `security_events` read permission to use this endpoint.
+   * operationId: code-scanning/list-alert-instances
+   * Request URI: /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances
+   */
+  public async code$scanning$list$alert$instances(
+    params: Params$code$scanning$list$alert$instances,
+    option?: RequestOption,
+  ): Promise<Response$code$scanning$list$alert$instances$Status$200["application/json"]> {
+    const url =
+      this.baseUrl +
+      `/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/alerts/${params.parameter.alert_number}/instances`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      page: { value: params.parameter.page, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
+      ref: { value: params.parameter.ref, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
    * List code scanning analyses for a repository
    * Lists the details of all code scanning analyses for a repository,
    * starting with the most recent.
@@ -25706,7 +28812,8 @@ export class Client<RequestOption> {
    * For very old analyses this data is not available,
    * and `0` is returned in this field.
    *
-   * You must use an access token with the `security_events` scope to use this endpoint.
+   * You must use an access token with the `security_events` scope to use this endpoint with private repos,
+   * the `public_repo` scope also grants permission to read security events on public repos only.
    * GitHub Apps must have the `security_events` read permission to use this endpoint.
    *
    * **Deprecation notice**:
@@ -25733,8 +28840,128 @@ export class Client<RequestOption> {
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
+   * Get a code scanning analysis for a repository
+   * Gets a specified code scanning analysis for a repository.
+   * You must use an access token with the `security_events` scope to use this endpoint with private repos,
+   * the `public_repo` scope also grants permission to read security events on public repos only.
+   * GitHub Apps must have the `security_events` read permission to use this endpoint.
+   *
+   * The default JSON response contains fields that describe the analysis.
+   * This includes the Git reference and commit SHA to which the analysis relates,
+   * the datetime of the analysis, the name of the code scanning tool,
+   * and the number of alerts.
+   *
+   * The `rules_count` field in the default response give the number of rules
+   * that were run in the analysis.
+   * For very old analyses this data is not available,
+   * and `0` is returned in this field.
+   *
+   * If you use the Accept header `application/sarif+json`,
+   * the response contains the analysis data that was uploaded.
+   * This is formatted as
+   * [SARIF version 2.1.0](https://docs.oasis-open.org/sarif/sarif/v2.1.0/cs01/sarif-v2.1.0-cs01.html).
+   * operationId: code-scanning/get-analysis
+   * Request URI: /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}
+   */
+  public async code$scanning$get$analysis<ResponseContentType extends ResponseContentType$code$scanning$get$analysis>(
+    params: Params$code$scanning$get$analysis<ResponseContentType>,
+    option?: RequestOption,
+  ): Promise<Response$code$scanning$get$analysis$Status$200[ResponseContentType]> {
+    const url =
+      this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/analyses/${params.parameter.analysis_id}`;
+    const headers = {
+      Accept: params.headers.Accept,
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Delete a code scanning analysis from a repository
+   * Deletes a specified code scanning analysis from a repository. For
+   * private repositories, you must use an access token with the `repo` scope. For public repositories,
+   * you must use an access token with `public_repo` scope.
+   * GitHub Apps must have the `security_events` write permission to use this endpoint.
+   *
+   * You can delete one analysis at a time.
+   * To delete a series of analyses, start with the most recent analysis and work backwards.
+   * Conceptually, the process is similar to the undo function in a text editor.
+   *
+   * When you list the analyses for a repository,
+   * one or more will be identified as deletable in the response:
+   *
+   * ```
+   * "deletable": true
+   * ```
+   *
+   * An analysis is deletable when it's the most recent in a set of analyses.
+   * Typically, a repository will have multiple sets of analyses
+   * for each enabled code scanning tool,
+   * where a set is determined by a unique combination of analysis values:
+   *
+   * * `ref`
+   * * `tool`
+   * * `analysis_key`
+   * * `environment`
+   *
+   * If you attempt to delete an analysis that is not the most recent in a set,
+   * you'll get a 400 response with the message:
+   *
+   * ```
+   * Analysis specified is not deletable.
+   * ```
+   *
+   * The response from a successful `DELETE` operation provides you with
+   * two alternative URLs for deleting the next analysis in the set:
+   * `next_analysis_url` and `confirm_delete_url`.
+   * Use the `next_analysis_url` URL if you want to avoid accidentally deleting the final analysis
+   * in a set. This is a useful option if you want to preserve at least one analysis
+   * for the specified tool in your repository.
+   * Use the `confirm_delete_url` URL if you are content to remove all analyses for a tool.
+   * When you delete the last analysis in a set, the value of `next_analysis_url` and `confirm_delete_url`
+   * in the 200 response is `null`.
+   *
+   * As an example of the deletion process,
+   * let's imagine that you added a workflow that configured a particular code scanning tool
+   * to analyze the code in a repository. This tool has added 15 analyses:
+   * 10 on the default branch, and another 5 on a topic branch.
+   * You therefore have two separate sets of analyses for this tool.
+   * You've now decided that you want to remove all of the analyses for the tool.
+   * To do this you must make 15 separate deletion requests.
+   * To start, you must find an analysis that's identified as deletable.
+   * Each set of analyses always has one that's identified as deletable.
+   * Having found the deletable analysis for one of the two sets,
+   * delete this analysis and then continue deleting the next analysis in the set until they're all deleted.
+   * Then repeat the process for the second set.
+   * The procedure therefore consists of a nested loop:
+   *
+   * **Outer loop**:
+   * * List the analyses for the repository, filtered by tool.
+   * * Parse this list to find a deletable analysis. If found:
+   *
+   *   **Inner loop**:
+   *   * Delete the identified analysis.
+   *   * Parse the response for the value of `confirm_delete_url` and, if found, use this in the next iteration.
+   *
+   * The above process assumes that you want to remove all trace of the tool's analyses from the GitHub user interface, for the specified repository, and it therefore uses the `confirm_delete_url` value. Alternatively, you could use the `next_analysis_url` value, which would leave the last analysis in each set undeleted to avoid removing a tool's analysis entirely.
+   * operationId: code-scanning/delete-analysis
+   * Request URI: /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}
+   */
+  public async code$scanning$delete$analysis(
+    params: Params$code$scanning$delete$analysis,
+    option?: RequestOption,
+  ): Promise<Response$code$scanning$delete$analysis$Status$200["application/json"]> {
+    const url =
+      this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/analyses/${params.parameter.analysis_id}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      confirm_delete: { value: params.parameter.confirm_delete, explode: false },
+    };
+    return this.apiClient.request("DELETE", url, headers, undefined, queryParameters, option);
+  }
+  /**
    * Upload an analysis as SARIF data
-   * Uploads SARIF data containing the results of a code scanning analysis to make the results available in a repository. You must use an access token with the `security_events` scope to use this endpoint. GitHub Apps must have the `security_events` write permission to use this endpoint.
+   * Uploads SARIF data containing the results of a code scanning analysis to make the results available in a repository. You must use an access token with the `security_events` scope to use this endpoint for private repositories. You can also use tokens with the `public_repo` scope for public repositories only. GitHub Apps must have the `security_events` write permission to use this endpoint.
    *
    * There are two places where you can upload code scanning results.
    *  - If you upload to a pull request, for example `--ref refs/pull/42/merge` or `--ref refs/pull/42/head`, then the results appear as alerts in a pull request check. For more information, see "[Triaging code scanning alerts in pull requests](/code-security/secure-coding/triaging-code-scanning-alerts-in-pull-requests)."
@@ -25746,7 +28973,7 @@ export class Client<RequestOption> {
    * gzip -c analysis-data.sarif | base64 -w0
    * ```
    *
-   * SARIF upload supports a maximum of 1000 results per analysis run. Any results over this limit are ignored. Typically, but not necessarily, a SARIF file contains a single run of a single tool. If a code scanning tool generates too many results, you should update the analysis configuration to run only the most important rules or queries.
+   * SARIF upload supports a maximum of 5000 results per analysis run. Any results over this limit are ignored and any SARIF uploads with more than 25,000 results are rejected. Typically, but not necessarily, a SARIF file contains a single run of a single tool. If a code scanning tool generates too many results, you should update the analysis configuration to run only the most important rules or queries.
    *
    * The `202 Accepted`, response includes an `id` value.
    * You can use this ID to check the status of the upload by using this for the `/sarifs/{sarif_id}` endpoint.
@@ -25764,6 +28991,22 @@ export class Client<RequestOption> {
       Accept: "application/json",
     };
     return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Get information about a SARIF upload
+   * Gets information about a SARIF upload, including the status and the URL of the analysis that was uploaded so that you can retrieve details of the analysis. For more information, see "[Get a code scanning analysis for a repository](/rest/reference/code-scanning#get-a-code-scanning-analysis-for-a-repository)." You must use an access token with the `security_events` scope to use this endpoint with private repos, the `public_repo` scope also grants permission to read security events on public repos only. GitHub Apps must have the `security_events` read permission to use this endpoint.
+   * operationId: code-scanning/get-sarif
+   * Request URI: /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}
+   */
+  public async code$scanning$get$sarif(
+    params: Params$code$scanning$get$sarif,
+    option?: RequestOption,
+  ): Promise<Response$code$scanning$get$sarif$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/sarifs/${params.parameter.sarif_id}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
   }
   /**
    * List repository collaborators
@@ -25811,7 +29054,7 @@ export class Client<RequestOption> {
   }
   /**
    * Add a repository collaborator
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    *
    * For more information on permission levels, see "[Repository permission levels for an organization](https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization#permission-levels-for-repositories-owned-by-an-organization)". There are restrictions on which permissions can be granted to organization members when an organization base role is in place. In this case, the permission being given must be equal to or higher than the org base permission. Otherwise, the request will fail with:
    *
@@ -25819,9 +29062,9 @@ export class Client<RequestOption> {
    * Cannot assign {member} permission of {role name}
    * ```
    *
-   * Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
+   * Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#http-verbs)."
    *
-   * The invitee will receive a notification that they have been invited to the repository, which they must accept or decline. They may do this via the notifications page, the email they receive, or by using the [repository invitations API endpoints](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#invitations).
+   * The invitee will receive a notification that they have been invited to the repository, which they must accept or decline. They may do this via the notifications page, the email they receive, or by using the [repository invitations API endpoints](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#invitations).
    *
    * **Rate limits**
    *
@@ -25869,7 +29112,7 @@ export class Client<RequestOption> {
   }
   /**
    * List commit comments for a repository
-   * Commit Comments use [these custom media types](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#custom-media-types). You can read more about the use of media types in the API [here](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types/).
+   * Commit Comments use [these custom media types](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#custom-media-types). You can read more about the use of media types in the API [here](https://docs.github.com/enterprise-server@3.4/rest/overview/media-types/).
    *
    * Comments are ordered by ascending ID.
    * operationId: repos/list-commit-comments-for-repo
@@ -25932,7 +29175,7 @@ export class Client<RequestOption> {
   }
   /**
    * List reactions for a commit comment
-   * List the reactions to a [commit comment](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#comments).
+   * List the reactions to a [commit comment](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#comments).
    * operationId: reactions/list-for-commit-comment
    * Request URI: /repos/{owner}/{repo}/comments/{comment_id}/reactions
    */
@@ -25953,7 +29196,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create reaction for a commit comment
-   * Create a reaction to a [commit comment](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#comments). A response with an HTTP `200` status means that you already added the reaction type to this commit comment.
+   * Create a reaction to a [commit comment](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#comments). A response with an HTTP `200` status means that you already added the reaction type to this commit comment.
    * operationId: reactions/create-for-commit-comment
    * Request URI: /repos/{owner}/{repo}/comments/{comment_id}/reactions
    */
@@ -25974,7 +29217,7 @@ export class Client<RequestOption> {
    * Delete a commit comment reaction
    * **Note:** You can also specify a repository by `repository_id` using the route `DELETE /repositories/:repository_id/comments/:comment_id/reactions/:reaction_id`.
    *
-   * Delete a reaction to a [commit comment](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#comments).
+   * Delete a reaction to a [commit comment](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#comments).
    * operationId: reactions/delete-for-commit-comment
    * Request URI: /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}
    */
@@ -26080,7 +29323,7 @@ export class Client<RequestOption> {
    * Create a commit comment
    * Create a comment for a commit using its `:commit_sha`.
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: repos/create-commit-comment
    * Request URI: /repos/{owner}/{repo}/commits/{commit_sha}/comments
    */
@@ -26097,7 +29340,7 @@ export class Client<RequestOption> {
   }
   /**
    * List pull requests associated with a commit
-   * Lists the merged pull request that introduced the commit to the repository. If the commit is not present in the default branch, additionally returns open pull requests associated with the commit. The results may include open and closed pull requests. Additional preview headers may be required to see certain details for associated pull requests, such as whether a pull request is in a draft state. For more information about previews that might affect this endpoint, see the [List pull requests](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#list-pull-requests) endpoint.
+   * Lists the merged pull request that introduced the commit to the repository. If the commit is not present in the default branch, additionally returns open pull requests associated with the commit. The results may include open and closed pull requests. Additional preview headers may be required to see certain details for associated pull requests, such as whether a pull request is in a draft state. For more information about previews that might affect this endpoint, see the [List pull requests](https://docs.github.com/enterprise-server@3.4/rest/reference/pulls#list-pull-requests) endpoint.
    * operationId: repos/list-pull-requests-associated-with-commit
    * Request URI: /repos/{owner}/{repo}/commits/{commit_sha}/pulls
    */
@@ -26121,9 +29364,9 @@ export class Client<RequestOption> {
    *
    * **Note:** If there are more than 300 files in the commit diff, the response will include pagination link headers for the remaining files, up to a limit of 3000 files. Each page contains the static commit information, and the only changes are to the file listing.
    *
-   * You can pass the appropriate [media type](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types/#commits-commit-comparison-and-pull-requests) to  fetch `diff` and `patch` formats. Diffs with binary data will have no `patch` property.
+   * You can pass the appropriate [media type](https://docs.github.com/enterprise-server@3.4/rest/overview/media-types/#commits-commit-comparison-and-pull-requests) to  fetch `diff` and `patch` formats. Diffs with binary data will have no `patch` property.
    *
-   * To return only the SHA-1 hash of the commit reference, you can provide the `sha` custom [media type](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types/#commits-commit-comparison-and-pull-requests) in the `Accept` header. You can use this endpoint to check if a remote reference's SHA-1 hash is the same as your local reference's SHA-1 hash by providing the local SHA-1 reference as the ETag.
+   * To return only the SHA-1 hash of the commit reference, you can provide the `sha` custom [media type](https://docs.github.com/enterprise-server@3.4/rest/overview/media-types/#commits-commit-comparison-and-pull-requests) in the `Accept` header. You can use this endpoint to check if a remote reference's SHA-1 hash is the same as your local reference's SHA-1 hash by providing the local SHA-1 reference as the ETag.
    *
    * **Signature verification object**
    *
@@ -26273,16 +29516,15 @@ export class Client<RequestOption> {
    * Compare two commits
    * The `basehead` param is comprised of two parts: `base` and `head`. Both must be branch names in `repo`. To compare branches across other repositories in the same network as `repo`, use the format `<USERNAME>:branch`.
    *
-   * The response from the API is equivalent to running the `git log base..head` command; however, commits are returned in chronological order. Pass the appropriate [media type](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types/#commits-commit-comparison-and-pull-requests) to fetch diff and patch formats.
+   * The response from the API is equivalent to running the `git log base..head` command; however, commits are returned in chronological order. Pass the appropriate [media type](https://docs.github.com/enterprise-server@3.4/rest/overview/media-types/#commits-commit-comparison-and-pull-requests) to fetch diff and patch formats.
    *
    * The response also includes details on the files that were changed between the two commits. This includes the status of the change (for example, if a file was added, removed, modified, or renamed), and details of the change itself. For example, files with a `renamed` status have a `previous_filename` field showing the previous filename of the file, and files with a `modified` status have a `patch` field showing the changes made to the file.
    *
    * **Working with large comparisons**
    *
-   * The response will include a comparison of up to 250 commits. If you are working with a larger commit range, you can use the [List commits](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#list-commits) to enumerate all commits in the range.
+   * To process a response with a large number of commits, you can use (`per_page` or `page`) to paginate the results. When using paging, the list of changed files is only returned with page 1, but includes all changed files for the entire comparison. For more information on working with pagination, see "[Traversing with pagination](/rest/guides/traversing-with-pagination)."
    *
-   * For comparisons with extremely large diffs, you may receive an error response indicating that the diff took too long
-   * to generate. You can typically resolve this error by using a smaller commit range.
+   * When calling this API without any paging parameters (`per_page` or `page`), the returned list is limited to 250 commits and the last commit in the list is the most recent of the entire comparison. When a paging parameter is specified, the first commit in the returned list of each page is the earliest.
    *
    * **Signature verification object**
    *
@@ -26323,45 +29565,26 @@ export class Client<RequestOption> {
     const headers = {
       Accept: "application/json",
     };
-    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
-  }
-  /**
-   * Create a content attachment
-   * Creates an attachment under a content reference URL in the body or comment of an issue or pull request. Use the `id` and `repository` `full_name` of the content reference from the [`content_reference` event](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads/#content_reference) to create an attachment.
-   *
-   * The app must create a content attachment within six hours of the content reference URL being posted. See "[Using content attachments](https://docs.github.com/enterprise-server@3.0/apps/using-content-attachments/)" for details about content attachments.
-   *
-   * You must use an [installation access token](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation) to access this endpoint.
-   * operationId: apps/create-content-attachment
-   * Request URI: /repos/{owner}/{repo}/content_references/{content_reference_id}/attachments
-   */
-  public async apps$create$content$attachment(
-    params: Params$apps$create$content$attachment,
-    option?: RequestOption,
-  ): Promise<Response$apps$create$content$attachment$Status$200["application/json"]> {
-    const url =
-      this.baseUrl +
-      `/repos/${params.parameter.owner}/${params.parameter.repo}/content_references/${params.parameter.content_reference_id}/attachments`;
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
+    const queryParameters: QueryParameters = {
+      page: { value: params.parameter.page, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
     };
-    return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
    * Get repository content
    * Gets the contents of a file or directory in a repository. Specify the file path or directory in `:path`. If you omit
    * `:path`, you will receive the contents of the repository's root directory. See the description below regarding what the API response includes for directories.
    *
-   * Files and symlinks support [a custom media type](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#custom-media-types) for
+   * Files and symlinks support [a custom media type](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#custom-media-types) for
    * retrieving the raw content or rendered HTML (when supported). All content types support [a custom media
-   * type](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#custom-media-types) to ensure the content is returned in a consistent
+   * type](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#custom-media-types) to ensure the content is returned in a consistent
    * object format.
    *
    * **Note**:
-   * *   To get a repository's contents recursively, you can [recursively get the tree](https://docs.github.com/enterprise-server@3.0/rest/reference/git#trees).
+   * *   To get a repository's contents recursively, you can [recursively get the tree](https://docs.github.com/enterprise-server@3.4/rest/reference/git#trees).
    * *   This API has an upper limit of 1,000 files for a directory. If you need to retrieve more files, use the [Git Trees
-   * API](https://docs.github.com/enterprise-server@3.0/rest/reference/git#get-a-tree).
+   * API](https://docs.github.com/enterprise-server@3.4/rest/reference/git#get-a-tree).
    * *   This API supports files up to 1 megabyte in size.
    *
    * #### If the content is a directory
@@ -26464,6 +29687,160 @@ export class Client<RequestOption> {
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
+   * List repository secrets
+   * Lists all secrets available in a repository without revealing their encrypted values. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `dependabot_secrets` repository permission to use this endpoint.
+   * operationId: dependabot/list-repo-secrets
+   * Request URI: /repos/{owner}/{repo}/dependabot/secrets
+   */
+  public async dependabot$list$repo$secrets(
+    params: Params$dependabot$list$repo$secrets,
+    option?: RequestOption,
+  ): Promise<Response$dependabot$list$repo$secrets$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/dependabot/secrets`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      per_page: { value: params.parameter.per_page, explode: false },
+      page: { value: params.parameter.page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * Get a repository public key
+   * Gets your public key, which you need to encrypt secrets. You need to encrypt a secret before you can create or update secrets. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `dependabot_secrets` repository permission to use this endpoint.
+   * operationId: dependabot/get-repo-public-key
+   * Request URI: /repos/{owner}/{repo}/dependabot/secrets/public-key
+   */
+  public async dependabot$get$repo$public$key(
+    params: Params$dependabot$get$repo$public$key,
+    option?: RequestOption,
+  ): Promise<Response$dependabot$get$repo$public$key$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/dependabot/secrets/public-key`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get a repository secret
+   * Gets a single repository secret without revealing its encrypted value. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `dependabot_secrets` repository permission to use this endpoint.
+   * operationId: dependabot/get-repo-secret
+   * Request URI: /repos/{owner}/{repo}/dependabot/secrets/{secret_name}
+   */
+  public async dependabot$get$repo$secret(
+    params: Params$dependabot$get$repo$secret,
+    option?: RequestOption,
+  ): Promise<Response$dependabot$get$repo$secret$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/dependabot/secrets/${params.parameter.secret_name}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Create or update a repository secret
+   * Creates or updates a repository secret with an encrypted value. Encrypt your secret using
+   * [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages). You must authenticate using an access
+   * token with the `repo` scope to use this endpoint. GitHub Apps must have the `dependabot_secrets` repository
+   * permission to use this endpoint.
+   *
+   * #### Example encrypting a secret using Node.js
+   *
+   * Encrypt your secret using the [tweetsodium](https://github.com/github/tweetsodium) library.
+   *
+   * ```
+   * const sodium = require('tweetsodium');
+   *
+   * const key = "base64-encoded-public-key";
+   * const value = "plain-text-secret";
+   *
+   * // Convert the message and key to Uint8Array's (Buffer implements that interface)
+   * const messageBytes = Buffer.from(value);
+   * const keyBytes = Buffer.from(key, 'base64');
+   *
+   * // Encrypt using LibSodium.
+   * const encryptedBytes = sodium.seal(messageBytes, keyBytes);
+   *
+   * // Base64 the encrypted secret
+   * const encrypted = Buffer.from(encryptedBytes).toString('base64');
+   *
+   * console.log(encrypted);
+   * ```
+   *
+   *
+   * #### Example encrypting a secret using Python
+   *
+   * Encrypt your secret using [pynacl](https://pynacl.readthedocs.io/en/latest/public/#nacl-public-sealedbox) with Python 3.
+   *
+   * ```
+   * from base64 import b64encode
+   * from nacl import encoding, public
+   *
+   * def encrypt(public_key: str, secret_value: str) -> str:
+   *   """Encrypt a Unicode string using the public key."""
+   *   public_key = public.PublicKey(public_key.encode("utf-8"), encoding.Base64Encoder())
+   *   sealed_box = public.SealedBox(public_key)
+   *   encrypted = sealed_box.encrypt(secret_value.encode("utf-8"))
+   *   return b64encode(encrypted).decode("utf-8")
+   * ```
+   *
+   * #### Example encrypting a secret using C#
+   *
+   * Encrypt your secret using the [Sodium.Core](https://www.nuget.org/packages/Sodium.Core/) package.
+   *
+   * ```
+   * var secretValue = System.Text.Encoding.UTF8.GetBytes("mySecret");
+   * var publicKey = Convert.FromBase64String("2Sg8iYjAxxmI2LvUXpJjkYrMxURPc8r+dB7TJyvvcCU=");
+   *
+   * var sealedPublicKeyBox = Sodium.SealedPublicKeyBox.Create(secretValue, publicKey);
+   *
+   * Console.WriteLine(Convert.ToBase64String(sealedPublicKeyBox));
+   * ```
+   *
+   * #### Example encrypting a secret using Ruby
+   *
+   * Encrypt your secret using the [rbnacl](https://github.com/RubyCrypto/rbnacl) gem.
+   *
+   * ```ruby
+   * require "rbnacl"
+   * require "base64"
+   *
+   * key = Base64.decode64("+ZYvJDZMHUfBkJdyq5Zm9SKqeuBQ4sj+6sfjlH4CgG0=")
+   * public_key = RbNaCl::PublicKey.new(key)
+   *
+   * box = RbNaCl::Boxes::Sealed.from_public_key(public_key)
+   * encrypted_secret = box.encrypt("my_secret")
+   *
+   * # Print the base64 encoded secret
+   * puts Base64.strict_encode64(encrypted_secret)
+   * ```
+   * operationId: dependabot/create-or-update-repo-secret
+   * Request URI: /repos/{owner}/{repo}/dependabot/secrets/{secret_name}
+   */
+  public async dependabot$create$or$update$repo$secret(
+    params: Params$dependabot$create$or$update$repo$secret,
+    option?: RequestOption,
+  ): Promise<Response$dependabot$create$or$update$repo$secret$Status$201["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/dependabot/secrets/${params.parameter.secret_name}`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("PUT", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Delete a repository secret
+   * Deletes a secret in a repository using the secret name. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `dependabot_secrets` repository permission to use this endpoint.
+   * operationId: dependabot/delete-repo-secret
+   * Request URI: /repos/{owner}/{repo}/dependabot/secrets/{secret_name}
+   */
+  public async dependabot$delete$repo$secret(params: Params$dependabot$delete$repo$secret, option?: RequestOption): Promise<void> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/dependabot/secrets/${params.parameter.secret_name}`;
+    const headers = {};
+    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
+  }
+  /**
    * List deployments
    * Simple filtering of deployments is available via query parameters:
    * operationId: repos/list-deployments
@@ -26503,7 +29880,7 @@ export class Client<RequestOption> {
    * the API will return a successful merge commit. If merge conflicts prevent the merge from succeeding, the API will
    * return a failure response.
    *
-   * By default, [commit statuses](https://docs.github.com/enterprise-server@3.0/rest/reference/commits#commit-statuses) for every submitted context must be in a `success`
+   * By default, [commit statuses](https://docs.github.com/enterprise-server@3.4/rest/reference/commits#commit-statuses) for every submitted context must be in a `success`
    * state. The `required_contexts` parameter allows you to specify a subset of contexts that must be `success`, or to
    * specify contexts that have not yet been submitted. You are not required to use commit statuses to deploy. If you do
    * not require any contexts or create any commit statuses, the deployment will always succeed.
@@ -26572,7 +29949,7 @@ export class Client<RequestOption> {
    * *   Create a new deployment that is active so that the system has a record of the current state, then delete the previously active deployment.
    * *   Mark the active deployment as inactive by adding any non-successful deployment status.
    *
-   * For more information, see "[Create a deployment](https://docs.github.com/enterprise-server@3.0/rest/reference/repos/#create-a-deployment)" and "[Create a deployment status](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#create-a-deployment-status)."
+   * For more information, see "[Create a deployment](https://docs.github.com/enterprise-server@3.4/rest/reference/repos/#create-a-deployment)" and "[Create a deployment status](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#create-a-deployment-status)."
    * operationId: repos/delete-deployment
    * Request URI: /repos/{owner}/{repo}/deployments/{deployment_id}
    */
@@ -26642,7 +30019,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create a repository dispatch event
-   * You can use this endpoint to trigger a webhook event called `repository_dispatch` when you want activity that happens outside of GitHub Enterprise Server to trigger a GitHub Actions workflow or GitHub App webhook. You must configure your GitHub Actions workflow or GitHub App to run when the `repository_dispatch` event occurs. For an example `repository_dispatch` webhook payload, see "[RepositoryDispatchEvent](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads/#repository_dispatch)."
+   * You can use this endpoint to trigger a webhook event called `repository_dispatch` when you want activity that happens outside of GitHub Enterprise Server to trigger a GitHub Actions workflow or GitHub App webhook. You must configure your GitHub Actions workflow or GitHub App to run when the `repository_dispatch` event occurs. For an example `repository_dispatch` webhook payload, see "[RepositoryDispatchEvent](https://docs.github.com/enterprise-server@3.4/webhooks/event-payloads/#repository_dispatch)."
    *
    * The `client_payload` parameter is available for any extra information that your workflow might need. This parameter is a JSON payload that will be passed on when the webhook event is dispatched. For example, the `client_payload` can include a message that a user would like to send using a GitHub Actions workflow. Or the `client_payload` can be used as a test to debug your workflow.
    *
@@ -26661,6 +30038,74 @@ export class Client<RequestOption> {
       "Content-Type": "application/json",
     };
     return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Get all environments
+   * Get all environments for a repository.
+   *
+   * Anyone with read access to the repository can use this endpoint. If the repository is private, you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint.
+   * operationId: repos/get-all-environments
+   * Request URI: /repos/{owner}/{repo}/environments
+   */
+  public async repos$get$all$environments(
+    params: Params$repos$get$all$environments,
+    option?: RequestOption,
+  ): Promise<Response$repos$get$all$environments$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/environments`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get an environment
+   * Anyone with read access to the repository can use this endpoint. If the repository is private, you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint.
+   * operationId: repos/get-environment
+   * Request URI: /repos/{owner}/{repo}/environments/{environment_name}
+   */
+  public async repos$get$environment(
+    params: Params$repos$get$environment,
+    option?: RequestOption,
+  ): Promise<Response$repos$get$environment$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/environments/${params.parameter.environment_name}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Create or update an environment
+   * Create or update an environment with protection rules, such as required reviewers. For more information about environment protection rules, see "[Environments](/actions/reference/environments#environment-protection-rules)."
+   *
+   * **Note:** Although you can use this operation to specify that only branches that match specified name patterns can deploy to this environment, you must use the UI to set the name patterns. For more information, see "[Environments](/actions/reference/environments#deployment-branches)."
+   *
+   * **Note:** To create or update secrets for an environment, see "[Secrets](/rest/reference/actions#secrets)."
+   *
+   * You must authenticate using an access token with the repo scope to use this endpoint.
+   * operationId: repos/create-or-update-environment
+   * Request URI: /repos/{owner}/{repo}/environments/{environment_name}
+   */
+  public async repos$create$or$update$environment(
+    params: Params$repos$create$or$update$environment,
+    option?: RequestOption,
+  ): Promise<Response$repos$create$or$update$environment$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/environments/${params.parameter.environment_name}`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("PUT", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Delete an environment
+   * You must authenticate using an access token with the repo scope to use this endpoint.
+   * operationId: repos/delete-an-environment
+   * Request URI: /repos/{owner}/{repo}/environments/{environment_name}
+   */
+  public async repos$delete$an$environment(params: Params$repos$delete$an$environment, option?: RequestOption): Promise<void> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/environments/${params.parameter.environment_name}`;
+    const headers = {};
+    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
   }
   /**
    * List repository events
@@ -26851,7 +30296,7 @@ export class Client<RequestOption> {
    *
    * When you use this endpoint without providing a `:ref`, it will return an array of all the references from your Git database, including notes and stashes if they exist on the server. Anything in the namespace is returned, not just `heads` and `tags`.
    *
-   * **Note:** You need to explicitly [request a pull request](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#get-a-pull-request) to trigger a test merge commit, which checks the mergeability of pull requests. For more information, see "[Checking mergeability of pull requests](https://docs.github.com/enterprise-server@3.0/rest/guides/getting-started-with-the-git-database-api#checking-mergeability-of-pull-requests)".
+   * **Note:** You need to explicitly [request a pull request](https://docs.github.com/enterprise-server@3.4/rest/reference/pulls#get-a-pull-request) to trigger a test merge commit, which checks the mergeability of pull requests. For more information, see "[Checking mergeability of pull requests](https://docs.github.com/enterprise-server@3.4/rest/guides/getting-started-with-the-git-database-api#checking-mergeability-of-pull-requests)".
    *
    * If you request matching references for a branch named `feature` but the branch `feature` doesn't exist, the response can still include other matching head refs that start with the word `feature`, such as `featureA` and `featureB`.
    * operationId: git/list-matching-refs
@@ -26875,7 +30320,7 @@ export class Client<RequestOption> {
    * Get a reference
    * Returns a single reference from your Git database. The `:ref` in the URL must be formatted as `heads/<branch name>` for branches and `tags/<tag name>` for tags. If the `:ref` doesn't match an existing ref, a `404` is returned.
    *
-   * **Note:** You need to explicitly [request a pull request](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#get-a-pull-request) to trigger a test merge commit, which checks the mergeability of pull requests. For more information, see "[Checking mergeability of pull requests](https://docs.github.com/enterprise-server@3.0/rest/guides/getting-started-with-the-git-database-api#checking-mergeability-of-pull-requests)".
+   * **Note:** You need to explicitly [request a pull request](https://docs.github.com/enterprise-server@3.4/rest/reference/pulls#get-a-pull-request) to trigger a test merge commit, which checks the mergeability of pull requests. For more information, see "[Checking mergeability of pull requests](https://docs.github.com/enterprise-server@3.4/rest/guides/getting-started-with-the-git-database-api#checking-mergeability-of-pull-requests)".
    * operationId: git/get-ref
    * Request URI: /repos/{owner}/{repo}/git/ref/{ref}
    */
@@ -26931,7 +30376,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create a tag object
-   * Note that creating a tag object does not create the reference that makes a tag in Git. If you want to create an annotated tag in Git, you have to do this call to create the tag object, and then [create](https://docs.github.com/enterprise-server@3.0/rest/reference/git#create-a-reference) the `refs/tags/[tag]` reference. If you want to create a lightweight tag, you only have to [create](https://docs.github.com/enterprise-server@3.0/rest/reference/git#create-a-reference) the tag reference - this call would be unnecessary.
+   * Note that creating a tag object does not create the reference that makes a tag in Git. If you want to create an annotated tag in Git, you have to do this call to create the tag object, and then [create](https://docs.github.com/enterprise-server@3.4/rest/reference/git#create-a-reference) the `refs/tags/[tag]` reference. If you want to create a lightweight tag, you only have to [create](https://docs.github.com/enterprise-server@3.4/rest/reference/git#create-a-reference) the tag reference - this call would be unnecessary.
    *
    * **Signature verification object**
    *
@@ -27019,7 +30464,7 @@ export class Client<RequestOption> {
    * Create a tree
    * The tree creation API accepts nested entries. If you specify both a tree and a nested path modifying that tree, this endpoint will overwrite the contents of the tree with the new path contents, and create a new tree structure.
    *
-   * If you use this endpoint to add, delete, or modify the file contents in a tree, you will need to commit the tree and then update a branch to point to the commit. For more information see "[Create a commit](https://docs.github.com/enterprise-server@3.0/rest/reference/git#create-a-commit)" and "[Update a reference](https://docs.github.com/enterprise-server@3.0/rest/reference/git#update-a-reference)."
+   * If you use this endpoint to add, delete, or modify the file contents in a tree, you will need to commit the tree and then update a branch to point to the commit. For more information see "[Create a commit](https://docs.github.com/enterprise-server@3.4/rest/reference/git#create-a-commit)" and "[Update a reference](https://docs.github.com/enterprise-server@3.4/rest/reference/git#update-a-reference)."
    * operationId: git/create-tree
    * Request URI: /repos/{owner}/{repo}/git/trees
    */
@@ -27173,8 +30618,64 @@ export class Client<RequestOption> {
     return this.apiClient.request("PATCH", url, headers, params.requestBody, undefined, option);
   }
   /**
+   * List deliveries for a repository webhook
+   * Returns a list of webhook deliveries for a webhook configured in a repository.
+   * operationId: repos/list-webhook-deliveries
+   * Request URI: /repos/{owner}/{repo}/hooks/{hook_id}/deliveries
+   */
+  public async repos$list$webhook$deliveries(
+    params: Params$repos$list$webhook$deliveries,
+    option?: RequestOption,
+  ): Promise<Response$repos$list$webhook$deliveries$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/deliveries`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      per_page: { value: params.parameter.per_page, explode: false },
+      cursor: { value: params.parameter.cursor, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * Get a delivery for a repository webhook
+   * Returns a delivery for a webhook configured in a repository.
+   * operationId: repos/get-webhook-delivery
+   * Request URI: /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}
+   */
+  public async repos$get$webhook$delivery(
+    params: Params$repos$get$webhook$delivery,
+    option?: RequestOption,
+  ): Promise<Response$repos$get$webhook$delivery$Status$200["application/json"]> {
+    const url =
+      this.baseUrl +
+      `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/deliveries/${params.parameter.delivery_id}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Redeliver a delivery for a repository webhook
+   * Redeliver a webhook delivery for a webhook configured in a repository.
+   * operationId: repos/redeliver-webhook-delivery
+   * Request URI: /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts
+   */
+  public async repos$redeliver$webhook$delivery(
+    params: Params$repos$redeliver$webhook$delivery,
+    option?: RequestOption,
+  ): Promise<Response$repos$redeliver$webhook$delivery$Status$202["application/json"]> {
+    const url =
+      this.baseUrl +
+      `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/deliveries/${params.parameter.delivery_id}/attempts`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, undefined, undefined, option);
+  }
+  /**
    * Ping a repository webhook
-   * This will trigger a [ping event](https://docs.github.com/enterprise-server@3.0/webhooks/#ping-event) to be sent to the hook.
+   * This will trigger a [ping event](https://docs.github.com/enterprise-server@3.4/webhooks/#ping-event) to be sent to the hook.
    * operationId: repos/ping-webhook
    * Request URI: /repos/{owner}/{repo}/hooks/{hook_id}/pings
    */
@@ -27200,7 +30701,7 @@ export class Client<RequestOption> {
    * Get a repository installation for the authenticated app
    * Enables an authenticated GitHub App to find the repository's installation information. The installation's account type will be either an organization or a user account, depending which account the repository belongs to.
    *
-   * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
    * operationId: apps/get-repo-installation
    * Request URI: /repos/{owner}/{repo}/installation
    */
@@ -27267,7 +30768,7 @@ export class Client<RequestOption> {
    * **Note**: GitHub's REST API v3 considers every pull request an issue, but not every issue is a pull request. For this
    * reason, "Issues" endpoints may return both issues and pull requests in the response. You can identify pull requests by
    * the `pull_request` key. Be aware that the `id` of a pull request returned from "Issues" endpoints will be an _issue id_. To find out the pull
-   * request id, use the "[List pull requests](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#list-pull-requests)" endpoint.
+   * request id, use the "[List pull requests](https://docs.github.com/enterprise-server@3.4/rest/reference/pulls#list-pull-requests)" endpoint.
    * operationId: issues/list-for-repo
    * Request URI: /repos/{owner}/{repo}/issues
    */
@@ -27298,7 +30799,7 @@ export class Client<RequestOption> {
    * Create an issue
    * Any user with pull access to a repository can create an issue. If [issues are disabled in the repository](https://docs.github.com/articles/disabling-issues/), the API returns a `410 Gone` status.
    *
-   * This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.0/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.4/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: issues/create
    * Request URI: /repos/{owner}/{repo}/issues
    */
@@ -27379,7 +30880,7 @@ export class Client<RequestOption> {
   }
   /**
    * List reactions for an issue comment
-   * List the reactions to an [issue comment](https://docs.github.com/enterprise-server@3.0/rest/reference/issues#comments).
+   * List the reactions to an [issue comment](https://docs.github.com/enterprise-server@3.4/rest/reference/issues#comments).
    * operationId: reactions/list-for-issue-comment
    * Request URI: /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions
    */
@@ -27401,7 +30902,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create reaction for an issue comment
-   * Create a reaction to an [issue comment](https://docs.github.com/enterprise-server@3.0/rest/reference/issues#comments). A response with an HTTP `200` status means that you already added the reaction type to this issue comment.
+   * Create a reaction to an [issue comment](https://docs.github.com/enterprise-server@3.4/rest/reference/issues#comments). A response with an HTTP `200` status means that you already added the reaction type to this issue comment.
    * operationId: reactions/create-for-issue-comment
    * Request URI: /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions
    */
@@ -27423,7 +30924,7 @@ export class Client<RequestOption> {
    * Delete an issue comment reaction
    * **Note:** You can also specify a repository by `repository_id` using the route `DELETE delete /repositories/:repository_id/issues/comments/:comment_id/reactions/:reaction_id`.
    *
-   * Delete a reaction to an [issue comment](https://docs.github.com/enterprise-server@3.0/rest/reference/issues#comments).
+   * Delete a reaction to an [issue comment](https://docs.github.com/enterprise-server@3.4/rest/reference/issues#comments).
    * operationId: reactions/delete-for-issue-comment
    * Request URI: /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}
    */
@@ -27470,17 +30971,17 @@ export class Client<RequestOption> {
   }
   /**
    * Get an issue
-   * The API returns a [`301 Moved Permanently` status](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-redirects-redirects) if the issue was
+   * The API returns a [`301 Moved Permanently` status](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#http-redirects-redirects) if the issue was
    * [transferred](https://docs.github.com/articles/transferring-an-issue-to-another-repository/) to another repository. If
    * the issue was transferred to or deleted from a repository where the authenticated user lacks read access, the API
    * returns a `404 Not Found` status. If the issue was deleted from a repository where the authenticated user has read
    * access, the API returns a `410 Gone` status. To receive webhook events for transferred and deleted issues, subscribe
-   * to the [`issues`](https://docs.github.com/enterprise-server@3.0/webhooks/event-payloads/#issues) webhook.
+   * to the [`issues`](https://docs.github.com/enterprise-server@3.4/webhooks/event-payloads/#issues) webhook.
    *
    * **Note**: GitHub's REST API v3 considers every pull request an issue, but not every issue is a pull request. For this
    * reason, "Issues" endpoints may return both issues and pull requests in the response. You can identify pull requests by
    * the `pull_request` key. Be aware that the `id` of a pull request returned from "Issues" endpoints will be an _issue id_. To find out the pull
-   * request id, use the "[List pull requests](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#list-pull-requests)" endpoint.
+   * request id, use the "[List pull requests](https://docs.github.com/enterprise-server@3.4/rest/reference/pulls#list-pull-requests)" endpoint.
    * operationId: issues/get
    * Request URI: /repos/{owner}/{repo}/issues/{issue_number}
    */
@@ -27565,7 +31066,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create an issue comment
-   * This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.0/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.4/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: issues/create-comment
    * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/comments
    */
@@ -27683,7 +31184,7 @@ export class Client<RequestOption> {
    * Lock an issue
    * Users with push access can lock an issue or pull request's conversation.
    *
-   * Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
+   * Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#http-verbs)."
    * operationId: issues/lock
    * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/lock
    */
@@ -27707,7 +31208,7 @@ export class Client<RequestOption> {
   }
   /**
    * List reactions for an issue
-   * List the reactions to an [issue](https://docs.github.com/enterprise-server@3.0/rest/reference/issues).
+   * List the reactions to an [issue](https://docs.github.com/enterprise-server@3.4/rest/reference/issues).
    * operationId: reactions/list-for-issue
    * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/reactions
    */
@@ -27728,7 +31229,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create reaction for an issue
-   * Create a reaction to an [issue](https://docs.github.com/enterprise-server@3.0/rest/reference/issues/). A response with an HTTP `200` status means that you already added the reaction type to this issue.
+   * Create a reaction to an [issue](https://docs.github.com/enterprise-server@3.4/rest/reference/issues/). A response with an HTTP `200` status means that you already added the reaction type to this issue.
    * operationId: reactions/create-for-issue
    * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/reactions
    */
@@ -27747,7 +31248,7 @@ export class Client<RequestOption> {
    * Delete an issue reaction
    * **Note:** You can also specify a repository by `repository_id` using the route `DELETE /repositories/:repository_id/issues/:issue_number/reactions/:reaction_id`.
    *
-   * Delete a reaction to an [issue](https://docs.github.com/enterprise-server@3.0/rest/reference/issues/).
+   * Delete a reaction to an [issue](https://docs.github.com/enterprise-server@3.4/rest/reference/issues/).
    * operationId: reactions/delete-for-issue
    * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}
    */
@@ -27932,10 +31433,35 @@ export class Client<RequestOption> {
     return this.apiClient.request("GET", url, headers, undefined, undefined, option);
   }
   /**
+   * Enable Git LFS for a repository
+   * operationId: repos/enable-lfs-for-repo
+   * Request URI: /repos/{owner}/{repo}/lfs
+   */
+  public async repos$enable$lfs$for$repo(
+    params: Params$repos$enable$lfs$for$repo,
+    option?: RequestOption,
+  ): Promise<Response$repos$enable$lfs$for$repo$Status$202["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/lfs`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("PUT", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Disable Git LFS for a repository
+   * operationId: repos/disable-lfs-for-repo
+   * Request URI: /repos/{owner}/{repo}/lfs
+   */
+  public async repos$disable$lfs$for$repo(params: Params$repos$disable$lfs$for$repo, option?: RequestOption): Promise<void> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/lfs`;
+    const headers = {};
+    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
+  }
+  /**
    * Get the license for a repository
    * This method returns the contents of the repository's license file, if one is detected.
    *
-   * Similar to [Get repository content](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#get-repository-content), this method also supports [custom media types](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types) for retrieving the raw license content or rendered license HTML.
+   * Similar to [Get repository content](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#get-repository-content), this method also supports [custom media types](https://docs.github.com/enterprise-server@3.4/rest/overview/media-types) for retrieving the raw license content or rendered license HTML.
    * operationId: licenses/get-for-repo
    * Request URI: /repos/{owner}/{repo}/license
    */
@@ -27948,6 +31474,23 @@ export class Client<RequestOption> {
       Accept: "application/json",
     };
     return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Sync a fork branch with the upstream repository
+   * Sync a branch of a forked repository to keep it up-to-date with the upstream repository.
+   * operationId: repos/merge-upstream
+   * Request URI: /repos/{owner}/{repo}/merge-upstream
+   */
+  public async repos$merge$upstream(
+    params: Params$repos$merge$upstream,
+    option?: RequestOption,
+  ): Promise<Response$repos$merge$upstream$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/merge-upstream`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
   }
   /**
    * Merge a branch
@@ -28087,7 +31630,7 @@ export class Client<RequestOption> {
   }
   /**
    * Mark repository notifications as read
-   * Marks all notifications in a repository as "read" removes them from the [default view on GitHub Enterprise Server](https://github.com/notifications). If the number of notifications is too large to complete in one request, you will receive a `202 Accepted` status and GitHub Enterprise Server will run an asynchronous process to mark notifications as "read." To check whether any "unread" notifications remain, you can use the [List repository notifications for the authenticated user](https://docs.github.com/enterprise-server@3.0/rest/reference/activity#list-repository-notifications-for-the-authenticated-user) endpoint and pass the query parameter `all=false`.
+   * Marks all notifications in a repository as "read" removes them from the [default view on GitHub Enterprise Server](https://github.com/notifications). If the number of notifications is too large to complete in one request, you will receive a `202 Accepted` status and GitHub Enterprise Server will run an asynchronous process to mark notifications as "read." To check whether any "unread" notifications remain, you can use the [List repository notifications for the authenticated user](https://docs.github.com/enterprise-server@3.4/rest/reference/activity#list-repository-notifications-for-the-authenticated-user) endpoint and pass the query parameter `all=false`.
    * operationId: activity/mark-repo-notifications-as-read
    * Request URI: /repos/{owner}/{repo}/notifications
    */
@@ -28370,7 +31913,7 @@ export class Client<RequestOption> {
    *
    * You can create a new pull request.
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/guides/best-practices-for-integrators#dealing-with-rate-limits)" for details.
    * operationId: pulls/create
    * Request URI: /repos/{owner}/{repo}/pulls
    */
@@ -28454,7 +31997,7 @@ export class Client<RequestOption> {
   }
   /**
    * List reactions for a pull request review comment
-   * List the reactions to a [pull request review comment](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#review-comments).
+   * List the reactions to a [pull request review comment](https://docs.github.com/enterprise-server@3.4/rest/reference/pulls#review-comments).
    * operationId: reactions/list-for-pull-request-review-comment
    * Request URI: /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions
    */
@@ -28476,7 +32019,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create reaction for a pull request review comment
-   * Create a reaction to a [pull request review comment](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#comments). A response with an HTTP `200` status means that you already added the reaction type to this pull request review comment.
+   * Create a reaction to a [pull request review comment](https://docs.github.com/enterprise-server@3.4/rest/reference/pulls#comments). A response with an HTTP `200` status means that you already added the reaction type to this pull request review comment.
    * operationId: reactions/create-for-pull-request-review-comment
    * Request URI: /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions
    */
@@ -28501,7 +32044,7 @@ export class Client<RequestOption> {
    * Delete a pull request comment reaction
    * **Note:** You can also specify a repository by `repository_id` using the route `DELETE /repositories/:repository_id/pulls/comments/:comment_id/reactions/:reaction_id.`
    *
-   * Delete a reaction to a [pull request review comment](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#review-comments).
+   * Delete a reaction to a [pull request review comment](https://docs.github.com/enterprise-server@3.4/rest/reference/pulls#review-comments).
    * operationId: reactions/delete-for-pull-request-comment
    * Request URI: /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}
    */
@@ -28521,7 +32064,7 @@ export class Client<RequestOption> {
    *
    * Lists details of a pull request by providing its number.
    *
-   * When you get, [create](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls/#create-a-pull-request), or [edit](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#update-a-pull-request) a pull request, GitHub Enterprise Server creates a merge commit to test whether the pull request can be automatically merged into the base branch. This test commit is not added to the base branch or the head branch. You can review the status of the test commit using the `mergeable` key. For more information, see "[Checking mergeability of pull requests](https://docs.github.com/enterprise-server@3.0/rest/guides/getting-started-with-the-git-database-api#checking-mergeability-of-pull-requests)".
+   * When you get, [create](https://docs.github.com/enterprise-server@3.4/rest/reference/pulls/#create-a-pull-request), or [edit](https://docs.github.com/enterprise-server@3.4/rest/reference/pulls#update-a-pull-request) a pull request, GitHub Enterprise Server creates a merge commit to test whether the pull request can be automatically merged into the base branch. This test commit is not added to the base branch or the head branch. You can review the status of the test commit using the `mergeable` key. For more information, see "[Checking mergeability of pull requests](https://docs.github.com/enterprise-server@3.4/rest/guides/getting-started-with-the-git-database-api#checking-mergeability-of-pull-requests)".
    *
    * The value of the `mergeable` attribute can be `true`, `false`, or `null`. If the value is `null`, then GitHub Enterprise Server has started a background job to compute the mergeability. After giving the job time to complete, resubmit the request. When the job finishes, you will see a non-`null` value for the `mergeable` attribute in the response. If `mergeable` is `true`, then `merge_commit_sha` will be the SHA of the _test_ merge commit.
    *
@@ -28531,7 +32074,7 @@ export class Client<RequestOption> {
    * *   If merged via a [squash](https://docs.github.com/articles/about-merge-methods-on-github/#squashing-your-merge-commits), `merge_commit_sha` represents the SHA of the squashed commit on the base branch.
    * *   If [rebased](https://docs.github.com/articles/about-merge-methods-on-github/#rebasing-and-merging-your-commits), `merge_commit_sha` represents the commit that the base branch was updated to.
    *
-   * Pass the appropriate [media type](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types/#commits-commit-comparison-and-pull-requests) to fetch diff and patch formats.
+   * Pass the appropriate [media type](https://docs.github.com/enterprise-server@3.4/rest/overview/media-types/#commits-commit-comparison-and-pull-requests) to fetch diff and patch formats.
    * operationId: pulls/get
    * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}
    */
@@ -28587,13 +32130,13 @@ export class Client<RequestOption> {
   /**
    * Create a review comment for a pull request
    *
-   * Creates a review comment in the pull request diff. To add a regular comment to a pull request timeline, see "[Create an issue comment](https://docs.github.com/enterprise-server@3.0/rest/reference/issues#create-an-issue-comment)." We recommend creating a review comment using `line`, `side`, and optionally `start_line` and `start_side` if your comment applies to more than one line in the pull request diff.
+   * Creates a review comment in the pull request diff. To add a regular comment to a pull request timeline, see "[Create an issue comment](https://docs.github.com/enterprise-server@3.4/rest/reference/issues#create-an-issue-comment)." We recommend creating a review comment using `line`, `side`, and optionally `start_line` and `start_side` if your comment applies to more than one line in the pull request diff.
    *
-   * You can still create a review comment using the `position` parameter. When you use `position`, the `line`, `side`, `start_line`, and `start_side` parameters are not required. For more information, see the [`comfort-fade` preview notice](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#create-a-review-comment-for-a-pull-request-preview-notices).
+   * You can still create a review comment using the `position` parameter. When you use `position`, the `line`, `side`, `start_line`, and `start_side` parameters are not required.
    *
    * **Note:** The position value equals the number of lines down from the first "@@" hunk header in the file you want to add a comment. The line just below the "@@" line is position 1, the next line is position 2, and so on. The position in the diff continues to increase through lines of whitespace and additional hunks until the beginning of a new file.
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: pulls/create-review-comment
    * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/comments
    */
@@ -28612,7 +32155,7 @@ export class Client<RequestOption> {
    * Create a reply for a review comment
    * Creates a reply to a review comment for a pull request. For the `comment_id`, provide the ID of the review comment you are replying to. This must be the ID of a _top-level review comment_, not a reply to that comment. Replies to replies are not supported.
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: pulls/create-reply-for-review-comment
    * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies
    */
@@ -28631,7 +32174,7 @@ export class Client<RequestOption> {
   }
   /**
    * List commits on a pull request
-   * Lists a maximum of 250 commits for a pull request. To receive a complete commit list for pull requests with more than 250 commits, use the [List commits](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#list-commits) endpoint.
+   * Lists a maximum of 250 commits for a pull request. To receive a complete commit list for pull requests with more than 250 commits, use the [List commits](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#list-commits) endpoint.
    * operationId: pulls/list-commits
    * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/commits
    */
@@ -28681,7 +32224,7 @@ export class Client<RequestOption> {
   }
   /**
    * Merge a pull request
-   * This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.0/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.4/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: pulls/merge
    * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/merge
    */
@@ -28715,7 +32258,7 @@ export class Client<RequestOption> {
   }
   /**
    * Request reviewers for a pull request
-   * This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.0/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.4/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: pulls/request-reviewers
    * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
    */
@@ -28770,11 +32313,11 @@ export class Client<RequestOption> {
   }
   /**
    * Create a review for a pull request
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    *
    * Pull request reviews created in the `PENDING` state do not include the `submitted_at` property in the response.
    *
-   * **Note:** To comment on a specific line in a file, you need to first determine the _position_ of that line in the diff. The GitHub REST API v3 offers the `application/vnd.github.v3.diff` [media type](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types#commits-commit-comparison-and-pull-requests). To see a pull request diff, add this media type to the `Accept` header of a call to the [single pull request](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#get-a-pull-request) endpoint.
+   * **Note:** To comment on a specific line in a file, you need to first determine the _position_ of that line in the diff. The GitHub REST API v3 offers the `application/vnd.github.v3.diff` [media type](https://docs.github.com/enterprise-server@3.4/rest/overview/media-types#commits-commit-comparison-and-pull-requests). To see a pull request diff, add this media type to the `Accept` header of a call to the [single pull request](https://docs.github.com/enterprise-server@3.4/rest/reference/pulls#get-a-pull-request) endpoint.
    *
    * The `position` value equals the number of lines down from the first "@@" hunk header in the file you want to add a comment. The line just below the "@@" line is position 1, the next line is position 2, and so on. The position in the diff continues to increase through lines of whitespace and additional hunks until the beginning of a new file.
    * operationId: pulls/create-review
@@ -28868,7 +32411,7 @@ export class Client<RequestOption> {
   }
   /**
    * Dismiss a review for a pull request
-   * **Note:** To dismiss a pull request review on a [protected branch](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#branches), you must be a repository administrator or be included in the list of people or teams who can dismiss pull request reviews.
+   * **Note:** To dismiss a pull request review on a [protected branch](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#branches), you must be a repository administrator or be included in the list of people or teams who can dismiss pull request reviews.
    * operationId: pulls/dismiss-review
    * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals
    */
@@ -28924,7 +32467,7 @@ export class Client<RequestOption> {
    * Get a repository README
    * Gets the preferred README for a repository.
    *
-   * READMEs support [custom media types](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#custom-media-types) for retrieving the raw content or rendered HTML.
+   * READMEs support [custom media types](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#custom-media-types) for retrieving the raw content or rendered HTML.
    * operationId: repos/get-readme
    * Request URI: /repos/{owner}/{repo}/readme
    */
@@ -28945,7 +32488,7 @@ export class Client<RequestOption> {
    * Get a repository README for a directory
    * Gets the README from a repository directory.
    *
-   * READMEs support [custom media types](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#custom-media-types) for retrieving the raw content or rendered HTML.
+   * READMEs support [custom media types](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#custom-media-types) for retrieving the raw content or rendered HTML.
    * operationId: repos/get-readme-in-directory
    * Request URI: /repos/{owner}/{repo}/readme/{dir}
    */
@@ -28964,7 +32507,7 @@ export class Client<RequestOption> {
   }
   /**
    * List releases
-   * This returns a list of releases, which does not include regular Git tags that have not been associated with a release. To get a list of Git tags, use the [Repository Tags API](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#list-repository-tags).
+   * This returns a list of releases, which does not include regular Git tags that have not been associated with a release. To get a list of Git tags, use the [Repository Tags API](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#list-repository-tags).
    *
    * Information about published releases are available to everyone. Only users with push access will receive listings for draft releases.
    * operationId: repos/list-releases
@@ -28988,7 +32531,7 @@ export class Client<RequestOption> {
    * Create a release
    * Users with push access to the repository can create a release.
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: repos/create-release
    * Request URI: /repos/{owner}/{repo}/releases
    */
@@ -29005,7 +32548,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get a release asset
-   * To download the asset's binary content, set the `Accept` header of the request to [`application/octet-stream`](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types). The API will either redirect the client to the location, or stream it directly if possible. API clients should handle both a `200` or `302` response.
+   * To download the asset's binary content, set the `Accept` header of the request to [`application/octet-stream`](https://docs.github.com/enterprise-server@3.4/rest/overview/media-types). The API will either redirect the client to the location, or stream it directly if possible. API clients should handle both a `200` or `302` response.
    * operationId: repos/get-release-asset
    * Request URI: /repos/{owner}/{repo}/releases/assets/{asset_id}
    */
@@ -29047,6 +32590,23 @@ export class Client<RequestOption> {
     return this.apiClient.request("PATCH", url, headers, params.requestBody, undefined, option);
   }
   /**
+   * Generate release notes content for a release
+   * Generate a name and body describing a [release](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#releases). The body content will be markdown formatted and contain information like the changes since last release and users who contributed. The generated release notes are not saved anywhere. They are intended to be generated and used when creating a new release.
+   * operationId: repos/generate-release-notes
+   * Request URI: /repos/{owner}/{repo}/releases/generate-notes
+   */
+  public async repos$generate$release$notes(
+    params: Params$repos$generate$release$notes,
+    option?: RequestOption,
+  ): Promise<Response$repos$generate$release$notes$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases/generate-notes`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
+  }
+  /**
    * Get the latest release
    * View the latest published full release for the repository.
    *
@@ -29082,7 +32642,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get a release
-   * **Note:** This returns an `upload_url` key corresponding to the endpoint for uploading release assets. This key is a [hypermedia resource](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#hypermedia).
+   * **Note:** This returns an `upload_url` key corresponding to the endpoint for uploading release assets. This key is a [hypermedia resource](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#hypermedia).
    * operationId: repos/get-release
    * Request URI: /repos/{owner}/{repo}/releases/{release_id}
    */
@@ -29145,8 +32705,8 @@ export class Client<RequestOption> {
   }
   /**
    * Upload a release asset
-   * This endpoint makes use of [a Hypermedia relation](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#hypermedia) to determine which URL to access. The endpoint you call to upload release assets is specific to your release. Use the `upload_url` returned in
-   * the response of the [Create a release endpoint](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#create-a-release) to upload a release asset.
+   * This endpoint makes use of [a Hypermedia relation](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#hypermedia) to determine which URL to access. The endpoint you call to upload release assets is specific to your release. Use the `upload_url` returned in
+   * the response of the [Create a release endpoint](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#create-a-release) to upload a release asset.
    *
    * You need to use an HTTP client which supports [SNI](http://en.wikipedia.org/wiki/Server_Name_Indication) to make calls to this endpoint.
    *
@@ -29160,7 +32720,7 @@ export class Client<RequestOption> {
    * When an upstream failure occurs, you will receive a `502 Bad Gateway` status. This may leave an empty asset with a state of `starter`. It can be safely deleted.
    *
    * **Notes:**
-   * *   GitHub Enterprise Server renames asset filenames that have special characters, non-alphanumeric characters, and leading or trailing periods. The "[List assets for a release](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#list-assets-for-a-release)"
+   * *   GitHub Enterprise Server renames asset filenames that have special characters, non-alphanumeric characters, and leading or trailing periods. The "[List assets for a release](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#list-assets-for-a-release)"
    * endpoint lists the renamed filenames. For more information and help, contact [GitHub Enterprise Server Support](https://support.github.com/contact?tags=dotcom-rest-api).
    * *   If you upload an asset with the same filename as another uploaded asset, you'll receive an error and must delete the old file before you can re-upload the new asset.
    * operationId: repos/upload-release-asset
@@ -29182,10 +32742,135 @@ export class Client<RequestOption> {
     return this.apiClient.request("POST", url, headers, params.requestBody, queryParameters, option);
   }
   /**
+   * Create reaction for a release
+   * Create a reaction to a [release](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#releases). A response with a `Status: 200 OK` means that you already added the reaction type to this release.
+   * operationId: reactions/create-for-release
+   * Request URI: /repos/{owner}/{repo}/releases/{release_id}/reactions
+   */
+  public async reactions$create$for$release(
+    params: Params$reactions$create$for$release,
+    option?: RequestOption,
+  ): Promise<(Response$reactions$create$for$release$Status$200 | Response$reactions$create$for$release$Status$201)["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases/${params.parameter.release_id}/reactions`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * List repository cache replication status
+   * Lists the status of each repository cache replica.
+   * operationId: repos/list-cache-info
+   * Request URI: /repos/{owner}/{repo}/replicas/caches
+   */
+  public async repos$list$cache$info(
+    params: Params$repos$list$cache$info,
+    option?: RequestOption,
+  ): Promise<Response$repos$list$cache$info$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/replicas/caches`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      per_page: { value: params.parameter.per_page, explode: false },
+      page: { value: params.parameter.page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * List secret scanning alerts for a repository
+   * Lists secret scanning alerts for a private repository, from newest to oldest. To use this endpoint, you must be an administrator for the repository or organization, and you must use an access token with the `repo` scope or `security_events` scope.
+   *
+   * GitHub Apps must have the `secret_scanning_alerts` read permission to use this endpoint.
+   * operationId: secret-scanning/list-alerts-for-repo
+   * Request URI: /repos/{owner}/{repo}/secret-scanning/alerts
+   */
+  public async secret$scanning$list$alerts$for$repo(
+    params: Params$secret$scanning$list$alerts$for$repo,
+    option?: RequestOption,
+  ): Promise<Response$secret$scanning$list$alerts$for$repo$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/secret-scanning/alerts`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      state: { value: params.parameter.state, explode: false },
+      secret_type: { value: params.parameter.secret_type, explode: false },
+      resolution: { value: params.parameter.resolution, explode: false },
+      page: { value: params.parameter.page, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * Get a secret scanning alert
+   * Gets a single secret scanning alert detected in a private repository. To use this endpoint, you must be an administrator for the repository or organization, and you must use an access token with the `repo` scope or `security_events` scope.
+   *
+   * GitHub Apps must have the `secret_scanning_alerts` read permission to use this endpoint.
+   * operationId: secret-scanning/get-alert
+   * Request URI: /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}
+   */
+  public async secret$scanning$get$alert(
+    params: Params$secret$scanning$get$alert,
+    option?: RequestOption,
+  ): Promise<Response$secret$scanning$get$alert$Status$200["application/json"]> {
+    const url =
+      this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/secret-scanning/alerts/${params.parameter.alert_number}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Update a secret scanning alert
+   * Updates the status of a secret scanning alert in a private repository. To use this endpoint, you must be an administrator for the repository or organization, and you must use an access token with the `repo` scope or `security_events` scope.
+   *
+   * GitHub Apps must have the `secret_scanning_alerts` write permission to use this endpoint.
+   * operationId: secret-scanning/update-alert
+   * Request URI: /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}
+   */
+  public async secret$scanning$update$alert(
+    params: Params$secret$scanning$update$alert,
+    option?: RequestOption,
+  ): Promise<Response$secret$scanning$update$alert$Status$200["application/json"]> {
+    const url =
+      this.baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/secret-scanning/alerts/${params.parameter.alert_number}`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("PATCH", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * List locations for a secret scanning alert
+   * Lists all locations for a given secret scanning alert for a private repository. To use this endpoint, you must be an administrator for the repository or organization, and you must use an access token with the `repo` scope or `security_events` scope.
+   *
+   * GitHub Apps must have the `secret_scanning_alerts` read permission to use this endpoint.
+   * operationId: secret-scanning/list-locations-for-alert
+   * Request URI: /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations
+   */
+  public async secret$scanning$list$locations$for$alert(
+    params: Params$secret$scanning$list$locations$for$alert,
+    option?: RequestOption,
+  ): Promise<Response$secret$scanning$list$locations$for$alert$Status$200["application/json"]> {
+    const url =
+      this.baseUrl +
+      `/repos/${params.parameter.owner}/${params.parameter.repo}/secret-scanning/alerts/${params.parameter.alert_number}/locations`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      page: { value: params.parameter.page, explode: false },
+      per_page: { value: params.parameter.per_page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
    * List stargazers
    * Lists the people that have starred the repository.
    *
-   * You can also find out _when_ stars were created by passing the following custom [media type](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types/) via the `Accept` header:
+   * You can also find out _when_ stars were created by passing the following custom [media type](https://docs.github.com/enterprise-server@3.4/rest/overview/media-types/) via the `Accept` header:
    * operationId: activity/list-stargazers-for-repo
    * Request URI: /repos/{owner}/{repo}/stargazers
    */
@@ -29353,7 +33038,7 @@ export class Client<RequestOption> {
   }
   /**
    * Set a repository subscription
-   * If you would like to watch a repository, set `subscribed` to `true`. If you would like to ignore notifications made within a repository, set `ignored` to `true`. If you would like to stop watching a repository, [delete the repository's subscription](https://docs.github.com/enterprise-server@3.0/rest/reference/activity#delete-a-repository-subscription) completely.
+   * If you would like to watch a repository, set `subscribed` to `true`. If you would like to ignore notifications made within a repository, set `ignored` to `true`. If you would like to stop watching a repository, [delete the repository's subscription](https://docs.github.com/enterprise-server@3.4/rest/reference/activity#delete-a-repository-subscription) completely.
    * operationId: activity/set-repo-subscription
    * Request URI: /repos/{owner}/{repo}/subscription
    */
@@ -29370,7 +33055,7 @@ export class Client<RequestOption> {
   }
   /**
    * Delete a repository subscription
-   * This endpoint should only be used to stop watching a repository. To control whether or not you wish to receive notifications from a repository, [set the repository's subscription manually](https://docs.github.com/enterprise-server@3.0/rest/reference/activity#set-a-repository-subscription).
+   * This endpoint should only be used to stop watching a repository. To control whether or not you wish to receive notifications from a repository, [set the repository's subscription manually](https://docs.github.com/enterprise-server@3.4/rest/reference/activity#set-a-repository-subscription).
    * operationId: activity/delete-repo-subscription
    * Request URI: /repos/{owner}/{repo}/subscription
    */
@@ -29499,11 +33184,11 @@ export class Client<RequestOption> {
   }
   /**
    * Create a repository using a template
-   * Creates a new repository using a repository template. Use the `template_owner` and `template_repo` route parameters to specify the repository to use as the template. The authenticated user must own or be a member of an organization that owns the repository. To check if a repository is available to use as a template, get the repository's information using the [Get a repository](https://docs.github.com/enterprise-server@3.0/rest/reference/repos#get-a-repository) endpoint and check that the `is_template` key is `true`.
+   * Creates a new repository using a repository template. Use the `template_owner` and `template_repo` route parameters to specify the repository to use as the template. The authenticated user must own or be a member of an organization that owns the repository. To check if a repository is available to use as a template, get the repository's information using the [Get a repository](https://docs.github.com/enterprise-server@3.4/rest/reference/repos#get-a-repository) endpoint and check that the `is_template` key is `true`.
    *
    * **OAuth scope requirements**
    *
-   * When using [OAuth](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/), authorizations must include:
+   * When using [OAuth](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/), authorizations must include:
    *
    * *   `public_repo` scope or `repo` scope to create a public repository. Note: For GitHub AE, use `repo` scope to create an internal repository.
    * *   `repo` scope to create a private repository
@@ -29527,7 +33212,7 @@ export class Client<RequestOption> {
    *
    * Note:
    * - For GitHub Enterprise Server, this endpoint will only list repositories available to all users on the enterprise.
-   * - Pagination is powered exclusively by the `since` parameter. Use the [Link header](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#link-header) to get the URL for the next page of repositories.
+   * - Pagination is powered exclusively by the `since` parameter. Use the [Link header](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#link-header) to get the URL for the next page of repositories.
    * operationId: repos/list-public
    * Request URI: /repositories
    */
@@ -29546,10 +33231,171 @@ export class Client<RequestOption> {
     return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
   }
   /**
-   * Search code
-   * Searches for query terms inside of a file. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#pagination).
+   * List environment secrets
+   * Lists all secrets available in an environment without revealing their encrypted values. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `secrets` repository permission to use this endpoint.
+   * operationId: actions/list-environment-secrets
+   * Request URI: /repositories/{repository_id}/environments/{environment_name}/secrets
+   */
+  public async actions$list$environment$secrets(
+    params: Params$actions$list$environment$secrets,
+    option?: RequestOption,
+  ): Promise<Response$actions$list$environment$secrets$Status$200["application/json"]> {
+    const url = this.baseUrl + `/repositories/${params.parameter.repository_id}/environments/${params.parameter.environment_name}/secrets`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      per_page: { value: params.parameter.per_page, explode: false },
+      page: { value: params.parameter.page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * Get an environment public key
+   * Get the public key for an environment, which you need to encrypt environment secrets. You need to encrypt a secret before you can create or update secrets. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `secrets` repository permission to use this endpoint.
+   * operationId: actions/get-environment-public-key
+   * Request URI: /repositories/{repository_id}/environments/{environment_name}/secrets/public-key
+   */
+  public async actions$get$environment$public$key(
+    params: Params$actions$get$environment$public$key,
+    option?: RequestOption,
+  ): Promise<Response$actions$get$environment$public$key$Status$200["application/json"]> {
+    const url =
+      this.baseUrl + `/repositories/${params.parameter.repository_id}/environments/${params.parameter.environment_name}/secrets/public-key`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Get an environment secret
+   * Gets a single environment secret without revealing its encrypted value. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `secrets` repository permission to use this endpoint.
+   * operationId: actions/get-environment-secret
+   * Request URI: /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}
+   */
+  public async actions$get$environment$secret(
+    params: Params$actions$get$environment$secret,
+    option?: RequestOption,
+  ): Promise<Response$actions$get$environment$secret$Status$200["application/json"]> {
+    const url =
+      this.baseUrl +
+      `/repositories/${params.parameter.repository_id}/environments/${params.parameter.environment_name}/secrets/${params.parameter.secret_name}`;
+    const headers = {
+      Accept: "application/json",
+    };
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Create or update an environment secret
+   * Creates or updates an environment secret with an encrypted value. Encrypt your secret using
+   * [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages). You must authenticate using an access
+   * token with the `repo` scope to use this endpoint. GitHub Apps must have the `secrets` repository permission to use
+   * this endpoint.
    *
-   * When searching for code, you can get text match metadata for the file **content** and file **path** fields when you pass the `text-match` media type. For more details about how to receive highlighted search results, see [Text match metadata](https://docs.github.com/enterprise-server@3.0/rest/reference/search#text-match-metadata).
+   * #### Example encrypting a secret using Node.js
+   *
+   * Encrypt your secret using the [tweetsodium](https://github.com/github/tweetsodium) library.
+   *
+   * ```
+   * const sodium = require('tweetsodium');
+   *
+   * const key = "base64-encoded-public-key";
+   * const value = "plain-text-secret";
+   *
+   * // Convert the message and key to Uint8Array's (Buffer implements that interface)
+   * const messageBytes = Buffer.from(value);
+   * const keyBytes = Buffer.from(key, 'base64');
+   *
+   * // Encrypt using LibSodium.
+   * const encryptedBytes = sodium.seal(messageBytes, keyBytes);
+   *
+   * // Base64 the encrypted secret
+   * const encrypted = Buffer.from(encryptedBytes).toString('base64');
+   *
+   * console.log(encrypted);
+   * ```
+   *
+   *
+   * #### Example encrypting a secret using Python
+   *
+   * Encrypt your secret using [pynacl](https://pynacl.readthedocs.io/en/latest/public/#nacl-public-sealedbox) with Python 3.
+   *
+   * ```
+   * from base64 import b64encode
+   * from nacl import encoding, public
+   *
+   * def encrypt(public_key: str, secret_value: str) -> str:
+   *   """Encrypt a Unicode string using the public key."""
+   *   public_key = public.PublicKey(public_key.encode("utf-8"), encoding.Base64Encoder())
+   *   sealed_box = public.SealedBox(public_key)
+   *   encrypted = sealed_box.encrypt(secret_value.encode("utf-8"))
+   *   return b64encode(encrypted).decode("utf-8")
+   * ```
+   *
+   * #### Example encrypting a secret using C#
+   *
+   * Encrypt your secret using the [Sodium.Core](https://www.nuget.org/packages/Sodium.Core/) package.
+   *
+   * ```
+   * var secretValue = System.Text.Encoding.UTF8.GetBytes("mySecret");
+   * var publicKey = Convert.FromBase64String("2Sg8iYjAxxmI2LvUXpJjkYrMxURPc8r+dB7TJyvvcCU=");
+   *
+   * var sealedPublicKeyBox = Sodium.SealedPublicKeyBox.Create(secretValue, publicKey);
+   *
+   * Console.WriteLine(Convert.ToBase64String(sealedPublicKeyBox));
+   * ```
+   *
+   * #### Example encrypting a secret using Ruby
+   *
+   * Encrypt your secret using the [rbnacl](https://github.com/RubyCrypto/rbnacl) gem.
+   *
+   * ```ruby
+   * require "rbnacl"
+   * require "base64"
+   *
+   * key = Base64.decode64("+ZYvJDZMHUfBkJdyq5Zm9SKqeuBQ4sj+6sfjlH4CgG0=")
+   * public_key = RbNaCl::PublicKey.new(key)
+   *
+   * box = RbNaCl::Boxes::Sealed.from_public_key(public_key)
+   * encrypted_secret = box.encrypt("my_secret")
+   *
+   * # Print the base64 encoded secret
+   * puts Base64.strict_encode64(encrypted_secret)
+   * ```
+   * operationId: actions/create-or-update-environment-secret
+   * Request URI: /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}
+   */
+  public async actions$create$or$update$environment$secret(
+    params: Params$actions$create$or$update$environment$secret,
+    option?: RequestOption,
+  ): Promise<Response$actions$create$or$update$environment$secret$Status$201["application/json"]> {
+    const url =
+      this.baseUrl +
+      `/repositories/${params.parameter.repository_id}/environments/${params.parameter.environment_name}/secrets/${params.parameter.secret_name}`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("PUT", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Delete an environment secret
+   * Deletes a secret in an environment using the secret name. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `secrets` repository permission to use this endpoint.
+   * operationId: actions/delete-environment-secret
+   * Request URI: /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}
+   */
+  public async actions$delete$environment$secret(params: Params$actions$delete$environment$secret, option?: RequestOption): Promise<void> {
+    const url =
+      this.baseUrl +
+      `/repositories/${params.parameter.repository_id}/environments/${params.parameter.environment_name}/secrets/${params.parameter.secret_name}`;
+    const headers = {};
+    return this.apiClient.request("DELETE", url, headers, undefined, undefined, option);
+  }
+  /**
+   * Search code
+   * Searches for query terms inside of a file. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#pagination).
+   *
+   * When searching for code, you can get text match metadata for the file **content** and file **path** fields when you pass the `text-match` media type. For more details about how to receive highlighted search results, see [Text match metadata](https://docs.github.com/enterprise-server@3.4/rest/reference/search#text-match-metadata).
    *
    * For example, if you want to find the definition of the `addClass` function inside [jQuery](https://github.com/jquery/jquery) repository, your query would look something like this:
    *
@@ -29584,10 +33430,10 @@ export class Client<RequestOption> {
   }
   /**
    * Search commits
-   * Find commits via various criteria on the default branch (usually `master`). This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#pagination).
+   * Find commits via various criteria on the default branch (usually `master`). This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#pagination).
    *
    * When searching for commits, you can get text match metadata for the **message** field when you provide the `text-match` media type. For more details about how to receive highlighted search results, see [Text match
-   * metadata](https://docs.github.com/enterprise-server@3.0/rest/reference/search#text-match-metadata).
+   * metadata](https://docs.github.com/enterprise-server@3.4/rest/reference/search#text-match-metadata).
    *
    * For example, if you want to find commits related to CSS in the [octocat/Spoon-Knife](https://github.com/octocat/Spoon-Knife) repository. Your query would look something like this:
    *
@@ -29614,10 +33460,10 @@ export class Client<RequestOption> {
   }
   /**
    * Search issues and pull requests
-   * Find issues by state and keyword. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#pagination).
+   * Find issues by state and keyword. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#pagination).
    *
    * When searching for issues, you can get text match metadata for the issue **title**, issue **body**, and issue **comment body** fields when you pass the `text-match` media type. For more details about how to receive highlighted
-   * search results, see [Text match metadata](https://docs.github.com/enterprise-server@3.0/rest/reference/search#text-match-metadata).
+   * search results, see [Text match metadata](https://docs.github.com/enterprise-server@3.4/rest/reference/search#text-match-metadata).
    *
    * For example, if you want to find the oldest unresolved Python bugs on Windows. Your query might look something like this.
    *
@@ -29648,9 +33494,9 @@ export class Client<RequestOption> {
   }
   /**
    * Search labels
-   * Find labels in a repository with names or descriptions that match search keywords. Returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#pagination).
+   * Find labels in a repository with names or descriptions that match search keywords. Returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#pagination).
    *
-   * When searching for labels, you can get text match metadata for the label **name** and **description** fields when you pass the `text-match` media type. For more details about how to receive highlighted search results, see [Text match metadata](https://docs.github.com/enterprise-server@3.0/rest/reference/search#text-match-metadata).
+   * When searching for labels, you can get text match metadata for the label **name** and **description** fields when you pass the `text-match` media type. For more details about how to receive highlighted search results, see [Text match metadata](https://docs.github.com/enterprise-server@3.4/rest/reference/search#text-match-metadata).
    *
    * For example, if you want to find labels in the `linguist` repository that match `bug`, `defect`, or `enhancement`. Your query might look like this:
    *
@@ -29680,19 +33526,15 @@ export class Client<RequestOption> {
   }
   /**
    * Search repositories
-   * Find repositories via various criteria. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#pagination).
+   * Find repositories via various criteria. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#pagination).
    *
-   * When searching for repositories, you can get text match metadata for the **name** and **description** fields when you pass the `text-match` media type. For more details about how to receive highlighted search results, see [Text match metadata](https://docs.github.com/enterprise-server@3.0/rest/reference/search#text-match-metadata).
+   * When searching for repositories, you can get text match metadata for the **name** and **description** fields when you pass the `text-match` media type. For more details about how to receive highlighted search results, see [Text match metadata](https://docs.github.com/enterprise-server@3.4/rest/reference/search#text-match-metadata).
    *
    * For example, if you want to search for popular Tetris repositories written in assembly code, your query might look like this:
    *
    * `q=tetris+language:assembly&sort=stars&order=desc`
    *
    * This query searches for repositories with the word `tetris` in the name, the description, or the README. The results are limited to repositories where the primary language is assembly. The results are sorted by stars in descending order, so that the most popular repositories appear first in the search results.
-   *
-   * When you include the `mercy` preview header, you can also search for multiple topics by adding more `topic:` instances. For example, your query might look like this:
-   *
-   * `q=topic:ruby+topic:rails`
    * operationId: search/repos
    * Request URI: /search/repositories
    */
@@ -29715,9 +33557,9 @@ export class Client<RequestOption> {
   }
   /**
    * Search topics
-   * Find topics via various criteria. Results are sorted by best match. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#pagination). See "[Searching topics](https://docs.github.com/articles/searching-topics/)" for a detailed list of qualifiers.
+   * Find topics via various criteria. Results are sorted by best match. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#pagination). See "[Searching topics](https://docs.github.com/articles/searching-topics/)" for a detailed list of qualifiers.
    *
-   * When searching for topics, you can get text match metadata for the topic's **short\_description**, **description**, **name**, or **display\_name** field when you pass the `text-match` media type. For more details about how to receive highlighted search results, see [Text match metadata](https://docs.github.com/enterprise-server@3.0/rest/reference/search#text-match-metadata).
+   * When searching for topics, you can get text match metadata for the topic's **short\_description**, **description**, **name**, or **display\_name** field when you pass the `text-match` media type. For more details about how to receive highlighted search results, see [Text match metadata](https://docs.github.com/enterprise-server@3.4/rest/reference/search#text-match-metadata).
    *
    * For example, if you want to search for topics related to Ruby that are featured on https://github.com/topics. Your query might look like this:
    *
@@ -29744,9 +33586,9 @@ export class Client<RequestOption> {
   }
   /**
    * Search users
-   * Find users via various criteria. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#pagination).
+   * Find users via various criteria. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#pagination).
    *
-   * When searching for users, you can get text match metadata for the issue **login**, **email**, and **name** fields when you pass the `text-match` media type. For more details about highlighting search results, see [Text match metadata](https://docs.github.com/enterprise-server@3.0/rest/reference/search#text-match-metadata). For more details about how to receive highlighted search results, see [Text match metadata](https://docs.github.com/enterprise-server@3.0/rest/reference/search#text-match-metadata).
+   * When searching for users, you can get text match metadata for the issue **login**, **email**, and **name** fields when you pass the `text-match` media type. For more details about highlighting search results, see [Text match metadata](https://docs.github.com/enterprise-server@3.4/rest/reference/search#text-match-metadata). For more details about how to receive highlighted search results, see [Text match metadata](https://docs.github.com/enterprise-server@3.4/rest/reference/search#text-match-metadata).
    *
    * For example, if you're looking for a list of popular users, you might try this query:
    *
@@ -29858,7 +33700,7 @@ export class Client<RequestOption> {
   }
   /**
    * Set settings
-   * For a list of the available settings, see the [Get settings endpoint](https://docs.github.com/enterprise-server@3.0/rest/reference/enterprise-admin#get-settings).
+   * For a list of the available settings, see the [Get settings endpoint](https://docs.github.com/enterprise-server@3.4/rest/reference/enterprise-admin#get-settings).
    *
    * **Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#--data-urlencode).
    * operationId: enterprise-admin/set-settings
@@ -29923,7 +33765,7 @@ export class Client<RequestOption> {
    * Create a GitHub license
    * When you boot a GitHub instance for the first time, you can use the following endpoint to upload a license.
    *
-   * Note that you need to `POST` to [`/setup/api/configure`](https://docs.github.com/enterprise-server@3.0/rest/reference/enterprise-admin#start-a-configuration-process) to start the actual configuration process.
+   * Note that you need to `POST` to [`/setup/api/configure`](https://docs.github.com/enterprise-server@3.4/rest/reference/enterprise-admin#start-a-configuration-process) to start the actual configuration process.
    *
    * When using this endpoint, your GitHub instance must have a password set. This can be accomplished two ways:
    *
@@ -29962,7 +33804,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Get a team (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the [Get a team by name](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#get-a-team-by-name) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the [Get a team by name](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#get-a-team-by-name) endpoint.
    * operationId: teams/get-legacy
    * Request URI: /teams/{team_id}
    */
@@ -29979,7 +33821,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Delete a team (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Delete a team](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#delete-a-team) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Delete a team](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#delete-a-team) endpoint.
    *
    * To delete a team, the authenticated user must be an organization owner or team maintainer.
    *
@@ -29995,7 +33837,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Update a team (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Update a team](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#update-a-team) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Update a team](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#update-a-team) endpoint.
    *
    * To edit a team, the authenticated user must either be an organization owner or a team maintainer.
    *
@@ -30017,9 +33859,9 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * List discussions (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List discussions`](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#list-discussions) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List discussions`](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#list-discussions) endpoint.
    *
-   * List all discussions on a team's page. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * List all discussions on a team's page. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: teams/list-discussions-legacy
    * Request URI: /teams/{team_id}/discussions
    */
@@ -30041,11 +33883,11 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Create a discussion (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`Create a discussion`](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#create-a-discussion) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`Create a discussion`](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#create-a-discussion) endpoint.
    *
-   * Creates a new discussion post on a team's page. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Creates a new discussion post on a team's page. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: teams/create-discussion-legacy
    * Request URI: /teams/{team_id}/discussions
    */
@@ -30063,9 +33905,9 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Get a discussion (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Get a discussion](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#get-a-discussion) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Get a discussion](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#get-a-discussion) endpoint.
    *
-   * Get a specific discussion on a team's page. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Get a specific discussion on a team's page. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: teams/get-discussion-legacy
    * Request URI: /teams/{team_id}/discussions/{discussion_number}
    */
@@ -30082,9 +33924,9 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Delete a discussion (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`Delete a discussion`](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#delete-a-discussion) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`Delete a discussion`](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#delete-a-discussion) endpoint.
    *
-   * Delete a discussion from a team's page. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Delete a discussion from a team's page. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: teams/delete-discussion-legacy
    * Request URI: /teams/{team_id}/discussions/{discussion_number}
    */
@@ -30096,9 +33938,9 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Update a discussion (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Update a discussion](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#update-a-discussion) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Update a discussion](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#update-a-discussion) endpoint.
    *
-   * Edits the title and body text of a discussion post. Only the parameters you provide are updated. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Edits the title and body text of a discussion post. Only the parameters you provide are updated. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: teams/update-discussion-legacy
    * Request URI: /teams/{team_id}/discussions/{discussion_number}
    */
@@ -30116,9 +33958,9 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * List discussion comments (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [List discussion comments](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#list-discussion-comments) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [List discussion comments](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#list-discussion-comments) endpoint.
    *
-   * List all comments on a team discussion. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * List all comments on a team discussion. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: teams/list-discussion-comments-legacy
    * Request URI: /teams/{team_id}/discussions/{discussion_number}/comments
    */
@@ -30140,11 +33982,11 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Create a discussion comment (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Create a discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#create-a-discussion-comment) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Create a discussion comment](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#create-a-discussion-comment) endpoint.
    *
-   * Creates a new comment on a team discussion. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Creates a new comment on a team discussion. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    *
-   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.0/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
+   * This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.4/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
    * operationId: teams/create-discussion-comment-legacy
    * Request URI: /teams/{team_id}/discussions/{discussion_number}/comments
    */
@@ -30162,9 +34004,9 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Get a discussion comment (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Get a discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#get-a-discussion-comment) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Get a discussion comment](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#get-a-discussion-comment) endpoint.
    *
-   * Get a specific comment on a team discussion. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Get a specific comment on a team discussion. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: teams/get-discussion-comment-legacy
    * Request URI: /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}
    */
@@ -30183,9 +34025,9 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Delete a discussion comment (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Delete a discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#delete-a-discussion-comment) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Delete a discussion comment](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#delete-a-discussion-comment) endpoint.
    *
-   * Deletes a comment on a team discussion. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Deletes a comment on a team discussion. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: teams/delete-discussion-comment-legacy
    * Request URI: /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}
    */
@@ -30202,9 +34044,9 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Update a discussion comment (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Update a discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#update-a-discussion-comment) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Update a discussion comment](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#update-a-discussion-comment) endpoint.
    *
-   * Edits the body text of a discussion comment. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Edits the body text of a discussion comment. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: teams/update-discussion-comment-legacy
    * Request URI: /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}
    */
@@ -30224,9 +34066,9 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * List reactions for a team discussion comment (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List reactions for a team discussion comment`](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#list-reactions-for-a-team-discussion-comment) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List reactions for a team discussion comment`](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#list-reactions-for-a-team-discussion-comment) endpoint.
    *
-   * List the reactions to a [team discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussion-comments). OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * List the reactions to a [team discussion comment](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#discussion-comments). OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: reactions/list-for-team-discussion-comment-legacy
    * Request URI: /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions
    */
@@ -30250,9 +34092,9 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Create reaction for a team discussion comment (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new "[Create reaction for a team discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#create-reaction-for-a-team-discussion-comment)" endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new "[Create reaction for a team discussion comment](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#create-reaction-for-a-team-discussion-comment)" endpoint.
    *
-   * Create a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussion-comments). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with an HTTP `200` status means that you already added the reaction type to this team discussion comment.
+   * Create a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#discussion-comments). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with an HTTP `200` status means that you already added the reaction type to this team discussion comment.
    * operationId: reactions/create-for-team-discussion-comment-legacy
    * Request URI: /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions
    */
@@ -30272,9 +34114,9 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * List reactions for a team discussion (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List reactions for a team discussion`](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#list-reactions-for-a-team-discussion) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List reactions for a team discussion`](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#list-reactions-for-a-team-discussion) endpoint.
    *
-   * List the reactions to a [team discussion](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussions). OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * List the reactions to a [team discussion](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#discussions). OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: reactions/list-for-team-discussion-legacy
    * Request URI: /teams/{team_id}/discussions/{discussion_number}/reactions
    */
@@ -30296,9 +34138,9 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Create reaction for a team discussion (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`Create reaction for a team discussion`](https://docs.github.com/enterprise-server@3.0/rest/reference/reactions#create-reaction-for-a-team-discussion) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`Create reaction for a team discussion`](https://docs.github.com/enterprise-server@3.4/rest/reference/reactions#create-reaction-for-a-team-discussion) endpoint.
    *
-   * Create a reaction to a [team discussion](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#discussions). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with an HTTP `200` status means that you already added the reaction type to this team discussion.
+   * Create a reaction to a [team discussion](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#discussions). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with an HTTP `200` status means that you already added the reaction type to this team discussion.
    * operationId: reactions/create-for-team-discussion-legacy
    * Request URI: /teams/{team_id}/discussions/{discussion_number}/reactions
    */
@@ -30316,7 +34158,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * List team members (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List team members`](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#list-team-members) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List team members`](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#list-team-members) endpoint.
    *
    * Team members will include the members of child teams.
    * operationId: teams/list-members-legacy
@@ -30342,7 +34184,7 @@ export class Client<RequestOption> {
    * Get team member (Legacy)
    * The "Get team member" endpoint (described below) is deprecated.
    *
-   * We recommend using the [Get team membership for a user](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#get-team-membership-for-a-user) endpoint instead. It allows you to get both active and pending memberships.
+   * We recommend using the [Get team membership for a user](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#get-team-membership-for-a-user) endpoint instead. It allows you to get both active and pending memberships.
    *
    * To list members in a team, the team must be visible to the authenticated user.
    * operationId: teams/get-member-legacy
@@ -30358,7 +34200,7 @@ export class Client<RequestOption> {
    * Add team member (Legacy)
    * The "Add team member" endpoint (described below) is deprecated.
    *
-   * We recommend using the [Add or update team membership for a user](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#add-or-update-team-membership-for-a-user) endpoint instead. It allows you to invite new organization members to your teams.
+   * We recommend using the [Add or update team membership for a user](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#add-or-update-team-membership-for-a-user) endpoint instead. It allows you to invite new organization members to your teams.
    *
    * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
@@ -30366,7 +34208,7 @@ export class Client<RequestOption> {
    *
    * **Note:** When you have team synchronization set up for a team with your organization's identity provider (IdP), you will see an error if you attempt to use the API for making changes to the team's membership. If you have access to manage group membership in your IdP, you can manage GitHub Enterprise Server team membership through your identity provider, which automatically adds and removes team members in an organization. For more information, see "[Synchronizing teams between your identity provider and GitHub Enterprise Server](https://docs.github.com/articles/synchronizing-teams-between-your-identity-provider-and-github/)."
    *
-   * Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
+   * Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#http-verbs)."
    * operationId: teams/add-member-legacy
    * Request URI: /teams/{team_id}/members/{username}
    */
@@ -30380,7 +34222,7 @@ export class Client<RequestOption> {
    * Remove team member (Legacy)
    * The "Remove team member" endpoint (described below) is deprecated.
    *
-   * We recommend using the [Remove team membership for a user](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#remove-team-membership-for-a-user) endpoint instead. It allows you to remove both active and pending memberships.
+   * We recommend using the [Remove team membership for a user](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#remove-team-membership-for-a-user) endpoint instead. It allows you to remove both active and pending memberships.
    *
    * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
@@ -30398,7 +34240,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Get team membership for a user (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Get team membership for a user](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#get-team-membership-for-a-user) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Get team membership for a user](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#get-team-membership-for-a-user) endpoint.
    *
    * Team members will include the members of child teams.
    *
@@ -30407,7 +34249,7 @@ export class Client<RequestOption> {
    * **Note:**
    * The response contains the `state` of the membership and the member's `role`.
    *
-   * The `role` for organization owners is set to `maintainer`. For more information about `maintainer` roles, see [Create a team](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#create-a-team).
+   * The `role` for organization owners is set to `maintainer`. For more information about `maintainer` roles, see [Create a team](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#create-a-team).
    * operationId: teams/get-membership-for-user-legacy
    * Request URI: /teams/{team_id}/memberships/{username}
    */
@@ -30424,7 +34266,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Add or update team membership for a user (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Add or update team membership for a user](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#add-or-update-team-membership-for-a-user) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Add or update team membership for a user](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#add-or-update-team-membership-for-a-user) endpoint.
    *
    * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
@@ -30452,7 +34294,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Remove team membership for a user (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Remove team membership for a user](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#remove-team-membership-for-a-user) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Remove team membership for a user](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#remove-team-membership-for-a-user) endpoint.
    *
    * Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
    *
@@ -30473,7 +34315,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * List team projects (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List team projects`](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#list-team-projects) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List team projects`](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#list-team-projects) endpoint.
    *
    * Lists the organization projects for a team.
    * operationId: teams/list-projects-legacy
@@ -30496,7 +34338,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Check team permissions for a project (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Check team permissions for a project](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#check-team-permissions-for-a-project) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Check team permissions for a project](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#check-team-permissions-for-a-project) endpoint.
    *
    * Checks whether a team has `read`, `write`, or `admin` permissions for an organization project. The response includes projects inherited from a parent team.
    * operationId: teams/check-permissions-for-project-legacy
@@ -30515,7 +34357,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Add or update team project permissions (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Add or update team project permissions](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#add-or-update-team-project-permissions) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Add or update team project permissions](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#add-or-update-team-project-permissions) endpoint.
    *
    * Adds an organization project to a team. To add a project to a team or update the team's permission on a project, the authenticated user must have `admin` permissions for the project. The project and team must be part of the same organization.
    * operationId: teams/add-or-update-project-permissions-legacy
@@ -30534,7 +34376,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Remove a project from a team (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Remove a project from a team](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#remove-a-project-from-a-team) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Remove a project from a team](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#remove-a-project-from-a-team) endpoint.
    *
    * Removes an organization project from a team. An organization owner or a team maintainer can remove any project from the team. To remove a project from a team as an organization member, the authenticated user must have `read` access to both the team and project, or `admin` access to the team or project. **Note:** This endpoint removes the project from the team, but does not delete it.
    * operationId: teams/remove-project-legacy
@@ -30548,7 +34390,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * List team repositories (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [List team repositories](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#list-team-repositories) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [List team repositories](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#list-team-repositories) endpoint.
    * operationId: teams/list-repos-legacy
    * Request URI: /teams/{team_id}/repos
    */
@@ -30571,9 +34413,9 @@ export class Client<RequestOption> {
    * Check team permissions for a repository (Legacy)
    * **Note**: Repositories inherited through a parent team will also be checked.
    *
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Check team permissions for a repository](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#check-team-permissions-for-a-repository) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Check team permissions for a repository](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#check-team-permissions-for-a-repository) endpoint.
    *
-   * You can also get information about the specified repository, including what permissions the team grants on it, by passing the following custom [media type](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types/) via the `Accept` header:
+   * You can also get information about the specified repository, including what permissions the team grants on it, by passing the following custom [media type](https://docs.github.com/enterprise-server@3.4/rest/overview/media-types/) via the `Accept` header:
    * operationId: teams/check-permissions-for-repo-legacy
    * Request URI: /teams/{team_id}/repos/{owner}/{repo}
    */
@@ -30590,11 +34432,11 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Add or update team repository permissions (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new "[Add or update team repository permissions](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#add-or-update-team-repository-permissions)" endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new "[Add or update team repository permissions](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#add-or-update-team-repository-permissions)" endpoint.
    *
    * To add a repository to a team or update the team's permission on a repository, the authenticated user must have admin access to the repository, and must be able to see the team. The repository must be owned by the organization, or a direct fork of a repository owned by the organization. You will get a `422 Unprocessable Entity` status if you attempt to add a repository to a team that is not owned by the organization.
    *
-   * Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
+   * Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#http-verbs)."
    * operationId: teams/add-or-update-repo-permissions-legacy
    * Request URI: /teams/{team_id}/repos/{owner}/{repo}
    */
@@ -30611,7 +34453,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * Remove a repository from a team (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Remove a repository from a team](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#remove-a-repository-from-a-team) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Remove a repository from a team](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#remove-a-repository-from-a-team) endpoint.
    *
    * If the authenticated user is an organization owner or a team maintainer, they can remove any repositories from the team. To remove a repository from a team as an organization member, the authenticated user must have admin access to the repository and must be able to see the team. NOTE: This does not delete the repository, it just removes it from the team.
    * operationId: teams/remove-repo-legacy
@@ -30625,7 +34467,7 @@ export class Client<RequestOption> {
   /**
    * @deprecated
    * List child teams (Legacy)
-   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List child teams`](https://docs.github.com/enterprise-server@3.0/rest/reference/teams#list-child-teams) endpoint.
+   * **Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List child teams`](https://docs.github.com/enterprise-server@3.4/rest/reference/teams#list-child-teams) endpoint.
    * operationId: teams/list-child-legacy
    * Request URI: /teams/{team_id}/teams
    */
@@ -30783,7 +34625,7 @@ export class Client<RequestOption> {
   }
   /**
    * Follow a user
-   * Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
+   * Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#http-verbs)."
    *
    * Following a user requires the user to be logged in and authenticated with basic auth or OAuth with the `user:follow` scope.
    * operationId: users/follow
@@ -30807,7 +34649,7 @@ export class Client<RequestOption> {
   }
   /**
    * List GPG keys for the authenticated user
-   * Lists the current user's GPG keys. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:gpg_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Lists the current user's GPG keys. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:gpg_key` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: users/list-gpg-keys-for-authenticated-user
    * Request URI: /user/gpg_keys
    */
@@ -30827,7 +34669,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create a GPG key for the authenticated user
-   * Adds a GPG key to the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth, or OAuth with at least `write:gpg_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Adds a GPG key to the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth, or OAuth with at least `write:gpg_key` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: users/create-gpg-key-for-authenticated-user
    * Request URI: /user/gpg_keys
    */
@@ -30844,7 +34686,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get a GPG key for the authenticated user
-   * View extended details for a single GPG key. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:gpg_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * View extended details for a single GPG key. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:gpg_key` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: users/get-gpg-key-for-authenticated-user
    * Request URI: /user/gpg_keys/{gpg_key_id}
    */
@@ -30860,7 +34702,7 @@ export class Client<RequestOption> {
   }
   /**
    * Delete a GPG key for the authenticated user
-   * Removes a GPG key from the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth or via OAuth with at least `admin:gpg_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Removes a GPG key from the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth or via OAuth with at least `admin:gpg_key` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: users/delete-gpg-key-for-authenticated-user
    * Request URI: /user/gpg_keys/{gpg_key_id}
    */
@@ -30876,7 +34718,7 @@ export class Client<RequestOption> {
    * List app installations accessible to the user access token
    * Lists installations of your GitHub App that the authenticated user has explicit permission (`:read`, `:write`, or `:admin`) to access.
    *
-   * You must use a [user-to-server OAuth access token](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps/#identifying-users-on-your-site), created for a user who has authorized your GitHub App, to access this endpoint.
+   * You must use a [user-to-server OAuth access token](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps/#identifying-users-on-your-site), created for a user who has authorized your GitHub App, to access this endpoint.
    *
    * The authenticated user has explicit permission to access repositories they own, repositories where they are a collaborator, and repositories that they can access through an organization membership.
    *
@@ -30904,7 +34746,7 @@ export class Client<RequestOption> {
    *
    * The authenticated user has explicit permission to access repositories they own, repositories where they are a collaborator, and repositories that they can access through an organization membership.
    *
-   * You must use a [user-to-server OAuth access token](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps/#identifying-users-on-your-site), created for a user who has authorized your GitHub App, to access this endpoint.
+   * You must use a [user-to-server OAuth access token](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps/#identifying-users-on-your-site), created for a user who has authorized your GitHub App, to access this endpoint.
    *
    * The access the user has to each repository is included in the hash under the `permissions` key.
    * operationId: apps/list-installation-repos-for-authenticated-user
@@ -30928,7 +34770,7 @@ export class Client<RequestOption> {
    * Add a repository to an app installation
    * Add a single repository to an installation. The authenticated user must have admin access to the repository.
    *
-   * You must use a personal access token (which you can create via the [command line](https://docs.github.com/enterprise-server@3.0/github/authenticating-to-github/creating-a-personal-access-token) or [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication)) to access this endpoint.
+   * You must use a personal access token (which you can create via the [command line](https://docs.github.com/enterprise-server@3.4/github/authenticating-to-github/creating-a-personal-access-token) or [Basic Authentication](https://docs.github.com/enterprise-server@3.4/rest/overview/other-authentication-methods#basic-authentication)) to access this endpoint.
    * operationId: apps/add-repo-to-installation-for-authenticated-user
    * Request URI: /user/installations/{installation_id}/repositories/{repository_id}
    */
@@ -30944,7 +34786,7 @@ export class Client<RequestOption> {
    * Remove a repository from an app installation
    * Remove a single repository from an installation. The authenticated user must have admin access to the repository.
    *
-   * You must use a personal access token (which you can create via the [command line](https://docs.github.com/enterprise-server@3.0/github/authenticating-to-github/creating-a-personal-access-token) or [Basic Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/other-authentication-methods#basic-authentication)) to access this endpoint.
+   * You must use a personal access token (which you can create via the [command line](https://docs.github.com/enterprise-server@3.4/github/authenticating-to-github/creating-a-personal-access-token) or [Basic Authentication](https://docs.github.com/enterprise-server@3.4/rest/overview/other-authentication-methods#basic-authentication)) to access this endpoint.
    * operationId: apps/remove-repo-from-installation-for-authenticated-user
    * Request URI: /user/installations/{installation_id}/repositories/{repository_id}
    */
@@ -30963,7 +34805,7 @@ export class Client<RequestOption> {
    * **Note**: GitHub's REST API v3 considers every pull request an issue, but not every issue is a pull request. For this
    * reason, "Issues" endpoints may return both issues and pull requests in the response. You can identify pull requests by
    * the `pull_request` key. Be aware that the `id` of a pull request returned from "Issues" endpoints will be an _issue id_. To find out the pull
-   * request id, use the "[List pull requests](https://docs.github.com/enterprise-server@3.0/rest/reference/pulls#list-pull-requests)" endpoint.
+   * request id, use the "[List pull requests](https://docs.github.com/enterprise-server@3.4/rest/reference/pulls#list-pull-requests)" endpoint.
    * operationId: issues/list-for-authenticated-user
    * Request URI: /user/issues
    */
@@ -30989,7 +34831,7 @@ export class Client<RequestOption> {
   }
   /**
    * List public SSH keys for the authenticated user
-   * Lists the public SSH keys for the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:public_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Lists the public SSH keys for the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:public_key` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: users/list-public-ssh-keys-for-authenticated-user
    * Request URI: /user/keys
    */
@@ -31009,7 +34851,7 @@ export class Client<RequestOption> {
   }
   /**
    * Create a public SSH key for the authenticated user
-   * Adds a public SSH key to the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth, or OAuth with at least `write:public_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Adds a public SSH key to the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth, or OAuth with at least `write:public_key` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: users/create-public-ssh-key-for-authenticated-user
    * Request URI: /user/keys
    */
@@ -31026,7 +34868,7 @@ export class Client<RequestOption> {
   }
   /**
    * Get a public SSH key for the authenticated user
-   * View extended details for a single public SSH key. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:public_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * View extended details for a single public SSH key. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:public_key` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: users/get-public-ssh-key-for-authenticated-user
    * Request URI: /user/keys/{key_id}
    */
@@ -31042,7 +34884,7 @@ export class Client<RequestOption> {
   }
   /**
    * Delete a public SSH key for the authenticated user
-   * Removes a public SSH key from the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth or via OAuth with at least `admin:public_key` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+   * Removes a public SSH key from the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth or via OAuth with at least `admin:public_key` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
    * operationId: users/delete-public-ssh-key-for-authenticated-user
    * Request URI: /user/keys/{key_id}
    */
@@ -31106,6 +34948,97 @@ export class Client<RequestOption> {
     return this.apiClient.request("PATCH", url, headers, params.requestBody, undefined, option);
   }
   /**
+   * List user migrations
+   * Lists all migrations a user has started.
+   * operationId: migrations/list-for-authenticated-user
+   * Request URI: /user/migrations
+   */
+  public async migrations$list$for$authenticated$user(
+    params: Params$migrations$list$for$authenticated$user,
+    option?: RequestOption,
+  ): Promise<Response$migrations$list$for$authenticated$user$Status$200["application/json"]> {
+    const url = this.baseUrl + `/user/migrations`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      per_page: { value: params.parameter.per_page, explode: false },
+      page: { value: params.parameter.page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
+   * Start a user migration
+   * Initiates the generation of a user migration archive.
+   * operationId: migrations/start-for-authenticated-user
+   * Request URI: /user/migrations
+   */
+  public async migrations$start$for$authenticated$user(
+    params: Params$migrations$start$for$authenticated$user,
+    option?: RequestOption,
+  ): Promise<Response$migrations$start$for$authenticated$user$Status$201["application/json"]> {
+    const url = this.baseUrl + `/user/migrations`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    return this.apiClient.request("POST", url, headers, params.requestBody, undefined, option);
+  }
+  /**
+   * Download a user migration archive
+   * Fetches the URL to download the migration archive as a `tar.gz` file. Depending on the resources your repository uses, the migration archive can contain JSON files with data for these objects:
+   *
+   * *   attachments
+   * *   bases
+   * *   commit\_comments
+   * *   issue\_comments
+   * *   issue\_events
+   * *   issues
+   * *   milestones
+   * *   organizations
+   * *   projects
+   * *   protected\_branches
+   * *   pull\_request\_reviews
+   * *   pull\_requests
+   * *   releases
+   * *   repositories
+   * *   review\_comments
+   * *   schema
+   * *   users
+   *
+   * The archive will also contain an `attachments` directory that includes all attachment files uploaded to GitHub.com and a `repositories` directory that contains the repository's Git data.
+   * operationId: migrations/get-archive-for-authenticated-user
+   * Request URI: /user/migrations/{migration_id}/archive
+   */
+  public async migrations$get$archive$for$authenticated$user(
+    params: Params$migrations$get$archive$for$authenticated$user,
+    option?: RequestOption,
+  ): Promise<void> {
+    const url = this.baseUrl + `/user/migrations/${params.parameter.migration_id}/archive`;
+    const headers = {};
+    return this.apiClient.request("GET", url, headers, undefined, undefined, option);
+  }
+  /**
+   * List repositories for a user migration
+   * Lists all the repositories for this user migration.
+   * operationId: migrations/list-repos-for-authenticated-user
+   * Request URI: /user/migrations/{migration_id}/repositories
+   */
+  public async migrations$list$repos$for$authenticated$user(
+    params: Params$migrations$list$repos$for$authenticated$user,
+    option?: RequestOption,
+  ): Promise<Response$migrations$list$repos$for$authenticated$user$Status$200["application/json"]> {
+    const url = this.baseUrl + `/user/migrations/${params.parameter.migration_id}/repositories`;
+    const headers = {
+      Accept: "application/json",
+    };
+    const queryParameters: QueryParameters = {
+      per_page: { value: params.parameter.per_page, explode: false },
+      page: { value: params.parameter.page, explode: false },
+    };
+    return this.apiClient.request("GET", url, headers, undefined, queryParameters, option);
+  }
+  /**
    * List organizations for the authenticated user
    * List organizations for the authenticated user.
    *
@@ -31147,7 +35080,7 @@ export class Client<RequestOption> {
   }
   /**
    * List public email addresses for the authenticated user
-   * Lists your publicly visible email address, which you can set with the [Set primary email visibility for the authenticated user](https://docs.github.com/enterprise-server@3.0/rest/reference/users#set-primary-email-visibility-for-the-authenticated-user) endpoint. This endpoint is accessible with the `user:email` scope.
+   * Lists your publicly visible email address, which you can set with the [Set primary email visibility for the authenticated user](https://docs.github.com/enterprise-server@3.4/rest/reference/users#set-primary-email-visibility-for-the-authenticated-user) endpoint. This endpoint is accessible with the `user:email` scope.
    * operationId: users/list-public-emails-for-authenticated-user
    * Request URI: /user/public_emails
    */
@@ -31200,7 +35133,7 @@ export class Client<RequestOption> {
    *
    * **OAuth scope requirements**
    *
-   * When using [OAuth](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/), authorizations must include:
+   * When using [OAuth](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/), authorizations must include:
    *
    * *   `public_repo` scope or `repo` scope to create a public repository. Note: For GitHub AE, use `repo` scope to create an internal repository.
    * *   `repo` scope to create a private repository.
@@ -31268,7 +35201,7 @@ export class Client<RequestOption> {
    * List repositories starred by the authenticated user
    * Lists repositories the authenticated user has starred.
    *
-   * You can also find out _when_ stars were created by passing the following custom [media type](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types/) via the `Accept` header:
+   * You can also find out _when_ stars were created by passing the following custom [media type](https://docs.github.com/enterprise-server@3.4/rest/overview/media-types/) via the `Accept` header:
    * operationId: activity/list-repos-starred-by-authenticated-user
    * Request URI: /user/starred
    */
@@ -31305,7 +35238,7 @@ export class Client<RequestOption> {
   }
   /**
    * Star a repository for the authenticated user
-   * Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
+   * Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#http-verbs)."
    * operationId: activity/star-repo-for-authenticated-user
    * Request URI: /user/starred/{owner}/{repo}
    */
@@ -31352,7 +35285,7 @@ export class Client<RequestOption> {
   }
   /**
    * List teams for the authenticated user
-   * List all of the teams across all of the organizations to which the authenticated user belongs. This method requires `user`, `repo`, or `read:org` [scope](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/) when authenticating via [OAuth](https://docs.github.com/enterprise-server@3.0/apps/building-oauth-apps/).
+   * List all of the teams across all of the organizations to which the authenticated user belongs. This method requires `user`, `repo`, or `read:org` [scope](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/) when authenticating via [OAuth](https://docs.github.com/enterprise-server@3.4/apps/building-oauth-apps/).
    * operationId: teams/list-for-authenticated-user
    * Request URI: /user/teams
    */
@@ -31374,7 +35307,7 @@ export class Client<RequestOption> {
    * List users
    * Lists all users, in the order that they signed up on GitHub Enterprise Server. This list includes personal user accounts and organization accounts.
    *
-   * Note: Pagination is powered exclusively by the `since` parameter. Use the [Link header](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#link-header) to get the URL for the next page of users.
+   * Note: Pagination is powered exclusively by the `since` parameter. Use the [Link header](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#link-header) to get the URL for the next page of users.
    * operationId: users/list
    * Request URI: /users
    */
@@ -31393,11 +35326,11 @@ export class Client<RequestOption> {
    * Get a user
    * Provides publicly available information about someone with a GitHub account.
    *
-   * GitHub Apps with the `Plan` user permission can use this endpoint to retrieve information about a user's GitHub Enterprise Server plan. The GitHub App must be authenticated as a user. See "[Identifying and authorizing users for GitHub Apps](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps/)" for details about authentication. For an example response, see 'Response with GitHub Enterprise Server plan information' below"
+   * GitHub Apps with the `Plan` user permission can use this endpoint to retrieve information about a user's GitHub Enterprise Server plan. The GitHub App must be authenticated as a user. See "[Identifying and authorizing users for GitHub Apps](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps/)" for details about authentication. For an example response, see 'Response with GitHub Enterprise Server plan information' below"
    *
-   * The `email` key in the following response is the publicly visible email address from your GitHub Enterprise Server [profile page](https://github.com/settings/profile). When setting up your profile, you can select a primary email address to be “public” which provides an email entry for this endpoint. If you do not set a public email address for `email`, then it will have a value of `null`. You only see publicly visible email addresses when authenticated with GitHub Enterprise Server. For more information, see [Authentication](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#authentication).
+   * The `email` key in the following response is the publicly visible email address from your GitHub Enterprise Server [profile page](https://github.com/settings/profile). When setting up your profile, you can select a primary email address to be “public” which provides an email entry for this endpoint. If you do not set a public email address for `email`, then it will have a value of `null`. You only see publicly visible email addresses when authenticated with GitHub Enterprise Server. For more information, see [Authentication](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#authentication).
    *
-   * The Emails API enables you to list all of your email addresses, and toggle a primary email to be visible publicly. For more information, see "[Emails API](https://docs.github.com/enterprise-server@3.0/rest/reference/users#emails)".
+   * The Emails API enables you to list all of your email addresses, and toggle a primary email to be visible publicly. For more information, see "[Emails API](https://docs.github.com/enterprise-server@3.4/rest/reference/users#emails)".
    * operationId: users/get-by-username
    * Request URI: /users/{username}
    */
@@ -31592,7 +35525,7 @@ export class Client<RequestOption> {
    * Get a user installation for the authenticated app
    * Enables an authenticated GitHub App to find the user’s installation information.
    *
-   * You must use a [JWT](https://docs.github.com/enterprise-server@3.0/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
+   * You must use a [JWT](https://docs.github.com/enterprise-server@3.4/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
    * operationId: apps/get-user-installation
    * Request URI: /users/{username}/installation
    */
@@ -31630,7 +35563,7 @@ export class Client<RequestOption> {
    * List organizations for a user
    * List [public organization memberships](https://docs.github.com/articles/publicizing-or-concealing-organization-membership) for the specified user.
    *
-   * This method only lists _public_ memberships, regardless of authentication. If you need to fetch all of the organization memberships (public and private) for the authenticated user, use the [List organizations for the authenticated user](https://docs.github.com/enterprise-server@3.0/rest/reference/orgs#list-organizations-for-the-authenticated-user) API instead.
+   * This method only lists _public_ memberships, regardless of authentication. If you need to fetch all of the organization memberships (public and private) for the authenticated user, use the [List organizations for the authenticated user](https://docs.github.com/enterprise-server@3.4/rest/reference/orgs#list-organizations-for-the-authenticated-user) API instead.
    * operationId: orgs/list-for-user
    * Request URI: /users/{username}/orgs
    */
@@ -31732,7 +35665,7 @@ export class Client<RequestOption> {
   }
   /**
    * Promote a user to be a site administrator
-   * Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
+   * Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#http-verbs)."
    * operationId: enterprise-admin/promote-user-to-be-site-administrator
    * Request URI: /users/{username}/site_admin
    */
@@ -31762,7 +35695,7 @@ export class Client<RequestOption> {
    * List repositories starred by a user
    * Lists repositories a user has starred.
    *
-   * You can also find out _when_ stars were created by passing the following custom [media type](https://docs.github.com/enterprise-server@3.0/rest/overview/media-types/) via the `Accept` header:
+   * You can also find out _when_ stars were created by passing the following custom [media type](https://docs.github.com/enterprise-server@3.4/rest/overview/media-types/) via the `Accept` header:
    * operationId: activity/list-repos-starred-by-user
    * Request URI: /users/{username}/starred
    */
@@ -31808,7 +35741,7 @@ export class Client<RequestOption> {
    *
    * You can suspend any user account except your own.
    *
-   * Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.0/rest/overview/resources-in-the-rest-api#http-verbs)."
+   * Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.4/rest/overview/resources-in-the-rest-api#http-verbs)."
    * operationId: enterprise-admin/suspend-user
    * Request URI: /users/{username}/suspended
    */
