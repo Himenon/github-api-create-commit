@@ -1,3 +1,5 @@
+export interface RequestOption {}
+
 export interface CreateBranchArgs {
   branchName: string;
   baseBranchName?: string;

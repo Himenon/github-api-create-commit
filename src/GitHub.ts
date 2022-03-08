@@ -1,24 +1,16 @@
 import type { Client, Schemas } from "./api";
 import type * as Types from "./types";
 
-export class CommitOperator {
-  constructor(private readonly client: Client<any>, private readonly owner: string, private readonly repo: string) {}
+export class GitHub {
+  constructor(private readonly client: Client<Types.RequestOption>, private readonly owner: string, private readonly repo: string) {}
   /**
    * * `headBranchName`に対してコミットする
    * * もし、`headBranchName`が存在しない場合は、`baseBranchName`からチェックアウトしたブランチに対してコミットする
    * * `baseBranchName`が指定されていない場合はリポジトリの`defaultBranch`からチェックアウトしたブランチに対してコミットする
    */
-  public createGitCommit = async ({
-    baseBranchName,
-    headBranchName,
-    commit,
-    files,
-  }: Types.CreateGitCommit): Promise<Types.CreateCommitRequestSuccessResponse> => {
+  public createGitCommit = async ({ baseBranchName, headBranchName, commit, files }: Types.CreateGitCommit): Promise<Schemas.git$commit> => {
     const owner = this.owner;
     const repo = this.repo;
-    if (files.length === 0) {
-      throw new Error("NOT_FOUND_GIT_COMMIT_FILES No files to commit.");
-    }
     const ref = `heads/${headBranchName}`;
     const parentCommit = await this.getParentCommit({ headBranchName, baseBranchName });
 
@@ -43,7 +35,7 @@ export class CommitOperator {
 
     const newTree = await Promise.all(newTreeTasks);
 
-    const gitTree = await this.client.git$create$tree({
+    const newGitTree = await this.client.git$create$tree({
       parameter: {
         owner,
         repo,
@@ -54,14 +46,14 @@ export class CommitOperator {
       },
     });
 
-    const commitObject = await this.client.git$create$commit({
+    const newCommit = await this.client.git$create$commit({
       parameter: {
         owner,
         repo,
       },
       requestBody: {
         message: commit.message,
-        tree: gitTree.sha,
+        tree: newGitTree.sha,
         parents: [parentCommit.sha],
       },
     });
@@ -73,17 +65,11 @@ export class CommitOperator {
         ref: ref,
       },
       requestBody: {
-        sha: commitObject.sha,
+        sha: newCommit.sha,
       },
     });
 
-    return {
-      commit: {
-        htmlUrl: commitObject.html_url,
-        message: commitObject.message,
-        sha: commitObject.sha,
-      },
-    };
+    return newCommit;
   };
   private createBranch = async ({ branchName, baseBranchName }: Types.CreateBranchArgs): Promise<void> => {
     const owner = this.owner;
