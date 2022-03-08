@@ -1,6 +1,7 @@
 import type { ApiClient, QueryParameters } from "./api";
 import type * as Types from "./types";
 import * as Formatter from "@himenon/openapi-parameter-formatter";
+import fetch from "node-fetch";
 
 export const generateQueryString = (queryParameters: QueryParameters | undefined): string | undefined => {
   if (!queryParameters) {
