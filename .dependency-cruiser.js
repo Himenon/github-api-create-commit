@@ -25,6 +25,10 @@ module.exports = {
      */
   forbidden: [
     {
+      name: "no-duplicate-dep-types",
+      severity: "ignore",
+    },
+    {
       name: "not-to-test",
       comment:
         "This module depends on code within a folder that should only contain tests. As tests don't " +

@@ -1,12 +1,28 @@
-export * as Sub from "./sub";
-export * as Hello from "./hello/world";
+import { GitHub } from "./GitHub";
+import * as ApiClientImpl from "./ApiClientImpl";
+import { Client, Schemas } from "./api";
+export * from "./types";
 
-export const hello = (name: string): string => {
-  const params = {
-    hoge: 1,
-    fuga: 2,
-  };
-  return `Hello ${name} ${JSON.stringify(params)}`;
+export { Schemas };
+
+export interface InitializeParameter {
+  owner: string;
+  repo: string;
+  /**
+   * For GitHUB API Endpoint
+   * Default: https://api.github.com
+   */
+  baseUrl?: string | "https://api.github.com";
+  /** GitHub Access Token */
+  accessToken?: string;
+}
+
+export const create = (args: InitializeParameter): GitHub => {
+  const baseUrl = args.baseUrl || "https://api.github.com";
+  const apiClientImpl = ApiClientImpl.create(args.accessToken);
+  const client = new Client(apiClientImpl, baseUrl);
+  const github = new GitHub(client, args.owner, args.repo);
+  return github;
 };
 
-console.log(hello("Your name"));
+export default create;
