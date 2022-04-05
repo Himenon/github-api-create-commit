@@ -13,7 +13,7 @@ export class GitHub {
     headBranchName,
     commitMessage,
     files,
-  }: Types.CreateGitCommitArgs): Promise<Schemas.git$commit> => {
+  }: Types.CreateGitCommitArgs): Promise<Schemas.commit> => {
     const owner = this.owner;
     const repo = this.repo;
     const ref = `heads/${headBranchName}`;
@@ -74,8 +74,15 @@ export class GitHub {
       },
     });
 
-    return newCommit;
+    return await this.client.repos$get$commit({
+      parameter: {
+        owner,
+        repo,
+        ref: newCommit.sha,
+      },
+    });
   };
+
   private createBranch = async ({ branchName, baseBranchName }: Types.CreateBranchArgs): Promise<void> => {
     const owner = this.owner;
     const repo = this.repo;
