@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.0.0"></a>
+
+# 2.0.0 (2022-04-05)
+
+### Features
+
+- change return commit object ([#6](https://github.com/Himenon/github-api-create-commit/issues/6)) ([ad98b48](https://github.com/Himenon/github-api-create-commit/commit/ad98b48))
+
+### BREAKING CHANGES
+
+- commit type
+
 <a name="1.1.0"></a>
 
 # 1.1.0 (2022-03-08)
