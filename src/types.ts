@@ -16,6 +16,10 @@ export interface GetParentCommitArgs {
 
 export interface CommitFile {
   /**
+   * Default utf-8
+   */
+  encoding?: "utf-8" | "base64";
+  /**
    * File path from repository root.
    */
   path: string;
