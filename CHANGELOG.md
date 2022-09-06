@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.1.2"></a>
+## 2.1.2 (2022-09-06)
+
+
+### Bug Fixes
+
+* release script ([#12](https://github.com/Himenon/github-api-create-commit/issues/12)) ([8fb9867](https://github.com/Himenon/github-api-create-commit/commit/8fb9867))
+
+
+
+
+
 <a name="2.1.1"></a>
 ## 2.1.1 (2022-09-06)
 
