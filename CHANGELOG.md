@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.1.1"></a>
+## 2.1.1 (2022-09-06)
+
+
+### Chores
+
+* add sample code ([#11](https://github.com/Himenon/github-api-create-commit/issues/11)) ([c85b550](https://github.com/Himenon/github-api-create-commit/commit/c85b550))
+
+
+
+
+
 <a name="2.1.0"></a>
 
 # 2.1.0 (2022-09-06)
