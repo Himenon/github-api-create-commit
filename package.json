@@ -67,11 +67,11 @@
   "scripts": {
     "build": "pnpm ts ./scripts/build.ts",
     "clean": "pnpm ts ./scripts/clean.ts",
-    "format:code": "run-s prettier:format eslint:format",
+    "format:code": "pnpm run prettier:format && pnpm run eslint:format",
     "lerna:version:up": "lerna version --yes",
     "release:github:registry": "pnpm publish --registry https://npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}",
     "release:npm:registry": "pnpm publish",
-    "test": "run-p depcruise:validate eslint:validate prettier:validate",
+    "test": "pnpm run depcruise:validate && pnpm run eslint:validate && pnpm run prettier:validate",
     "prettier:format": "prettier \"**/*.{js,jsx,ts,tsx,json,yml,yaml,md,html}\" --write ./src",
     "prettier:validate": "prettier --check \"**/*.{js,jsx,ts,tsx,json,yml,yaml,md,html}\"",
     "eslint:format": "eslint \"**/*.{ts,tsx}\" --fix",
