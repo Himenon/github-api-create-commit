@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.1.0"></a>
+# 2.1.0 (2022-09-06)
+
+
+### Features
+
+* support base64 encoding ([#10](https://github.com/Himenon/github-api-create-commit/issues/10)) ([ba2fe23](https://github.com/Himenon/github-api-create-commit/commit/ba2fe23))
+
+
+
+
+
 <a name="2.0.1"></a>
 
 ## 2.0.1 (2022-09-06)
