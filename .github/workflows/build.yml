@@ -9,22 +9,27 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
-        os: [ubuntu-latest]
+        node-version: [16]
+        os: [windows-latest, ubuntu-latest]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/initialize
+      - uses: pnpm/action-setup@v2.2.2
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          version: 7.1.0
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+          cache: "pnpm"
+      - run: pnpm i --frozen-lockfile
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-
       - name: Test & Build
         run: |
-          yarn install --frozen-lockfile
-          yarn build
-          yarn test
+          pnpm build
+          pnpm test
         env:
           CI: true
