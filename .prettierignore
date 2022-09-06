@@ -2,3 +2,4 @@ lib
 package.json
 node_modules
 openapi/
+pnpm-lock.yaml
