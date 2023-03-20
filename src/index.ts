@@ -5,7 +5,7 @@ import { FetchFunction } from "./types";
 import nodeFetch from "node-fetch";
 export * from "./types";
 
-export { Schemas, GitHub, type  Client };
+export { Schemas, GitHub, type Client };
 
 export interface InitializeParameter {
   owner: string;
