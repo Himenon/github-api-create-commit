@@ -1,11 +1,11 @@
 import { GitHub } from "./GitHub";
 import * as ApiClientImpl from "./ApiClientImpl";
-import { Client, Schemas } from "./api";
+import { createClient, type Client, Schemas } from "./api";
 import { FetchFunction } from "./types";
 import nodeFetch from "node-fetch";
 export * from "./types";
 
-export { Schemas, GitHub, Client };
+export { Schemas, GitHub, type Client };
 
 export interface InitializeParameter {
   owner: string;
@@ -30,7 +30,7 @@ export const create = (args: InitializeParameter): GitHub => {
     accessToken: args.accessToken,
     fetch: _fetch,
   });
-  const client = new Client(apiClientImpl, baseUrl);
+  const client = createClient(apiClientImpl, baseUrl);
   const github = new GitHub(client, args.owner, args.repo);
   return github;
 };
