@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.1.3"></a>
+## 2.1.3 (2023-03-20)
+
+
+### Chores
+
+* update oas code gen ([#13](https://github.com/Himenon/github-api-create-commit/issues/13)) ([5c17ade](https://github.com/Himenon/github-api-create-commit/commit/5c17ade))
+
+
+
+
+
 <a name="2.1.2"></a>
 ## 2.1.2 (2022-09-06)
 
