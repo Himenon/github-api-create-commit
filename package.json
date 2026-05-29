@@ -60,13 +60,13 @@
   "scripts": {
     "build": "tsup",
     "clean": "node --strip-types ./scripts/clean.ts",
+    "depcruise:validate": "depcruise --validate .dependency-cruiser.cjs src",
     "format": "biome check --write --unsafe .",
     "lerna:version:up": "lerna version --yes",
     "lint": "biome check .",
     "release:github:registry": "pnpm publish --access public --no-git-checks",
     "release:npm:registry": "pnpm publish --access public --no-git-checks",
     "test": "pnpm run depcruise:validate",
-    "depcruise:validate": "depcruise --validate .dependency-cruiser.cjs src",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
@@ -89,7 +89,7 @@
     "tsup": "^8.5.1",
     "typescript": "6.0.3"
   },
-  "packageManager": "pnpm@11.1.2",
+  "packageManager": "pnpm@10.34.1",
   "engines": {
     "node": ">=24.0.0"
   },

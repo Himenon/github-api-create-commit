@@ -7,3 +7,4 @@ onlyBuiltDependencies:
   - "@swc/core"
   - esbuild
   - lefthook
+  - nx
