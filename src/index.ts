@@ -1,11 +1,12 @@
-import { GitHub } from "./GitHub";
-import * as ApiClientImpl from "./ApiClientImpl";
-import { createClient, type Client, Schemas } from "./api";
-import { FetchFunction } from "./types";
 import nodeFetch from "node-fetch";
+import * as ApiClientImpl from "./ApiClientImpl";
+import { type Client, createClient, Schemas } from "./api";
+import { GitHub } from "./GitHub";
+import type { FetchFunction } from "./types";
+
 export * from "./types";
 
-export { Schemas, GitHub, type Client };
+export { type Client, GitHub, Schemas };
 
 export interface InitializeParameter {
   owner: string;

@@ -1,7 +1,8 @@
-import * as rimraf from "rimraf";
+import { rimraf } from "rimraf";
 
 const main = async () => {
-  rimraf.sync("lib");
+  await rimraf("lib");
+  await rimraf("dist");
 };
 
 main().catch(error => {

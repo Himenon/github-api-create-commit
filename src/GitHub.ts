@@ -2,7 +2,11 @@ import type { Client, Schemas } from "./api";
 import type * as Types from "./types";
 
 export class GitHub {
-  constructor(private readonly client: Client<Types.RequestOption>, private readonly owner: string, private readonly repo: string) {}
+  constructor(
+    private readonly client: Client<Types.RequestOption>,
+    private readonly owner: string,
+    private readonly repo: string,
+  ) {}
   /**
    * * `headBranchName`に対してコミットする
    * * もし、`headBranchName`が存在しない場合は、`baseBranchName`からチェックアウトしたブランチに対してコミットする
@@ -140,7 +144,7 @@ export class GitHub {
     });
     // ブランチが存在しない場合は作成する
     if (!branches.find(b => b.name === headBranchName)) {
-      const targetBaseBranchName = baseBranchName && !!branches.find(b => b.name === baseBranchName) ? baseBranchName : undefined;
+      const targetBaseBranchName = baseBranchName && branches.find(b => b.name === baseBranchName) ? baseBranchName : undefined;
       await this.createBranch({ branchName: headBranchName, baseBranchName: targetBaseBranchName });
     }
     const parentGitRef = await this.client.git$get$ref({

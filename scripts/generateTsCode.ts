@@ -1,6 +1,5 @@
-import * as fs from "fs";
-import * as path from "path";
-
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { CodeGenerator } from "@himenon/openapi-typescript-code-generator";
 import * as Templates from "@himenon/openapi-typescript-code-generator/templates";
 import type * as Types from "@himenon/openapi-typescript-code-generator/types";
