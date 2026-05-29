@@ -1,4 +1,3 @@
-import nodeFetch from "node-fetch";
 import * as ApiClientImpl from "./ApiClientImpl";
 import { type Client, createClient, Schemas } from "./api";
 import { GitHub } from "./GitHub";
@@ -18,15 +17,12 @@ export interface InitializeParameter {
   baseUrl?: string | "https://api.github.com";
   /** GitHub Access Token */
   accessToken?: string;
-  /**
-   * Default: node-fetch
-   */
   fetch?: FetchFunction;
 }
 
 export const create = (args: InitializeParameter): GitHub => {
   const baseUrl = args.baseUrl || "https://api.github.com";
-  const _fetch: FetchFunction = args.fetch || nodeFetch;
+  const _fetch: FetchFunction = args.fetch || fetch;
   const apiClientImpl = ApiClientImpl.create({
     accessToken: args.accessToken,
     fetch: _fetch,

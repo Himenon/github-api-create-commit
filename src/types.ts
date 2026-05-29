@@ -1,5 +1,3 @@
-import type { RequestInfo, RequestInit, Response } from "node-fetch";
-
 export type RequestOption = {};
 
 export type FetchFunction = (url: RequestInfo, init?: RequestInit) => Promise<Response>;
