@@ -1,3 +1,8 @@
+minimumReleaseAge: 21600
+minimumReleaseAgeExclude:
+  - "@himenon/openapi-parameter-formatter"
+  - "@himenon/openapi-typescript-code-generator"
+
 onlyBuiltDependencies:
   - "@swc/core"
   - esbuild
