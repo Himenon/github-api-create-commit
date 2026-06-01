@@ -15,6 +15,6 @@
   },
   "stream": true,
   "concurrency": 1,
-  "npmClient": "yarn",
+  "npmClient": "pnpm",
   "packages": ["."]
 }

@@ -1,0 +1,10 @@
+minimumReleaseAge: 10800
+minimumReleaseAgeExclude:
+  - "@himenon/openapi-parameter-formatter"
+  - "@himenon/openapi-typescript-code-generator"
+
+onlyBuiltDependencies:
+  - "@swc/core"
+  - esbuild
+  - lefthook
+  - nx

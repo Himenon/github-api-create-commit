@@ -1457,15 +1457,7 @@ export namespace Schemas {
    *
    * How the author is associated with the repository.
    */
-  export type author_association =
-    | "COLLABORATOR"
-    | "CONTRIBUTOR"
-    | "FIRST_TIMER"
-    | "FIRST_TIME_CONTRIBUTOR"
-    | "MANNEQUIN"
-    | "MEMBER"
-    | "NONE"
-    | "OWNER";
+  export type author_association = "COLLABORATOR" | "CONTRIBUTOR" | "FIRST_TIMER" | "FIRST_TIME_CONTRIBUTOR" | "MANNEQUIN" | "MEMBER" | "NONE" | "OWNER";
   export interface reaction$rollup {
     url: string;
     total_count: number;
@@ -1968,7 +1960,7 @@ export namespace Schemas {
     created_at?: string;
   }
   /** An object without any properties. */
-  export interface empty$object {}
+  export type empty$object = {};
   /** Secrets for GitHub Dependabot for an organization. */
   export interface organization$dependabot$secret {
     /** The name of the secret. */
@@ -7448,11 +7440,9 @@ export interface RequestBody$enterprise$admin$set$custom$labels$for$self$hosted$
     labels: string[];
   };
 }
-export type Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$200 =
-  Responses.actions_runner_labels.Content;
+export type Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$200 = Responses.actions_runner_labels.Content;
 export type Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$404 = Responses.not_found.Content;
-export type Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$422 =
-  Responses.validation_failed_simple.Content;
+export type Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$422 = Responses.validation_failed_simple.Content;
 export interface Parameter$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise {
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
@@ -7465,22 +7455,18 @@ export interface RequestBody$enterprise$admin$add$custom$labels$to$self$hosted$r
     labels: string[];
   };
 }
-export type Response$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise$Status$200 =
-  Responses.actions_runner_labels.Content;
+export type Response$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise$Status$200 = Responses.actions_runner_labels.Content;
 export type Response$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise$Status$404 = Responses.not_found.Content;
-export type Response$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise$Status$422 =
-  Responses.validation_failed_simple.Content;
+export type Response$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise$Status$422 = Responses.validation_failed_simple.Content;
 export interface Parameter$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise {
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
   /** Unique identifier of the self-hosted runner. */
   runner_id: Parameters.runner$id;
 }
-export type Response$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise$Status$200 =
-  Responses.actions_runner_labels_readonly.Content;
+export type Response$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise$Status$200 = Responses.actions_runner_labels_readonly.Content;
 export type Response$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise$Status$404 = Responses.not_found.Content;
-export type Response$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise$Status$422 =
-  Responses.validation_failed_simple.Content;
+export type Response$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise$Status$422 = Responses.validation_failed_simple.Content;
 export interface Parameter$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise {
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
@@ -7489,11 +7475,9 @@ export interface Parameter$enterprise$admin$remove$custom$label$from$self$hosted
   /** The name of a self-hosted runner's custom label. */
   name: Parameters.runner$label$name;
 }
-export type Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$200 =
-  Responses.actions_runner_labels.Content;
+export type Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$200 = Responses.actions_runner_labels.Content;
 export type Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$404 = Responses.not_found.Content;
-export type Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$422 =
-  Responses.validation_failed_simple.Content;
+export type Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$422 = Responses.validation_failed_simple.Content;
 export interface Parameter$enterprise$admin$get$audit$log {
   /** The slug version of the enterprise name. You can also substitute this value with the enterprise id. */
   enterprise: Parameters.enterprise;
@@ -8400,8 +8384,7 @@ export interface Parameter$actions$remove$all$custom$labels$from$self$hosted$run
   /** Unique identifier of the self-hosted runner. */
   runner_id: Parameters.runner$id;
 }
-export type Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$org$Status$200 =
-  Responses.actions_runner_labels_readonly.Content;
+export type Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$org$Status$200 = Responses.actions_runner_labels_readonly.Content;
 export type Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$org$Status$404 = Responses.not_found.Content;
 export interface Parameter$actions$remove$custom$label$from$self$hosted$runner$for$org {
   org: Parameters.org;
@@ -10242,8 +10225,7 @@ export interface Parameter$actions$remove$all$custom$labels$from$self$hosted$run
   /** Unique identifier of the self-hosted runner. */
   runner_id: Parameters.runner$id;
 }
-export type Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo$Status$200 =
-  Responses.actions_runner_labels_readonly.Content;
+export type Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo$Status$200 = Responses.actions_runner_labels_readonly.Content;
 export type Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo$Status$404 = Responses.not_found.Content;
 export interface Parameter$actions$remove$custom$label$from$self$hosted$runner$for$repo {
   owner: Parameters.owner;
@@ -14704,18 +14686,7 @@ export interface Parameter$search$issues$and$pull$requests {
   /** The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as GitHub.com. To learn more about the format of the query, see [Constructing a search query](https://docs.github.com/enterprise-server@3.4/rest/reference/search#constructing-a-search-query). See "[Searching issues and pull requests](https://docs.github.com/articles/searching-issues-and-pull-requests/)" for a detailed list of qualifiers. */
   q: string;
   /** Sorts the results of your query by the number of `comments`, `reactions`, `reactions-+1`, `reactions--1`, `reactions-smile`, `reactions-thinking_face`, `reactions-heart`, `reactions-tada`, or `interactions`. You can also sort results by how recently the items were `created` or `updated`, Default: [best match](https://docs.github.com/enterprise-server@3.4/rest/reference/search#ranking-search-results) */
-  sort?:
-    | "comments"
-    | "reactions"
-    | "reactions-+1"
-    | "reactions--1"
-    | "reactions-smile"
-    | "reactions-thinking_face"
-    | "reactions-heart"
-    | "reactions-tada"
-    | "interactions"
-    | "created"
-    | "updated";
+  sort?: "comments" | "reactions" | "reactions-+1" | "reactions--1" | "reactions-smile" | "reactions-thinking_face" | "reactions-heart" | "reactions-tada" | "interactions" | "created" | "updated";
   /** Determines whether the first search result returned is the highest number of matches (`desc`) or lowest number of matches (`asc`). This parameter is ignored unless you provide `sort`. */
   order?: Parameters.order;
   /** Results per page (max 100) */
@@ -16097,26 +16068,22 @@ export interface Params$enterprise$admin$delete$public$key {
   parameter: Parameter$enterprise$admin$delete$public$key;
 }
 export type RequestContentType$enterprise$admin$update$ldap$mapping$for$team = keyof RequestBody$enterprise$admin$update$ldap$mapping$for$team;
-export type ResponseContentType$enterprise$admin$update$ldap$mapping$for$team =
-  keyof Response$enterprise$admin$update$ldap$mapping$for$team$Status$200;
+export type ResponseContentType$enterprise$admin$update$ldap$mapping$for$team = keyof Response$enterprise$admin$update$ldap$mapping$for$team$Status$200;
 export interface Params$enterprise$admin$update$ldap$mapping$for$team {
   parameter: Parameter$enterprise$admin$update$ldap$mapping$for$team;
   requestBody: RequestBody$enterprise$admin$update$ldap$mapping$for$team["application/json"];
 }
-export type ResponseContentType$enterprise$admin$sync$ldap$mapping$for$team =
-  keyof Response$enterprise$admin$sync$ldap$mapping$for$team$Status$201;
+export type ResponseContentType$enterprise$admin$sync$ldap$mapping$for$team = keyof Response$enterprise$admin$sync$ldap$mapping$for$team$Status$201;
 export interface Params$enterprise$admin$sync$ldap$mapping$for$team {
   parameter: Parameter$enterprise$admin$sync$ldap$mapping$for$team;
 }
 export type RequestContentType$enterprise$admin$update$ldap$mapping$for$user = keyof RequestBody$enterprise$admin$update$ldap$mapping$for$user;
-export type ResponseContentType$enterprise$admin$update$ldap$mapping$for$user =
-  keyof Response$enterprise$admin$update$ldap$mapping$for$user$Status$200;
+export type ResponseContentType$enterprise$admin$update$ldap$mapping$for$user = keyof Response$enterprise$admin$update$ldap$mapping$for$user$Status$200;
 export interface Params$enterprise$admin$update$ldap$mapping$for$user {
   parameter: Parameter$enterprise$admin$update$ldap$mapping$for$user;
   requestBody: RequestBody$enterprise$admin$update$ldap$mapping$for$user["application/json"];
 }
-export type ResponseContentType$enterprise$admin$sync$ldap$mapping$for$user =
-  keyof Response$enterprise$admin$sync$ldap$mapping$for$user$Status$201;
+export type ResponseContentType$enterprise$admin$sync$ldap$mapping$for$user = keyof Response$enterprise$admin$sync$ldap$mapping$for$user$Status$201;
 export interface Params$enterprise$admin$sync$ldap$mapping$for$user {
   parameter: Parameter$enterprise$admin$sync$ldap$mapping$for$user;
 }
@@ -16131,41 +16098,33 @@ export interface Params$enterprise$admin$update$org$name {
   parameter: Parameter$enterprise$admin$update$org$name;
   requestBody: RequestBody$enterprise$admin$update$org$name["application/json"];
 }
-export type ResponseContentType$enterprise$admin$list$pre$receive$environments =
-  keyof Response$enterprise$admin$list$pre$receive$environments$Status$200;
+export type ResponseContentType$enterprise$admin$list$pre$receive$environments = keyof Response$enterprise$admin$list$pre$receive$environments$Status$200;
 export interface Params$enterprise$admin$list$pre$receive$environments {
   parameter: Parameter$enterprise$admin$list$pre$receive$environments;
 }
-export type RequestContentType$enterprise$admin$create$pre$receive$environment =
-  keyof RequestBody$enterprise$admin$create$pre$receive$environment;
-export type ResponseContentType$enterprise$admin$create$pre$receive$environment =
-  keyof Response$enterprise$admin$create$pre$receive$environment$Status$201;
+export type RequestContentType$enterprise$admin$create$pre$receive$environment = keyof RequestBody$enterprise$admin$create$pre$receive$environment;
+export type ResponseContentType$enterprise$admin$create$pre$receive$environment = keyof Response$enterprise$admin$create$pre$receive$environment$Status$201;
 export interface Params$enterprise$admin$create$pre$receive$environment {
   requestBody: RequestBody$enterprise$admin$create$pre$receive$environment["application/json"];
 }
-export type ResponseContentType$enterprise$admin$get$pre$receive$environment =
-  keyof Response$enterprise$admin$get$pre$receive$environment$Status$200;
+export type ResponseContentType$enterprise$admin$get$pre$receive$environment = keyof Response$enterprise$admin$get$pre$receive$environment$Status$200;
 export interface Params$enterprise$admin$get$pre$receive$environment {
   parameter: Parameter$enterprise$admin$get$pre$receive$environment;
 }
 export interface Params$enterprise$admin$delete$pre$receive$environment {
   parameter: Parameter$enterprise$admin$delete$pre$receive$environment;
 }
-export type RequestContentType$enterprise$admin$update$pre$receive$environment =
-  keyof RequestBody$enterprise$admin$update$pre$receive$environment;
-export type ResponseContentType$enterprise$admin$update$pre$receive$environment =
-  keyof Response$enterprise$admin$update$pre$receive$environment$Status$200;
+export type RequestContentType$enterprise$admin$update$pre$receive$environment = keyof RequestBody$enterprise$admin$update$pre$receive$environment;
+export type ResponseContentType$enterprise$admin$update$pre$receive$environment = keyof Response$enterprise$admin$update$pre$receive$environment$Status$200;
 export interface Params$enterprise$admin$update$pre$receive$environment {
   parameter: Parameter$enterprise$admin$update$pre$receive$environment;
   requestBody: RequestBody$enterprise$admin$update$pre$receive$environment["application/json"];
 }
-export type ResponseContentType$enterprise$admin$start$pre$receive$environment$download =
-  keyof Response$enterprise$admin$start$pre$receive$environment$download$Status$202;
+export type ResponseContentType$enterprise$admin$start$pre$receive$environment$download = keyof Response$enterprise$admin$start$pre$receive$environment$download$Status$202;
 export interface Params$enterprise$admin$start$pre$receive$environment$download {
   parameter: Parameter$enterprise$admin$start$pre$receive$environment$download;
 }
-export type ResponseContentType$enterprise$admin$get$download$status$for$pre$receive$environment =
-  keyof Response$enterprise$admin$get$download$status$for$pre$receive$environment$Status$200;
+export type ResponseContentType$enterprise$admin$get$download$status$for$pre$receive$environment = keyof Response$enterprise$admin$get$download$status$for$pre$receive$environment$Status$200;
 export interface Params$enterprise$admin$get$download$status$for$pre$receive$environment {
   parameter: Parameter$enterprise$admin$get$download$status$for$pre$receive$environment;
 }
@@ -16191,8 +16150,7 @@ export interface Params$enterprise$admin$update$pre$receive$hook {
   parameter: Parameter$enterprise$admin$update$pre$receive$hook;
   requestBody: RequestBody$enterprise$admin$update$pre$receive$hook["application/json"];
 }
-export type ResponseContentType$enterprise$admin$list$personal$access$tokens =
-  keyof Response$enterprise$admin$list$personal$access$tokens$Status$200;
+export type ResponseContentType$enterprise$admin$list$personal$access$tokens = keyof Response$enterprise$admin$list$personal$access$tokens$Status$200;
 export interface Params$enterprise$admin$list$personal$access$tokens {
   parameter: Parameter$enterprise$admin$list$personal$access$tokens;
 }
@@ -16213,10 +16171,8 @@ export interface Params$enterprise$admin$update$username$for$user {
   parameter: Parameter$enterprise$admin$update$username$for$user;
   requestBody: RequestBody$enterprise$admin$update$username$for$user["application/json"];
 }
-export type RequestContentType$enterprise$admin$create$impersonation$o$auth$token =
-  keyof RequestBody$enterprise$admin$create$impersonation$o$auth$token;
-export type ResponseContentType$enterprise$admin$create$impersonation$o$auth$token =
-  keyof Response$enterprise$admin$create$impersonation$o$auth$token$Status$201;
+export type RequestContentType$enterprise$admin$create$impersonation$o$auth$token = keyof RequestBody$enterprise$admin$create$impersonation$o$auth$token;
+export type ResponseContentType$enterprise$admin$create$impersonation$o$auth$token = keyof Response$enterprise$admin$create$impersonation$o$auth$token$Status$201;
 export interface Params$enterprise$admin$create$impersonation$o$auth$token {
   parameter: Parameter$enterprise$admin$create$impersonation$o$auth$token;
   requestBody: RequestBody$enterprise$admin$create$impersonation$o$auth$token["application/json"];
@@ -16324,16 +16280,13 @@ export type ResponseContentType$oauth$authorizations$create$authorization = keyo
 export interface Params$oauth$authorizations$create$authorization {
   requestBody: RequestBody$oauth$authorizations$create$authorization["application/json"];
 }
-export type RequestContentType$oauth$authorizations$get$or$create$authorization$for$app =
-  keyof RequestBody$oauth$authorizations$get$or$create$authorization$for$app;
-export type ResponseContentType$oauth$authorizations$get$or$create$authorization$for$app =
-  keyof Response$oauth$authorizations$get$or$create$authorization$for$app$Status$200;
+export type RequestContentType$oauth$authorizations$get$or$create$authorization$for$app = keyof RequestBody$oauth$authorizations$get$or$create$authorization$for$app;
+export type ResponseContentType$oauth$authorizations$get$or$create$authorization$for$app = keyof Response$oauth$authorizations$get$or$create$authorization$for$app$Status$200;
 export interface Params$oauth$authorizations$get$or$create$authorization$for$app {
   parameter: Parameter$oauth$authorizations$get$or$create$authorization$for$app;
   requestBody: RequestBody$oauth$authorizations$get$or$create$authorization$for$app["application/json"];
 }
-export type RequestContentType$oauth$authorizations$get$or$create$authorization$for$app$and$fingerprint =
-  keyof RequestBody$oauth$authorizations$get$or$create$authorization$for$app$and$fingerprint;
+export type RequestContentType$oauth$authorizations$get$or$create$authorization$for$app$and$fingerprint = keyof RequestBody$oauth$authorizations$get$or$create$authorization$for$app$and$fingerprint;
 export type ResponseContentType$oauth$authorizations$get$or$create$authorization$for$app$and$fingerprint =
   keyof Response$oauth$authorizations$get$or$create$authorization$for$app$and$fingerprint$Status$200;
 export interface Params$oauth$authorizations$get$or$create$authorization$for$app$and$fingerprint {
@@ -16377,13 +16330,11 @@ export type ResponseContentType$enterprise$admin$get$pages$stats = keyof Respons
 export type ResponseContentType$enterprise$admin$get$pull$request$stats = keyof Response$enterprise$admin$get$pull$request$stats$Status$200;
 export type ResponseContentType$enterprise$admin$get$repo$stats = keyof Response$enterprise$admin$get$repo$stats$Status$200;
 export type ResponseContentType$enterprise$admin$get$user$stats = keyof Response$enterprise$admin$get$user$stats$Status$200;
-export type ResponseContentType$enterprise$admin$get$github$actions$permissions$enterprise =
-  keyof Response$enterprise$admin$get$github$actions$permissions$enterprise$Status$200;
+export type ResponseContentType$enterprise$admin$get$github$actions$permissions$enterprise = keyof Response$enterprise$admin$get$github$actions$permissions$enterprise$Status$200;
 export interface Params$enterprise$admin$get$github$actions$permissions$enterprise {
   parameter: Parameter$enterprise$admin$get$github$actions$permissions$enterprise;
 }
-export type RequestContentType$enterprise$admin$set$github$actions$permissions$enterprise =
-  keyof RequestBody$enterprise$admin$set$github$actions$permissions$enterprise;
+export type RequestContentType$enterprise$admin$set$github$actions$permissions$enterprise = keyof RequestBody$enterprise$admin$set$github$actions$permissions$enterprise;
 export interface Params$enterprise$admin$set$github$actions$permissions$enterprise {
   parameter: Parameter$enterprise$admin$set$github$actions$permissions$enterprise;
   requestBody: RequestBody$enterprise$admin$set$github$actions$permissions$enterprise["application/json"];
@@ -16405,42 +16356,34 @@ export interface Params$enterprise$admin$enable$selected$organization$github$act
 export interface Params$enterprise$admin$disable$selected$organization$github$actions$enterprise {
   parameter: Parameter$enterprise$admin$disable$selected$organization$github$actions$enterprise;
 }
-export type ResponseContentType$enterprise$admin$get$allowed$actions$enterprise =
-  keyof Response$enterprise$admin$get$allowed$actions$enterprise$Status$200;
+export type ResponseContentType$enterprise$admin$get$allowed$actions$enterprise = keyof Response$enterprise$admin$get$allowed$actions$enterprise$Status$200;
 export interface Params$enterprise$admin$get$allowed$actions$enterprise {
   parameter: Parameter$enterprise$admin$get$allowed$actions$enterprise;
 }
-export type RequestContentType$enterprise$admin$set$allowed$actions$enterprise =
-  keyof RequestBody$enterprise$admin$set$allowed$actions$enterprise;
+export type RequestContentType$enterprise$admin$set$allowed$actions$enterprise = keyof RequestBody$enterprise$admin$set$allowed$actions$enterprise;
 export interface Params$enterprise$admin$set$allowed$actions$enterprise {
   parameter: Parameter$enterprise$admin$set$allowed$actions$enterprise;
   requestBody: RequestBody$enterprise$admin$set$allowed$actions$enterprise["application/json"];
 }
-export type ResponseContentType$enterprise$admin$list$self$hosted$runner$groups$for$enterprise =
-  keyof Response$enterprise$admin$list$self$hosted$runner$groups$for$enterprise$Status$200;
+export type ResponseContentType$enterprise$admin$list$self$hosted$runner$groups$for$enterprise = keyof Response$enterprise$admin$list$self$hosted$runner$groups$for$enterprise$Status$200;
 export interface Params$enterprise$admin$list$self$hosted$runner$groups$for$enterprise {
   parameter: Parameter$enterprise$admin$list$self$hosted$runner$groups$for$enterprise;
 }
-export type RequestContentType$enterprise$admin$create$self$hosted$runner$group$for$enterprise =
-  keyof RequestBody$enterprise$admin$create$self$hosted$runner$group$for$enterprise;
-export type ResponseContentType$enterprise$admin$create$self$hosted$runner$group$for$enterprise =
-  keyof Response$enterprise$admin$create$self$hosted$runner$group$for$enterprise$Status$201;
+export type RequestContentType$enterprise$admin$create$self$hosted$runner$group$for$enterprise = keyof RequestBody$enterprise$admin$create$self$hosted$runner$group$for$enterprise;
+export type ResponseContentType$enterprise$admin$create$self$hosted$runner$group$for$enterprise = keyof Response$enterprise$admin$create$self$hosted$runner$group$for$enterprise$Status$201;
 export interface Params$enterprise$admin$create$self$hosted$runner$group$for$enterprise {
   parameter: Parameter$enterprise$admin$create$self$hosted$runner$group$for$enterprise;
   requestBody: RequestBody$enterprise$admin$create$self$hosted$runner$group$for$enterprise["application/json"];
 }
-export type ResponseContentType$enterprise$admin$get$self$hosted$runner$group$for$enterprise =
-  keyof Response$enterprise$admin$get$self$hosted$runner$group$for$enterprise$Status$200;
+export type ResponseContentType$enterprise$admin$get$self$hosted$runner$group$for$enterprise = keyof Response$enterprise$admin$get$self$hosted$runner$group$for$enterprise$Status$200;
 export interface Params$enterprise$admin$get$self$hosted$runner$group$for$enterprise {
   parameter: Parameter$enterprise$admin$get$self$hosted$runner$group$for$enterprise;
 }
 export interface Params$enterprise$admin$delete$self$hosted$runner$group$from$enterprise {
   parameter: Parameter$enterprise$admin$delete$self$hosted$runner$group$from$enterprise;
 }
-export type RequestContentType$enterprise$admin$update$self$hosted$runner$group$for$enterprise =
-  keyof RequestBody$enterprise$admin$update$self$hosted$runner$group$for$enterprise;
-export type ResponseContentType$enterprise$admin$update$self$hosted$runner$group$for$enterprise =
-  keyof Response$enterprise$admin$update$self$hosted$runner$group$for$enterprise$Status$200;
+export type RequestContentType$enterprise$admin$update$self$hosted$runner$group$for$enterprise = keyof RequestBody$enterprise$admin$update$self$hosted$runner$group$for$enterprise;
+export type ResponseContentType$enterprise$admin$update$self$hosted$runner$group$for$enterprise = keyof Response$enterprise$admin$update$self$hosted$runner$group$for$enterprise$Status$200;
 export interface Params$enterprise$admin$update$self$hosted$runner$group$for$enterprise {
   parameter: Parameter$enterprise$admin$update$self$hosted$runner$group$for$enterprise;
   requestBody: RequestBody$enterprise$admin$update$self$hosted$runner$group$for$enterprise["application/json"];
@@ -16450,8 +16393,7 @@ export type ResponseContentType$enterprise$admin$list$org$access$to$self$hosted$
 export interface Params$enterprise$admin$list$org$access$to$self$hosted$runner$group$in$enterprise {
   parameter: Parameter$enterprise$admin$list$org$access$to$self$hosted$runner$group$in$enterprise;
 }
-export type RequestContentType$enterprise$admin$set$org$access$to$self$hosted$runner$group$in$enterprise =
-  keyof RequestBody$enterprise$admin$set$org$access$to$self$hosted$runner$group$in$enterprise;
+export type RequestContentType$enterprise$admin$set$org$access$to$self$hosted$runner$group$in$enterprise = keyof RequestBody$enterprise$admin$set$org$access$to$self$hosted$runner$group$in$enterprise;
 export interface Params$enterprise$admin$set$org$access$to$self$hosted$runner$group$in$enterprise {
   parameter: Parameter$enterprise$admin$set$org$access$to$self$hosted$runner$group$in$enterprise;
   requestBody: RequestBody$enterprise$admin$set$org$access$to$self$hosted$runner$group$in$enterprise["application/json"];
@@ -16462,13 +16404,11 @@ export interface Params$enterprise$admin$add$org$access$to$self$hosted$runner$gr
 export interface Params$enterprise$admin$remove$org$access$to$self$hosted$runner$group$in$enterprise {
   parameter: Parameter$enterprise$admin$remove$org$access$to$self$hosted$runner$group$in$enterprise;
 }
-export type ResponseContentType$enterprise$admin$list$self$hosted$runners$in$group$for$enterprise =
-  keyof Response$enterprise$admin$list$self$hosted$runners$in$group$for$enterprise$Status$200;
+export type ResponseContentType$enterprise$admin$list$self$hosted$runners$in$group$for$enterprise = keyof Response$enterprise$admin$list$self$hosted$runners$in$group$for$enterprise$Status$200;
 export interface Params$enterprise$admin$list$self$hosted$runners$in$group$for$enterprise {
   parameter: Parameter$enterprise$admin$list$self$hosted$runners$in$group$for$enterprise;
 }
-export type RequestContentType$enterprise$admin$set$self$hosted$runners$in$group$for$enterprise =
-  keyof RequestBody$enterprise$admin$set$self$hosted$runners$in$group$for$enterprise;
+export type RequestContentType$enterprise$admin$set$self$hosted$runners$in$group$for$enterprise = keyof RequestBody$enterprise$admin$set$self$hosted$runners$in$group$for$enterprise;
 export interface Params$enterprise$admin$set$self$hosted$runners$in$group$for$enterprise {
   parameter: Parameter$enterprise$admin$set$self$hosted$runners$in$group$for$enterprise;
   requestBody: RequestBody$enterprise$admin$set$self$hosted$runners$in$group$for$enterprise["application/json"];
@@ -16479,49 +16419,41 @@ export interface Params$enterprise$admin$add$self$hosted$runner$to$group$for$ent
 export interface Params$enterprise$admin$remove$self$hosted$runner$from$group$for$enterprise {
   parameter: Parameter$enterprise$admin$remove$self$hosted$runner$from$group$for$enterprise;
 }
-export type ResponseContentType$enterprise$admin$list$self$hosted$runners$for$enterprise =
-  keyof Response$enterprise$admin$list$self$hosted$runners$for$enterprise$Status$200;
+export type ResponseContentType$enterprise$admin$list$self$hosted$runners$for$enterprise = keyof Response$enterprise$admin$list$self$hosted$runners$for$enterprise$Status$200;
 export interface Params$enterprise$admin$list$self$hosted$runners$for$enterprise {
   parameter: Parameter$enterprise$admin$list$self$hosted$runners$for$enterprise;
 }
-export type ResponseContentType$enterprise$admin$list$runner$applications$for$enterprise =
-  keyof Response$enterprise$admin$list$runner$applications$for$enterprise$Status$200;
+export type ResponseContentType$enterprise$admin$list$runner$applications$for$enterprise = keyof Response$enterprise$admin$list$runner$applications$for$enterprise$Status$200;
 export interface Params$enterprise$admin$list$runner$applications$for$enterprise {
   parameter: Parameter$enterprise$admin$list$runner$applications$for$enterprise;
 }
-export type ResponseContentType$enterprise$admin$create$registration$token$for$enterprise =
-  keyof Response$enterprise$admin$create$registration$token$for$enterprise$Status$201;
+export type ResponseContentType$enterprise$admin$create$registration$token$for$enterprise = keyof Response$enterprise$admin$create$registration$token$for$enterprise$Status$201;
 export interface Params$enterprise$admin$create$registration$token$for$enterprise {
   parameter: Parameter$enterprise$admin$create$registration$token$for$enterprise;
 }
-export type ResponseContentType$enterprise$admin$create$remove$token$for$enterprise =
-  keyof Response$enterprise$admin$create$remove$token$for$enterprise$Status$201;
+export type ResponseContentType$enterprise$admin$create$remove$token$for$enterprise = keyof Response$enterprise$admin$create$remove$token$for$enterprise$Status$201;
 export interface Params$enterprise$admin$create$remove$token$for$enterprise {
   parameter: Parameter$enterprise$admin$create$remove$token$for$enterprise;
 }
-export type ResponseContentType$enterprise$admin$get$self$hosted$runner$for$enterprise =
-  keyof Response$enterprise$admin$get$self$hosted$runner$for$enterprise$Status$200;
+export type ResponseContentType$enterprise$admin$get$self$hosted$runner$for$enterprise = keyof Response$enterprise$admin$get$self$hosted$runner$for$enterprise$Status$200;
 export interface Params$enterprise$admin$get$self$hosted$runner$for$enterprise {
   parameter: Parameter$enterprise$admin$get$self$hosted$runner$for$enterprise;
 }
 export interface Params$enterprise$admin$delete$self$hosted$runner$from$enterprise {
   parameter: Parameter$enterprise$admin$delete$self$hosted$runner$from$enterprise;
 }
-export type ResponseContentType$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise =
-  keyof Response$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise$Status$200;
+export type ResponseContentType$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise = keyof Response$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise$Status$200;
 export interface Params$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise {
   parameter: Parameter$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise;
 }
-export type RequestContentType$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise =
-  keyof RequestBody$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise;
+export type RequestContentType$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise = keyof RequestBody$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise;
 export type ResponseContentType$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise =
   keyof Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$200;
 export interface Params$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise {
   parameter: Parameter$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise;
   requestBody: RequestBody$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise["application/json"];
 }
-export type RequestContentType$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise =
-  keyof RequestBody$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise;
+export type RequestContentType$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise = keyof RequestBody$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise;
 export type ResponseContentType$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise =
   keyof Response$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise$Status$200;
 export interface Params$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise {
@@ -16542,13 +16474,11 @@ export type ResponseContentType$enterprise$admin$get$audit$log = keyof Response$
 export interface Params$enterprise$admin$get$audit$log {
   parameter: Parameter$enterprise$admin$get$audit$log;
 }
-export type ResponseContentType$secret$scanning$list$alerts$for$enterprise =
-  keyof Response$secret$scanning$list$alerts$for$enterprise$Status$200;
+export type ResponseContentType$secret$scanning$list$alerts$for$enterprise = keyof Response$secret$scanning$list$alerts$for$enterprise$Status$200;
 export interface Params$secret$scanning$list$alerts$for$enterprise {
   parameter: Parameter$secret$scanning$list$alerts$for$enterprise;
 }
-export type ResponseContentType$billing$get$github$advanced$security$billing$ghe =
-  keyof Response$billing$get$github$advanced$security$billing$ghe$Status$200;
+export type ResponseContentType$billing$get$github$advanced$security$billing$ghe = keyof Response$billing$get$github$advanced$security$billing$ghe$Status$200;
 export interface Params$billing$get$github$advanced$security$billing$ghe {
   parameter: Parameter$billing$get$github$advanced$security$billing$ghe;
 }
@@ -16640,8 +16570,7 @@ export type ResponseContentType$gitignore$get$template = keyof Response$gitignor
 export interface Params$gitignore$get$template {
   parameter: Parameter$gitignore$get$template;
 }
-export type ResponseContentType$apps$list$repos$accessible$to$installation =
-  keyof Response$apps$list$repos$accessible$to$installation$Status$200;
+export type ResponseContentType$apps$list$repos$accessible$to$installation = keyof Response$apps$list$repos$accessible$to$installation$Status$200;
 export interface Params$apps$list$repos$accessible$to$installation {
   parameter: Parameter$apps$list$repos$accessible$to$installation;
 }
@@ -16671,13 +16600,11 @@ export interface Params$markdown$render$raw<T extends RequestContentType$markdow
   requestBody: RequestBody$markdown$render$raw[T];
 }
 export type ResponseContentType$meta$get = keyof Response$meta$get$Status$200;
-export type ResponseContentType$activity$list$public$events$for$repo$network =
-  keyof Response$activity$list$public$events$for$repo$network$Status$200;
+export type ResponseContentType$activity$list$public$events$for$repo$network = keyof Response$activity$list$public$events$for$repo$network$Status$200;
 export interface Params$activity$list$public$events$for$repo$network {
   parameter: Parameter$activity$list$public$events$for$repo$network;
 }
-export type ResponseContentType$activity$list$notifications$for$authenticated$user =
-  keyof Response$activity$list$notifications$for$authenticated$user$Status$200;
+export type ResponseContentType$activity$list$notifications$for$authenticated$user = keyof Response$activity$list$notifications$for$authenticated$user$Status$200;
 export interface Params$activity$list$notifications$for$authenticated$user {
   parameter: Parameter$activity$list$notifications$for$authenticated$user;
 }
@@ -16693,8 +16620,7 @@ export interface Params$activity$get$thread {
 export interface Params$activity$mark$thread$as$read {
   parameter: Parameter$activity$mark$thread$as$read;
 }
-export type ResponseContentType$activity$get$thread$subscription$for$authenticated$user =
-  keyof Response$activity$get$thread$subscription$for$authenticated$user$Status$200;
+export type ResponseContentType$activity$get$thread$subscription$for$authenticated$user = keyof Response$activity$get$thread$subscription$for$authenticated$user$Status$200;
 export interface Params$activity$get$thread$subscription$for$authenticated$user {
   parameter: Parameter$activity$get$thread$subscription$for$authenticated$user;
 }
@@ -16729,13 +16655,11 @@ export interface Params$orgs$update {
   parameter: Parameter$orgs$update;
   requestBody: RequestBody$orgs$update["application/json"];
 }
-export type ResponseContentType$actions$get$github$actions$permissions$organization =
-  keyof Response$actions$get$github$actions$permissions$organization$Status$200;
+export type ResponseContentType$actions$get$github$actions$permissions$organization = keyof Response$actions$get$github$actions$permissions$organization$Status$200;
 export interface Params$actions$get$github$actions$permissions$organization {
   parameter: Parameter$actions$get$github$actions$permissions$organization;
 }
-export type RequestContentType$actions$set$github$actions$permissions$organization =
-  keyof RequestBody$actions$set$github$actions$permissions$organization;
+export type RequestContentType$actions$set$github$actions$permissions$organization = keyof RequestBody$actions$set$github$actions$permissions$organization;
 export interface Params$actions$set$github$actions$permissions$organization {
   parameter: Parameter$actions$set$github$actions$permissions$organization;
   requestBody: RequestBody$actions$set$github$actions$permissions$organization["application/json"];
@@ -16745,8 +16669,7 @@ export type ResponseContentType$actions$list$selected$repositories$enabled$githu
 export interface Params$actions$list$selected$repositories$enabled$github$actions$organization {
   parameter: Parameter$actions$list$selected$repositories$enabled$github$actions$organization;
 }
-export type RequestContentType$actions$set$selected$repositories$enabled$github$actions$organization =
-  keyof RequestBody$actions$set$selected$repositories$enabled$github$actions$organization;
+export type RequestContentType$actions$set$selected$repositories$enabled$github$actions$organization = keyof RequestBody$actions$set$selected$repositories$enabled$github$actions$organization;
 export interface Params$actions$set$selected$repositories$enabled$github$actions$organization {
   parameter: Parameter$actions$set$selected$repositories$enabled$github$actions$organization;
   requestBody: RequestBody$actions$set$selected$repositories$enabled$github$actions$organization["application/json"];
@@ -16766,42 +16689,34 @@ export interface Params$actions$set$allowed$actions$organization {
   parameter: Parameter$actions$set$allowed$actions$organization;
   requestBody: RequestBody$actions$set$allowed$actions$organization["application/json"];
 }
-export type ResponseContentType$actions$list$self$hosted$runner$groups$for$org =
-  keyof Response$actions$list$self$hosted$runner$groups$for$org$Status$200;
+export type ResponseContentType$actions$list$self$hosted$runner$groups$for$org = keyof Response$actions$list$self$hosted$runner$groups$for$org$Status$200;
 export interface Params$actions$list$self$hosted$runner$groups$for$org {
   parameter: Parameter$actions$list$self$hosted$runner$groups$for$org;
 }
-export type RequestContentType$actions$create$self$hosted$runner$group$for$org =
-  keyof RequestBody$actions$create$self$hosted$runner$group$for$org;
-export type ResponseContentType$actions$create$self$hosted$runner$group$for$org =
-  keyof Response$actions$create$self$hosted$runner$group$for$org$Status$201;
+export type RequestContentType$actions$create$self$hosted$runner$group$for$org = keyof RequestBody$actions$create$self$hosted$runner$group$for$org;
+export type ResponseContentType$actions$create$self$hosted$runner$group$for$org = keyof Response$actions$create$self$hosted$runner$group$for$org$Status$201;
 export interface Params$actions$create$self$hosted$runner$group$for$org {
   parameter: Parameter$actions$create$self$hosted$runner$group$for$org;
   requestBody: RequestBody$actions$create$self$hosted$runner$group$for$org["application/json"];
 }
-export type ResponseContentType$actions$get$self$hosted$runner$group$for$org =
-  keyof Response$actions$get$self$hosted$runner$group$for$org$Status$200;
+export type ResponseContentType$actions$get$self$hosted$runner$group$for$org = keyof Response$actions$get$self$hosted$runner$group$for$org$Status$200;
 export interface Params$actions$get$self$hosted$runner$group$for$org {
   parameter: Parameter$actions$get$self$hosted$runner$group$for$org;
 }
 export interface Params$actions$delete$self$hosted$runner$group$from$org {
   parameter: Parameter$actions$delete$self$hosted$runner$group$from$org;
 }
-export type RequestContentType$actions$update$self$hosted$runner$group$for$org =
-  keyof RequestBody$actions$update$self$hosted$runner$group$for$org;
-export type ResponseContentType$actions$update$self$hosted$runner$group$for$org =
-  keyof Response$actions$update$self$hosted$runner$group$for$org$Status$200;
+export type RequestContentType$actions$update$self$hosted$runner$group$for$org = keyof RequestBody$actions$update$self$hosted$runner$group$for$org;
+export type ResponseContentType$actions$update$self$hosted$runner$group$for$org = keyof Response$actions$update$self$hosted$runner$group$for$org$Status$200;
 export interface Params$actions$update$self$hosted$runner$group$for$org {
   parameter: Parameter$actions$update$self$hosted$runner$group$for$org;
   requestBody: RequestBody$actions$update$self$hosted$runner$group$for$org["application/json"];
 }
-export type ResponseContentType$actions$list$repo$access$to$self$hosted$runner$group$in$org =
-  keyof Response$actions$list$repo$access$to$self$hosted$runner$group$in$org$Status$200;
+export type ResponseContentType$actions$list$repo$access$to$self$hosted$runner$group$in$org = keyof Response$actions$list$repo$access$to$self$hosted$runner$group$in$org$Status$200;
 export interface Params$actions$list$repo$access$to$self$hosted$runner$group$in$org {
   parameter: Parameter$actions$list$repo$access$to$self$hosted$runner$group$in$org;
 }
-export type RequestContentType$actions$set$repo$access$to$self$hosted$runner$group$in$org =
-  keyof RequestBody$actions$set$repo$access$to$self$hosted$runner$group$in$org;
+export type RequestContentType$actions$set$repo$access$to$self$hosted$runner$group$in$org = keyof RequestBody$actions$set$repo$access$to$self$hosted$runner$group$in$org;
 export interface Params$actions$set$repo$access$to$self$hosted$runner$group$in$org {
   parameter: Parameter$actions$set$repo$access$to$self$hosted$runner$group$in$org;
   requestBody: RequestBody$actions$set$repo$access$to$self$hosted$runner$group$in$org["application/json"];
@@ -16812,13 +16727,11 @@ export interface Params$actions$add$repo$access$to$self$hosted$runner$group$in$o
 export interface Params$actions$remove$repo$access$to$self$hosted$runner$group$in$org {
   parameter: Parameter$actions$remove$repo$access$to$self$hosted$runner$group$in$org;
 }
-export type ResponseContentType$actions$list$self$hosted$runners$in$group$for$org =
-  keyof Response$actions$list$self$hosted$runners$in$group$for$org$Status$200;
+export type ResponseContentType$actions$list$self$hosted$runners$in$group$for$org = keyof Response$actions$list$self$hosted$runners$in$group$for$org$Status$200;
 export interface Params$actions$list$self$hosted$runners$in$group$for$org {
   parameter: Parameter$actions$list$self$hosted$runners$in$group$for$org;
 }
-export type RequestContentType$actions$set$self$hosted$runners$in$group$for$org =
-  keyof RequestBody$actions$set$self$hosted$runners$in$group$for$org;
+export type RequestContentType$actions$set$self$hosted$runners$in$group$for$org = keyof RequestBody$actions$set$self$hosted$runners$in$group$for$org;
 export interface Params$actions$set$self$hosted$runners$in$group$for$org {
   parameter: Parameter$actions$set$self$hosted$runners$in$group$for$org;
   requestBody: RequestBody$actions$set$self$hosted$runners$in$group$for$org["application/json"];
@@ -16852,34 +16765,27 @@ export interface Params$actions$get$self$hosted$runner$for$org {
 export interface Params$actions$delete$self$hosted$runner$from$org {
   parameter: Parameter$actions$delete$self$hosted$runner$from$org;
 }
-export type ResponseContentType$actions$list$labels$for$self$hosted$runner$for$org =
-  keyof Response$actions$list$labels$for$self$hosted$runner$for$org$Status$200;
+export type ResponseContentType$actions$list$labels$for$self$hosted$runner$for$org = keyof Response$actions$list$labels$for$self$hosted$runner$for$org$Status$200;
 export interface Params$actions$list$labels$for$self$hosted$runner$for$org {
   parameter: Parameter$actions$list$labels$for$self$hosted$runner$for$org;
 }
-export type RequestContentType$actions$set$custom$labels$for$self$hosted$runner$for$org =
-  keyof RequestBody$actions$set$custom$labels$for$self$hosted$runner$for$org;
-export type ResponseContentType$actions$set$custom$labels$for$self$hosted$runner$for$org =
-  keyof Response$actions$set$custom$labels$for$self$hosted$runner$for$org$Status$200;
+export type RequestContentType$actions$set$custom$labels$for$self$hosted$runner$for$org = keyof RequestBody$actions$set$custom$labels$for$self$hosted$runner$for$org;
+export type ResponseContentType$actions$set$custom$labels$for$self$hosted$runner$for$org = keyof Response$actions$set$custom$labels$for$self$hosted$runner$for$org$Status$200;
 export interface Params$actions$set$custom$labels$for$self$hosted$runner$for$org {
   parameter: Parameter$actions$set$custom$labels$for$self$hosted$runner$for$org;
   requestBody: RequestBody$actions$set$custom$labels$for$self$hosted$runner$for$org["application/json"];
 }
-export type RequestContentType$actions$add$custom$labels$to$self$hosted$runner$for$org =
-  keyof RequestBody$actions$add$custom$labels$to$self$hosted$runner$for$org;
-export type ResponseContentType$actions$add$custom$labels$to$self$hosted$runner$for$org =
-  keyof Response$actions$add$custom$labels$to$self$hosted$runner$for$org$Status$200;
+export type RequestContentType$actions$add$custom$labels$to$self$hosted$runner$for$org = keyof RequestBody$actions$add$custom$labels$to$self$hosted$runner$for$org;
+export type ResponseContentType$actions$add$custom$labels$to$self$hosted$runner$for$org = keyof Response$actions$add$custom$labels$to$self$hosted$runner$for$org$Status$200;
 export interface Params$actions$add$custom$labels$to$self$hosted$runner$for$org {
   parameter: Parameter$actions$add$custom$labels$to$self$hosted$runner$for$org;
   requestBody: RequestBody$actions$add$custom$labels$to$self$hosted$runner$for$org["application/json"];
 }
-export type ResponseContentType$actions$remove$all$custom$labels$from$self$hosted$runner$for$org =
-  keyof Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$org$Status$200;
+export type ResponseContentType$actions$remove$all$custom$labels$from$self$hosted$runner$for$org = keyof Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$org$Status$200;
 export interface Params$actions$remove$all$custom$labels$from$self$hosted$runner$for$org {
   parameter: Parameter$actions$remove$all$custom$labels$from$self$hosted$runner$for$org;
 }
-export type ResponseContentType$actions$remove$custom$label$from$self$hosted$runner$for$org =
-  keyof Response$actions$remove$custom$label$from$self$hosted$runner$for$org$Status$200;
+export type ResponseContentType$actions$remove$custom$label$from$self$hosted$runner$for$org = keyof Response$actions$remove$custom$label$from$self$hosted$runner$for$org$Status$200;
 export interface Params$actions$remove$custom$label$from$self$hosted$runner$for$org {
   parameter: Parameter$actions$remove$custom$label$from$self$hosted$runner$for$org;
 }
@@ -16904,8 +16810,7 @@ export interface Params$actions$create$or$update$org$secret {
 export interface Params$actions$delete$org$secret {
   parameter: Parameter$actions$delete$org$secret;
 }
-export type ResponseContentType$actions$list$selected$repos$for$org$secret =
-  keyof Response$actions$list$selected$repos$for$org$secret$Status$200;
+export type ResponseContentType$actions$list$selected$repos$for$org$secret = keyof Response$actions$list$selected$repos$for$org$secret$Status$200;
 export interface Params$actions$list$selected$repos$for$org$secret {
   parameter: Parameter$actions$list$selected$repos$for$org$secret;
 }
@@ -16945,8 +16850,7 @@ export interface Params$dependabot$create$or$update$org$secret {
 export interface Params$dependabot$delete$org$secret {
   parameter: Parameter$dependabot$delete$org$secret;
 }
-export type ResponseContentType$dependabot$list$selected$repos$for$org$secret =
-  keyof Response$dependabot$list$selected$repos$for$org$secret$Status$200;
+export type ResponseContentType$dependabot$list$selected$repos$for$org$secret = keyof Response$dependabot$list$selected$repos$for$org$secret$Status$200;
 export interface Params$dependabot$list$selected$repos$for$org$secret {
   parameter: Parameter$dependabot$list$selected$repos$for$org$secret;
 }
@@ -17066,33 +16970,27 @@ export type ResponseContentType$orgs$list$outside$collaborators = keyof Response
 export interface Params$orgs$list$outside$collaborators {
   parameter: Parameter$orgs$list$outside$collaborators;
 }
-export type ResponseContentType$orgs$convert$member$to$outside$collaborator =
-  keyof Response$orgs$convert$member$to$outside$collaborator$Status$202;
+export type ResponseContentType$orgs$convert$member$to$outside$collaborator = keyof Response$orgs$convert$member$to$outside$collaborator$Status$202;
 export interface Params$orgs$convert$member$to$outside$collaborator {
   parameter: Parameter$orgs$convert$member$to$outside$collaborator;
 }
 export interface Params$orgs$remove$outside$collaborator {
   parameter: Parameter$orgs$remove$outside$collaborator;
 }
-export type ResponseContentType$enterprise$admin$list$pre$receive$hooks$for$org =
-  keyof Response$enterprise$admin$list$pre$receive$hooks$for$org$Status$200;
+export type ResponseContentType$enterprise$admin$list$pre$receive$hooks$for$org = keyof Response$enterprise$admin$list$pre$receive$hooks$for$org$Status$200;
 export interface Params$enterprise$admin$list$pre$receive$hooks$for$org {
   parameter: Parameter$enterprise$admin$list$pre$receive$hooks$for$org;
 }
-export type ResponseContentType$enterprise$admin$get$pre$receive$hook$for$org =
-  keyof Response$enterprise$admin$get$pre$receive$hook$for$org$Status$200;
+export type ResponseContentType$enterprise$admin$get$pre$receive$hook$for$org = keyof Response$enterprise$admin$get$pre$receive$hook$for$org$Status$200;
 export interface Params$enterprise$admin$get$pre$receive$hook$for$org {
   parameter: Parameter$enterprise$admin$get$pre$receive$hook$for$org;
 }
-export type ResponseContentType$enterprise$admin$remove$pre$receive$hook$enforcement$for$org =
-  keyof Response$enterprise$admin$remove$pre$receive$hook$enforcement$for$org$Status$200;
+export type ResponseContentType$enterprise$admin$remove$pre$receive$hook$enforcement$for$org = keyof Response$enterprise$admin$remove$pre$receive$hook$enforcement$for$org$Status$200;
 export interface Params$enterprise$admin$remove$pre$receive$hook$enforcement$for$org {
   parameter: Parameter$enterprise$admin$remove$pre$receive$hook$enforcement$for$org;
 }
-export type RequestContentType$enterprise$admin$update$pre$receive$hook$enforcement$for$org =
-  keyof RequestBody$enterprise$admin$update$pre$receive$hook$enforcement$for$org;
-export type ResponseContentType$enterprise$admin$update$pre$receive$hook$enforcement$for$org =
-  keyof Response$enterprise$admin$update$pre$receive$hook$enforcement$for$org$Status$200;
+export type RequestContentType$enterprise$admin$update$pre$receive$hook$enforcement$for$org = keyof RequestBody$enterprise$admin$update$pre$receive$hook$enforcement$for$org;
+export type ResponseContentType$enterprise$admin$update$pre$receive$hook$enforcement$for$org = keyof Response$enterprise$admin$update$pre$receive$hook$enforcement$for$org$Status$200;
 export interface Params$enterprise$admin$update$pre$receive$hook$enforcement$for$org {
   parameter: Parameter$enterprise$admin$update$pre$receive$hook$enforcement$for$org;
   requestBody: RequestBody$enterprise$admin$update$pre$receive$hook$enforcement$for$org["application/json"];
@@ -17134,8 +17032,7 @@ export type ResponseContentType$secret$scanning$list$alerts$for$org = keyof Resp
 export interface Params$secret$scanning$list$alerts$for$org {
   parameter: Parameter$secret$scanning$list$alerts$for$org;
 }
-export type ResponseContentType$billing$get$github$advanced$security$billing$org =
-  keyof Response$billing$get$github$advanced$security$billing$org$Status$200;
+export type ResponseContentType$billing$get$github$advanced$security$billing$org = keyof Response$billing$get$github$advanced$security$billing$org$Status$200;
 export interface Params$billing$get$github$advanced$security$billing$org {
   parameter: Parameter$billing$get$github$advanced$security$billing$org;
 }
@@ -17208,15 +17105,12 @@ export interface Params$teams$update$discussion$comment$in$org {
   parameter: Parameter$teams$update$discussion$comment$in$org;
   requestBody: RequestBody$teams$update$discussion$comment$in$org["application/json"];
 }
-export type ResponseContentType$reactions$list$for$team$discussion$comment$in$org =
-  keyof Response$reactions$list$for$team$discussion$comment$in$org$Status$200;
+export type ResponseContentType$reactions$list$for$team$discussion$comment$in$org = keyof Response$reactions$list$for$team$discussion$comment$in$org$Status$200;
 export interface Params$reactions$list$for$team$discussion$comment$in$org {
   parameter: Parameter$reactions$list$for$team$discussion$comment$in$org;
 }
-export type RequestContentType$reactions$create$for$team$discussion$comment$in$org =
-  keyof RequestBody$reactions$create$for$team$discussion$comment$in$org;
-export type ResponseContentType$reactions$create$for$team$discussion$comment$in$org =
-  keyof Response$reactions$create$for$team$discussion$comment$in$org$Status$200;
+export type RequestContentType$reactions$create$for$team$discussion$comment$in$org = keyof RequestBody$reactions$create$for$team$discussion$comment$in$org;
+export type ResponseContentType$reactions$create$for$team$discussion$comment$in$org = keyof Response$reactions$create$for$team$discussion$comment$in$org$Status$200;
 export interface Params$reactions$create$for$team$discussion$comment$in$org {
   parameter: Parameter$reactions$create$for$team$discussion$comment$in$org;
   requestBody: RequestBody$reactions$create$for$team$discussion$comment$in$org["application/json"];
@@ -17229,8 +17123,7 @@ export interface Params$reactions$list$for$team$discussion$in$org {
   parameter: Parameter$reactions$list$for$team$discussion$in$org;
 }
 export type RequestContentType$reactions$create$for$team$discussion$in$org = keyof RequestBody$reactions$create$for$team$discussion$in$org;
-export type ResponseContentType$reactions$create$for$team$discussion$in$org =
-  keyof Response$reactions$create$for$team$discussion$in$org$Status$200;
+export type ResponseContentType$reactions$create$for$team$discussion$in$org = keyof Response$reactions$create$for$team$discussion$in$org$Status$200;
 export interface Params$reactions$create$for$team$discussion$in$org {
   parameter: Parameter$reactions$create$for$team$discussion$in$org;
   requestBody: RequestBody$reactions$create$for$team$discussion$in$org["application/json"];
@@ -17246,10 +17139,8 @@ export type ResponseContentType$teams$get$membership$for$user$in$org = keyof Res
 export interface Params$teams$get$membership$for$user$in$org {
   parameter: Parameter$teams$get$membership$for$user$in$org;
 }
-export type RequestContentType$teams$add$or$update$membership$for$user$in$org =
-  keyof RequestBody$teams$add$or$update$membership$for$user$in$org;
-export type ResponseContentType$teams$add$or$update$membership$for$user$in$org =
-  keyof Response$teams$add$or$update$membership$for$user$in$org$Status$200;
+export type RequestContentType$teams$add$or$update$membership$for$user$in$org = keyof RequestBody$teams$add$or$update$membership$for$user$in$org;
+export type ResponseContentType$teams$add$or$update$membership$for$user$in$org = keyof Response$teams$add$or$update$membership$for$user$in$org$Status$200;
 export interface Params$teams$add$or$update$membership$for$user$in$org {
   parameter: Parameter$teams$add$or$update$membership$for$user$in$org;
   requestBody: RequestBody$teams$add$or$update$membership$for$user$in$org["application/json"];
@@ -17261,13 +17152,11 @@ export type ResponseContentType$teams$list$projects$in$org = keyof Response$team
 export interface Params$teams$list$projects$in$org {
   parameter: Parameter$teams$list$projects$in$org;
 }
-export type ResponseContentType$teams$check$permissions$for$project$in$org =
-  keyof Response$teams$check$permissions$for$project$in$org$Status$200;
+export type ResponseContentType$teams$check$permissions$for$project$in$org = keyof Response$teams$check$permissions$for$project$in$org$Status$200;
 export interface Params$teams$check$permissions$for$project$in$org {
   parameter: Parameter$teams$check$permissions$for$project$in$org;
 }
-export type RequestContentType$teams$add$or$update$project$permissions$in$org =
-  keyof RequestBody$teams$add$or$update$project$permissions$in$org;
+export type RequestContentType$teams$add$or$update$project$permissions$in$org = keyof RequestBody$teams$add$or$update$project$permissions$in$org;
 export interface Params$teams$add$or$update$project$permissions$in$org {
   parameter: Parameter$teams$add$or$update$project$permissions$in$org;
   requestBody: RequestBody$teams$add$or$update$project$permissions$in$org["application/json"];
@@ -17420,13 +17309,11 @@ export interface Params$actions$get$job$for$workflow$run {
 export interface Params$actions$download$job$logs$for$workflow$run {
   parameter: Parameter$actions$download$job$logs$for$workflow$run;
 }
-export type ResponseContentType$actions$get$github$actions$permissions$repository =
-  keyof Response$actions$get$github$actions$permissions$repository$Status$200;
+export type ResponseContentType$actions$get$github$actions$permissions$repository = keyof Response$actions$get$github$actions$permissions$repository$Status$200;
 export interface Params$actions$get$github$actions$permissions$repository {
   parameter: Parameter$actions$get$github$actions$permissions$repository;
 }
-export type RequestContentType$actions$set$github$actions$permissions$repository =
-  keyof RequestBody$actions$set$github$actions$permissions$repository;
+export type RequestContentType$actions$set$github$actions$permissions$repository = keyof RequestBody$actions$set$github$actions$permissions$repository;
 export interface Params$actions$set$github$actions$permissions$repository {
   parameter: Parameter$actions$set$github$actions$permissions$repository;
   requestBody: RequestBody$actions$set$github$actions$permissions$repository["application/json"];
@@ -17448,8 +17335,7 @@ export type ResponseContentType$actions$list$runner$applications$for$repo = keyo
 export interface Params$actions$list$runner$applications$for$repo {
   parameter: Parameter$actions$list$runner$applications$for$repo;
 }
-export type ResponseContentType$actions$create$registration$token$for$repo =
-  keyof Response$actions$create$registration$token$for$repo$Status$201;
+export type ResponseContentType$actions$create$registration$token$for$repo = keyof Response$actions$create$registration$token$for$repo$Status$201;
 export interface Params$actions$create$registration$token$for$repo {
   parameter: Parameter$actions$create$registration$token$for$repo;
 }
@@ -17464,34 +17350,27 @@ export interface Params$actions$get$self$hosted$runner$for$repo {
 export interface Params$actions$delete$self$hosted$runner$from$repo {
   parameter: Parameter$actions$delete$self$hosted$runner$from$repo;
 }
-export type ResponseContentType$actions$list$labels$for$self$hosted$runner$for$repo =
-  keyof Response$actions$list$labels$for$self$hosted$runner$for$repo$Status$200;
+export type ResponseContentType$actions$list$labels$for$self$hosted$runner$for$repo = keyof Response$actions$list$labels$for$self$hosted$runner$for$repo$Status$200;
 export interface Params$actions$list$labels$for$self$hosted$runner$for$repo {
   parameter: Parameter$actions$list$labels$for$self$hosted$runner$for$repo;
 }
-export type RequestContentType$actions$set$custom$labels$for$self$hosted$runner$for$repo =
-  keyof RequestBody$actions$set$custom$labels$for$self$hosted$runner$for$repo;
-export type ResponseContentType$actions$set$custom$labels$for$self$hosted$runner$for$repo =
-  keyof Response$actions$set$custom$labels$for$self$hosted$runner$for$repo$Status$200;
+export type RequestContentType$actions$set$custom$labels$for$self$hosted$runner$for$repo = keyof RequestBody$actions$set$custom$labels$for$self$hosted$runner$for$repo;
+export type ResponseContentType$actions$set$custom$labels$for$self$hosted$runner$for$repo = keyof Response$actions$set$custom$labels$for$self$hosted$runner$for$repo$Status$200;
 export interface Params$actions$set$custom$labels$for$self$hosted$runner$for$repo {
   parameter: Parameter$actions$set$custom$labels$for$self$hosted$runner$for$repo;
   requestBody: RequestBody$actions$set$custom$labels$for$self$hosted$runner$for$repo["application/json"];
 }
-export type RequestContentType$actions$add$custom$labels$to$self$hosted$runner$for$repo =
-  keyof RequestBody$actions$add$custom$labels$to$self$hosted$runner$for$repo;
-export type ResponseContentType$actions$add$custom$labels$to$self$hosted$runner$for$repo =
-  keyof Response$actions$add$custom$labels$to$self$hosted$runner$for$repo$Status$200;
+export type RequestContentType$actions$add$custom$labels$to$self$hosted$runner$for$repo = keyof RequestBody$actions$add$custom$labels$to$self$hosted$runner$for$repo;
+export type ResponseContentType$actions$add$custom$labels$to$self$hosted$runner$for$repo = keyof Response$actions$add$custom$labels$to$self$hosted$runner$for$repo$Status$200;
 export interface Params$actions$add$custom$labels$to$self$hosted$runner$for$repo {
   parameter: Parameter$actions$add$custom$labels$to$self$hosted$runner$for$repo;
   requestBody: RequestBody$actions$add$custom$labels$to$self$hosted$runner$for$repo["application/json"];
 }
-export type ResponseContentType$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo =
-  keyof Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo$Status$200;
+export type ResponseContentType$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo = keyof Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo$Status$200;
 export interface Params$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo {
   parameter: Parameter$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo;
 }
-export type ResponseContentType$actions$remove$custom$label$from$self$hosted$runner$for$repo =
-  keyof Response$actions$remove$custom$label$from$self$hosted$runner$for$repo$Status$200;
+export type ResponseContentType$actions$remove$custom$label$from$self$hosted$runner$for$repo = keyof Response$actions$remove$custom$label$from$self$hosted$runner$for$repo$Status$200;
 export interface Params$actions$remove$custom$label$from$self$hosted$runner$for$repo {
   parameter: Parameter$actions$remove$custom$label$from$self$hosted$runner$for$repo;
 }
@@ -17533,8 +17412,7 @@ export interface Params$actions$get$pending$deployments$for$run {
   parameter: Parameter$actions$get$pending$deployments$for$run;
 }
 export type RequestContentType$actions$review$pending$deployments$for$run = keyof RequestBody$actions$review$pending$deployments$for$run;
-export type ResponseContentType$actions$review$pending$deployments$for$run =
-  keyof Response$actions$review$pending$deployments$for$run$Status$200;
+export type ResponseContentType$actions$review$pending$deployments$for$run = keyof Response$actions$review$pending$deployments$for$run$Status$200;
 export interface Params$actions$review$pending$deployments$for$run {
   parameter: Parameter$actions$review$pending$deployments$for$run;
   requestBody: RequestBody$actions$review$pending$deployments$for$run["application/json"];
@@ -17651,8 +17529,7 @@ export interface Params$repos$delete$pull$request$review$protection {
   parameter: Parameter$repos$delete$pull$request$review$protection;
 }
 export type RequestContentType$repos$update$pull$request$review$protection = keyof RequestBody$repos$update$pull$request$review$protection;
-export type ResponseContentType$repos$update$pull$request$review$protection =
-  keyof Response$repos$update$pull$request$review$protection$Status$200;
+export type ResponseContentType$repos$update$pull$request$review$protection = keyof Response$repos$update$pull$request$review$protection$Status$200;
 export interface Params$repos$update$pull$request$review$protection {
   parameter: Parameter$repos$update$pull$request$review$protection;
   requestBody: RequestBody$repos$update$pull$request$review$protection["application/json"];
@@ -17710,8 +17587,7 @@ export interface Params$repos$get$access$restrictions {
 export interface Params$repos$delete$access$restrictions {
   parameter: Parameter$repos$delete$access$restrictions;
 }
-export type ResponseContentType$repos$get$apps$with$access$to$protected$branch =
-  keyof Response$repos$get$apps$with$access$to$protected$branch$Status$200;
+export type ResponseContentType$repos$get$apps$with$access$to$protected$branch = keyof Response$repos$get$apps$with$access$to$protected$branch$Status$200;
 export interface Params$repos$get$apps$with$access$to$protected$branch {
   parameter: Parameter$repos$get$apps$with$access$to$protected$branch;
 }
@@ -17733,8 +17609,7 @@ export interface Params$repos$remove$app$access$restrictions {
   parameter: Parameter$repos$remove$app$access$restrictions;
   requestBody: RequestBody$repos$remove$app$access$restrictions["application/json"];
 }
-export type ResponseContentType$repos$get$teams$with$access$to$protected$branch =
-  keyof Response$repos$get$teams$with$access$to$protected$branch$Status$200;
+export type ResponseContentType$repos$get$teams$with$access$to$protected$branch = keyof Response$repos$get$teams$with$access$to$protected$branch$Status$200;
 export interface Params$repos$get$teams$with$access$to$protected$branch {
   parameter: Parameter$repos$get$teams$with$access$to$protected$branch;
 }
@@ -17756,8 +17631,7 @@ export interface Params$repos$remove$team$access$restrictions {
   parameter: Parameter$repos$remove$team$access$restrictions;
   requestBody: RequestBody$repos$remove$team$access$restrictions["application/json"];
 }
-export type ResponseContentType$repos$get$users$with$access$to$protected$branch =
-  keyof Response$repos$get$users$with$access$to$protected$branch$Status$200;
+export type ResponseContentType$repos$get$users$with$access$to$protected$branch = keyof Response$repos$get$users$with$access$to$protected$branch$Status$200;
 export interface Params$repos$get$users$with$access$to$protected$branch {
   parameter: Parameter$repos$get$users$with$access$to$protected$branch;
 }
@@ -17944,8 +17818,7 @@ export interface Params$repos$create$commit$comment {
   parameter: Parameter$repos$create$commit$comment;
   requestBody: RequestBody$repos$create$commit$comment["application/json"];
 }
-export type ResponseContentType$repos$list$pull$requests$associated$with$commit =
-  keyof Response$repos$list$pull$requests$associated$with$commit$Status$200;
+export type ResponseContentType$repos$list$pull$requests$associated$with$commit = keyof Response$repos$list$pull$requests$associated$with$commit$Status$200;
 export interface Params$repos$list$pull$requests$associated$with$commit {
   parameter: Parameter$repos$list$pull$requests$associated$with$commit;
 }
@@ -18441,8 +18314,7 @@ export type ResponseContentType$issues$list$labels$for$milestone = keyof Respons
 export interface Params$issues$list$labels$for$milestone {
   parameter: Parameter$issues$list$labels$for$milestone;
 }
-export type ResponseContentType$activity$list$repo$notifications$for$authenticated$user =
-  keyof Response$activity$list$repo$notifications$for$authenticated$user$Status$200;
+export type ResponseContentType$activity$list$repo$notifications$for$authenticated$user = keyof Response$activity$list$repo$notifications$for$authenticated$user$Status$200;
 export interface Params$activity$list$repo$notifications$for$authenticated$user {
   parameter: Parameter$activity$list$repo$notifications$for$authenticated$user;
 }
@@ -18486,25 +18358,20 @@ export type ResponseContentType$repos$get$pages$build = keyof Response$repos$get
 export interface Params$repos$get$pages$build {
   parameter: Parameter$repos$get$pages$build;
 }
-export type ResponseContentType$enterprise$admin$list$pre$receive$hooks$for$repo =
-  keyof Response$enterprise$admin$list$pre$receive$hooks$for$repo$Status$200;
+export type ResponseContentType$enterprise$admin$list$pre$receive$hooks$for$repo = keyof Response$enterprise$admin$list$pre$receive$hooks$for$repo$Status$200;
 export interface Params$enterprise$admin$list$pre$receive$hooks$for$repo {
   parameter: Parameter$enterprise$admin$list$pre$receive$hooks$for$repo;
 }
-export type ResponseContentType$enterprise$admin$get$pre$receive$hook$for$repo =
-  keyof Response$enterprise$admin$get$pre$receive$hook$for$repo$Status$200;
+export type ResponseContentType$enterprise$admin$get$pre$receive$hook$for$repo = keyof Response$enterprise$admin$get$pre$receive$hook$for$repo$Status$200;
 export interface Params$enterprise$admin$get$pre$receive$hook$for$repo {
   parameter: Parameter$enterprise$admin$get$pre$receive$hook$for$repo;
 }
-export type ResponseContentType$enterprise$admin$remove$pre$receive$hook$enforcement$for$repo =
-  keyof Response$enterprise$admin$remove$pre$receive$hook$enforcement$for$repo$Status$200;
+export type ResponseContentType$enterprise$admin$remove$pre$receive$hook$enforcement$for$repo = keyof Response$enterprise$admin$remove$pre$receive$hook$enforcement$for$repo$Status$200;
 export interface Params$enterprise$admin$remove$pre$receive$hook$enforcement$for$repo {
   parameter: Parameter$enterprise$admin$remove$pre$receive$hook$enforcement$for$repo;
 }
-export type RequestContentType$enterprise$admin$update$pre$receive$hook$enforcement$for$repo =
-  keyof RequestBody$enterprise$admin$update$pre$receive$hook$enforcement$for$repo;
-export type ResponseContentType$enterprise$admin$update$pre$receive$hook$enforcement$for$repo =
-  keyof Response$enterprise$admin$update$pre$receive$hook$enforcement$for$repo$Status$200;
+export type RequestContentType$enterprise$admin$update$pre$receive$hook$enforcement$for$repo = keyof RequestBody$enterprise$admin$update$pre$receive$hook$enforcement$for$repo;
+export type ResponseContentType$enterprise$admin$update$pre$receive$hook$enforcement$for$repo = keyof Response$enterprise$admin$update$pre$receive$hook$enforcement$for$repo$Status$200;
 export interface Params$enterprise$admin$update$pre$receive$hook$enforcement$for$repo {
   parameter: Parameter$enterprise$admin$update$pre$receive$hook$enforcement$for$repo;
   requestBody: RequestBody$enterprise$admin$update$pre$receive$hook$enforcement$for$repo["application/json"];
@@ -18546,15 +18413,12 @@ export interface Params$pulls$update$review$comment {
   parameter: Parameter$pulls$update$review$comment;
   requestBody: RequestBody$pulls$update$review$comment["application/json"];
 }
-export type ResponseContentType$reactions$list$for$pull$request$review$comment =
-  keyof Response$reactions$list$for$pull$request$review$comment$Status$200;
+export type ResponseContentType$reactions$list$for$pull$request$review$comment = keyof Response$reactions$list$for$pull$request$review$comment$Status$200;
 export interface Params$reactions$list$for$pull$request$review$comment {
   parameter: Parameter$reactions$list$for$pull$request$review$comment;
 }
-export type RequestContentType$reactions$create$for$pull$request$review$comment =
-  keyof RequestBody$reactions$create$for$pull$request$review$comment;
-export type ResponseContentType$reactions$create$for$pull$request$review$comment =
-  keyof Response$reactions$create$for$pull$request$review$comment$Status$200;
+export type RequestContentType$reactions$create$for$pull$request$review$comment = keyof RequestBody$reactions$create$for$pull$request$review$comment;
+export type ResponseContentType$reactions$create$for$pull$request$review$comment = keyof Response$reactions$create$for$pull$request$review$comment$Status$200;
 export interface Params$reactions$create$for$pull$request$review$comment {
   parameter: Parameter$reactions$create$for$pull$request$review$comment;
   requestBody: RequestBody$reactions$create$for$pull$request$review$comment["application/json"];
@@ -18863,8 +18727,7 @@ export interface Params$actions$get$environment$secret {
   parameter: Parameter$actions$get$environment$secret;
 }
 export type RequestContentType$actions$create$or$update$environment$secret = keyof RequestBody$actions$create$or$update$environment$secret;
-export type ResponseContentType$actions$create$or$update$environment$secret =
-  keyof Response$actions$create$or$update$environment$secret$Status$201;
+export type ResponseContentType$actions$create$or$update$environment$secret = keyof Response$actions$create$or$update$environment$secret$Status$201;
 export interface Params$actions$create$or$update$environment$secret {
   parameter: Parameter$actions$create$or$update$environment$secret;
   requestBody: RequestBody$actions$create$or$update$environment$secret["application/json"];
@@ -18902,10 +18765,8 @@ export interface Params$search$users {
 }
 export type ResponseContentType$enterprise$admin$get$configuration$status = keyof Response$enterprise$admin$get$configuration$status$Status$200;
 export type ResponseContentType$enterprise$admin$get$maintenance$status = keyof Response$enterprise$admin$get$maintenance$status$Status$200;
-export type RequestContentType$enterprise$admin$enable$or$disable$maintenance$mode =
-  keyof RequestBody$enterprise$admin$enable$or$disable$maintenance$mode;
-export type ResponseContentType$enterprise$admin$enable$or$disable$maintenance$mode =
-  keyof Response$enterprise$admin$enable$or$disable$maintenance$mode$Status$200;
+export type RequestContentType$enterprise$admin$enable$or$disable$maintenance$mode = keyof RequestBody$enterprise$admin$enable$or$disable$maintenance$mode;
+export type ResponseContentType$enterprise$admin$enable$or$disable$maintenance$mode = keyof Response$enterprise$admin$enable$or$disable$maintenance$mode$Status$200;
 export interface Params$enterprise$admin$enable$or$disable$maintenance$mode {
   requestBody: RequestBody$enterprise$admin$enable$or$disable$maintenance$mode["application/x-www-form-urlencoded"];
 }
@@ -18914,21 +18775,18 @@ export type RequestContentType$enterprise$admin$set$settings = keyof RequestBody
 export interface Params$enterprise$admin$set$settings {
   requestBody: RequestBody$enterprise$admin$set$settings["application/x-www-form-urlencoded"];
 }
-export type ResponseContentType$enterprise$admin$get$all$authorized$ssh$keys =
-  keyof Response$enterprise$admin$get$all$authorized$ssh$keys$Status$200;
+export type ResponseContentType$enterprise$admin$get$all$authorized$ssh$keys = keyof Response$enterprise$admin$get$all$authorized$ssh$keys$Status$200;
 export type RequestContentType$enterprise$admin$add$authorized$ssh$key = keyof RequestBody$enterprise$admin$add$authorized$ssh$key;
 export type ResponseContentType$enterprise$admin$add$authorized$ssh$key = keyof Response$enterprise$admin$add$authorized$ssh$key$Status$201;
 export interface Params$enterprise$admin$add$authorized$ssh$key {
   requestBody: RequestBody$enterprise$admin$add$authorized$ssh$key["application/x-www-form-urlencoded"];
 }
 export type RequestContentType$enterprise$admin$remove$authorized$ssh$key = keyof RequestBody$enterprise$admin$remove$authorized$ssh$key;
-export type ResponseContentType$enterprise$admin$remove$authorized$ssh$key =
-  keyof Response$enterprise$admin$remove$authorized$ssh$key$Status$200;
+export type ResponseContentType$enterprise$admin$remove$authorized$ssh$key = keyof Response$enterprise$admin$remove$authorized$ssh$key$Status$200;
 export interface Params$enterprise$admin$remove$authorized$ssh$key {
   requestBody: RequestBody$enterprise$admin$remove$authorized$ssh$key["application/x-www-form-urlencoded"];
 }
-export type RequestContentType$enterprise$admin$create$enterprise$server$license =
-  keyof RequestBody$enterprise$admin$create$enterprise$server$license;
+export type RequestContentType$enterprise$admin$create$enterprise$server$license = keyof RequestBody$enterprise$admin$create$enterprise$server$license;
 export interface Params$enterprise$admin$create$enterprise$server$license {
   requestBody: RequestBody$enterprise$admin$create$enterprise$server$license["application/x-www-form-urlencoded"];
 }
@@ -18995,15 +18853,12 @@ export interface Params$teams$update$discussion$comment$legacy {
   parameter: Parameter$teams$update$discussion$comment$legacy;
   requestBody: RequestBody$teams$update$discussion$comment$legacy["application/json"];
 }
-export type ResponseContentType$reactions$list$for$team$discussion$comment$legacy =
-  keyof Response$reactions$list$for$team$discussion$comment$legacy$Status$200;
+export type ResponseContentType$reactions$list$for$team$discussion$comment$legacy = keyof Response$reactions$list$for$team$discussion$comment$legacy$Status$200;
 export interface Params$reactions$list$for$team$discussion$comment$legacy {
   parameter: Parameter$reactions$list$for$team$discussion$comment$legacy;
 }
-export type RequestContentType$reactions$create$for$team$discussion$comment$legacy =
-  keyof RequestBody$reactions$create$for$team$discussion$comment$legacy;
-export type ResponseContentType$reactions$create$for$team$discussion$comment$legacy =
-  keyof Response$reactions$create$for$team$discussion$comment$legacy$Status$201;
+export type RequestContentType$reactions$create$for$team$discussion$comment$legacy = keyof RequestBody$reactions$create$for$team$discussion$comment$legacy;
+export type ResponseContentType$reactions$create$for$team$discussion$comment$legacy = keyof Response$reactions$create$for$team$discussion$comment$legacy$Status$201;
 export interface Params$reactions$create$for$team$discussion$comment$legacy {
   parameter: Parameter$reactions$create$for$team$discussion$comment$legacy;
   requestBody: RequestBody$reactions$create$for$team$discussion$comment$legacy["application/json"];
@@ -19013,8 +18868,7 @@ export interface Params$reactions$list$for$team$discussion$legacy {
   parameter: Parameter$reactions$list$for$team$discussion$legacy;
 }
 export type RequestContentType$reactions$create$for$team$discussion$legacy = keyof RequestBody$reactions$create$for$team$discussion$legacy;
-export type ResponseContentType$reactions$create$for$team$discussion$legacy =
-  keyof Response$reactions$create$for$team$discussion$legacy$Status$201;
+export type ResponseContentType$reactions$create$for$team$discussion$legacy = keyof Response$reactions$create$for$team$discussion$legacy$Status$201;
 export interface Params$reactions$create$for$team$discussion$legacy {
   parameter: Parameter$reactions$create$for$team$discussion$legacy;
   requestBody: RequestBody$reactions$create$for$team$discussion$legacy["application/json"];
@@ -19036,10 +18890,8 @@ export type ResponseContentType$teams$get$membership$for$user$legacy = keyof Res
 export interface Params$teams$get$membership$for$user$legacy {
   parameter: Parameter$teams$get$membership$for$user$legacy;
 }
-export type RequestContentType$teams$add$or$update$membership$for$user$legacy =
-  keyof RequestBody$teams$add$or$update$membership$for$user$legacy;
-export type ResponseContentType$teams$add$or$update$membership$for$user$legacy =
-  keyof Response$teams$add$or$update$membership$for$user$legacy$Status$200;
+export type RequestContentType$teams$add$or$update$membership$for$user$legacy = keyof RequestBody$teams$add$or$update$membership$for$user$legacy;
+export type ResponseContentType$teams$add$or$update$membership$for$user$legacy = keyof Response$teams$add$or$update$membership$for$user$legacy$Status$200;
 export interface Params$teams$add$or$update$membership$for$user$legacy {
   parameter: Parameter$teams$add$or$update$membership$for$user$legacy;
   requestBody: RequestBody$teams$add$or$update$membership$for$user$legacy["application/json"];
@@ -19051,13 +18903,11 @@ export type ResponseContentType$teams$list$projects$legacy = keyof Response$team
 export interface Params$teams$list$projects$legacy {
   parameter: Parameter$teams$list$projects$legacy;
 }
-export type ResponseContentType$teams$check$permissions$for$project$legacy =
-  keyof Response$teams$check$permissions$for$project$legacy$Status$200;
+export type ResponseContentType$teams$check$permissions$for$project$legacy = keyof Response$teams$check$permissions$for$project$legacy$Status$200;
 export interface Params$teams$check$permissions$for$project$legacy {
   parameter: Parameter$teams$check$permissions$for$project$legacy;
 }
-export type RequestContentType$teams$add$or$update$project$permissions$legacy =
-  keyof RequestBody$teams$add$or$update$project$permissions$legacy;
+export type RequestContentType$teams$add$or$update$project$permissions$legacy = keyof RequestBody$teams$add$or$update$project$permissions$legacy;
 export interface Params$teams$add$or$update$project$permissions$legacy {
   parameter: Parameter$teams$add$or$update$project$permissions$legacy;
   requestBody: RequestBody$teams$add$or$update$project$permissions$legacy["application/json"];
@@ -19104,8 +18954,7 @@ export type RequestContentType$users$delete$email$for$authenticated$user = keyof
 export interface Params$users$delete$email$for$authenticated$user {
   requestBody: RequestBody$users$delete$email$for$authenticated$user["application/json"];
 }
-export type ResponseContentType$users$list$followers$for$authenticated$user =
-  keyof Response$users$list$followers$for$authenticated$user$Status$200;
+export type ResponseContentType$users$list$followers$for$authenticated$user = keyof Response$users$list$followers$for$authenticated$user$Status$200;
 export interface Params$users$list$followers$for$authenticated$user {
   parameter: Parameter$users$list$followers$for$authenticated$user;
 }
@@ -19122,14 +18971,12 @@ export interface Params$users$follow {
 export interface Params$users$unfollow {
   parameter: Parameter$users$unfollow;
 }
-export type ResponseContentType$users$list$gpg$keys$for$authenticated$user =
-  keyof Response$users$list$gpg$keys$for$authenticated$user$Status$200;
+export type ResponseContentType$users$list$gpg$keys$for$authenticated$user = keyof Response$users$list$gpg$keys$for$authenticated$user$Status$200;
 export interface Params$users$list$gpg$keys$for$authenticated$user {
   parameter: Parameter$users$list$gpg$keys$for$authenticated$user;
 }
 export type RequestContentType$users$create$gpg$key$for$authenticated$user = keyof RequestBody$users$create$gpg$key$for$authenticated$user;
-export type ResponseContentType$users$create$gpg$key$for$authenticated$user =
-  keyof Response$users$create$gpg$key$for$authenticated$user$Status$201;
+export type ResponseContentType$users$create$gpg$key$for$authenticated$user = keyof Response$users$create$gpg$key$for$authenticated$user$Status$201;
 export interface Params$users$create$gpg$key$for$authenticated$user {
   requestBody: RequestBody$users$create$gpg$key$for$authenticated$user["application/json"];
 }
@@ -19140,13 +18987,11 @@ export interface Params$users$get$gpg$key$for$authenticated$user {
 export interface Params$users$delete$gpg$key$for$authenticated$user {
   parameter: Parameter$users$delete$gpg$key$for$authenticated$user;
 }
-export type ResponseContentType$apps$list$installations$for$authenticated$user =
-  keyof Response$apps$list$installations$for$authenticated$user$Status$200;
+export type ResponseContentType$apps$list$installations$for$authenticated$user = keyof Response$apps$list$installations$for$authenticated$user$Status$200;
 export interface Params$apps$list$installations$for$authenticated$user {
   parameter: Parameter$apps$list$installations$for$authenticated$user;
 }
-export type ResponseContentType$apps$list$installation$repos$for$authenticated$user =
-  keyof Response$apps$list$installation$repos$for$authenticated$user$Status$200;
+export type ResponseContentType$apps$list$installation$repos$for$authenticated$user = keyof Response$apps$list$installation$repos$for$authenticated$user$Status$200;
 export interface Params$apps$list$installation$repos$for$authenticated$user {
   parameter: Parameter$apps$list$installation$repos$for$authenticated$user;
 }
@@ -19160,39 +19005,32 @@ export type ResponseContentType$issues$list$for$authenticated$user = keyof Respo
 export interface Params$issues$list$for$authenticated$user {
   parameter: Parameter$issues$list$for$authenticated$user;
 }
-export type ResponseContentType$users$list$public$ssh$keys$for$authenticated$user =
-  keyof Response$users$list$public$ssh$keys$for$authenticated$user$Status$200;
+export type ResponseContentType$users$list$public$ssh$keys$for$authenticated$user = keyof Response$users$list$public$ssh$keys$for$authenticated$user$Status$200;
 export interface Params$users$list$public$ssh$keys$for$authenticated$user {
   parameter: Parameter$users$list$public$ssh$keys$for$authenticated$user;
 }
-export type RequestContentType$users$create$public$ssh$key$for$authenticated$user =
-  keyof RequestBody$users$create$public$ssh$key$for$authenticated$user;
-export type ResponseContentType$users$create$public$ssh$key$for$authenticated$user =
-  keyof Response$users$create$public$ssh$key$for$authenticated$user$Status$201;
+export type RequestContentType$users$create$public$ssh$key$for$authenticated$user = keyof RequestBody$users$create$public$ssh$key$for$authenticated$user;
+export type ResponseContentType$users$create$public$ssh$key$for$authenticated$user = keyof Response$users$create$public$ssh$key$for$authenticated$user$Status$201;
 export interface Params$users$create$public$ssh$key$for$authenticated$user {
   requestBody: RequestBody$users$create$public$ssh$key$for$authenticated$user["application/json"];
 }
-export type ResponseContentType$users$get$public$ssh$key$for$authenticated$user =
-  keyof Response$users$get$public$ssh$key$for$authenticated$user$Status$200;
+export type ResponseContentType$users$get$public$ssh$key$for$authenticated$user = keyof Response$users$get$public$ssh$key$for$authenticated$user$Status$200;
 export interface Params$users$get$public$ssh$key$for$authenticated$user {
   parameter: Parameter$users$get$public$ssh$key$for$authenticated$user;
 }
 export interface Params$users$delete$public$ssh$key$for$authenticated$user {
   parameter: Parameter$users$delete$public$ssh$key$for$authenticated$user;
 }
-export type ResponseContentType$orgs$list$memberships$for$authenticated$user =
-  keyof Response$orgs$list$memberships$for$authenticated$user$Status$200;
+export type ResponseContentType$orgs$list$memberships$for$authenticated$user = keyof Response$orgs$list$memberships$for$authenticated$user$Status$200;
 export interface Params$orgs$list$memberships$for$authenticated$user {
   parameter: Parameter$orgs$list$memberships$for$authenticated$user;
 }
-export type ResponseContentType$orgs$get$membership$for$authenticated$user =
-  keyof Response$orgs$get$membership$for$authenticated$user$Status$200;
+export type ResponseContentType$orgs$get$membership$for$authenticated$user = keyof Response$orgs$get$membership$for$authenticated$user$Status$200;
 export interface Params$orgs$get$membership$for$authenticated$user {
   parameter: Parameter$orgs$get$membership$for$authenticated$user;
 }
 export type RequestContentType$orgs$update$membership$for$authenticated$user = keyof RequestBody$orgs$update$membership$for$authenticated$user;
-export type ResponseContentType$orgs$update$membership$for$authenticated$user =
-  keyof Response$orgs$update$membership$for$authenticated$user$Status$200;
+export type ResponseContentType$orgs$update$membership$for$authenticated$user = keyof Response$orgs$update$membership$for$authenticated$user$Status$200;
 export interface Params$orgs$update$membership$for$authenticated$user {
   parameter: Parameter$orgs$update$membership$for$authenticated$user;
   requestBody: RequestBody$orgs$update$membership$for$authenticated$user["application/json"];
@@ -19209,8 +19047,7 @@ export interface Params$migrations$start$for$authenticated$user {
 export interface Params$migrations$get$archive$for$authenticated$user {
   parameter: Parameter$migrations$get$archive$for$authenticated$user;
 }
-export type ResponseContentType$migrations$list$repos$for$authenticated$user =
-  keyof Response$migrations$list$repos$for$authenticated$user$Status$200;
+export type ResponseContentType$migrations$list$repos$for$authenticated$user = keyof Response$migrations$list$repos$for$authenticated$user$Status$200;
 export interface Params$migrations$list$repos$for$authenticated$user {
   parameter: Parameter$migrations$list$repos$for$authenticated$user;
 }
@@ -19223,8 +19060,7 @@ export type ResponseContentType$projects$create$for$authenticated$user = keyof R
 export interface Params$projects$create$for$authenticated$user {
   requestBody: RequestBody$projects$create$for$authenticated$user["application/json"];
 }
-export type ResponseContentType$users$list$public$emails$for$authenticated$user =
-  keyof Response$users$list$public$emails$for$authenticated$user$Status$200;
+export type ResponseContentType$users$list$public$emails$for$authenticated$user = keyof Response$users$list$public$emails$for$authenticated$user$Status$200;
 export interface Params$users$list$public$emails$for$authenticated$user {
   parameter: Parameter$users$list$public$emails$for$authenticated$user;
 }
@@ -19237,8 +19073,7 @@ export type ResponseContentType$repos$create$for$authenticated$user = keyof Resp
 export interface Params$repos$create$for$authenticated$user {
   requestBody: RequestBody$repos$create$for$authenticated$user["application/json"];
 }
-export type ResponseContentType$repos$list$invitations$for$authenticated$user =
-  keyof Response$repos$list$invitations$for$authenticated$user$Status$200;
+export type ResponseContentType$repos$list$invitations$for$authenticated$user = keyof Response$repos$list$invitations$for$authenticated$user$Status$200;
 export interface Params$repos$list$invitations$for$authenticated$user {
   parameter: Parameter$repos$list$invitations$for$authenticated$user;
 }
@@ -19248,11 +19083,8 @@ export interface Params$repos$decline$invitation$for$authenticated$user {
 export interface Params$repos$accept$invitation$for$authenticated$user {
   parameter: Parameter$repos$accept$invitation$for$authenticated$user;
 }
-export type ResponseContentType$activity$list$repos$starred$by$authenticated$user =
-  keyof Response$activity$list$repos$starred$by$authenticated$user$Status$200;
-export interface Params$activity$list$repos$starred$by$authenticated$user<
-  U extends ResponseContentType$activity$list$repos$starred$by$authenticated$user,
-> {
+export type ResponseContentType$activity$list$repos$starred$by$authenticated$user = keyof Response$activity$list$repos$starred$by$authenticated$user$Status$200;
+export interface Params$activity$list$repos$starred$by$authenticated$user<U extends ResponseContentType$activity$list$repos$starred$by$authenticated$user> {
   headers: {
     Accept: U;
   };
@@ -19267,8 +19099,7 @@ export interface Params$activity$star$repo$for$authenticated$user {
 export interface Params$activity$unstar$repo$for$authenticated$user {
   parameter: Parameter$activity$unstar$repo$for$authenticated$user;
 }
-export type ResponseContentType$activity$list$watched$repos$for$authenticated$user =
-  keyof Response$activity$list$watched$repos$for$authenticated$user$Status$200;
+export type ResponseContentType$activity$list$watched$repos$for$authenticated$user = keyof Response$activity$list$watched$repos$for$authenticated$user$Status$200;
 export interface Params$activity$list$watched$repos$for$authenticated$user {
   parameter: Parameter$activity$list$watched$repos$for$authenticated$user;
 }
@@ -19284,13 +19115,11 @@ export type ResponseContentType$users$get$by$username = keyof Response$users$get
 export interface Params$users$get$by$username {
   parameter: Parameter$users$get$by$username;
 }
-export type ResponseContentType$activity$list$events$for$authenticated$user =
-  keyof Response$activity$list$events$for$authenticated$user$Status$200;
+export type ResponseContentType$activity$list$events$for$authenticated$user = keyof Response$activity$list$events$for$authenticated$user$Status$200;
 export interface Params$activity$list$events$for$authenticated$user {
   parameter: Parameter$activity$list$events$for$authenticated$user;
 }
-export type ResponseContentType$activity$list$org$events$for$authenticated$user =
-  keyof Response$activity$list$org$events$for$authenticated$user$Status$200;
+export type ResponseContentType$activity$list$org$events$for$authenticated$user = keyof Response$activity$list$org$events$for$authenticated$user$Status$200;
 export interface Params$activity$list$org$events$for$authenticated$user {
   parameter: Parameter$activity$list$org$events$for$authenticated$user;
 }
@@ -19341,8 +19170,7 @@ export type ResponseContentType$activity$list$received$events$for$user = keyof R
 export interface Params$activity$list$received$events$for$user {
   parameter: Parameter$activity$list$received$events$for$user;
 }
-export type ResponseContentType$activity$list$received$public$events$for$user =
-  keyof Response$activity$list$received$public$events$for$user$Status$200;
+export type ResponseContentType$activity$list$received$public$events$for$user = keyof Response$activity$list$received$public$events$for$user$Status$200;
 export interface Params$activity$list$received$public$events$for$user {
   parameter: Parameter$activity$list$received$public$events$for$user;
 }
@@ -19985,53 +19813,48 @@ export type SuccessResponses =
   | Response$activity$list$repos$watched$by$user$Status$200
   | Response$meta$get$zen$Status$200;
 export namespace ErrorResponse {
-  export type meta$root = void;
-  export type enterprise$admin$list$global$webhooks = void;
-  export type enterprise$admin$create$global$webhook = void;
-  export type enterprise$admin$get$global$webhook = void;
-  export type enterprise$admin$delete$global$webhook = void;
-  export type enterprise$admin$update$global$webhook = void;
-  export type enterprise$admin$ping$global$webhook = void;
-  export type enterprise$admin$list$public$keys = void;
-  export type enterprise$admin$delete$public$key = void;
-  export type enterprise$admin$update$ldap$mapping$for$team = void;
-  export type enterprise$admin$sync$ldap$mapping$for$team = void;
-  export type enterprise$admin$update$ldap$mapping$for$user = void;
-  export type enterprise$admin$sync$ldap$mapping$for$user = void;
-  export type enterprise$admin$create$org = void;
-  export type enterprise$admin$update$org$name = void;
-  export type enterprise$admin$list$pre$receive$environments = void;
-  export type enterprise$admin$create$pre$receive$environment = void;
-  export type enterprise$admin$get$pre$receive$environment = void;
+  export type meta$root = undefined;
+  export type enterprise$admin$list$global$webhooks = undefined;
+  export type enterprise$admin$create$global$webhook = undefined;
+  export type enterprise$admin$get$global$webhook = undefined;
+  export type enterprise$admin$delete$global$webhook = undefined;
+  export type enterprise$admin$update$global$webhook = undefined;
+  export type enterprise$admin$ping$global$webhook = undefined;
+  export type enterprise$admin$list$public$keys = undefined;
+  export type enterprise$admin$delete$public$key = undefined;
+  export type enterprise$admin$update$ldap$mapping$for$team = undefined;
+  export type enterprise$admin$sync$ldap$mapping$for$team = undefined;
+  export type enterprise$admin$update$ldap$mapping$for$user = undefined;
+  export type enterprise$admin$sync$ldap$mapping$for$user = undefined;
+  export type enterprise$admin$create$org = undefined;
+  export type enterprise$admin$update$org$name = undefined;
+  export type enterprise$admin$list$pre$receive$environments = undefined;
+  export type enterprise$admin$create$pre$receive$environment = undefined;
+  export type enterprise$admin$get$pre$receive$environment = undefined;
   export type enterprise$admin$delete$pre$receive$environment = Response$enterprise$admin$delete$pre$receive$environment$Status$422;
   export type enterprise$admin$update$pre$receive$environment = Response$enterprise$admin$update$pre$receive$environment$Status$422;
-  export type enterprise$admin$start$pre$receive$environment$download =
-    Response$enterprise$admin$start$pre$receive$environment$download$Status$422;
-  export type enterprise$admin$get$download$status$for$pre$receive$environment = void;
-  export type enterprise$admin$list$pre$receive$hooks = void;
-  export type enterprise$admin$create$pre$receive$hook = void;
-  export type enterprise$admin$get$pre$receive$hook = void;
-  export type enterprise$admin$delete$pre$receive$hook = void;
-  export type enterprise$admin$update$pre$receive$hook = void;
-  export type enterprise$admin$list$personal$access$tokens = void;
-  export type enterprise$admin$delete$personal$access$token = void;
-  export type enterprise$admin$create$user = void;
-  export type enterprise$admin$delete$user = void;
-  export type enterprise$admin$update$username$for$user = void;
-  export type enterprise$admin$create$impersonation$o$auth$token = void;
-  export type enterprise$admin$delete$impersonation$o$auth$token = void;
-  export type apps$get$authenticated = void;
+  export type enterprise$admin$start$pre$receive$environment$download = Response$enterprise$admin$start$pre$receive$environment$download$Status$422;
+  export type enterprise$admin$get$download$status$for$pre$receive$environment = undefined;
+  export type enterprise$admin$list$pre$receive$hooks = undefined;
+  export type enterprise$admin$create$pre$receive$hook = undefined;
+  export type enterprise$admin$get$pre$receive$hook = undefined;
+  export type enterprise$admin$delete$pre$receive$hook = undefined;
+  export type enterprise$admin$update$pre$receive$hook = undefined;
+  export type enterprise$admin$list$personal$access$tokens = undefined;
+  export type enterprise$admin$delete$personal$access$token = undefined;
+  export type enterprise$admin$create$user = undefined;
+  export type enterprise$admin$delete$user = undefined;
+  export type enterprise$admin$update$username$for$user = undefined;
+  export type enterprise$admin$create$impersonation$o$auth$token = undefined;
+  export type enterprise$admin$delete$impersonation$o$auth$token = undefined;
+  export type apps$get$authenticated = undefined;
   export type apps$create$from$manifest = Response$apps$create$from$manifest$Status$404 | Response$apps$create$from$manifest$Status$422;
-  export type apps$get$webhook$config$for$app = void;
-  export type apps$update$webhook$config$for$app = void;
-  export type apps$list$webhook$deliveries =
-    | Response$apps$list$webhook$deliveries$Status$400
-    | Response$apps$list$webhook$deliveries$Status$422;
+  export type apps$get$webhook$config$for$app = undefined;
+  export type apps$update$webhook$config$for$app = undefined;
+  export type apps$list$webhook$deliveries = Response$apps$list$webhook$deliveries$Status$400 | Response$apps$list$webhook$deliveries$Status$422;
   export type apps$get$webhook$delivery = Response$apps$get$webhook$delivery$Status$400 | Response$apps$get$webhook$delivery$Status$422;
-  export type apps$redeliver$webhook$delivery =
-    | Response$apps$redeliver$webhook$delivery$Status$400
-    | Response$apps$redeliver$webhook$delivery$Status$422;
-  export type apps$list$installations = void;
+  export type apps$redeliver$webhook$delivery = Response$apps$redeliver$webhook$delivery$Status$400 | Response$apps$redeliver$webhook$delivery$Status$422;
+  export type apps$list$installations = undefined;
   export type apps$get$installation = Response$apps$get$installation$Status$404 | Response$apps$get$installation$Status$415;
   export type apps$delete$installation = Response$apps$delete$installation$Status$404;
   export type apps$create$installation$access$token =
@@ -20046,25 +19869,14 @@ export namespace ErrorResponse {
     | Response$oauth$authorizations$list$grants$Status$401
     | Response$oauth$authorizations$list$grants$Status$403
     | Response$oauth$authorizations$list$grants$Status$404;
-  export type oauth$authorizations$get$grant =
-    | Response$oauth$authorizations$get$grant$Status$401
-    | Response$oauth$authorizations$get$grant$Status$403;
-  export type oauth$authorizations$delete$grant =
-    | Response$oauth$authorizations$delete$grant$Status$401
-    | Response$oauth$authorizations$delete$grant$Status$403;
+  export type oauth$authorizations$get$grant = Response$oauth$authorizations$get$grant$Status$401 | Response$oauth$authorizations$get$grant$Status$403;
+  export type oauth$authorizations$delete$grant = Response$oauth$authorizations$delete$grant$Status$401 | Response$oauth$authorizations$delete$grant$Status$403;
   export type apps$delete$authorization = Response$apps$delete$authorization$Status$422;
   export type apps$check$token = Response$apps$check$token$Status$404 | Response$apps$check$token$Status$422;
   export type apps$delete$token = Response$apps$delete$token$Status$422;
   export type apps$reset$token = Response$apps$reset$token$Status$422;
-  export type apps$scope$token =
-    | Response$apps$scope$token$Status$401
-    | Response$apps$scope$token$Status$403
-    | Response$apps$scope$token$Status$404
-    | Response$apps$scope$token$Status$422;
-  export type apps$get$by$slug =
-    | Response$apps$get$by$slug$Status$403
-    | Response$apps$get$by$slug$Status$404
-    | Response$apps$get$by$slug$Status$415;
+  export type apps$scope$token = Response$apps$scope$token$Status$401 | Response$apps$scope$token$Status$403 | Response$apps$scope$token$Status$404 | Response$apps$scope$token$Status$422;
+  export type apps$get$by$slug = Response$apps$get$by$slug$Status$403 | Response$apps$get$by$slug$Status$404 | Response$apps$get$by$slug$Status$415;
   export type oauth$authorizations$list$authorizations =
     | Response$oauth$authorizations$list$authorizations$Status$401
     | Response$oauth$authorizations$list$authorizations$Status$403
@@ -20078,62 +19890,56 @@ export namespace ErrorResponse {
     | Response$oauth$authorizations$get$or$create$authorization$for$app$Status$401
     | Response$oauth$authorizations$get$or$create$authorization$for$app$Status$403
     | Response$oauth$authorizations$get$or$create$authorization$for$app$Status$422;
-  export type oauth$authorizations$get$or$create$authorization$for$app$and$fingerprint =
-    Response$oauth$authorizations$get$or$create$authorization$for$app$and$fingerprint$Status$422;
-  export type oauth$authorizations$get$authorization =
-    | Response$oauth$authorizations$get$authorization$Status$401
-    | Response$oauth$authorizations$get$authorization$Status$403;
-  export type oauth$authorizations$delete$authorization =
-    | Response$oauth$authorizations$delete$authorization$Status$401
-    | Response$oauth$authorizations$delete$authorization$Status$403;
+  export type oauth$authorizations$get$or$create$authorization$for$app$and$fingerprint = Response$oauth$authorizations$get$or$create$authorization$for$app$and$fingerprint$Status$422;
+  export type oauth$authorizations$get$authorization = Response$oauth$authorizations$get$authorization$Status$401 | Response$oauth$authorizations$get$authorization$Status$403;
+  export type oauth$authorizations$delete$authorization = Response$oauth$authorizations$delete$authorization$Status$401 | Response$oauth$authorizations$delete$authorization$Status$403;
   export type oauth$authorizations$update$authorization = Response$oauth$authorizations$update$authorization$Status$422;
-  export type codes$of$conduct$get$all$codes$of$conduct = void;
+  export type codes$of$conduct$get$all$codes$of$conduct = undefined;
   export type codes$of$conduct$get$conduct$code = Response$codes$of$conduct$get$conduct$code$Status$404;
-  export type emojis$get = void;
-  export type enterprise$admin$get$announcement = void;
-  export type enterprise$admin$remove$announcement = void;
-  export type enterprise$admin$set$announcement = void;
-  export type enterprise$admin$get$license$information = void;
-  export type enterprise$admin$get$all$stats = void;
-  export type enterprise$admin$get$comment$stats = void;
-  export type enterprise$admin$get$gist$stats = void;
-  export type enterprise$admin$get$hooks$stats = void;
-  export type enterprise$admin$get$issue$stats = void;
-  export type enterprise$admin$get$milestone$stats = void;
-  export type enterprise$admin$get$org$stats = void;
-  export type enterprise$admin$get$pages$stats = void;
-  export type enterprise$admin$get$pull$request$stats = void;
-  export type enterprise$admin$get$repo$stats = void;
-  export type enterprise$admin$get$user$stats = void;
-  export type enterprise$admin$get$github$actions$permissions$enterprise = void;
-  export type enterprise$admin$set$github$actions$permissions$enterprise = void;
-  export type enterprise$admin$list$selected$organizations$enabled$github$actions$enterprise = void;
-  export type enterprise$admin$set$selected$organizations$enabled$github$actions$enterprise = void;
-  export type enterprise$admin$enable$selected$organization$github$actions$enterprise = void;
-  export type enterprise$admin$disable$selected$organization$github$actions$enterprise = void;
-  export type enterprise$admin$get$allowed$actions$enterprise = void;
-  export type enterprise$admin$set$allowed$actions$enterprise = void;
-  export type enterprise$admin$list$self$hosted$runner$groups$for$enterprise = void;
-  export type enterprise$admin$create$self$hosted$runner$group$for$enterprise = void;
-  export type enterprise$admin$get$self$hosted$runner$group$for$enterprise = void;
-  export type enterprise$admin$delete$self$hosted$runner$group$from$enterprise = void;
-  export type enterprise$admin$update$self$hosted$runner$group$for$enterprise = void;
-  export type enterprise$admin$list$org$access$to$self$hosted$runner$group$in$enterprise = void;
-  export type enterprise$admin$set$org$access$to$self$hosted$runner$group$in$enterprise = void;
-  export type enterprise$admin$add$org$access$to$self$hosted$runner$group$in$enterprise = void;
-  export type enterprise$admin$remove$org$access$to$self$hosted$runner$group$in$enterprise = void;
-  export type enterprise$admin$list$self$hosted$runners$in$group$for$enterprise = void;
-  export type enterprise$admin$set$self$hosted$runners$in$group$for$enterprise = void;
-  export type enterprise$admin$add$self$hosted$runner$to$group$for$enterprise = void;
-  export type enterprise$admin$remove$self$hosted$runner$from$group$for$enterprise = void;
-  export type enterprise$admin$list$self$hosted$runners$for$enterprise = void;
-  export type enterprise$admin$list$runner$applications$for$enterprise = void;
-  export type enterprise$admin$create$registration$token$for$enterprise = void;
-  export type enterprise$admin$create$remove$token$for$enterprise = void;
-  export type enterprise$admin$get$self$hosted$runner$for$enterprise = void;
-  export type enterprise$admin$delete$self$hosted$runner$from$enterprise = void;
-  export type enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise =
-    Response$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise$Status$404;
+  export type emojis$get = undefined;
+  export type enterprise$admin$get$announcement = undefined;
+  export type enterprise$admin$remove$announcement = undefined;
+  export type enterprise$admin$set$announcement = undefined;
+  export type enterprise$admin$get$license$information = undefined;
+  export type enterprise$admin$get$all$stats = undefined;
+  export type enterprise$admin$get$comment$stats = undefined;
+  export type enterprise$admin$get$gist$stats = undefined;
+  export type enterprise$admin$get$hooks$stats = undefined;
+  export type enterprise$admin$get$issue$stats = undefined;
+  export type enterprise$admin$get$milestone$stats = undefined;
+  export type enterprise$admin$get$org$stats = undefined;
+  export type enterprise$admin$get$pages$stats = undefined;
+  export type enterprise$admin$get$pull$request$stats = undefined;
+  export type enterprise$admin$get$repo$stats = undefined;
+  export type enterprise$admin$get$user$stats = undefined;
+  export type enterprise$admin$get$github$actions$permissions$enterprise = undefined;
+  export type enterprise$admin$set$github$actions$permissions$enterprise = undefined;
+  export type enterprise$admin$list$selected$organizations$enabled$github$actions$enterprise = undefined;
+  export type enterprise$admin$set$selected$organizations$enabled$github$actions$enterprise = undefined;
+  export type enterprise$admin$enable$selected$organization$github$actions$enterprise = undefined;
+  export type enterprise$admin$disable$selected$organization$github$actions$enterprise = undefined;
+  export type enterprise$admin$get$allowed$actions$enterprise = undefined;
+  export type enterprise$admin$set$allowed$actions$enterprise = undefined;
+  export type enterprise$admin$list$self$hosted$runner$groups$for$enterprise = undefined;
+  export type enterprise$admin$create$self$hosted$runner$group$for$enterprise = undefined;
+  export type enterprise$admin$get$self$hosted$runner$group$for$enterprise = undefined;
+  export type enterprise$admin$delete$self$hosted$runner$group$from$enterprise = undefined;
+  export type enterprise$admin$update$self$hosted$runner$group$for$enterprise = undefined;
+  export type enterprise$admin$list$org$access$to$self$hosted$runner$group$in$enterprise = undefined;
+  export type enterprise$admin$set$org$access$to$self$hosted$runner$group$in$enterprise = undefined;
+  export type enterprise$admin$add$org$access$to$self$hosted$runner$group$in$enterprise = undefined;
+  export type enterprise$admin$remove$org$access$to$self$hosted$runner$group$in$enterprise = undefined;
+  export type enterprise$admin$list$self$hosted$runners$in$group$for$enterprise = undefined;
+  export type enterprise$admin$set$self$hosted$runners$in$group$for$enterprise = undefined;
+  export type enterprise$admin$add$self$hosted$runner$to$group$for$enterprise = undefined;
+  export type enterprise$admin$remove$self$hosted$runner$from$group$for$enterprise = undefined;
+  export type enterprise$admin$list$self$hosted$runners$for$enterprise = undefined;
+  export type enterprise$admin$list$runner$applications$for$enterprise = undefined;
+  export type enterprise$admin$create$registration$token$for$enterprise = undefined;
+  export type enterprise$admin$create$remove$token$for$enterprise = undefined;
+  export type enterprise$admin$get$self$hosted$runner$for$enterprise = undefined;
+  export type enterprise$admin$delete$self$hosted$runner$from$enterprise = undefined;
+  export type enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise = Response$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise$Status$404;
   export type enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise =
     | Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$404
     | Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$422;
@@ -20146,13 +19952,11 @@ export namespace ErrorResponse {
   export type enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise =
     | Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$404
     | Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$422;
-  export type enterprise$admin$get$audit$log = void;
-  export type secret$scanning$list$alerts$for$enterprise =
-    | Response$secret$scanning$list$alerts$for$enterprise$Status$404
-    | Response$secret$scanning$list$alerts$for$enterprise$Status$503;
+  export type enterprise$admin$get$audit$log = undefined;
+  export type secret$scanning$list$alerts$for$enterprise = Response$secret$scanning$list$alerts$for$enterprise$Status$404 | Response$secret$scanning$list$alerts$for$enterprise$Status$503;
   export type billing$get$github$advanced$security$billing$ghe = Response$billing$get$github$advanced$security$billing$ghe$Status$403;
   export type activity$list$public$events = Response$activity$list$public$events$Status$403 | Response$activity$list$public$events$Status$503;
-  export type activity$get$feeds = void;
+  export type activity$get$feeds = undefined;
   export type gists$list = Response$gists$list$Status$403;
   export type gists$create = Response$gists$create$Status$403 | Response$gists$create$Status$404 | Response$gists$create$Status$422;
   export type gists$list$public = Response$gists$list$public$Status$403 | Response$gists$list$public$Status$422;
@@ -20171,75 +19975,62 @@ export namespace ErrorResponse {
   export type gists$check$is$starred = Response$gists$check$is$starred$Status$403 | Response$gists$check$is$starred$Status$404;
   export type gists$star = Response$gists$star$Status$403 | Response$gists$star$Status$404;
   export type gists$unstar = Response$gists$unstar$Status$403 | Response$gists$unstar$Status$404;
-  export type gists$get$revision =
-    | Response$gists$get$revision$Status$403
-    | Response$gists$get$revision$Status$404
-    | Response$gists$get$revision$Status$422;
-  export type gitignore$get$all$templates = void;
-  export type gitignore$get$template = void;
-  export type apps$list$repos$accessible$to$installation =
-    | Response$apps$list$repos$accessible$to$installation$Status$401
-    | Response$apps$list$repos$accessible$to$installation$Status$403;
-  export type apps$revoke$installation$access$token = void;
+  export type gists$get$revision = Response$gists$get$revision$Status$403 | Response$gists$get$revision$Status$404 | Response$gists$get$revision$Status$422;
+  export type gitignore$get$all$templates = undefined;
+  export type gitignore$get$template = undefined;
+  export type apps$list$repos$accessible$to$installation = Response$apps$list$repos$accessible$to$installation$Status$401 | Response$apps$list$repos$accessible$to$installation$Status$403;
+  export type apps$revoke$installation$access$token = undefined;
   export type issues$list = Response$issues$list$Status$404 | Response$issues$list$Status$422;
-  export type licenses$get$all$commonly$used = void;
+  export type licenses$get$all$commonly$used = undefined;
   export type licenses$get = Response$licenses$get$Status$403 | Response$licenses$get$Status$404;
-  export type markdown$render = void;
-  export type markdown$render$raw = void;
-  export type meta$get = void;
-  export type activity$list$public$events$for$repo$network =
-    | Response$activity$list$public$events$for$repo$network$Status$403
-    | Response$activity$list$public$events$for$repo$network$Status$404;
+  export type markdown$render = undefined;
+  export type markdown$render$raw = undefined;
+  export type meta$get = undefined;
+  export type activity$list$public$events$for$repo$network = Response$activity$list$public$events$for$repo$network$Status$403 | Response$activity$list$public$events$for$repo$network$Status$404;
   export type activity$list$notifications$for$authenticated$user =
     | Response$activity$list$notifications$for$authenticated$user$Status$401
     | Response$activity$list$notifications$for$authenticated$user$Status$403
     | Response$activity$list$notifications$for$authenticated$user$Status$422;
-  export type activity$mark$notifications$as$read =
-    | Response$activity$mark$notifications$as$read$Status$401
-    | Response$activity$mark$notifications$as$read$Status$403;
+  export type activity$mark$notifications$as$read = Response$activity$mark$notifications$as$read$Status$401 | Response$activity$mark$notifications$as$read$Status$403;
   export type activity$get$thread = Response$activity$get$thread$Status$401 | Response$activity$get$thread$Status$403;
   export type activity$mark$thread$as$read = Response$activity$mark$thread$as$read$Status$403;
   export type activity$get$thread$subscription$for$authenticated$user =
     | Response$activity$get$thread$subscription$for$authenticated$user$Status$401
     | Response$activity$get$thread$subscription$for$authenticated$user$Status$403;
-  export type activity$set$thread$subscription =
-    | Response$activity$set$thread$subscription$Status$401
-    | Response$activity$set$thread$subscription$Status$403;
-  export type activity$delete$thread$subscription =
-    | Response$activity$delete$thread$subscription$Status$401
-    | Response$activity$delete$thread$subscription$Status$403;
-  export type meta$get$octocat = void;
-  export type orgs$list = void;
-  export type orgs$list$custom$roles = void;
+  export type activity$set$thread$subscription = Response$activity$set$thread$subscription$Status$401 | Response$activity$set$thread$subscription$Status$403;
+  export type activity$delete$thread$subscription = Response$activity$delete$thread$subscription$Status$401 | Response$activity$delete$thread$subscription$Status$403;
+  export type meta$get$octocat = undefined;
+  export type orgs$list = undefined;
+  export type orgs$list$custom$roles = undefined;
   export type orgs$get = Response$orgs$get$Status$404;
   export type orgs$update = Response$orgs$update$Status$409 | Response$orgs$update$Status$422;
-  export type actions$get$github$actions$permissions$organization = void;
-  export type actions$set$github$actions$permissions$organization = void;
-  export type actions$list$selected$repositories$enabled$github$actions$organization = void;
-  export type actions$set$selected$repositories$enabled$github$actions$organization = void;
-  export type actions$enable$selected$repository$github$actions$organization = void;
-  export type actions$disable$selected$repository$github$actions$organization = void;
-  export type actions$get$allowed$actions$organization = void;
-  export type actions$set$allowed$actions$organization = void;
-  export type actions$list$self$hosted$runner$groups$for$org = void;
-  export type actions$create$self$hosted$runner$group$for$org = void;
-  export type actions$get$self$hosted$runner$group$for$org = void;
-  export type actions$delete$self$hosted$runner$group$from$org = void;
-  export type actions$update$self$hosted$runner$group$for$org = void;
-  export type actions$list$repo$access$to$self$hosted$runner$group$in$org = void;
-  export type actions$set$repo$access$to$self$hosted$runner$group$in$org = void;
-  export type actions$add$repo$access$to$self$hosted$runner$group$in$org = void;
-  export type actions$remove$repo$access$to$self$hosted$runner$group$in$org = void;
-  export type actions$list$self$hosted$runners$in$group$for$org = void;
-  export type actions$set$self$hosted$runners$in$group$for$org = void;
-  export type actions$add$self$hosted$runner$to$group$for$org = void;
-  export type actions$remove$self$hosted$runner$from$group$for$org = void;
-  export type actions$list$self$hosted$runners$for$org = void;
-  export type actions$list$runner$applications$for$org = void;
-  export type actions$create$registration$token$for$org = void;
-  export type actions$create$remove$token$for$org = void;
-  export type actions$get$self$hosted$runner$for$org = void;
-  export type actions$delete$self$hosted$runner$from$org = void;
+  export type actions$get$github$actions$permissions$organization = undefined;
+  export type actions$set$github$actions$permissions$organization = undefined;
+  export type actions$list$selected$repositories$enabled$github$actions$organization = undefined;
+  export type actions$set$selected$repositories$enabled$github$actions$organization = undefined;
+  export type actions$enable$selected$repository$github$actions$organization = undefined;
+  export type actions$disable$selected$repository$github$actions$organization = undefined;
+  export type actions$get$allowed$actions$organization = undefined;
+  export type actions$set$allowed$actions$organization = undefined;
+  export type actions$list$self$hosted$runner$groups$for$org = undefined;
+  export type actions$create$self$hosted$runner$group$for$org = undefined;
+  export type actions$get$self$hosted$runner$group$for$org = undefined;
+  export type actions$delete$self$hosted$runner$group$from$org = undefined;
+  export type actions$update$self$hosted$runner$group$for$org = undefined;
+  export type actions$list$repo$access$to$self$hosted$runner$group$in$org = undefined;
+  export type actions$set$repo$access$to$self$hosted$runner$group$in$org = undefined;
+  export type actions$add$repo$access$to$self$hosted$runner$group$in$org = undefined;
+  export type actions$remove$repo$access$to$self$hosted$runner$group$in$org = undefined;
+  export type actions$list$self$hosted$runners$in$group$for$org = undefined;
+  export type actions$set$self$hosted$runners$in$group$for$org = undefined;
+  export type actions$add$self$hosted$runner$to$group$for$org = undefined;
+  export type actions$remove$self$hosted$runner$from$group$for$org = undefined;
+  export type actions$list$self$hosted$runners$for$org = undefined;
+  export type actions$list$runner$applications$for$org = undefined;
+  export type actions$create$registration$token$for$org = undefined;
+  export type actions$create$remove$token$for$org = undefined;
+  export type actions$get$self$hosted$runner$for$org = undefined;
+  export type actions$delete$self$hosted$runner$from$org = undefined;
   export type actions$list$labels$for$self$hosted$runner$for$org = Response$actions$list$labels$for$self$hosted$runner$for$org$Status$404;
   export type actions$set$custom$labels$for$self$hosted$runner$for$org =
     | Response$actions$set$custom$labels$for$self$hosted$runner$for$org$Status$404
@@ -20247,71 +20038,60 @@ export namespace ErrorResponse {
   export type actions$add$custom$labels$to$self$hosted$runner$for$org =
     | Response$actions$add$custom$labels$to$self$hosted$runner$for$org$Status$404
     | Response$actions$add$custom$labels$to$self$hosted$runner$for$org$Status$422;
-  export type actions$remove$all$custom$labels$from$self$hosted$runner$for$org =
-    Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$org$Status$404;
+  export type actions$remove$all$custom$labels$from$self$hosted$runner$for$org = Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$org$Status$404;
   export type actions$remove$custom$label$from$self$hosted$runner$for$org =
     | Response$actions$remove$custom$label$from$self$hosted$runner$for$org$Status$404
     | Response$actions$remove$custom$label$from$self$hosted$runner$for$org$Status$422;
-  export type actions$list$org$secrets = void;
-  export type actions$get$org$public$key = void;
-  export type actions$get$org$secret = void;
-  export type actions$create$or$update$org$secret = void;
-  export type actions$delete$org$secret = void;
-  export type actions$list$selected$repos$for$org$secret = void;
-  export type actions$set$selected$repos$for$org$secret = void;
-  export type actions$add$selected$repo$to$org$secret = void;
-  export type actions$remove$selected$repo$from$org$secret = void;
-  export type orgs$get$audit$log = void;
-  export type dependabot$list$org$secrets = void;
-  export type dependabot$get$org$public$key = void;
-  export type dependabot$get$org$secret = void;
-  export type dependabot$create$or$update$org$secret = void;
-  export type dependabot$delete$org$secret = void;
-  export type dependabot$list$selected$repos$for$org$secret = void;
-  export type dependabot$set$selected$repos$for$org$secret = void;
-  export type dependabot$add$selected$repo$to$org$secret = void;
-  export type dependabot$remove$selected$repo$from$org$secret = void;
-  export type activity$list$public$org$events = void;
+  export type actions$list$org$secrets = undefined;
+  export type actions$get$org$public$key = undefined;
+  export type actions$get$org$secret = undefined;
+  export type actions$create$or$update$org$secret = undefined;
+  export type actions$delete$org$secret = undefined;
+  export type actions$list$selected$repos$for$org$secret = undefined;
+  export type actions$set$selected$repos$for$org$secret = undefined;
+  export type actions$add$selected$repo$to$org$secret = undefined;
+  export type actions$remove$selected$repo$from$org$secret = undefined;
+  export type orgs$get$audit$log = undefined;
+  export type dependabot$list$org$secrets = undefined;
+  export type dependabot$get$org$public$key = undefined;
+  export type dependabot$get$org$secret = undefined;
+  export type dependabot$create$or$update$org$secret = undefined;
+  export type dependabot$delete$org$secret = undefined;
+  export type dependabot$list$selected$repos$for$org$secret = undefined;
+  export type dependabot$set$selected$repos$for$org$secret = undefined;
+  export type dependabot$add$selected$repo$to$org$secret = undefined;
+  export type dependabot$remove$selected$repo$from$org$secret = undefined;
+  export type activity$list$public$org$events = undefined;
   export type orgs$list$webhooks = Response$orgs$list$webhooks$Status$404;
   export type orgs$create$webhook = Response$orgs$create$webhook$Status$404 | Response$orgs$create$webhook$Status$422;
   export type orgs$get$webhook = Response$orgs$get$webhook$Status$404;
   export type orgs$delete$webhook = Response$orgs$delete$webhook$Status$404;
   export type orgs$update$webhook = Response$orgs$update$webhook$Status$404 | Response$orgs$update$webhook$Status$422;
-  export type orgs$get$webhook$config$for$org = void;
-  export type orgs$update$webhook$config$for$org = void;
-  export type orgs$list$webhook$deliveries =
-    | Response$orgs$list$webhook$deliveries$Status$400
-    | Response$orgs$list$webhook$deliveries$Status$422;
+  export type orgs$get$webhook$config$for$org = undefined;
+  export type orgs$update$webhook$config$for$org = undefined;
+  export type orgs$list$webhook$deliveries = Response$orgs$list$webhook$deliveries$Status$400 | Response$orgs$list$webhook$deliveries$Status$422;
   export type orgs$get$webhook$delivery = Response$orgs$get$webhook$delivery$Status$400 | Response$orgs$get$webhook$delivery$Status$422;
-  export type orgs$redeliver$webhook$delivery =
-    | Response$orgs$redeliver$webhook$delivery$Status$400
-    | Response$orgs$redeliver$webhook$delivery$Status$422;
+  export type orgs$redeliver$webhook$delivery = Response$orgs$redeliver$webhook$delivery$Status$400 | Response$orgs$redeliver$webhook$delivery$Status$422;
   export type orgs$ping$webhook = Response$orgs$ping$webhook$Status$404;
-  export type apps$get$org$installation = void;
-  export type orgs$list$app$installations = void;
+  export type apps$get$org$installation = undefined;
+  export type orgs$list$app$installations = undefined;
   export type issues$list$for$org = Response$issues$list$for$org$Status$404;
   export type orgs$list$members = Response$orgs$list$members$Status$422;
-  export type orgs$check$membership$for$user = void;
+  export type orgs$check$membership$for$user = undefined;
   export type orgs$remove$member = Response$orgs$remove$member$Status$403;
-  export type orgs$get$membership$for$user =
-    | Response$orgs$get$membership$for$user$Status$403
-    | Response$orgs$get$membership$for$user$Status$404;
-  export type orgs$set$membership$for$user =
-    | Response$orgs$set$membership$for$user$Status$403
-    | Response$orgs$set$membership$for$user$Status$422;
-  export type orgs$remove$membership$for$user =
-    | Response$orgs$remove$membership$for$user$Status$403
-    | Response$orgs$remove$membership$for$user$Status$404;
-  export type migrations$list$for$org = void;
+  export type orgs$get$membership$for$user = Response$orgs$get$membership$for$user$Status$403 | Response$orgs$get$membership$for$user$Status$404;
+  export type orgs$set$membership$for$user = Response$orgs$set$membership$for$user$Status$403 | Response$orgs$set$membership$for$user$Status$422;
+  export type orgs$remove$membership$for$user = Response$orgs$remove$membership$for$user$Status$403 | Response$orgs$remove$membership$for$user$Status$404;
+  export type migrations$list$for$org = undefined;
   export type migrations$start$for$org = Response$migrations$start$for$org$Status$404 | Response$migrations$start$for$org$Status$422;
   export type migrations$get$status$for$org = Response$migrations$get$status$for$org$Status$404;
-  export type orgs$list$outside$collaborators = void;
+  export type orgs$list$outside$collaborators = undefined;
   export type orgs$convert$member$to$outside$collaborator = Response$orgs$convert$member$to$outside$collaborator$Status$404;
   export type orgs$remove$outside$collaborator = Response$orgs$remove$outside$collaborator$Status$422;
-  export type enterprise$admin$list$pre$receive$hooks$for$org = void;
-  export type enterprise$admin$get$pre$receive$hook$for$org = void;
-  export type enterprise$admin$remove$pre$receive$hook$enforcement$for$org = void;
-  export type enterprise$admin$update$pre$receive$hook$enforcement$for$org = void;
+  export type enterprise$admin$list$pre$receive$hooks$for$org = undefined;
+  export type enterprise$admin$get$pre$receive$hook$for$org = undefined;
+  export type enterprise$admin$remove$pre$receive$hook$enforcement$for$org = undefined;
+  export type enterprise$admin$update$pre$receive$hook$enforcement$for$org = undefined;
   export type projects$list$for$org = Response$projects$list$for$org$Status$422;
   export type projects$create$for$org =
     | Response$projects$create$for$org$Status$401
@@ -20319,72 +20099,57 @@ export namespace ErrorResponse {
     | Response$projects$create$for$org$Status$404
     | Response$projects$create$for$org$Status$410
     | Response$projects$create$for$org$Status$422;
-  export type orgs$list$public$members = void;
-  export type orgs$check$public$membership$for$user = void;
+  export type orgs$list$public$members = undefined;
+  export type orgs$check$public$membership$for$user = undefined;
   export type orgs$set$public$membership$for$authenticated$user = Response$orgs$set$public$membership$for$authenticated$user$Status$403;
-  export type orgs$remove$public$membership$for$authenticated$user = void;
-  export type repos$list$for$org = void;
+  export type orgs$remove$public$membership$for$authenticated$user = undefined;
+  export type repos$list$for$org = undefined;
   export type repos$create$in$org = Response$repos$create$in$org$Status$403 | Response$repos$create$in$org$Status$422;
-  export type secret$scanning$list$alerts$for$org =
-    | Response$secret$scanning$list$alerts$for$org$Status$404
-    | Response$secret$scanning$list$alerts$for$org$Status$503;
+  export type secret$scanning$list$alerts$for$org = Response$secret$scanning$list$alerts$for$org$Status$404 | Response$secret$scanning$list$alerts$for$org$Status$503;
   export type billing$get$github$advanced$security$billing$org = Response$billing$get$github$advanced$security$billing$org$Status$403;
   export type teams$list = Response$teams$list$Status$403;
   export type teams$create = Response$teams$create$Status$403 | Response$teams$create$Status$422;
   export type teams$get$by$name = Response$teams$get$by$name$Status$404;
-  export type teams$delete$in$org = void;
-  export type teams$update$in$org = void;
-  export type teams$list$discussions$in$org = void;
-  export type teams$create$discussion$in$org = void;
-  export type teams$get$discussion$in$org = void;
-  export type teams$delete$discussion$in$org = void;
-  export type teams$update$discussion$in$org = void;
-  export type teams$list$discussion$comments$in$org = void;
-  export type teams$create$discussion$comment$in$org = void;
-  export type teams$get$discussion$comment$in$org = void;
-  export type teams$delete$discussion$comment$in$org = void;
-  export type teams$update$discussion$comment$in$org = void;
-  export type reactions$list$for$team$discussion$comment$in$org = void;
-  export type reactions$create$for$team$discussion$comment$in$org = void;
-  export type reactions$delete$for$team$discussion$comment = void;
-  export type reactions$list$for$team$discussion$in$org = void;
-  export type reactions$create$for$team$discussion$in$org = void;
-  export type reactions$delete$for$team$discussion = void;
-  export type teams$list$members$in$org = void;
-  export type teams$get$membership$for$user$in$org = void;
-  export type teams$add$or$update$membership$for$user$in$org = void;
-  export type teams$remove$membership$for$user$in$org = void;
-  export type teams$list$projects$in$org = void;
-  export type teams$check$permissions$for$project$in$org = void;
+  export type teams$delete$in$org = undefined;
+  export type teams$update$in$org = undefined;
+  export type teams$list$discussions$in$org = undefined;
+  export type teams$create$discussion$in$org = undefined;
+  export type teams$get$discussion$in$org = undefined;
+  export type teams$delete$discussion$in$org = undefined;
+  export type teams$update$discussion$in$org = undefined;
+  export type teams$list$discussion$comments$in$org = undefined;
+  export type teams$create$discussion$comment$in$org = undefined;
+  export type teams$get$discussion$comment$in$org = undefined;
+  export type teams$delete$discussion$comment$in$org = undefined;
+  export type teams$update$discussion$comment$in$org = undefined;
+  export type reactions$list$for$team$discussion$comment$in$org = undefined;
+  export type reactions$create$for$team$discussion$comment$in$org = undefined;
+  export type reactions$delete$for$team$discussion$comment = undefined;
+  export type reactions$list$for$team$discussion$in$org = undefined;
+  export type reactions$create$for$team$discussion$in$org = undefined;
+  export type reactions$delete$for$team$discussion = undefined;
+  export type teams$list$members$in$org = undefined;
+  export type teams$get$membership$for$user$in$org = undefined;
+  export type teams$add$or$update$membership$for$user$in$org = undefined;
+  export type teams$remove$membership$for$user$in$org = undefined;
+  export type teams$list$projects$in$org = undefined;
+  export type teams$check$permissions$for$project$in$org = undefined;
   export type teams$add$or$update$project$permissions$in$org = Response$teams$add$or$update$project$permissions$in$org$Status$403;
-  export type teams$remove$project$in$org = void;
-  export type teams$list$repos$in$org = void;
-  export type teams$check$permissions$for$repo$in$org = void;
-  export type teams$add$or$update$repo$permissions$in$org = void;
-  export type teams$remove$repo$in$org = void;
-  export type teams$list$child$in$org = void;
-  export type projects$get$card =
-    | Response$projects$get$card$Status$401
-    | Response$projects$get$card$Status$403
-    | Response$projects$get$card$Status$404;
-  export type projects$delete$card =
-    | Response$projects$delete$card$Status$401
-    | Response$projects$delete$card$Status$403
-    | Response$projects$delete$card$Status$404;
+  export type teams$remove$project$in$org = undefined;
+  export type teams$list$repos$in$org = undefined;
+  export type teams$check$permissions$for$repo$in$org = undefined;
+  export type teams$add$or$update$repo$permissions$in$org = undefined;
+  export type teams$remove$repo$in$org = undefined;
+  export type teams$list$child$in$org = undefined;
+  export type projects$get$card = Response$projects$get$card$Status$401 | Response$projects$get$card$Status$403 | Response$projects$get$card$Status$404;
+  export type projects$delete$card = Response$projects$delete$card$Status$401 | Response$projects$delete$card$Status$403 | Response$projects$delete$card$Status$404;
   export type projects$update$card =
     | Response$projects$update$card$Status$401
     | Response$projects$update$card$Status$403
     | Response$projects$update$card$Status$404
     | Response$projects$update$card$Status$422;
-  export type projects$move$card =
-    | Response$projects$move$card$Status$401
-    | Response$projects$move$card$Status$403
-    | Response$projects$move$card$Status$422
-    | Response$projects$move$card$Status$503;
-  export type projects$get$column =
-    | Response$projects$get$column$Status$401
-    | Response$projects$get$column$Status$403
-    | Response$projects$get$column$Status$404;
+  export type projects$move$card = Response$projects$move$card$Status$401 | Response$projects$move$card$Status$403 | Response$projects$move$card$Status$422 | Response$projects$move$card$Status$503;
+  export type projects$get$column = Response$projects$get$column$Status$401 | Response$projects$get$column$Status$403 | Response$projects$get$column$Status$404;
   export type projects$delete$column = Response$projects$delete$column$Status$401 | Response$projects$delete$column$Status$403;
   export type projects$update$column = Response$projects$update$column$Status$401 | Response$projects$update$column$Status$403;
   export type projects$list$cards = Response$projects$list$cards$Status$401 | Response$projects$list$cards$Status$403;
@@ -20393,21 +20158,10 @@ export namespace ErrorResponse {
     | Response$projects$create$card$Status$403
     | Response$projects$create$card$Status$422
     | Response$projects$create$card$Status$503;
-  export type projects$move$column =
-    | Response$projects$move$column$Status$401
-    | Response$projects$move$column$Status$403
-    | Response$projects$move$column$Status$422;
+  export type projects$move$column = Response$projects$move$column$Status$401 | Response$projects$move$column$Status$403 | Response$projects$move$column$Status$422;
   export type projects$get = Response$projects$get$Status$401 | Response$projects$get$Status$403;
-  export type projects$delete =
-    | Response$projects$delete$Status$401
-    | Response$projects$delete$Status$403
-    | Response$projects$delete$Status$404
-    | Response$projects$delete$Status$410;
-  export type projects$update =
-    | Response$projects$update$Status$401
-    | Response$projects$update$Status$403
-    | Response$projects$update$Status$410
-    | Response$projects$update$Status$422;
+  export type projects$delete = Response$projects$delete$Status$401 | Response$projects$delete$Status$403 | Response$projects$delete$Status$404 | Response$projects$delete$Status$410;
+  export type projects$update = Response$projects$update$Status$401 | Response$projects$update$Status$403 | Response$projects$update$Status$410 | Response$projects$update$Status$422;
   export type projects$list$collaborators =
     | Response$projects$list$collaborators$Status$401
     | Response$projects$list$collaborators$Status$403
@@ -20429,34 +20183,28 @@ export namespace ErrorResponse {
     | Response$projects$get$permission$for$user$Status$404
     | Response$projects$get$permission$for$user$Status$422;
   export type projects$list$columns = Response$projects$list$columns$Status$401 | Response$projects$list$columns$Status$403;
-  export type projects$create$column =
-    | Response$projects$create$column$Status$401
-    | Response$projects$create$column$Status$403
-    | Response$projects$create$column$Status$422;
+  export type projects$create$column = Response$projects$create$column$Status$401 | Response$projects$create$column$Status$403 | Response$projects$create$column$Status$422;
   export type rate$limit$get = Response$rate$limit$get$Status$404;
-  export type reactions$delete$legacy =
-    | Response$reactions$delete$legacy$Status$401
-    | Response$reactions$delete$legacy$Status$403
-    | Response$reactions$delete$legacy$Status$410;
+  export type reactions$delete$legacy = Response$reactions$delete$legacy$Status$401 | Response$reactions$delete$legacy$Status$403 | Response$reactions$delete$legacy$Status$410;
   export type repos$get = Response$repos$get$Status$403 | Response$repos$get$Status$404;
   export type repos$delete = Response$repos$delete$Status$403 | Response$repos$delete$Status$404;
   export type repos$update = Response$repos$update$Status$403 | Response$repos$update$Status$404 | Response$repos$update$Status$422;
-  export type actions$list$artifacts$for$repo = void;
-  export type actions$get$artifact = void;
-  export type actions$delete$artifact = void;
-  export type actions$download$artifact = void;
-  export type actions$get$job$for$workflow$run = void;
-  export type actions$download$job$logs$for$workflow$run = void;
-  export type actions$get$github$actions$permissions$repository = void;
-  export type actions$set$github$actions$permissions$repository = void;
-  export type actions$get$allowed$actions$repository = void;
-  export type actions$set$allowed$actions$repository = void;
-  export type actions$list$self$hosted$runners$for$repo = void;
-  export type actions$list$runner$applications$for$repo = void;
-  export type actions$create$registration$token$for$repo = void;
-  export type actions$create$remove$token$for$repo = void;
-  export type actions$get$self$hosted$runner$for$repo = void;
-  export type actions$delete$self$hosted$runner$from$repo = void;
+  export type actions$list$artifacts$for$repo = undefined;
+  export type actions$get$artifact = undefined;
+  export type actions$delete$artifact = undefined;
+  export type actions$download$artifact = undefined;
+  export type actions$get$job$for$workflow$run = undefined;
+  export type actions$download$job$logs$for$workflow$run = undefined;
+  export type actions$get$github$actions$permissions$repository = undefined;
+  export type actions$set$github$actions$permissions$repository = undefined;
+  export type actions$get$allowed$actions$repository = undefined;
+  export type actions$set$allowed$actions$repository = undefined;
+  export type actions$list$self$hosted$runners$for$repo = undefined;
+  export type actions$list$runner$applications$for$repo = undefined;
+  export type actions$create$registration$token$for$repo = undefined;
+  export type actions$create$remove$token$for$repo = undefined;
+  export type actions$get$self$hosted$runner$for$repo = undefined;
+  export type actions$delete$self$hosted$runner$from$repo = undefined;
   export type actions$list$labels$for$self$hosted$runner$for$repo = Response$actions$list$labels$for$self$hosted$runner$for$repo$Status$404;
   export type actions$set$custom$labels$for$self$hosted$runner$for$repo =
     | Response$actions$set$custom$labels$for$self$hosted$runner$for$repo$Status$404
@@ -20464,39 +20212,36 @@ export namespace ErrorResponse {
   export type actions$add$custom$labels$to$self$hosted$runner$for$repo =
     | Response$actions$add$custom$labels$to$self$hosted$runner$for$repo$Status$404
     | Response$actions$add$custom$labels$to$self$hosted$runner$for$repo$Status$422;
-  export type actions$remove$all$custom$labels$from$self$hosted$runner$for$repo =
-    Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo$Status$404;
+  export type actions$remove$all$custom$labels$from$self$hosted$runner$for$repo = Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo$Status$404;
   export type actions$remove$custom$label$from$self$hosted$runner$for$repo =
     | Response$actions$remove$custom$label$from$self$hosted$runner$for$repo$Status$404
     | Response$actions$remove$custom$label$from$self$hosted$runner$for$repo$Status$422;
-  export type actions$list$workflow$runs$for$repo = void;
-  export type actions$get$workflow$run = void;
-  export type actions$delete$workflow$run = void;
-  export type actions$get$reviews$for$run = void;
-  export type actions$list$workflow$run$artifacts = void;
+  export type actions$list$workflow$runs$for$repo = undefined;
+  export type actions$get$workflow$run = undefined;
+  export type actions$delete$workflow$run = undefined;
+  export type actions$get$reviews$for$run = undefined;
+  export type actions$list$workflow$run$artifacts = undefined;
   export type actions$cancel$workflow$run = Response$actions$cancel$workflow$run$Status$409;
-  export type actions$list$jobs$for$workflow$run = void;
-  export type actions$download$workflow$run$logs = void;
-  export type actions$delete$workflow$run$logs =
-    | Response$actions$delete$workflow$run$logs$Status$403
-    | Response$actions$delete$workflow$run$logs$Status$500;
-  export type actions$get$pending$deployments$for$run = void;
-  export type actions$review$pending$deployments$for$run = void;
-  export type actions$re$run$workflow = void;
-  export type actions$list$repo$secrets = void;
-  export type actions$get$repo$public$key = void;
-  export type actions$get$repo$secret = void;
-  export type actions$create$or$update$repo$secret = void;
-  export type actions$delete$repo$secret = void;
-  export type actions$list$repo$workflows = void;
-  export type actions$get$workflow = void;
-  export type actions$disable$workflow = void;
-  export type actions$create$workflow$dispatch = void;
-  export type actions$enable$workflow = void;
-  export type actions$list$workflow$runs = void;
+  export type actions$list$jobs$for$workflow$run = undefined;
+  export type actions$download$workflow$run$logs = undefined;
+  export type actions$delete$workflow$run$logs = Response$actions$delete$workflow$run$logs$Status$403 | Response$actions$delete$workflow$run$logs$Status$500;
+  export type actions$get$pending$deployments$for$run = undefined;
+  export type actions$review$pending$deployments$for$run = undefined;
+  export type actions$re$run$workflow = undefined;
+  export type actions$list$repo$secrets = undefined;
+  export type actions$get$repo$public$key = undefined;
+  export type actions$get$repo$secret = undefined;
+  export type actions$create$or$update$repo$secret = undefined;
+  export type actions$delete$repo$secret = undefined;
+  export type actions$list$repo$workflows = undefined;
+  export type actions$get$workflow = undefined;
+  export type actions$disable$workflow = undefined;
+  export type actions$create$workflow$dispatch = undefined;
+  export type actions$enable$workflow = undefined;
+  export type actions$list$workflow$runs = undefined;
   export type issues$list$assignees = Response$issues$list$assignees$Status$404;
   export type issues$check$user$can$be$assigned = Response$issues$check$user$can$be$assigned$Status$404;
-  export type repos$list$autolinks = void;
+  export type repos$list$autolinks = undefined;
   export type repos$create$autolink = Response$repos$create$autolink$Status$422;
   export type repos$get$autolink = Response$repos$get$autolink$Status$404;
   export type repos$delete$autolink = Response$repos$delete$autolink$Status$404;
@@ -20508,33 +20253,27 @@ export namespace ErrorResponse {
     | Response$repos$update$branch$protection$Status$404
     | Response$repos$update$branch$protection$Status$422;
   export type repos$delete$branch$protection = Response$repos$delete$branch$protection$Status$403;
-  export type repos$get$admin$branch$protection = void;
-  export type repos$set$admin$branch$protection = void;
+  export type repos$get$admin$branch$protection = undefined;
+  export type repos$set$admin$branch$protection = undefined;
   export type repos$delete$admin$branch$protection = Response$repos$delete$admin$branch$protection$Status$404;
-  export type repos$get$pull$request$review$protection = void;
+  export type repos$get$pull$request$review$protection = undefined;
   export type repos$delete$pull$request$review$protection = Response$repos$delete$pull$request$review$protection$Status$404;
   export type repos$update$pull$request$review$protection = Response$repos$update$pull$request$review$protection$Status$422;
   export type repos$get$commit$signature$protection = Response$repos$get$commit$signature$protection$Status$404;
   export type repos$create$commit$signature$protection = Response$repos$create$commit$signature$protection$Status$404;
   export type repos$delete$commit$signature$protection = Response$repos$delete$commit$signature$protection$Status$404;
   export type repos$get$status$checks$protection = Response$repos$get$status$checks$protection$Status$404;
-  export type repos$remove$status$check$protection = void;
-  export type repos$update$status$check$protection =
-    | Response$repos$update$status$check$protection$Status$404
-    | Response$repos$update$status$check$protection$Status$422;
+  export type repos$remove$status$check$protection = undefined;
+  export type repos$update$status$check$protection = Response$repos$update$status$check$protection$Status$404 | Response$repos$update$status$check$protection$Status$422;
   export type repos$get$all$status$check$contexts = Response$repos$get$all$status$check$contexts$Status$404;
-  export type repos$set$status$check$contexts =
-    | Response$repos$set$status$check$contexts$Status$404
-    | Response$repos$set$status$check$contexts$Status$422;
+  export type repos$set$status$check$contexts = Response$repos$set$status$check$contexts$Status$404 | Response$repos$set$status$check$contexts$Status$422;
   export type repos$add$status$check$contexts =
     | Response$repos$add$status$check$contexts$Status$403
     | Response$repos$add$status$check$contexts$Status$404
     | Response$repos$add$status$check$contexts$Status$422;
-  export type repos$remove$status$check$contexts =
-    | Response$repos$remove$status$check$contexts$Status$404
-    | Response$repos$remove$status$check$contexts$Status$422;
+  export type repos$remove$status$check$contexts = Response$repos$remove$status$check$contexts$Status$404 | Response$repos$remove$status$check$contexts$Status$422;
   export type repos$get$access$restrictions = Response$repos$get$access$restrictions$Status$404;
-  export type repos$delete$access$restrictions = void;
+  export type repos$delete$access$restrictions = undefined;
   export type repos$get$apps$with$access$to$protected$branch = Response$repos$get$apps$with$access$to$protected$branch$Status$404;
   export type repos$set$app$access$restrictions = Response$repos$set$app$access$restrictions$Status$422;
   export type repos$add$app$access$restrictions = Response$repos$add$app$access$restrictions$Status$422;
@@ -20547,35 +20286,23 @@ export namespace ErrorResponse {
   export type repos$set$user$access$restrictions = Response$repos$set$user$access$restrictions$Status$422;
   export type repos$add$user$access$restrictions = Response$repos$add$user$access$restrictions$Status$422;
   export type repos$remove$user$access$restrictions = Response$repos$remove$user$access$restrictions$Status$422;
-  export type repos$rename$branch =
-    | Response$repos$rename$branch$Status$403
-    | Response$repos$rename$branch$Status$404
-    | Response$repos$rename$branch$Status$422;
-  export type checks$create = void;
-  export type checks$get = void;
-  export type checks$update = void;
-  export type checks$list$annotations = void;
-  export type checks$rerequest$run =
-    | Response$checks$rerequest$run$Status$403
-    | Response$checks$rerequest$run$Status$404
-    | Response$checks$rerequest$run$Status$422;
-  export type checks$create$suite = void;
-  export type checks$set$suites$preferences = void;
-  export type checks$get$suite = void;
-  export type checks$list$for$suite = void;
-  export type checks$rerequest$suite = void;
+  export type repos$rename$branch = Response$repos$rename$branch$Status$403 | Response$repos$rename$branch$Status$404 | Response$repos$rename$branch$Status$422;
+  export type checks$create = undefined;
+  export type checks$get = undefined;
+  export type checks$update = undefined;
+  export type checks$list$annotations = undefined;
+  export type checks$rerequest$run = Response$checks$rerequest$run$Status$403 | Response$checks$rerequest$run$Status$404 | Response$checks$rerequest$run$Status$422;
+  export type checks$create$suite = undefined;
+  export type checks$set$suites$preferences = undefined;
+  export type checks$get$suite = undefined;
+  export type checks$list$for$suite = undefined;
+  export type checks$rerequest$suite = undefined;
   export type code$scanning$list$alerts$for$repo =
     | Response$code$scanning$list$alerts$for$repo$Status$403
     | Response$code$scanning$list$alerts$for$repo$Status$404
     | Response$code$scanning$list$alerts$for$repo$Status$503;
-  export type code$scanning$get$alert =
-    | Response$code$scanning$get$alert$Status$403
-    | Response$code$scanning$get$alert$Status$404
-    | Response$code$scanning$get$alert$Status$503;
-  export type code$scanning$update$alert =
-    | Response$code$scanning$update$alert$Status$403
-    | Response$code$scanning$update$alert$Status$404
-    | Response$code$scanning$update$alert$Status$503;
+  export type code$scanning$get$alert = Response$code$scanning$get$alert$Status$403 | Response$code$scanning$get$alert$Status$404 | Response$code$scanning$get$alert$Status$503;
+  export type code$scanning$update$alert = Response$code$scanning$update$alert$Status$403 | Response$code$scanning$update$alert$Status$404 | Response$code$scanning$update$alert$Status$503;
   export type code$scanning$list$alert$instances =
     | Response$code$scanning$list$alert$instances$Status$403
     | Response$code$scanning$list$alert$instances$Status$404
@@ -20584,69 +20311,50 @@ export namespace ErrorResponse {
     | Response$code$scanning$list$recent$analyses$Status$403
     | Response$code$scanning$list$recent$analyses$Status$404
     | Response$code$scanning$list$recent$analyses$Status$503;
-  export type code$scanning$get$analysis =
-    | Response$code$scanning$get$analysis$Status$403
-    | Response$code$scanning$get$analysis$Status$404
-    | Response$code$scanning$get$analysis$Status$503;
+  export type code$scanning$get$analysis = Response$code$scanning$get$analysis$Status$403 | Response$code$scanning$get$analysis$Status$404 | Response$code$scanning$get$analysis$Status$503;
   export type code$scanning$delete$analysis =
     | Response$code$scanning$delete$analysis$Status$400
     | Response$code$scanning$delete$analysis$Status$403
     | Response$code$scanning$delete$analysis$Status$404
     | Response$code$scanning$delete$analysis$Status$503;
-  export type code$scanning$upload$sarif =
-    | Response$code$scanning$upload$sarif$Status$403
-    | Response$code$scanning$upload$sarif$Status$404
-    | Response$code$scanning$upload$sarif$Status$503;
+  export type code$scanning$upload$sarif = Response$code$scanning$upload$sarif$Status$403 | Response$code$scanning$upload$sarif$Status$404 | Response$code$scanning$upload$sarif$Status$503;
   export type code$scanning$get$sarif = Response$code$scanning$get$sarif$Status$403 | Response$code$scanning$get$sarif$Status$503;
   export type repos$list$collaborators = Response$repos$list$collaborators$Status$404;
-  export type repos$check$collaborator = void;
+  export type repos$check$collaborator = undefined;
   export type repos$add$collaborator = Response$repos$add$collaborator$Status$403 | Response$repos$add$collaborator$Status$422;
-  export type repos$remove$collaborator = void;
+  export type repos$remove$collaborator = undefined;
   export type repos$get$collaborator$permission$level = Response$repos$get$collaborator$permission$level$Status$404;
-  export type repos$list$commit$comments$for$repo = void;
+  export type repos$list$commit$comments$for$repo = undefined;
   export type repos$get$commit$comment = Response$repos$get$commit$comment$Status$404;
   export type repos$delete$commit$comment = Response$repos$delete$commit$comment$Status$404;
   export type repos$update$commit$comment = Response$repos$update$commit$comment$Status$404;
   export type reactions$list$for$commit$comment = Response$reactions$list$for$commit$comment$Status$404;
-  export type reactions$create$for$commit$comment =
-    | Response$reactions$create$for$commit$comment$Status$415
-    | Response$reactions$create$for$commit$comment$Status$422;
-  export type reactions$delete$for$commit$comment = void;
-  export type repos$list$commits =
-    | Response$repos$list$commits$Status$400
-    | Response$repos$list$commits$Status$404
-    | Response$repos$list$commits$Status$409
-    | Response$repos$list$commits$Status$500;
+  export type reactions$create$for$commit$comment = Response$reactions$create$for$commit$comment$Status$415 | Response$reactions$create$for$commit$comment$Status$422;
+  export type reactions$delete$for$commit$comment = undefined;
+  export type repos$list$commits = Response$repos$list$commits$Status$400 | Response$repos$list$commits$Status$404 | Response$repos$list$commits$Status$409 | Response$repos$list$commits$Status$500;
   export type repos$list$branches$for$head$commit = Response$repos$list$branches$for$head$commit$Status$422;
-  export type repos$list$comments$for$commit = void;
+  export type repos$list$comments$for$commit = undefined;
   export type repos$create$commit$comment = Response$repos$create$commit$comment$Status$403 | Response$repos$create$commit$comment$Status$422;
-  export type repos$list$pull$requests$associated$with$commit = void;
-  export type repos$get$commit =
-    | Response$repos$get$commit$Status$404
-    | Response$repos$get$commit$Status$422
-    | Response$repos$get$commit$Status$500;
-  export type checks$list$for$ref = void;
-  export type checks$list$suites$for$ref = void;
+  export type repos$list$pull$requests$associated$with$commit = undefined;
+  export type repos$get$commit = Response$repos$get$commit$Status$404 | Response$repos$get$commit$Status$422 | Response$repos$get$commit$Status$500;
+  export type checks$list$for$ref = undefined;
+  export type checks$list$suites$for$ref = undefined;
   export type repos$get$combined$status$for$ref = Response$repos$get$combined$status$for$ref$Status$404;
-  export type repos$list$commit$statuses$for$ref = void;
+  export type repos$list$commit$statuses$for$ref = undefined;
   export type repos$compare$commits = Response$repos$compare$commits$Status$404 | Response$repos$compare$commits$Status$500;
   export type repos$get$content = Response$repos$get$content$Status$403 | Response$repos$get$content$Status$404;
   export type repos$create$or$update$file$contents =
     | Response$repos$create$or$update$file$contents$Status$404
     | Response$repos$create$or$update$file$contents$Status$409
     | Response$repos$create$or$update$file$contents$Status$422;
-  export type repos$delete$file =
-    | Response$repos$delete$file$Status$404
-    | Response$repos$delete$file$Status$409
-    | Response$repos$delete$file$Status$422
-    | Response$repos$delete$file$Status$503;
+  export type repos$delete$file = Response$repos$delete$file$Status$404 | Response$repos$delete$file$Status$409 | Response$repos$delete$file$Status$422 | Response$repos$delete$file$Status$503;
   export type repos$list$contributors = Response$repos$list$contributors$Status$403 | Response$repos$list$contributors$Status$404;
-  export type dependabot$list$repo$secrets = void;
-  export type dependabot$get$repo$public$key = void;
-  export type dependabot$get$repo$secret = void;
-  export type dependabot$create$or$update$repo$secret = void;
-  export type dependabot$delete$repo$secret = void;
-  export type repos$list$deployments = void;
+  export type dependabot$list$repo$secrets = undefined;
+  export type dependabot$get$repo$public$key = undefined;
+  export type dependabot$get$repo$secret = undefined;
+  export type dependabot$create$or$update$repo$secret = undefined;
+  export type dependabot$delete$repo$secret = undefined;
+  export type repos$list$deployments = undefined;
   export type repos$create$deployment = Response$repos$create$deployment$Status$422;
   export type repos$get$deployment = Response$repos$get$deployment$Status$404;
   export type repos$delete$deployment = Response$repos$delete$deployment$Status$404 | Response$repos$delete$deployment$Status$422;
@@ -20654,26 +20362,18 @@ export namespace ErrorResponse {
   export type repos$create$deployment$status = Response$repos$create$deployment$status$Status$422;
   export type repos$get$deployment$status = Response$repos$get$deployment$status$Status$404;
   export type repos$create$dispatch$event = Response$repos$create$dispatch$event$Status$422;
-  export type repos$get$all$environments = void;
-  export type repos$get$environment = void;
+  export type repos$get$all$environments = undefined;
+  export type repos$get$environment = undefined;
   export type repos$create$or$update$environment = Response$repos$create$or$update$environment$Status$422;
-  export type repos$delete$an$environment = void;
-  export type activity$list$repo$events = void;
+  export type repos$delete$an$environment = undefined;
+  export type activity$list$repo$events = undefined;
   export type repos$list$forks = Response$repos$list$forks$Status$400;
-  export type repos$create$fork =
-    | Response$repos$create$fork$Status$400
-    | Response$repos$create$fork$Status$403
-    | Response$repos$create$fork$Status$404
-    | Response$repos$create$fork$Status$422;
-  export type git$create$blob =
-    | Response$git$create$blob$Status$403
-    | Response$git$create$blob$Status$404
-    | Response$git$create$blob$Status$409
-    | Response$git$create$blob$Status$422;
+  export type repos$create$fork = Response$repos$create$fork$Status$400 | Response$repos$create$fork$Status$403 | Response$repos$create$fork$Status$404 | Response$repos$create$fork$Status$422;
+  export type git$create$blob = Response$git$create$blob$Status$403 | Response$git$create$blob$Status$404 | Response$git$create$blob$Status$409 | Response$git$create$blob$Status$422;
   export type git$get$blob = Response$git$get$blob$Status$403 | Response$git$get$blob$Status$404 | Response$git$get$blob$Status$422;
   export type git$create$commit = Response$git$create$commit$Status$404 | Response$git$create$commit$Status$422;
   export type git$get$commit = Response$git$get$commit$Status$404;
-  export type git$list$matching$refs = void;
+  export type git$list$matching$refs = undefined;
   export type git$get$ref = Response$git$get$ref$Status$404;
   export type git$create$ref = Response$git$create$ref$Status$422;
   export type git$delete$ref = Response$git$delete$ref$Status$422;
@@ -20683,28 +20383,21 @@ export namespace ErrorResponse {
   export type git$create$tree = Response$git$create$tree$Status$403 | Response$git$create$tree$Status$404 | Response$git$create$tree$Status$422;
   export type git$get$tree = Response$git$get$tree$Status$404 | Response$git$get$tree$Status$422;
   export type repos$list$webhooks = Response$repos$list$webhooks$Status$404;
-  export type repos$create$webhook =
-    | Response$repos$create$webhook$Status$403
-    | Response$repos$create$webhook$Status$404
-    | Response$repos$create$webhook$Status$422;
+  export type repos$create$webhook = Response$repos$create$webhook$Status$403 | Response$repos$create$webhook$Status$404 | Response$repos$create$webhook$Status$422;
   export type repos$get$webhook = Response$repos$get$webhook$Status$404;
   export type repos$delete$webhook = Response$repos$delete$webhook$Status$404;
   export type repos$update$webhook = Response$repos$update$webhook$Status$404 | Response$repos$update$webhook$Status$422;
-  export type repos$get$webhook$config$for$repo = void;
-  export type repos$update$webhook$config$for$repo = void;
-  export type repos$list$webhook$deliveries =
-    | Response$repos$list$webhook$deliveries$Status$400
-    | Response$repos$list$webhook$deliveries$Status$422;
+  export type repos$get$webhook$config$for$repo = undefined;
+  export type repos$update$webhook$config$for$repo = undefined;
+  export type repos$list$webhook$deliveries = Response$repos$list$webhook$deliveries$Status$400 | Response$repos$list$webhook$deliveries$Status$422;
   export type repos$get$webhook$delivery = Response$repos$get$webhook$delivery$Status$400 | Response$repos$get$webhook$delivery$Status$422;
-  export type repos$redeliver$webhook$delivery =
-    | Response$repos$redeliver$webhook$delivery$Status$400
-    | Response$repos$redeliver$webhook$delivery$Status$422;
+  export type repos$redeliver$webhook$delivery = Response$repos$redeliver$webhook$delivery$Status$400 | Response$repos$redeliver$webhook$delivery$Status$422;
   export type repos$ping$webhook = Response$repos$ping$webhook$Status$404;
   export type repos$test$push$webhook = Response$repos$test$push$webhook$Status$404;
   export type apps$get$repo$installation = Response$apps$get$repo$installation$Status$404;
-  export type repos$list$invitations = void;
-  export type repos$delete$invitation = void;
-  export type repos$update$invitation = void;
+  export type repos$list$invitations = undefined;
+  export type repos$delete$invitation = undefined;
+  export type repos$update$invitation = undefined;
   export type issues$list$for$repo = Response$issues$list$for$repo$Status$404 | Response$issues$list$for$repo$Status$422;
   export type issues$create =
     | Response$issues$create$Status$403
@@ -20712,20 +20405,15 @@ export namespace ErrorResponse {
     | Response$issues$create$Status$410
     | Response$issues$create$Status$422
     | Response$issues$create$Status$503;
-  export type issues$list$comments$for$repo =
-    | Response$issues$list$comments$for$repo$Status$404
-    | Response$issues$list$comments$for$repo$Status$422;
+  export type issues$list$comments$for$repo = Response$issues$list$comments$for$repo$Status$404 | Response$issues$list$comments$for$repo$Status$422;
   export type issues$get$comment = Response$issues$get$comment$Status$404;
-  export type issues$delete$comment = void;
+  export type issues$delete$comment = undefined;
   export type issues$update$comment = Response$issues$update$comment$Status$422;
   export type reactions$list$for$issue$comment = Response$reactions$list$for$issue$comment$Status$404;
   export type reactions$create$for$issue$comment = Response$reactions$create$for$issue$comment$Status$422;
-  export type reactions$delete$for$issue$comment = void;
+  export type reactions$delete$for$issue$comment = undefined;
   export type issues$list$events$for$repo = Response$issues$list$events$for$repo$Status$422;
-  export type issues$get$event =
-    | Response$issues$get$event$Status$403
-    | Response$issues$get$event$Status$404
-    | Response$issues$get$event$Status$410;
+  export type issues$get$event = Response$issues$get$event$Status$403 | Response$issues$get$event$Status$404 | Response$issues$get$event$Status$410;
   export type issues$get = Response$issues$get$Status$404 | Response$issues$get$Status$410;
   export type issues$update =
     | Response$issues$update$Status$403
@@ -20733,8 +20421,8 @@ export namespace ErrorResponse {
     | Response$issues$update$Status$410
     | Response$issues$update$Status$422
     | Response$issues$update$Status$503;
-  export type issues$add$assignees = void;
-  export type issues$remove$assignees = void;
+  export type issues$add$assignees = undefined;
+  export type issues$remove$assignees = undefined;
   export type issues$list$comments = Response$issues$list$comments$Status$404 | Response$issues$list$comments$Status$410;
   export type issues$create$comment =
     | Response$issues$create$comment$Status$403
@@ -20747,55 +20435,47 @@ export namespace ErrorResponse {
   export type issues$add$labels = Response$issues$add$labels$Status$410 | Response$issues$add$labels$Status$422;
   export type issues$remove$all$labels = Response$issues$remove$all$labels$Status$410;
   export type issues$remove$label = Response$issues$remove$label$Status$404 | Response$issues$remove$label$Status$410;
-  export type issues$lock =
-    | Response$issues$lock$Status$403
-    | Response$issues$lock$Status$404
-    | Response$issues$lock$Status$410
-    | Response$issues$lock$Status$422;
+  export type issues$lock = Response$issues$lock$Status$403 | Response$issues$lock$Status$404 | Response$issues$lock$Status$410 | Response$issues$lock$Status$422;
   export type issues$unlock = Response$issues$unlock$Status$403 | Response$issues$unlock$Status$404;
   export type reactions$list$for$issue = Response$reactions$list$for$issue$Status$404 | Response$reactions$list$for$issue$Status$410;
   export type reactions$create$for$issue = Response$reactions$create$for$issue$Status$422;
-  export type reactions$delete$for$issue = void;
-  export type issues$list$events$for$timeline =
-    | Response$issues$list$events$for$timeline$Status$404
-    | Response$issues$list$events$for$timeline$Status$410;
-  export type repos$list$deploy$keys = void;
+  export type reactions$delete$for$issue = undefined;
+  export type issues$list$events$for$timeline = Response$issues$list$events$for$timeline$Status$404 | Response$issues$list$events$for$timeline$Status$410;
+  export type repos$list$deploy$keys = undefined;
   export type repos$create$deploy$key = Response$repos$create$deploy$key$Status$422;
   export type repos$get$deploy$key = Response$repos$get$deploy$key$Status$404;
-  export type repos$delete$deploy$key = void;
+  export type repos$delete$deploy$key = undefined;
   export type issues$list$labels$for$repo = Response$issues$list$labels$for$repo$Status$404;
   export type issues$create$label = Response$issues$create$label$Status$404 | Response$issues$create$label$Status$422;
   export type issues$get$label = Response$issues$get$label$Status$404;
-  export type issues$delete$label = void;
-  export type issues$update$label = void;
-  export type repos$list$languages = void;
-  export type repos$enable$lfs$for$repo = void;
-  export type repos$disable$lfs$for$repo = void;
-  export type licenses$get$for$repo = void;
-  export type repos$merge$upstream = void;
+  export type issues$delete$label = undefined;
+  export type issues$update$label = undefined;
+  export type repos$list$languages = undefined;
+  export type repos$enable$lfs$for$repo = undefined;
+  export type repos$disable$lfs$for$repo = undefined;
+  export type licenses$get$for$repo = undefined;
+  export type repos$merge$upstream = undefined;
   export type repos$merge = Response$repos$merge$Status$403 | Response$repos$merge$Status$422;
   export type issues$list$milestones = Response$issues$list$milestones$Status$404;
   export type issues$create$milestone = Response$issues$create$milestone$Status$404 | Response$issues$create$milestone$Status$422;
   export type issues$get$milestone = Response$issues$get$milestone$Status$404;
   export type issues$delete$milestone = Response$issues$delete$milestone$Status$404;
-  export type issues$update$milestone = void;
-  export type issues$list$labels$for$milestone = void;
-  export type activity$list$repo$notifications$for$authenticated$user = void;
-  export type activity$mark$repo$notifications$as$read = void;
+  export type issues$update$milestone = undefined;
+  export type issues$list$labels$for$milestone = undefined;
+  export type activity$list$repo$notifications$for$authenticated$user = undefined;
+  export type activity$mark$repo$notifications$as$read = undefined;
   export type repos$get$pages = Response$repos$get$pages$Status$404;
-  export type repos$update$information$about$pages$site =
-    | Response$repos$update$information$about$pages$site$Status$400
-    | Response$repos$update$information$about$pages$site$Status$422;
+  export type repos$update$information$about$pages$site = Response$repos$update$information$about$pages$site$Status$400 | Response$repos$update$information$about$pages$site$Status$422;
   export type repos$create$pages$site = Response$repos$create$pages$site$Status$409 | Response$repos$create$pages$site$Status$422;
   export type repos$delete$pages$site = Response$repos$delete$pages$site$Status$404 | Response$repos$delete$pages$site$Status$422;
-  export type repos$list$pages$builds = void;
-  export type repos$request$pages$build = void;
-  export type repos$get$latest$pages$build = void;
-  export type repos$get$pages$build = void;
-  export type enterprise$admin$list$pre$receive$hooks$for$repo = void;
-  export type enterprise$admin$get$pre$receive$hook$for$repo = void;
-  export type enterprise$admin$remove$pre$receive$hook$enforcement$for$repo = void;
-  export type enterprise$admin$update$pre$receive$hook$enforcement$for$repo = void;
+  export type repos$list$pages$builds = undefined;
+  export type repos$request$pages$build = undefined;
+  export type repos$get$latest$pages$build = undefined;
+  export type repos$get$pages$build = undefined;
+  export type enterprise$admin$list$pre$receive$hooks$for$repo = undefined;
+  export type enterprise$admin$get$pre$receive$hook$for$repo = undefined;
+  export type enterprise$admin$remove$pre$receive$hook$enforcement$for$repo = undefined;
+  export type enterprise$admin$update$pre$receive$hook$enforcement$for$repo = undefined;
   export type projects$list$for$repo =
     | Response$projects$list$for$repo$Status$401
     | Response$projects$list$for$repo$Status$403
@@ -20810,59 +20490,49 @@ export namespace ErrorResponse {
     | Response$projects$create$for$repo$Status$422;
   export type pulls$list = Response$pulls$list$Status$422;
   export type pulls$create = Response$pulls$create$Status$403 | Response$pulls$create$Status$422;
-  export type pulls$list$review$comments$for$repo = void;
+  export type pulls$list$review$comments$for$repo = undefined;
   export type pulls$get$review$comment = Response$pulls$get$review$comment$Status$404;
   export type pulls$delete$review$comment = Response$pulls$delete$review$comment$Status$404;
-  export type pulls$update$review$comment = void;
+  export type pulls$update$review$comment = undefined;
   export type reactions$list$for$pull$request$review$comment = Response$reactions$list$for$pull$request$review$comment$Status$404;
   export type reactions$create$for$pull$request$review$comment = Response$reactions$create$for$pull$request$review$comment$Status$422;
-  export type reactions$delete$for$pull$request$comment = void;
+  export type reactions$delete$for$pull$request$comment = undefined;
   export type pulls$get = Response$pulls$get$Status$404 | Response$pulls$get$Status$500;
   export type pulls$update = Response$pulls$update$Status$403 | Response$pulls$update$Status$422;
-  export type pulls$list$review$comments = void;
+  export type pulls$list$review$comments = undefined;
   export type pulls$create$review$comment = Response$pulls$create$review$comment$Status$403 | Response$pulls$create$review$comment$Status$422;
   export type pulls$create$reply$for$review$comment = Response$pulls$create$reply$for$review$comment$Status$404;
-  export type pulls$list$commits = void;
+  export type pulls$list$commits = undefined;
   export type pulls$list$files = Response$pulls$list$files$Status$422 | Response$pulls$list$files$Status$500;
-  export type pulls$check$if$merged = void;
-  export type pulls$merge =
-    | Response$pulls$merge$Status$403
-    | Response$pulls$merge$Status$404
-    | Response$pulls$merge$Status$405
-    | Response$pulls$merge$Status$409
-    | Response$pulls$merge$Status$422;
-  export type pulls$list$requested$reviewers = void;
+  export type pulls$check$if$merged = undefined;
+  export type pulls$merge = Response$pulls$merge$Status$403 | Response$pulls$merge$Status$404 | Response$pulls$merge$Status$405 | Response$pulls$merge$Status$409 | Response$pulls$merge$Status$422;
+  export type pulls$list$requested$reviewers = undefined;
   export type pulls$request$reviewers = Response$pulls$request$reviewers$Status$403;
   export type pulls$remove$requested$reviewers = Response$pulls$remove$requested$reviewers$Status$422;
-  export type pulls$list$reviews = void;
+  export type pulls$list$reviews = undefined;
   export type pulls$create$review = Response$pulls$create$review$Status$403 | Response$pulls$create$review$Status$422;
   export type pulls$get$review = Response$pulls$get$review$Status$404;
   export type pulls$update$review = Response$pulls$update$review$Status$422;
   export type pulls$delete$pending$review = Response$pulls$delete$pending$review$Status$404 | Response$pulls$delete$pending$review$Status$422;
   export type pulls$list$comments$for$review = Response$pulls$list$comments$for$review$Status$404;
   export type pulls$dismiss$review = Response$pulls$dismiss$review$Status$404 | Response$pulls$dismiss$review$Status$422;
-  export type pulls$submit$review =
-    | Response$pulls$submit$review$Status$403
-    | Response$pulls$submit$review$Status$404
-    | Response$pulls$submit$review$Status$422;
+  export type pulls$submit$review = Response$pulls$submit$review$Status$403 | Response$pulls$submit$review$Status$404 | Response$pulls$submit$review$Status$422;
   export type pulls$update$branch = Response$pulls$update$branch$Status$403 | Response$pulls$update$branch$Status$422;
   export type repos$get$readme = Response$repos$get$readme$Status$404 | Response$repos$get$readme$Status$422;
-  export type repos$get$readme$in$directory =
-    | Response$repos$get$readme$in$directory$Status$404
-    | Response$repos$get$readme$in$directory$Status$422;
+  export type repos$get$readme$in$directory = Response$repos$get$readme$in$directory$Status$404 | Response$repos$get$readme$in$directory$Status$422;
   export type repos$list$releases = Response$repos$list$releases$Status$404;
   export type repos$create$release = Response$repos$create$release$Status$422;
   export type repos$get$release$asset = Response$repos$get$release$asset$Status$404 | Response$repos$get$release$asset$Status$415;
-  export type repos$delete$release$asset = void;
-  export type repos$update$release$asset = void;
+  export type repos$delete$release$asset = undefined;
+  export type repos$update$release$asset = undefined;
   export type repos$generate$release$notes = Response$repos$generate$release$notes$Status$404;
-  export type repos$get$latest$release = void;
+  export type repos$get$latest$release = undefined;
   export type repos$get$release$by$tag = Response$repos$get$release$by$tag$Status$404;
   export type repos$get$release = Response$repos$get$release$Status$404;
-  export type repos$delete$release = void;
-  export type repos$update$release = void;
-  export type repos$list$release$assets = void;
-  export type repos$upload$release$asset = void;
+  export type repos$delete$release = undefined;
+  export type repos$update$release = undefined;
+  export type repos$list$release$assets = undefined;
+  export type repos$upload$release$asset = undefined;
   export type reactions$create$for$release = Response$reactions$create$for$release$Status$422;
   export type repos$list$cache$info = Response$repos$list$cache$info$Status$403 | Response$repos$list$cache$info$Status$404;
   export type secret$scanning$list$alerts$for$repo = Response$secret$scanning$list$alerts$for$repo$Status$503;
@@ -20870,98 +20540,87 @@ export namespace ErrorResponse {
   export type secret$scanning$update$alert = Response$secret$scanning$update$alert$Status$503;
   export type secret$scanning$list$locations$for$alert = Response$secret$scanning$list$locations$for$alert$Status$503;
   export type activity$list$stargazers$for$repo = Response$activity$list$stargazers$for$repo$Status$422;
-  export type repos$get$code$frequency$stats = void;
-  export type repos$get$commit$activity$stats = void;
-  export type repos$get$contributors$stats = void;
+  export type repos$get$code$frequency$stats = undefined;
+  export type repos$get$commit$activity$stats = undefined;
+  export type repos$get$contributors$stats = undefined;
   export type repos$get$participation$stats = Response$repos$get$participation$stats$Status$404;
-  export type repos$get$punch$card$stats = void;
-  export type repos$create$commit$status = void;
-  export type activity$list$watchers$for$repo = void;
+  export type repos$get$punch$card$stats = undefined;
+  export type repos$create$commit$status = undefined;
+  export type activity$list$watchers$for$repo = undefined;
   export type activity$get$repo$subscription = Response$activity$get$repo$subscription$Status$403;
-  export type activity$set$repo$subscription = void;
-  export type activity$delete$repo$subscription = void;
-  export type repos$list$tags = void;
-  export type repos$download$tarball$archive = void;
-  export type repos$list$teams = void;
+  export type activity$set$repo$subscription = undefined;
+  export type activity$delete$repo$subscription = undefined;
+  export type repos$list$tags = undefined;
+  export type repos$download$tarball$archive = undefined;
+  export type repos$list$teams = undefined;
   export type repos$get$all$topics = Response$repos$get$all$topics$Status$404;
   export type repos$replace$all$topics = Response$repos$replace$all$topics$Status$404 | Response$repos$replace$all$topics$Status$422;
-  export type repos$transfer = void;
-  export type repos$download$zipball$archive = void;
-  export type repos$create$using$template = void;
+  export type repos$transfer = undefined;
+  export type repos$download$zipball$archive = undefined;
+  export type repos$create$using$template = undefined;
   export type repos$list$public = Response$repos$list$public$Status$422;
-  export type actions$list$environment$secrets = void;
-  export type actions$get$environment$public$key = void;
-  export type actions$get$environment$secret = void;
-  export type actions$create$or$update$environment$secret = void;
-  export type actions$delete$environment$secret = void;
+  export type actions$list$environment$secrets = undefined;
+  export type actions$get$environment$public$key = undefined;
+  export type actions$get$environment$secret = undefined;
+  export type actions$create$or$update$environment$secret = undefined;
+  export type actions$delete$environment$secret = undefined;
   export type search$code = Response$search$code$Status$403 | Response$search$code$Status$422 | Response$search$code$Status$503;
-  export type search$commits = void;
+  export type search$commits = undefined;
   export type search$issues$and$pull$requests =
     | Response$search$issues$and$pull$requests$Status$403
     | Response$search$issues$and$pull$requests$Status$422
     | Response$search$issues$and$pull$requests$Status$503;
   export type search$labels = Response$search$labels$Status$403 | Response$search$labels$Status$404 | Response$search$labels$Status$422;
   export type search$repos = Response$search$repos$Status$422 | Response$search$repos$Status$503;
-  export type search$topics = void;
+  export type search$topics = undefined;
   export type search$users = Response$search$users$Status$422 | Response$search$users$Status$503;
-  export type enterprise$admin$get$configuration$status = void;
-  export type enterprise$admin$start$configuration$process = void;
-  export type enterprise$admin$get$maintenance$status = void;
-  export type enterprise$admin$enable$or$disable$maintenance$mode = void;
-  export type enterprise$admin$get$settings = void;
-  export type enterprise$admin$set$settings = void;
-  export type enterprise$admin$get$all$authorized$ssh$keys = void;
-  export type enterprise$admin$add$authorized$ssh$key = void;
-  export type enterprise$admin$remove$authorized$ssh$key = void;
-  export type enterprise$admin$create$enterprise$server$license = void;
-  export type enterprise$admin$upgrade$license = void;
+  export type enterprise$admin$get$configuration$status = undefined;
+  export type enterprise$admin$start$configuration$process = undefined;
+  export type enterprise$admin$get$maintenance$status = undefined;
+  export type enterprise$admin$enable$or$disable$maintenance$mode = undefined;
+  export type enterprise$admin$get$settings = undefined;
+  export type enterprise$admin$set$settings = undefined;
+  export type enterprise$admin$get$all$authorized$ssh$keys = undefined;
+  export type enterprise$admin$add$authorized$ssh$key = undefined;
+  export type enterprise$admin$remove$authorized$ssh$key = undefined;
+  export type enterprise$admin$create$enterprise$server$license = undefined;
+  export type enterprise$admin$upgrade$license = undefined;
   export type teams$get$legacy = Response$teams$get$legacy$Status$404;
   export type teams$delete$legacy = Response$teams$delete$legacy$Status$404 | Response$teams$delete$legacy$Status$422;
-  export type teams$update$legacy =
-    | Response$teams$update$legacy$Status$403
-    | Response$teams$update$legacy$Status$404
-    | Response$teams$update$legacy$Status$422;
-  export type teams$list$discussions$legacy = void;
-  export type teams$create$discussion$legacy = void;
-  export type teams$get$discussion$legacy = void;
-  export type teams$delete$discussion$legacy = void;
-  export type teams$update$discussion$legacy = void;
-  export type teams$list$discussion$comments$legacy = void;
-  export type teams$create$discussion$comment$legacy = void;
-  export type teams$get$discussion$comment$legacy = void;
-  export type teams$delete$discussion$comment$legacy = void;
-  export type teams$update$discussion$comment$legacy = void;
-  export type reactions$list$for$team$discussion$comment$legacy = void;
-  export type reactions$create$for$team$discussion$comment$legacy = void;
-  export type reactions$list$for$team$discussion$legacy = void;
-  export type reactions$create$for$team$discussion$legacy = void;
+  export type teams$update$legacy = Response$teams$update$legacy$Status$403 | Response$teams$update$legacy$Status$404 | Response$teams$update$legacy$Status$422;
+  export type teams$list$discussions$legacy = undefined;
+  export type teams$create$discussion$legacy = undefined;
+  export type teams$get$discussion$legacy = undefined;
+  export type teams$delete$discussion$legacy = undefined;
+  export type teams$update$discussion$legacy = undefined;
+  export type teams$list$discussion$comments$legacy = undefined;
+  export type teams$create$discussion$comment$legacy = undefined;
+  export type teams$get$discussion$comment$legacy = undefined;
+  export type teams$delete$discussion$comment$legacy = undefined;
+  export type teams$update$discussion$comment$legacy = undefined;
+  export type reactions$list$for$team$discussion$comment$legacy = undefined;
+  export type reactions$create$for$team$discussion$comment$legacy = undefined;
+  export type reactions$list$for$team$discussion$legacy = undefined;
+  export type reactions$create$for$team$discussion$legacy = undefined;
   export type teams$list$members$legacy = Response$teams$list$members$legacy$Status$404;
-  export type teams$get$member$legacy = void;
+  export type teams$get$member$legacy = undefined;
   export type teams$add$member$legacy = Response$teams$add$member$legacy$Status$403;
-  export type teams$remove$member$legacy = void;
+  export type teams$remove$member$legacy = undefined;
   export type teams$get$membership$for$user$legacy = Response$teams$get$membership$for$user$legacy$Status$404;
   export type teams$add$or$update$membership$for$user$legacy = Response$teams$add$or$update$membership$for$user$legacy$Status$404;
-  export type teams$remove$membership$for$user$legacy = void;
+  export type teams$remove$membership$for$user$legacy = undefined;
   export type teams$list$projects$legacy = Response$teams$list$projects$legacy$Status$404;
-  export type teams$check$permissions$for$project$legacy = void;
+  export type teams$check$permissions$for$project$legacy = undefined;
   export type teams$add$or$update$project$permissions$legacy =
     | Response$teams$add$or$update$project$permissions$legacy$Status$403
     | Response$teams$add$or$update$project$permissions$legacy$Status$404
     | Response$teams$add$or$update$project$permissions$legacy$Status$422;
-  export type teams$remove$project$legacy =
-    | Response$teams$remove$project$legacy$Status$404
-    | Response$teams$remove$project$legacy$Status$415
-    | Response$teams$remove$project$legacy$Status$422;
+  export type teams$remove$project$legacy = Response$teams$remove$project$legacy$Status$404 | Response$teams$remove$project$legacy$Status$415 | Response$teams$remove$project$legacy$Status$422;
   export type teams$list$repos$legacy = Response$teams$list$repos$legacy$Status$404;
-  export type teams$check$permissions$for$repo$legacy = void;
-  export type teams$add$or$update$repo$permissions$legacy =
-    | Response$teams$add$or$update$repo$permissions$legacy$Status$403
-    | Response$teams$add$or$update$repo$permissions$legacy$Status$422;
-  export type teams$remove$repo$legacy = void;
-  export type teams$list$child$legacy =
-    | Response$teams$list$child$legacy$Status$403
-    | Response$teams$list$child$legacy$Status$404
-    | Response$teams$list$child$legacy$Status$422;
+  export type teams$check$permissions$for$repo$legacy = undefined;
+  export type teams$add$or$update$repo$permissions$legacy = Response$teams$add$or$update$repo$permissions$legacy$Status$403 | Response$teams$add$or$update$repo$permissions$legacy$Status$422;
+  export type teams$remove$repo$legacy = undefined;
+  export type teams$list$child$legacy = Response$teams$list$child$legacy$Status$403 | Response$teams$list$child$legacy$Status$404 | Response$teams$list$child$legacy$Status$422;
   export type users$get$authenticated = Response$users$get$authenticated$Status$401 | Response$users$get$authenticated$Status$403;
   export type users$update$authenticated =
     | Response$users$update$authenticated$Status$401
@@ -20982,12 +20641,8 @@ export namespace ErrorResponse {
     | Response$users$delete$email$for$authenticated$user$Status$403
     | Response$users$delete$email$for$authenticated$user$Status$404
     | Response$users$delete$email$for$authenticated$user$Status$422;
-  export type users$list$followers$for$authenticated$user =
-    | Response$users$list$followers$for$authenticated$user$Status$401
-    | Response$users$list$followers$for$authenticated$user$Status$403;
-  export type users$list$followed$by$authenticated$user =
-    | Response$users$list$followed$by$authenticated$user$Status$401
-    | Response$users$list$followed$by$authenticated$user$Status$403;
+  export type users$list$followers$for$authenticated$user = Response$users$list$followers$for$authenticated$user$Status$401 | Response$users$list$followers$for$authenticated$user$Status$403;
+  export type users$list$followed$by$authenticated$user = Response$users$list$followed$by$authenticated$user$Status$401 | Response$users$list$followed$by$authenticated$user$Status$403;
   export type users$check$person$is$followed$by$authenticated =
     | Response$users$check$person$is$followed$by$authenticated$Status$401
     | Response$users$check$person$is$followed$by$authenticated$Status$403
@@ -21047,27 +20702,19 @@ export namespace ErrorResponse {
     | Response$orgs$list$memberships$for$authenticated$user$Status$401
     | Response$orgs$list$memberships$for$authenticated$user$Status$403
     | Response$orgs$list$memberships$for$authenticated$user$Status$422;
-  export type orgs$get$membership$for$authenticated$user =
-    | Response$orgs$get$membership$for$authenticated$user$Status$403
-    | Response$orgs$get$membership$for$authenticated$user$Status$404;
+  export type orgs$get$membership$for$authenticated$user = Response$orgs$get$membership$for$authenticated$user$Status$403 | Response$orgs$get$membership$for$authenticated$user$Status$404;
   export type orgs$update$membership$for$authenticated$user =
     | Response$orgs$update$membership$for$authenticated$user$Status$403
     | Response$orgs$update$membership$for$authenticated$user$Status$404
     | Response$orgs$update$membership$for$authenticated$user$Status$422;
-  export type migrations$list$for$authenticated$user =
-    | Response$migrations$list$for$authenticated$user$Status$401
-    | Response$migrations$list$for$authenticated$user$Status$403;
+  export type migrations$list$for$authenticated$user = Response$migrations$list$for$authenticated$user$Status$401 | Response$migrations$list$for$authenticated$user$Status$403;
   export type migrations$start$for$authenticated$user =
     | Response$migrations$start$for$authenticated$user$Status$401
     | Response$migrations$start$for$authenticated$user$Status$403
     | Response$migrations$start$for$authenticated$user$Status$422;
-  export type migrations$get$archive$for$authenticated$user =
-    | Response$migrations$get$archive$for$authenticated$user$Status$401
-    | Response$migrations$get$archive$for$authenticated$user$Status$403;
+  export type migrations$get$archive$for$authenticated$user = Response$migrations$get$archive$for$authenticated$user$Status$401 | Response$migrations$get$archive$for$authenticated$user$Status$403;
   export type migrations$list$repos$for$authenticated$user = Response$migrations$list$repos$for$authenticated$user$Status$404;
-  export type orgs$list$for$authenticated$user =
-    | Response$orgs$list$for$authenticated$user$Status$401
-    | Response$orgs$list$for$authenticated$user$Status$403;
+  export type orgs$list$for$authenticated$user = Response$orgs$list$for$authenticated$user$Status$401 | Response$orgs$list$for$authenticated$user$Status$403;
   export type projects$create$for$authenticated$user =
     | Response$projects$create$for$authenticated$user$Status$401
     | Response$projects$create$for$authenticated$user$Status$403
@@ -21117,34 +20764,32 @@ export namespace ErrorResponse {
   export type activity$list$watched$repos$for$authenticated$user =
     | Response$activity$list$watched$repos$for$authenticated$user$Status$401
     | Response$activity$list$watched$repos$for$authenticated$user$Status$403;
-  export type teams$list$for$authenticated$user =
-    | Response$teams$list$for$authenticated$user$Status$403
-    | Response$teams$list$for$authenticated$user$Status$404;
-  export type users$list = void;
+  export type teams$list$for$authenticated$user = Response$teams$list$for$authenticated$user$Status$403 | Response$teams$list$for$authenticated$user$Status$404;
+  export type users$list = undefined;
   export type users$get$by$username = Response$users$get$by$username$Status$404;
-  export type activity$list$events$for$authenticated$user = void;
-  export type activity$list$org$events$for$authenticated$user = void;
-  export type activity$list$public$events$for$user = void;
-  export type users$list$followers$for$user = void;
-  export type users$list$following$for$user = void;
-  export type users$check$following$for$user = void;
+  export type activity$list$events$for$authenticated$user = undefined;
+  export type activity$list$org$events$for$authenticated$user = undefined;
+  export type activity$list$public$events$for$user = undefined;
+  export type users$list$followers$for$user = undefined;
+  export type users$list$following$for$user = undefined;
+  export type users$check$following$for$user = undefined;
   export type gists$list$for$user = Response$gists$list$for$user$Status$422;
-  export type users$list$gpg$keys$for$user = void;
+  export type users$list$gpg$keys$for$user = undefined;
   export type users$get$context$for$user = Response$users$get$context$for$user$Status$404 | Response$users$get$context$for$user$Status$422;
-  export type apps$get$user$installation = void;
-  export type users$list$public$keys$for$user = void;
-  export type orgs$list$for$user = void;
+  export type apps$get$user$installation = undefined;
+  export type users$list$public$keys$for$user = undefined;
+  export type orgs$list$for$user = undefined;
   export type projects$list$for$user = Response$projects$list$for$user$Status$422;
-  export type activity$list$received$events$for$user = void;
-  export type activity$list$received$public$events$for$user = void;
-  export type repos$list$for$user = void;
-  export type enterprise$admin$promote$user$to$be$site$administrator = void;
-  export type enterprise$admin$demote$site$administrator = void;
-  export type activity$list$repos$starred$by$user = void;
-  export type activity$list$repos$watched$by$user = void;
-  export type enterprise$admin$suspend$user = void;
-  export type enterprise$admin$unsuspend$user = void;
-  export type meta$get$zen = void;
+  export type activity$list$received$events$for$user = undefined;
+  export type activity$list$received$public$events$for$user = undefined;
+  export type repos$list$for$user = undefined;
+  export type enterprise$admin$promote$user$to$be$site$administrator = undefined;
+  export type enterprise$admin$demote$site$administrator = undefined;
+  export type activity$list$repos$starred$by$user = undefined;
+  export type activity$list$repos$watched$by$user = undefined;
+  export type enterprise$admin$suspend$user = undefined;
+  export type enterprise$admin$unsuspend$user = undefined;
+  export type meta$get$zen = undefined;
 }
 export interface ApiClient<RequestOption> {
   request: <T = SuccessResponses>(
@@ -21165,7 +20810,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /
      */
     meta$root: (option?: RequestOption): Promise<Response$meta$root$Status$200["application/json"]> => {
-      const url = baseUrl + `/`;
+      const url = `${baseUrl}/`;
       const headers = {
         Accept: "application/json",
       };
@@ -21180,7 +20825,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$list$global$webhooks,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$list$global$webhooks$Status$200["application/json"]> => {
-      const url = baseUrl + `/admin/hooks`;
+      const url = `${baseUrl}/admin/hooks`;
       const headers = {
         Accept: "application/json",
         accept: params.parameter.accept,
@@ -21200,7 +20845,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$create$global$webhook,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$create$global$webhook$Status$201["application/json"]> => {
-      const url = baseUrl + `/admin/hooks`;
+      const url = `${baseUrl}/admin/hooks`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21216,7 +20861,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$get$global$webhook,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$get$global$webhook$Status$200["application/json"]> => {
-      const url = baseUrl + `/admin/hooks/${params.parameter.hook_id}`;
+      const url = `${baseUrl}/admin/hooks/${params.parameter.hook_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -21228,7 +20873,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /admin/hooks/{hook_id}
      */
     enterprise$admin$delete$global$webhook: (params: Params$enterprise$admin$delete$global$webhook, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/admin/hooks/${params.parameter.hook_id}`;
+      const url = `${baseUrl}/admin/hooks/${params.parameter.hook_id}`;
       const headers = {
         accept: params.parameter.accept,
       };
@@ -21244,7 +20889,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$update$global$webhook,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$update$global$webhook$Status$200["application/json"]> => {
-      const url = baseUrl + `/admin/hooks/${params.parameter.hook_id}`;
+      const url = `${baseUrl}/admin/hooks/${params.parameter.hook_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21258,7 +20903,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /admin/hooks/{hook_id}/pings
      */
     enterprise$admin$ping$global$webhook: (params: Params$enterprise$admin$ping$global$webhook, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/admin/hooks/${params.parameter.hook_id}/pings`;
+      const url = `${baseUrl}/admin/hooks/${params.parameter.hook_id}/pings`;
       const headers = {
         accept: params.parameter.accept,
       };
@@ -21273,7 +20918,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$list$public$keys,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$list$public$keys$Status$200["application/json"]> => {
-      const url = baseUrl + `/admin/keys`;
+      const url = `${baseUrl}/admin/keys`;
       const headers = {
         Accept: "application/json",
       };
@@ -21292,7 +20937,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /admin/keys/{key_ids}
      */
     enterprise$admin$delete$public$key: (params: Params$enterprise$admin$delete$public$key, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/admin/keys/${params.parameter.key_ids}`;
+      const url = `${baseUrl}/admin/keys/${params.parameter.key_ids}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -21306,7 +20951,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$update$ldap$mapping$for$team,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$update$ldap$mapping$for$team$Status$200["application/json"]> => {
-      const url = baseUrl + `/admin/ldap/teams/${params.parameter.team_id}/mapping`;
+      const url = `${baseUrl}/admin/ldap/teams/${params.parameter.team_id}/mapping`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21323,7 +20968,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$sync$ldap$mapping$for$team,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$sync$ldap$mapping$for$team$Status$201["application/json"]> => {
-      const url = baseUrl + `/admin/ldap/teams/${params.parameter.team_id}/sync`;
+      const url = `${baseUrl}/admin/ldap/teams/${params.parameter.team_id}/sync`;
       const headers = {
         Accept: "application/json",
       };
@@ -21338,7 +20983,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$update$ldap$mapping$for$user,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$update$ldap$mapping$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/admin/ldap/users/${params.parameter.username}/mapping`;
+      const url = `${baseUrl}/admin/ldap/users/${params.parameter.username}/mapping`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21355,7 +21000,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$sync$ldap$mapping$for$user,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$sync$ldap$mapping$for$user$Status$201["application/json"]> => {
-      const url = baseUrl + `/admin/ldap/users/${params.parameter.username}/sync`;
+      const url = `${baseUrl}/admin/ldap/users/${params.parameter.username}/sync`;
       const headers = {
         Accept: "application/json",
       };
@@ -21366,11 +21011,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/create-org
      * Request URI: /admin/organizations
      */
-    enterprise$admin$create$org: (
-      params: Params$enterprise$admin$create$org,
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$create$org$Status$201["application/json"]> => {
-      const url = baseUrl + `/admin/organizations`;
+    enterprise$admin$create$org: (params: Params$enterprise$admin$create$org, option?: RequestOption): Promise<Response$enterprise$admin$create$org$Status$201["application/json"]> => {
+      const url = `${baseUrl}/admin/organizations`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21382,11 +21024,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/update-org-name
      * Request URI: /admin/organizations/{org}
      */
-    enterprise$admin$update$org$name: (
-      params: Params$enterprise$admin$update$org$name,
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$update$org$name$Status$202["application/json"]> => {
-      const url = baseUrl + `/admin/organizations/${params.parameter.org}`;
+    enterprise$admin$update$org$name: (params: Params$enterprise$admin$update$org$name, option?: RequestOption): Promise<Response$enterprise$admin$update$org$name$Status$202["application/json"]> => {
+      const url = `${baseUrl}/admin/organizations/${params.parameter.org}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21402,7 +21041,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$list$pre$receive$environments,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$list$pre$receive$environments$Status$200["application/json"]> => {
-      const url = baseUrl + `/admin/pre-receive-environments`;
+      const url = `${baseUrl}/admin/pre-receive-environments`;
       const headers = {
         Accept: "application/json",
       };
@@ -21423,7 +21062,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$create$pre$receive$environment,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$create$pre$receive$environment$Status$201["application/json"]> => {
-      const url = baseUrl + `/admin/pre-receive-environments`;
+      const url = `${baseUrl}/admin/pre-receive-environments`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21439,7 +21078,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$get$pre$receive$environment,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$get$pre$receive$environment$Status$200["application/json"]> => {
-      const url = baseUrl + `/admin/pre-receive-environments/${params.parameter.pre_receive_environment_id}`;
+      const url = `${baseUrl}/admin/pre-receive-environments/${params.parameter.pre_receive_environment_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -21457,11 +21096,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/delete-pre-receive-environment
      * Request URI: /admin/pre-receive-environments/{pre_receive_environment_id}
      */
-    enterprise$admin$delete$pre$receive$environment: (
-      params: Params$enterprise$admin$delete$pre$receive$environment,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/admin/pre-receive-environments/${params.parameter.pre_receive_environment_id}`;
+    enterprise$admin$delete$pre$receive$environment: (params: Params$enterprise$admin$delete$pre$receive$environment, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/admin/pre-receive-environments/${params.parameter.pre_receive_environment_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -21475,7 +21111,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$update$pre$receive$environment,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$update$pre$receive$environment$Status$200["application/json"]> => {
-      const url = baseUrl + `/admin/pre-receive-environments/${params.parameter.pre_receive_environment_id}`;
+      const url = `${baseUrl}/admin/pre-receive-environments/${params.parameter.pre_receive_environment_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21499,7 +21135,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$start$pre$receive$environment$download,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$start$pre$receive$environment$download$Status$202["application/json"]> => {
-      const url = baseUrl + `/admin/pre-receive-environments/${params.parameter.pre_receive_environment_id}/downloads`;
+      const url = `${baseUrl}/admin/pre-receive-environments/${params.parameter.pre_receive_environment_id}/downloads`;
       const headers = {
         Accept: "application/json",
       };
@@ -21515,7 +21151,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$get$download$status$for$pre$receive$environment,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$get$download$status$for$pre$receive$environment$Status$200["application/json"]> => {
-      const url = baseUrl + `/admin/pre-receive-environments/${params.parameter.pre_receive_environment_id}/downloads/latest`;
+      const url = `${baseUrl}/admin/pre-receive-environments/${params.parameter.pre_receive_environment_id}/downloads/latest`;
       const headers = {
         Accept: "application/json",
       };
@@ -21530,7 +21166,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$list$pre$receive$hooks,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$list$pre$receive$hooks$Status$200["application/json"]> => {
-      const url = baseUrl + `/admin/pre-receive-hooks`;
+      const url = `${baseUrl}/admin/pre-receive-hooks`;
       const headers = {
         Accept: "application/json",
       };
@@ -21551,7 +21187,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$create$pre$receive$hook,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$create$pre$receive$hook$Status$201["application/json"]> => {
-      const url = baseUrl + `/admin/pre-receive-hooks`;
+      const url = `${baseUrl}/admin/pre-receive-hooks`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21567,7 +21203,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$get$pre$receive$hook,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$get$pre$receive$hook$Status$200["application/json"]> => {
-      const url = baseUrl + `/admin/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
+      const url = `${baseUrl}/admin/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -21578,11 +21214,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/delete-pre-receive-hook
      * Request URI: /admin/pre-receive-hooks/{pre_receive_hook_id}
      */
-    enterprise$admin$delete$pre$receive$hook: (
-      params: Params$enterprise$admin$delete$pre$receive$hook,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/admin/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
+    enterprise$admin$delete$pre$receive$hook: (params: Params$enterprise$admin$delete$pre$receive$hook, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/admin/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -21595,7 +21228,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$update$pre$receive$hook,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$update$pre$receive$hook$Status$200["application/json"]> => {
-      const url = baseUrl + `/admin/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
+      const url = `${baseUrl}/admin/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21612,7 +21245,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$list$personal$access$tokens,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$list$personal$access$tokens$Status$200["application/json"]> => {
-      const url = baseUrl + `/admin/tokens`;
+      const url = `${baseUrl}/admin/tokens`;
       const headers = {
         Accept: "application/json",
       };
@@ -21628,11 +21261,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/delete-personal-access-token
      * Request URI: /admin/tokens/{token_id}
      */
-    enterprise$admin$delete$personal$access$token: (
-      params: Params$enterprise$admin$delete$personal$access$token,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/admin/tokens/${params.parameter.token_id}`;
+    enterprise$admin$delete$personal$access$token: (params: Params$enterprise$admin$delete$personal$access$token, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/admin/tokens/${params.parameter.token_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -21646,11 +21276,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/create-user
      * Request URI: /admin/users
      */
-    enterprise$admin$create$user: (
-      params: Params$enterprise$admin$create$user,
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$create$user$Status$201["application/json"]> => {
-      const url = baseUrl + `/admin/users`;
+    enterprise$admin$create$user: (params: Params$enterprise$admin$create$user, option?: RequestOption): Promise<Response$enterprise$admin$create$user$Status$201["application/json"]> => {
+      const url = `${baseUrl}/admin/users`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21666,7 +21293,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /admin/users/{username}
      */
     enterprise$admin$delete$user: (params: Params$enterprise$admin$delete$user, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/admin/users/${params.parameter.username}`;
+      const url = `${baseUrl}/admin/users/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -21679,7 +21306,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$update$username$for$user,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$update$username$for$user$Status$202["application/json"]> => {
-      const url = baseUrl + `/admin/users/${params.parameter.username}`;
+      const url = `${baseUrl}/admin/users/${params.parameter.username}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21695,7 +21322,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$create$impersonation$o$auth$token,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$create$impersonation$o$auth$token$Status$201["application/json"]> => {
-      const url = baseUrl + `/admin/users/${params.parameter.username}/authorizations`;
+      const url = `${baseUrl}/admin/users/${params.parameter.username}/authorizations`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21707,11 +21334,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/delete-impersonation-o-auth-token
      * Request URI: /admin/users/{username}/authorizations
      */
-    enterprise$admin$delete$impersonation$o$auth$token: (
-      params: Params$enterprise$admin$delete$impersonation$o$auth$token,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/admin/users/${params.parameter.username}/authorizations`;
+    enterprise$admin$delete$impersonation$o$auth$token: (params: Params$enterprise$admin$delete$impersonation$o$auth$token, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/admin/users/${params.parameter.username}/authorizations`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -21724,7 +21348,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /app
      */
     apps$get$authenticated: (option?: RequestOption): Promise<Response$apps$get$authenticated$Status$200["application/json"]> => {
-      const url = baseUrl + `/app`;
+      const url = `${baseUrl}/app`;
       const headers = {
         Accept: "application/json",
       };
@@ -21736,11 +21360,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/create-from-manifest
      * Request URI: /app-manifests/{code}/conversions
      */
-    apps$create$from$manifest: (
-      params: Params$apps$create$from$manifest,
-      option?: RequestOption,
-    ): Promise<Response$apps$create$from$manifest$Status$201["application/json"]> => {
-      const url = baseUrl + `/app-manifests/${params.parameter.code}/conversions`;
+    apps$create$from$manifest: (params: Params$apps$create$from$manifest, option?: RequestOption): Promise<Response$apps$create$from$manifest$Status$201["application/json"]> => {
+      const url = `${baseUrl}/app-manifests/${params.parameter.code}/conversions`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21755,10 +21376,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/get-webhook-config-for-app
      * Request URI: /app/hook/config
      */
-    apps$get$webhook$config$for$app: (
-      option?: RequestOption,
-    ): Promise<Response$apps$get$webhook$config$for$app$Status$200["application/json"]> => {
-      const url = baseUrl + `/app/hook/config`;
+    apps$get$webhook$config$for$app: (option?: RequestOption): Promise<Response$apps$get$webhook$config$for$app$Status$200["application/json"]> => {
+      const url = `${baseUrl}/app/hook/config`;
       const headers = {
         Accept: "application/json",
       };
@@ -21776,7 +21395,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$apps$update$webhook$config$for$app,
       option?: RequestOption,
     ): Promise<Response$apps$update$webhook$config$for$app$Status$200["application/json"]> => {
-      const url = baseUrl + `/app/hook/config`;
+      const url = `${baseUrl}/app/hook/config`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21791,11 +21410,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/list-webhook-deliveries
      * Request URI: /app/hook/deliveries
      */
-    apps$list$webhook$deliveries: (
-      params: Params$apps$list$webhook$deliveries,
-      option?: RequestOption,
-    ): Promise<Response$apps$list$webhook$deliveries$Status$200["application/json"]> => {
-      const url = baseUrl + `/app/hook/deliveries`;
+    apps$list$webhook$deliveries: (params: Params$apps$list$webhook$deliveries, option?: RequestOption): Promise<Response$apps$list$webhook$deliveries$Status$200["application/json"]> => {
+      const url = `${baseUrl}/app/hook/deliveries`;
       const headers = {
         Accept: "application/json",
       };
@@ -21813,11 +21429,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/get-webhook-delivery
      * Request URI: /app/hook/deliveries/{delivery_id}
      */
-    apps$get$webhook$delivery: (
-      params: Params$apps$get$webhook$delivery,
-      option?: RequestOption,
-    ): Promise<Response$apps$get$webhook$delivery$Status$200["application/json"]> => {
-      const url = baseUrl + `/app/hook/deliveries/${params.parameter.delivery_id}`;
+    apps$get$webhook$delivery: (params: Params$apps$get$webhook$delivery, option?: RequestOption): Promise<Response$apps$get$webhook$delivery$Status$200["application/json"]> => {
+      const url = `${baseUrl}/app/hook/deliveries/${params.parameter.delivery_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -21831,11 +21444,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/redeliver-webhook-delivery
      * Request URI: /app/hook/deliveries/{delivery_id}/attempts
      */
-    apps$redeliver$webhook$delivery: (
-      params: Params$apps$redeliver$webhook$delivery,
-      option?: RequestOption,
-    ): Promise<Response$apps$redeliver$webhook$delivery$Status$202["application/json"]> => {
-      const url = baseUrl + `/app/hook/deliveries/${params.parameter.delivery_id}/attempts`;
+    apps$redeliver$webhook$delivery: (params: Params$apps$redeliver$webhook$delivery, option?: RequestOption): Promise<Response$apps$redeliver$webhook$delivery$Status$202["application/json"]> => {
+      const url = `${baseUrl}/app/hook/deliveries/${params.parameter.delivery_id}/attempts`;
       const headers = {
         Accept: "application/json",
       };
@@ -21849,11 +21459,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/list-installations
      * Request URI: /app/installations
      */
-    apps$list$installations: (
-      params: Params$apps$list$installations,
-      option?: RequestOption,
-    ): Promise<Response$apps$list$installations$Status$200["application/json"]> => {
-      const url = baseUrl + `/app/installations`;
+    apps$list$installations: (params: Params$apps$list$installations, option?: RequestOption): Promise<Response$apps$list$installations$Status$200["application/json"]> => {
+      const url = `${baseUrl}/app/installations`;
       const headers = {
         Accept: "application/json",
       };
@@ -21873,11 +21480,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/get-installation
      * Request URI: /app/installations/{installation_id}
      */
-    apps$get$installation: (
-      params: Params$apps$get$installation,
-      option?: RequestOption,
-    ): Promise<Response$apps$get$installation$Status$200["application/json"]> => {
-      const url = baseUrl + `/app/installations/${params.parameter.installation_id}`;
+    apps$get$installation: (params: Params$apps$get$installation, option?: RequestOption): Promise<Response$apps$get$installation$Status$200["application/json"]> => {
+      const url = `${baseUrl}/app/installations/${params.parameter.installation_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -21892,7 +21496,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /app/installations/{installation_id}
      */
     apps$delete$installation: (params: Params$apps$delete$installation, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/app/installations/${params.parameter.installation_id}`;
+      const url = `${baseUrl}/app/installations/${params.parameter.installation_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -21908,7 +21512,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$apps$create$installation$access$token,
       option?: RequestOption,
     ): Promise<Response$apps$create$installation$access$token$Status$201["application/json"]> => {
-      const url = baseUrl + `/app/installations/${params.parameter.installation_id}/access_tokens`;
+      const url = `${baseUrl}/app/installations/${params.parameter.installation_id}/access_tokens`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -21924,7 +21528,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /app/installations/{installation_id}/suspended
      */
     apps$suspend$installation: (params: Params$apps$suspend$installation, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/app/installations/${params.parameter.installation_id}/suspended`;
+      const url = `${baseUrl}/app/installations/${params.parameter.installation_id}/suspended`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -21937,7 +21541,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /app/installations/{installation_id}/suspended
      */
     apps$unsuspend$installation: (params: Params$apps$unsuspend$installation, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/app/installations/${params.parameter.installation_id}/suspended`;
+      const url = `${baseUrl}/app/installations/${params.parameter.installation_id}/suspended`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -21949,11 +21553,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: oauth-authorizations/list-grants
      * Request URI: /applications/grants
      */
-    oauth$authorizations$list$grants: (
-      params: Params$oauth$authorizations$list$grants,
-      option?: RequestOption,
-    ): Promise<Response$oauth$authorizations$list$grants$Status$200["application/json"]> => {
-      const url = baseUrl + `/applications/grants`;
+    oauth$authorizations$list$grants: (params: Params$oauth$authorizations$list$grants, option?: RequestOption): Promise<Response$oauth$authorizations$list$grants$Status$200["application/json"]> => {
+      const url = `${baseUrl}/applications/grants`;
       const headers = {
         Accept: "application/json",
       };
@@ -21970,11 +21571,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: oauth-authorizations/get-grant
      * Request URI: /applications/grants/{grant_id}
      */
-    oauth$authorizations$get$grant: (
-      params: Params$oauth$authorizations$get$grant,
-      option?: RequestOption,
-    ): Promise<Response$oauth$authorizations$get$grant$Status$200["application/json"]> => {
-      const url = baseUrl + `/applications/grants/${params.parameter.grant_id}`;
+    oauth$authorizations$get$grant: (params: Params$oauth$authorizations$get$grant, option?: RequestOption): Promise<Response$oauth$authorizations$get$grant$Status$200["application/json"]> => {
+      const url = `${baseUrl}/applications/grants/${params.parameter.grant_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -21989,7 +21587,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /applications/grants/{grant_id}
      */
     oauth$authorizations$delete$grant: (params: Params$oauth$authorizations$delete$grant, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/applications/grants/${params.parameter.grant_id}`;
+      const url = `${baseUrl}/applications/grants/${params.parameter.grant_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -22001,7 +21599,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /applications/{client_id}/grant
      */
     apps$delete$authorization: (params: Params$apps$delete$authorization, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/applications/${params.parameter.client_id}/grant`;
+      const url = `${baseUrl}/applications/${params.parameter.client_id}/grant`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -22013,11 +21611,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/check-token
      * Request URI: /applications/{client_id}/token
      */
-    apps$check$token: (
-      params: Params$apps$check$token,
-      option?: RequestOption,
-    ): Promise<Response$apps$check$token$Status$200["application/json"]> => {
-      const url = baseUrl + `/applications/${params.parameter.client_id}/token`;
+    apps$check$token: (params: Params$apps$check$token, option?: RequestOption): Promise<Response$apps$check$token$Status$200["application/json"]> => {
+      const url = `${baseUrl}/applications/${params.parameter.client_id}/token`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -22031,7 +21626,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /applications/{client_id}/token
      */
     apps$delete$token: (params: Params$apps$delete$token, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/applications/${params.parameter.client_id}/token`;
+      const url = `${baseUrl}/applications/${params.parameter.client_id}/token`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -22043,11 +21638,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/reset-token
      * Request URI: /applications/{client_id}/token
      */
-    apps$reset$token: (
-      params: Params$apps$reset$token,
-      option?: RequestOption,
-    ): Promise<Response$apps$reset$token$Status$200["application/json"]> => {
-      const url = baseUrl + `/applications/${params.parameter.client_id}/token`;
+    apps$reset$token: (params: Params$apps$reset$token, option?: RequestOption): Promise<Response$apps$reset$token$Status$200["application/json"]> => {
+      const url = `${baseUrl}/applications/${params.parameter.client_id}/token`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -22060,11 +21652,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/scope-token
      * Request URI: /applications/{client_id}/token/scoped
      */
-    apps$scope$token: (
-      params: Params$apps$scope$token,
-      option?: RequestOption,
-    ): Promise<Response$apps$scope$token$Status$200["application/json"]> => {
-      const url = baseUrl + `/applications/${params.parameter.client_id}/token/scoped`;
+    apps$scope$token: (params: Params$apps$scope$token, option?: RequestOption): Promise<Response$apps$scope$token$Status$200["application/json"]> => {
+      const url = `${baseUrl}/applications/${params.parameter.client_id}/token/scoped`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -22079,11 +21668,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/get-by-slug
      * Request URI: /apps/{app_slug}
      */
-    apps$get$by$slug: (
-      params: Params$apps$get$by$slug,
-      option?: RequestOption,
-    ): Promise<Response$apps$get$by$slug$Status$200["application/json"]> => {
-      const url = baseUrl + `/apps/${params.parameter.app_slug}`;
+    apps$get$by$slug: (params: Params$apps$get$by$slug, option?: RequestOption): Promise<Response$apps$get$by$slug$Status$200["application/json"]> => {
+      const url = `${baseUrl}/apps/${params.parameter.app_slug}`;
       const headers = {
         Accept: "application/json",
       };
@@ -22099,7 +21685,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$oauth$authorizations$list$authorizations,
       option?: RequestOption,
     ): Promise<Response$oauth$authorizations$list$authorizations$Status$200["application/json"]> => {
-      const url = baseUrl + `/authorizations`;
+      const url = `${baseUrl}/authorizations`;
       const headers = {
         Accept: "application/json",
       };
@@ -22130,7 +21716,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$oauth$authorizations$create$authorization,
       option?: RequestOption,
     ): Promise<Response$oauth$authorizations$create$authorization$Status$201["application/json"]> => {
-      const url = baseUrl + `/authorizations`;
+      const url = `${baseUrl}/authorizations`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -22154,13 +21740,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
     oauth$authorizations$get$or$create$authorization$for$app: (
       params: Params$oauth$authorizations$get$or$create$authorization$for$app,
       option?: RequestOption,
-    ): Promise<
-      (
-        | Response$oauth$authorizations$get$or$create$authorization$for$app$Status$200
-        | Response$oauth$authorizations$get$or$create$authorization$for$app$Status$201
-      )["application/json"]
-    > => {
-      const url = baseUrl + `/authorizations/clients/${params.parameter.client_id}`;
+    ): Promise<(Response$oauth$authorizations$get$or$create$authorization$for$app$Status$200 | Response$oauth$authorizations$get$or$create$authorization$for$app$Status$201)["application/json"]> => {
+      const url = `${baseUrl}/authorizations/clients/${params.parameter.client_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -22188,7 +21769,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
         | Response$oauth$authorizations$get$or$create$authorization$for$app$and$fingerprint$Status$201
       )["application/json"]
     > => {
-      const url = baseUrl + `/authorizations/clients/${params.parameter.client_id}/${params.parameter.fingerprint}`;
+      const url = `${baseUrl}/authorizations/clients/${params.parameter.client_id}/${params.parameter.fingerprint}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -22205,7 +21786,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$oauth$authorizations$get$authorization,
       option?: RequestOption,
     ): Promise<Response$oauth$authorizations$get$authorization$Status$200["application/json"]> => {
-      const url = baseUrl + `/authorizations/${params.parameter.authorization_id}`;
+      const url = `${baseUrl}/authorizations/${params.parameter.authorization_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -22217,11 +21798,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: oauth-authorizations/delete-authorization
      * Request URI: /authorizations/{authorization_id}
      */
-    oauth$authorizations$delete$authorization: (
-      params: Params$oauth$authorizations$delete$authorization,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/authorizations/${params.parameter.authorization_id}`;
+    oauth$authorizations$delete$authorization: (params: Params$oauth$authorizations$delete$authorization, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/authorizations/${params.parameter.authorization_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -22239,7 +21817,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$oauth$authorizations$update$authorization,
       option?: RequestOption,
     ): Promise<Response$oauth$authorizations$update$authorization$Status$200["application/json"]> => {
-      const url = baseUrl + `/authorizations/${params.parameter.authorization_id}`;
+      const url = `${baseUrl}/authorizations/${params.parameter.authorization_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -22251,10 +21829,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: codes-of-conduct/get-all-codes-of-conduct
      * Request URI: /codes_of_conduct
      */
-    codes$of$conduct$get$all$codes$of$conduct: (
-      option?: RequestOption,
-    ): Promise<Response$codes$of$conduct$get$all$codes$of$conduct$Status$200["application/json"]> => {
-      const url = baseUrl + `/codes_of_conduct`;
+    codes$of$conduct$get$all$codes$of$conduct: (option?: RequestOption): Promise<Response$codes$of$conduct$get$all$codes$of$conduct$Status$200["application/json"]> => {
+      const url = `${baseUrl}/codes_of_conduct`;
       const headers = {
         Accept: "application/json",
       };
@@ -22269,7 +21845,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$codes$of$conduct$get$conduct$code,
       option?: RequestOption,
     ): Promise<Response$codes$of$conduct$get$conduct$code$Status$200["application/json"]> => {
-      const url = baseUrl + `/codes_of_conduct/${params.parameter.key}`;
+      const url = `${baseUrl}/codes_of_conduct/${params.parameter.key}`;
       const headers = {
         Accept: "application/json",
       };
@@ -22282,7 +21858,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /emojis
      */
     emojis$get: (option?: RequestOption): Promise<Response$emojis$get$Status$200["application/json"]> => {
-      const url = baseUrl + `/emojis`;
+      const url = `${baseUrl}/emojis`;
       const headers = {
         Accept: "application/json",
       };
@@ -22294,10 +21870,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-announcement
      * Request URI: /enterprise/announcement
      */
-    enterprise$admin$get$announcement: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$announcement$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprise/announcement`;
+    enterprise$admin$get$announcement: (option?: RequestOption): Promise<Response$enterprise$admin$get$announcement$Status$200["application/json"]> => {
+      const url = `${baseUrl}/enterprise/announcement`;
       const headers = {
         Accept: "application/json",
       };
@@ -22310,7 +21884,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /enterprise/announcement
      */
     enterprise$admin$remove$announcement: (option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/enterprise/announcement`;
+      const url = `${baseUrl}/enterprise/announcement`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -22324,7 +21898,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$set$announcement,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$set$announcement$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprise/announcement`;
+      const url = `${baseUrl}/enterprise/announcement`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -22336,10 +21910,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-license-information
      * Request URI: /enterprise/settings/license
      */
-    enterprise$admin$get$license$information: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$license$information$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprise/settings/license`;
+    enterprise$admin$get$license$information: (option?: RequestOption): Promise<Response$enterprise$admin$get$license$information$Status$200["application/json"]> => {
+      const url = `${baseUrl}/enterprise/settings/license`;
       const headers = {
         Accept: "application/json",
       };
@@ -22350,10 +21922,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-all-stats
      * Request URI: /enterprise/stats/all
      */
-    enterprise$admin$get$all$stats: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$all$stats$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprise/stats/all`;
+    enterprise$admin$get$all$stats: (option?: RequestOption): Promise<Response$enterprise$admin$get$all$stats$Status$200["application/json"]> => {
+      const url = `${baseUrl}/enterprise/stats/all`;
       const headers = {
         Accept: "application/json",
       };
@@ -22364,10 +21934,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-comment-stats
      * Request URI: /enterprise/stats/comments
      */
-    enterprise$admin$get$comment$stats: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$comment$stats$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprise/stats/comments`;
+    enterprise$admin$get$comment$stats: (option?: RequestOption): Promise<Response$enterprise$admin$get$comment$stats$Status$200["application/json"]> => {
+      const url = `${baseUrl}/enterprise/stats/comments`;
       const headers = {
         Accept: "application/json",
       };
@@ -22378,10 +21946,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-gist-stats
      * Request URI: /enterprise/stats/gists
      */
-    enterprise$admin$get$gist$stats: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$gist$stats$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprise/stats/gists`;
+    enterprise$admin$get$gist$stats: (option?: RequestOption): Promise<Response$enterprise$admin$get$gist$stats$Status$200["application/json"]> => {
+      const url = `${baseUrl}/enterprise/stats/gists`;
       const headers = {
         Accept: "application/json",
       };
@@ -22392,10 +21958,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-hooks-stats
      * Request URI: /enterprise/stats/hooks
      */
-    enterprise$admin$get$hooks$stats: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$hooks$stats$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprise/stats/hooks`;
+    enterprise$admin$get$hooks$stats: (option?: RequestOption): Promise<Response$enterprise$admin$get$hooks$stats$Status$200["application/json"]> => {
+      const url = `${baseUrl}/enterprise/stats/hooks`;
       const headers = {
         Accept: "application/json",
       };
@@ -22406,10 +21970,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-issue-stats
      * Request URI: /enterprise/stats/issues
      */
-    enterprise$admin$get$issue$stats: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$issue$stats$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprise/stats/issues`;
+    enterprise$admin$get$issue$stats: (option?: RequestOption): Promise<Response$enterprise$admin$get$issue$stats$Status$200["application/json"]> => {
+      const url = `${baseUrl}/enterprise/stats/issues`;
       const headers = {
         Accept: "application/json",
       };
@@ -22420,10 +21982,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-milestone-stats
      * Request URI: /enterprise/stats/milestones
      */
-    enterprise$admin$get$milestone$stats: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$milestone$stats$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprise/stats/milestones`;
+    enterprise$admin$get$milestone$stats: (option?: RequestOption): Promise<Response$enterprise$admin$get$milestone$stats$Status$200["application/json"]> => {
+      const url = `${baseUrl}/enterprise/stats/milestones`;
       const headers = {
         Accept: "application/json",
       };
@@ -22434,10 +21994,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-org-stats
      * Request URI: /enterprise/stats/orgs
      */
-    enterprise$admin$get$org$stats: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$org$stats$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprise/stats/orgs`;
+    enterprise$admin$get$org$stats: (option?: RequestOption): Promise<Response$enterprise$admin$get$org$stats$Status$200["application/json"]> => {
+      const url = `${baseUrl}/enterprise/stats/orgs`;
       const headers = {
         Accept: "application/json",
       };
@@ -22448,10 +22006,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-pages-stats
      * Request URI: /enterprise/stats/pages
      */
-    enterprise$admin$get$pages$stats: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$pages$stats$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprise/stats/pages`;
+    enterprise$admin$get$pages$stats: (option?: RequestOption): Promise<Response$enterprise$admin$get$pages$stats$Status$200["application/json"]> => {
+      const url = `${baseUrl}/enterprise/stats/pages`;
       const headers = {
         Accept: "application/json",
       };
@@ -22462,10 +22018,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-pull-request-stats
      * Request URI: /enterprise/stats/pulls
      */
-    enterprise$admin$get$pull$request$stats: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$pull$request$stats$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprise/stats/pulls`;
+    enterprise$admin$get$pull$request$stats: (option?: RequestOption): Promise<Response$enterprise$admin$get$pull$request$stats$Status$200["application/json"]> => {
+      const url = `${baseUrl}/enterprise/stats/pulls`;
       const headers = {
         Accept: "application/json",
       };
@@ -22476,10 +22030,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-repo-stats
      * Request URI: /enterprise/stats/repos
      */
-    enterprise$admin$get$repo$stats: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$repo$stats$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprise/stats/repos`;
+    enterprise$admin$get$repo$stats: (option?: RequestOption): Promise<Response$enterprise$admin$get$repo$stats$Status$200["application/json"]> => {
+      const url = `${baseUrl}/enterprise/stats/repos`;
       const headers = {
         Accept: "application/json",
       };
@@ -22490,10 +22042,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-user-stats
      * Request URI: /enterprise/stats/users
      */
-    enterprise$admin$get$user$stats: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$user$stats$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprise/stats/users`;
+    enterprise$admin$get$user$stats: (option?: RequestOption): Promise<Response$enterprise$admin$get$user$stats$Status$200["application/json"]> => {
+      const url = `${baseUrl}/enterprise/stats/users`;
       const headers = {
         Accept: "application/json",
       };
@@ -22511,7 +22061,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$get$github$actions$permissions$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$get$github$actions$permissions$enterprise$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/permissions`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/permissions`;
       const headers = {
         Accept: "application/json",
       };
@@ -22525,11 +22075,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/set-github-actions-permissions-enterprise
      * Request URI: /enterprises/{enterprise}/actions/permissions
      */
-    enterprise$admin$set$github$actions$permissions$enterprise: (
-      params: Params$enterprise$admin$set$github$actions$permissions$enterprise,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/permissions`;
+    enterprise$admin$set$github$actions$permissions$enterprise: (params: Params$enterprise$admin$set$github$actions$permissions$enterprise, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/permissions`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -22547,7 +22094,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$list$selected$organizations$enabled$github$actions$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$list$selected$organizations$enabled$github$actions$enterprise$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/permissions/organizations`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/permissions/organizations`;
       const headers = {
         Accept: "application/json",
       };
@@ -22569,7 +22116,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$set$selected$organizations$enabled$github$actions$enterprise,
       option?: RequestOption,
     ): Promise<void> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/permissions/organizations`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/permissions/organizations`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -22587,7 +22134,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$enable$selected$organization$github$actions$enterprise,
       option?: RequestOption,
     ): Promise<void> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/permissions/organizations/${params.parameter.org_id}`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/permissions/organizations/${params.parameter.org_id}`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -22603,7 +22150,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$disable$selected$organization$github$actions$enterprise,
       option?: RequestOption,
     ): Promise<void> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/permissions/organizations/${params.parameter.org_id}`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/permissions/organizations/${params.parameter.org_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -22619,7 +22166,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$get$allowed$actions$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$get$allowed$actions$enterprise$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/permissions/selected-actions`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/permissions/selected-actions`;
       const headers = {
         Accept: "application/json",
       };
@@ -22633,11 +22180,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/set-allowed-actions-enterprise
      * Request URI: /enterprises/{enterprise}/actions/permissions/selected-actions
      */
-    enterprise$admin$set$allowed$actions$enterprise: (
-      params: Params$enterprise$admin$set$allowed$actions$enterprise,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/permissions/selected-actions`;
+    enterprise$admin$set$allowed$actions$enterprise: (params: Params$enterprise$admin$set$allowed$actions$enterprise, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/permissions/selected-actions`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -22655,7 +22199,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$list$self$hosted$runner$groups$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$list$self$hosted$runner$groups$for$enterprise$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runner-groups`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runner-groups`;
       const headers = {
         Accept: "application/json",
       };
@@ -22677,7 +22221,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$create$self$hosted$runner$group$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$create$self$hosted$runner$group$for$enterprise$Status$201["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runner-groups`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runner-groups`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -22696,7 +22240,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$get$self$hosted$runner$group$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$get$self$hosted$runner$group$for$enterprise$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -22710,11 +22254,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/delete-self-hosted-runner-group-from-enterprise
      * Request URI: /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}
      */
-    enterprise$admin$delete$self$hosted$runner$group$from$enterprise: (
-      params: Params$enterprise$admin$delete$self$hosted$runner$group$from$enterprise,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}`;
+    enterprise$admin$delete$self$hosted$runner$group$from$enterprise: (params: Params$enterprise$admin$delete$self$hosted$runner$group$from$enterprise, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -22730,7 +22271,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$update$self$hosted$runner$group$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$update$self$hosted$runner$group$for$enterprise$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -22749,8 +22290,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$list$org$access$to$self$hosted$runner$group$in$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$list$org$access$to$self$hosted$runner$group$in$enterprise$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/organizations`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/organizations`;
       const headers = {
         Accept: "application/json",
       };
@@ -22772,8 +22312,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$set$org$access$to$self$hosted$runner$group$in$enterprise,
       option?: RequestOption,
     ): Promise<void> => {
-      const url =
-        baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/organizations`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/organizations`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -22791,9 +22330,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$add$org$access$to$self$hosted$runner$group$in$enterprise,
       option?: RequestOption,
     ): Promise<void> => {
-      const url =
-        baseUrl +
-        `/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/organizations/${params.parameter.org_id}`;
+      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/organizations/${params.parameter.org_id}`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -22809,9 +22346,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$remove$org$access$to$self$hosted$runner$group$in$enterprise,
       option?: RequestOption,
     ): Promise<void> => {
-      const url =
-        baseUrl +
-        `/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/organizations/${params.parameter.org_id}`;
+      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/organizations/${params.parameter.org_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -22827,7 +22362,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$list$self$hosted$runners$in$group$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$list$self$hosted$runners$in$group$for$enterprise$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/runners`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/runners`;
       const headers = {
         Accept: "application/json",
       };
@@ -22845,11 +22380,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/set-self-hosted-runners-in-group-for-enterprise
      * Request URI: /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners
      */
-    enterprise$admin$set$self$hosted$runners$in$group$for$enterprise: (
-      params: Params$enterprise$admin$set$self$hosted$runners$in$group$for$enterprise,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/runners`;
+    enterprise$admin$set$self$hosted$runners$in$group$for$enterprise: (params: Params$enterprise$admin$set$self$hosted$runners$in$group$for$enterprise, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/runners`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -22864,13 +22396,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/add-self-hosted-runner-to-group-for-enterprise
      * Request URI: /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners/{runner_id}
      */
-    enterprise$admin$add$self$hosted$runner$to$group$for$enterprise: (
-      params: Params$enterprise$admin$add$self$hosted$runner$to$group$for$enterprise,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url =
-        baseUrl +
-        `/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/runners/${params.parameter.runner_id}`;
+    enterprise$admin$add$self$hosted$runner$to$group$for$enterprise: (params: Params$enterprise$admin$add$self$hosted$runner$to$group$for$enterprise, option?: RequestOption): Promise<void> => {
+      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/runners/${params.parameter.runner_id}`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -22886,9 +22413,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$remove$self$hosted$runner$from$group$for$enterprise,
       option?: RequestOption,
     ): Promise<void> => {
-      const url =
-        baseUrl +
-        `/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/runners/${params.parameter.runner_id}`;
+      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runner-groups/${params.parameter.runner_group_id}/runners/${params.parameter.runner_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -22904,7 +22429,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$list$self$hosted$runners$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$list$self$hosted$runners$for$enterprise$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runners`;
       const headers = {
         Accept: "application/json",
       };
@@ -22926,7 +22451,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$list$runner$applications$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$list$runner$applications$for$enterprise$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners/downloads`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runners/downloads`;
       const headers = {
         Accept: "application/json",
       };
@@ -22952,7 +22477,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$create$registration$token$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$create$registration$token$for$enterprise$Status$201["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners/registration-token`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runners/registration-token`;
       const headers = {
         Accept: "application/json",
       };
@@ -22979,7 +22504,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$create$remove$token$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$create$remove$token$for$enterprise$Status$201["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners/remove-token`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runners/remove-token`;
       const headers = {
         Accept: "application/json",
       };
@@ -22997,7 +22522,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$get$self$hosted$runner$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$get$self$hosted$runner$for$enterprise$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -23011,11 +22536,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/delete-self-hosted-runner-from-enterprise
      * Request URI: /enterprises/{enterprise}/actions/runners/{runner_id}
      */
-    enterprise$admin$delete$self$hosted$runner$from$enterprise: (
-      params: Params$enterprise$admin$delete$self$hosted$runner$from$enterprise,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}`;
+    enterprise$admin$delete$self$hosted$runner$from$enterprise: (params: Params$enterprise$admin$delete$self$hosted$runner$from$enterprise, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -23031,7 +22553,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$list$labels$for$self$hosted$runner$for$enterprise$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}/labels`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}/labels`;
       const headers = {
         Accept: "application/json",
       };
@@ -23050,7 +22572,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$set$custom$labels$for$self$hosted$runner$for$enterprise$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}/labels`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}/labels`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -23069,7 +22591,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$add$custom$labels$to$self$hosted$runner$for$enterprise$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}/labels`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}/labels`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -23089,7 +22611,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$remove$all$custom$labels$from$self$hosted$runner$for$enterprise$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}/labels`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}/labels`;
       const headers = {
         Accept: "application/json",
       };
@@ -23111,8 +22633,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$remove$custom$label$from$self$hosted$runner$for$enterprise$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}/labels/${params.parameter.name}`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/actions/runners/${params.parameter.runner_id}/labels/${params.parameter.name}`;
       const headers = {
         Accept: "application/json",
       };
@@ -23124,11 +22645,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-audit-log
      * Request URI: /enterprises/{enterprise}/audit-log
      */
-    enterprise$admin$get$audit$log: (
-      params: Params$enterprise$admin$get$audit$log,
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$audit$log$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/audit-log`;
+    enterprise$admin$get$audit$log: (params: Params$enterprise$admin$get$audit$log, option?: RequestOption): Promise<Response$enterprise$admin$get$audit$log$Status$200["application/json"]> => {
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/audit-log`;
       const headers = {
         Accept: "application/json",
       };
@@ -23154,7 +22672,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$secret$scanning$list$alerts$for$enterprise,
       option?: RequestOption,
     ): Promise<Response$secret$scanning$list$alerts$for$enterprise$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/secret-scanning/alerts`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/secret-scanning/alerts`;
       const headers = {
         Accept: "application/json",
       };
@@ -23179,7 +22697,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$billing$get$github$advanced$security$billing$ghe,
       option?: RequestOption,
     ): Promise<Response$billing$get$github$advanced$security$billing$ghe$Status$200["application/json"]> => {
-      const url = baseUrl + `/enterprises/${params.parameter.enterprise}/settings/billing/advanced-security`;
+      const url = `${baseUrl}/enterprises/${params.parameter.enterprise}/settings/billing/advanced-security`;
       const headers = {
         Accept: "application/json",
       };
@@ -23195,11 +22713,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: activity/list-public-events
      * Request URI: /events
      */
-    activity$list$public$events: (
-      params: Params$activity$list$public$events,
-      option?: RequestOption,
-    ): Promise<Response$activity$list$public$events$Status$200["application/json"]> => {
-      const url = baseUrl + `/events`;
+    activity$list$public$events: (params: Params$activity$list$public$events, option?: RequestOption): Promise<Response$activity$list$public$events$Status$200["application/json"]> => {
+      const url = `${baseUrl}/events`;
       const headers = {
         Accept: "application/json",
       };
@@ -23226,7 +22741,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /feeds
      */
     activity$get$feeds: (option?: RequestOption): Promise<Response$activity$get$feeds$Status$200["application/json"]> => {
-      const url = baseUrl + `/feeds`;
+      const url = `${baseUrl}/feeds`;
       const headers = {
         Accept: "application/json",
       };
@@ -23239,7 +22754,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /gists
      */
     gists$list: (params: Params$gists$list, option?: RequestOption): Promise<Response$gists$list$Status$200["application/json"]> => {
-      const url = baseUrl + `/gists`;
+      const url = `${baseUrl}/gists`;
       const headers = {
         Accept: "application/json",
       };
@@ -23259,7 +22774,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /gists
      */
     gists$create: (params: Params$gists$create, option?: RequestOption): Promise<Response$gists$create$Status$201["application/json"]> => {
-      const url = baseUrl + `/gists`;
+      const url = `${baseUrl}/gists`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -23274,11 +22789,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: gists/list-public
      * Request URI: /gists/public
      */
-    gists$list$public: (
-      params: Params$gists$list$public,
-      option?: RequestOption,
-    ): Promise<Response$gists$list$public$Status$200["application/json"]> => {
-      const url = baseUrl + `/gists/public`;
+    gists$list$public: (params: Params$gists$list$public, option?: RequestOption): Promise<Response$gists$list$public$Status$200["application/json"]> => {
+      const url = `${baseUrl}/gists/public`;
       const headers = {
         Accept: "application/json",
       };
@@ -23295,11 +22807,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: gists/list-starred
      * Request URI: /gists/starred
      */
-    gists$list$starred: (
-      params: Params$gists$list$starred,
-      option?: RequestOption,
-    ): Promise<Response$gists$list$starred$Status$200["application/json"]> => {
-      const url = baseUrl + `/gists/starred`;
+    gists$list$starred: (params: Params$gists$list$starred, option?: RequestOption): Promise<Response$gists$list$starred$Status$200["application/json"]> => {
+      const url = `${baseUrl}/gists/starred`;
       const headers = {
         Accept: "application/json",
       };
@@ -23316,7 +22825,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /gists/{gist_id}
      */
     gists$get: (params: Params$gists$get, option?: RequestOption): Promise<Response$gists$get$Status$200["application/json"]> => {
-      const url = baseUrl + `/gists/${params.parameter.gist_id}`;
+      const url = `${baseUrl}/gists/${params.parameter.gist_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -23328,7 +22837,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /gists/{gist_id}
      */
     gists$delete: (params: Params$gists$delete, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/gists/${params.parameter.gist_id}`;
+      const url = `${baseUrl}/gists/${params.parameter.gist_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -23339,7 +22848,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /gists/{gist_id}
      */
     gists$update: (params: Params$gists$update, option?: RequestOption): Promise<Response$gists$update$Status$200["application/json"]> => {
-      const url = baseUrl + `/gists/${params.parameter.gist_id}`;
+      const url = `${baseUrl}/gists/${params.parameter.gist_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -23351,11 +22860,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: gists/list-comments
      * Request URI: /gists/{gist_id}/comments
      */
-    gists$list$comments: (
-      params: Params$gists$list$comments,
-      option?: RequestOption,
-    ): Promise<Response$gists$list$comments$Status$200["application/json"]> => {
-      const url = baseUrl + `/gists/${params.parameter.gist_id}/comments`;
+    gists$list$comments: (params: Params$gists$list$comments, option?: RequestOption): Promise<Response$gists$list$comments$Status$200["application/json"]> => {
+      const url = `${baseUrl}/gists/${params.parameter.gist_id}/comments`;
       const headers = {
         Accept: "application/json",
       };
@@ -23370,11 +22876,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: gists/create-comment
      * Request URI: /gists/{gist_id}/comments
      */
-    gists$create$comment: (
-      params: Params$gists$create$comment,
-      option?: RequestOption,
-    ): Promise<Response$gists$create$comment$Status$201["application/json"]> => {
-      const url = baseUrl + `/gists/${params.parameter.gist_id}/comments`;
+    gists$create$comment: (params: Params$gists$create$comment, option?: RequestOption): Promise<Response$gists$create$comment$Status$201["application/json"]> => {
+      const url = `${baseUrl}/gists/${params.parameter.gist_id}/comments`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -23386,11 +22889,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: gists/get-comment
      * Request URI: /gists/{gist_id}/comments/{comment_id}
      */
-    gists$get$comment: (
-      params: Params$gists$get$comment,
-      option?: RequestOption,
-    ): Promise<Response$gists$get$comment$Status$200["application/json"]> => {
-      const url = baseUrl + `/gists/${params.parameter.gist_id}/comments/${params.parameter.comment_id}`;
+    gists$get$comment: (params: Params$gists$get$comment, option?: RequestOption): Promise<Response$gists$get$comment$Status$200["application/json"]> => {
+      const url = `${baseUrl}/gists/${params.parameter.gist_id}/comments/${params.parameter.comment_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -23402,7 +22902,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /gists/{gist_id}/comments/{comment_id}
      */
     gists$delete$comment: (params: Params$gists$delete$comment, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/gists/${params.parameter.gist_id}/comments/${params.parameter.comment_id}`;
+      const url = `${baseUrl}/gists/${params.parameter.gist_id}/comments/${params.parameter.comment_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -23411,11 +22911,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: gists/update-comment
      * Request URI: /gists/{gist_id}/comments/{comment_id}
      */
-    gists$update$comment: (
-      params: Params$gists$update$comment,
-      option?: RequestOption,
-    ): Promise<Response$gists$update$comment$Status$200["application/json"]> => {
-      const url = baseUrl + `/gists/${params.parameter.gist_id}/comments/${params.parameter.comment_id}`;
+    gists$update$comment: (params: Params$gists$update$comment, option?: RequestOption): Promise<Response$gists$update$comment$Status$200["application/json"]> => {
+      const url = `${baseUrl}/gists/${params.parameter.gist_id}/comments/${params.parameter.comment_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -23427,11 +22924,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: gists/list-commits
      * Request URI: /gists/{gist_id}/commits
      */
-    gists$list$commits: (
-      params: Params$gists$list$commits,
-      option?: RequestOption,
-    ): Promise<Response$gists$list$commits$Status$200["application/json"]> => {
-      const url = baseUrl + `/gists/${params.parameter.gist_id}/commits`;
+    gists$list$commits: (params: Params$gists$list$commits, option?: RequestOption): Promise<Response$gists$list$commits$Status$200["application/json"]> => {
+      const url = `${baseUrl}/gists/${params.parameter.gist_id}/commits`;
       const headers = {
         Accept: "application/json",
       };
@@ -23446,11 +22940,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: gists/list-forks
      * Request URI: /gists/{gist_id}/forks
      */
-    gists$list$forks: (
-      params: Params$gists$list$forks,
-      option?: RequestOption,
-    ): Promise<Response$gists$list$forks$Status$200["application/json"]> => {
-      const url = baseUrl + `/gists/${params.parameter.gist_id}/forks`;
+    gists$list$forks: (params: Params$gists$list$forks, option?: RequestOption): Promise<Response$gists$list$forks$Status$200["application/json"]> => {
+      const url = `${baseUrl}/gists/${params.parameter.gist_id}/forks`;
       const headers = {
         Accept: "application/json",
       };
@@ -23467,7 +22958,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /gists/{gist_id}/forks
      */
     gists$fork: (params: Params$gists$fork, option?: RequestOption): Promise<Response$gists$fork$Status$201["application/json"]> => {
-      const url = baseUrl + `/gists/${params.parameter.gist_id}/forks`;
+      const url = `${baseUrl}/gists/${params.parameter.gist_id}/forks`;
       const headers = {
         Accept: "application/json",
       };
@@ -23479,7 +22970,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /gists/{gist_id}/star
      */
     gists$check$is$starred: (params: Params$gists$check$is$starred, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/gists/${params.parameter.gist_id}/star`;
+      const url = `${baseUrl}/gists/${params.parameter.gist_id}/star`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -23490,7 +22981,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /gists/{gist_id}/star
      */
     gists$star: (params: Params$gists$star, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/gists/${params.parameter.gist_id}/star`;
+      const url = `${baseUrl}/gists/${params.parameter.gist_id}/star`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -23500,7 +22991,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /gists/{gist_id}/star
      */
     gists$unstar: (params: Params$gists$unstar, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/gists/${params.parameter.gist_id}/star`;
+      const url = `${baseUrl}/gists/${params.parameter.gist_id}/star`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -23509,11 +23000,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: gists/get-revision
      * Request URI: /gists/{gist_id}/{sha}
      */
-    gists$get$revision: (
-      params: Params$gists$get$revision,
-      option?: RequestOption,
-    ): Promise<Response$gists$get$revision$Status$200["application/json"]> => {
-      const url = baseUrl + `/gists/${params.parameter.gist_id}/${params.parameter.sha}`;
+    gists$get$revision: (params: Params$gists$get$revision, option?: RequestOption): Promise<Response$gists$get$revision$Status$200["application/json"]> => {
+      const url = `${baseUrl}/gists/${params.parameter.gist_id}/${params.parameter.sha}`;
       const headers = {
         Accept: "application/json",
       };
@@ -23526,7 +23014,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /gitignore/templates
      */
     gitignore$get$all$templates: (option?: RequestOption): Promise<Response$gitignore$get$all$templates$Status$200["application/json"]> => {
-      const url = baseUrl + `/gitignore/templates`;
+      const url = `${baseUrl}/gitignore/templates`;
       const headers = {
         Accept: "application/json",
       };
@@ -23539,11 +23027,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: gitignore/get-template
      * Request URI: /gitignore/templates/{name}
      */
-    gitignore$get$template: (
-      params: Params$gitignore$get$template,
-      option?: RequestOption,
-    ): Promise<Response$gitignore$get$template$Status$200["application/json"]> => {
-      const url = baseUrl + `/gitignore/templates/${params.parameter.name}`;
+    gitignore$get$template: (params: Params$gitignore$get$template, option?: RequestOption): Promise<Response$gitignore$get$template$Status$200["application/json"]> => {
+      const url = `${baseUrl}/gitignore/templates/${params.parameter.name}`;
       const headers = {
         Accept: "application/json",
       };
@@ -23561,7 +23046,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$apps$list$repos$accessible$to$installation,
       option?: RequestOption,
     ): Promise<Response$apps$list$repos$accessible$to$installation$Status$200["application/json"]> => {
-      const url = baseUrl + `/installation/repositories`;
+      const url = `${baseUrl}/installation/repositories`;
       const headers = {
         Accept: "application/json",
       };
@@ -23582,7 +23067,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /installation/token
      */
     apps$revoke$installation$access$token: (option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/installation/token`;
+      const url = `${baseUrl}/installation/token`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -23601,7 +23086,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /issues
      */
     issues$list: (params: Params$issues$list, option?: RequestOption): Promise<Response$issues$list$Status$200["application/json"]> => {
-      const url = baseUrl + `/issues`;
+      const url = `${baseUrl}/issues`;
       const headers = {
         Accept: "application/json",
       };
@@ -23626,11 +23111,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: licenses/get-all-commonly-used
      * Request URI: /licenses
      */
-    licenses$get$all$commonly$used: (
-      params: Params$licenses$get$all$commonly$used,
-      option?: RequestOption,
-    ): Promise<Response$licenses$get$all$commonly$used$Status$200["application/json"]> => {
-      const url = baseUrl + `/licenses`;
+    licenses$get$all$commonly$used: (params: Params$licenses$get$all$commonly$used, option?: RequestOption): Promise<Response$licenses$get$all$commonly$used$Status$200["application/json"]> => {
+      const url = `${baseUrl}/licenses`;
       const headers = {
         Accept: "application/json",
       };
@@ -23647,7 +23129,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /licenses/{license}
      */
     licenses$get: (params: Params$licenses$get, option?: RequestOption): Promise<Response$licenses$get$Status$200["application/json"]> => {
-      const url = baseUrl + `/licenses/${params.parameter.license}`;
+      const url = `${baseUrl}/licenses/${params.parameter.license}`;
       const headers = {
         Accept: "application/json",
       };
@@ -23659,7 +23141,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /markdown
      */
     markdown$render: (params: Params$markdown$render, option?: RequestOption): Promise<Response$markdown$render$Status$200["text/html"]> => {
-      const url = baseUrl + `/markdown`;
+      const url = `${baseUrl}/markdown`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "text/html",
@@ -23676,7 +23158,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$markdown$render$raw<RequestContentType>,
       option?: RequestOption,
     ): Promise<Response$markdown$render$raw$Status$200["text/html"]> => {
-      const url = baseUrl + `/markdown/raw`;
+      const url = `${baseUrl}/markdown/raw`;
       const headers = {
         "Content-Type": params.headers["Content-Type"],
         Accept: "text/html",
@@ -23689,7 +23171,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /meta
      */
     meta$get: (option?: RequestOption): Promise<Response$meta$get$Status$200["application/json"]> => {
-      const url = baseUrl + `/meta`;
+      const url = `${baseUrl}/meta`;
       const headers = {
         Accept: "application/json",
       };
@@ -23704,7 +23186,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$activity$list$public$events$for$repo$network,
       option?: RequestOption,
     ): Promise<Response$activity$list$public$events$for$repo$network$Status$200["application/json"]> => {
-      const url = baseUrl + `/networks/${params.parameter.owner}/${params.parameter.repo}/events`;
+      const url = `${baseUrl}/networks/${params.parameter.owner}/${params.parameter.repo}/events`;
       const headers = {
         Accept: "application/json",
       };
@@ -23724,7 +23206,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$activity$list$notifications$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$activity$list$notifications$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/notifications`;
+      const url = `${baseUrl}/notifications`;
       const headers = {
         Accept: "application/json",
       };
@@ -23748,7 +23230,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$activity$mark$notifications$as$read,
       option?: RequestOption,
     ): Promise<Response$activity$mark$notifications$as$read$Status$202["application/json"]> => {
-      const url = baseUrl + `/notifications`;
+      const url = `${baseUrl}/notifications`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -23760,11 +23242,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: activity/get-thread
      * Request URI: /notifications/threads/{thread_id}
      */
-    activity$get$thread: (
-      params: Params$activity$get$thread,
-      option?: RequestOption,
-    ): Promise<Response$activity$get$thread$Status$200["application/json"]> => {
-      const url = baseUrl + `/notifications/threads/${params.parameter.thread_id}`;
+    activity$get$thread: (params: Params$activity$get$thread, option?: RequestOption): Promise<Response$activity$get$thread$Status$200["application/json"]> => {
+      const url = `${baseUrl}/notifications/threads/${params.parameter.thread_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -23776,7 +23255,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /notifications/threads/{thread_id}
      */
     activity$mark$thread$as$read: (params: Params$activity$mark$thread$as$read, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/notifications/threads/${params.parameter.thread_id}`;
+      const url = `${baseUrl}/notifications/threads/${params.parameter.thread_id}`;
       const headers = {};
       return apiClient.request("PATCH", url, headers, undefined, undefined, option);
     },
@@ -23792,7 +23271,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$activity$get$thread$subscription$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$activity$get$thread$subscription$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/notifications/threads/${params.parameter.thread_id}/subscription`;
+      const url = `${baseUrl}/notifications/threads/${params.parameter.thread_id}/subscription`;
       const headers = {
         Accept: "application/json",
       };
@@ -23808,11 +23287,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: activity/set-thread-subscription
      * Request URI: /notifications/threads/{thread_id}/subscription
      */
-    activity$set$thread$subscription: (
-      params: Params$activity$set$thread$subscription,
-      option?: RequestOption,
-    ): Promise<Response$activity$set$thread$subscription$Status$200["application/json"]> => {
-      const url = baseUrl + `/notifications/threads/${params.parameter.thread_id}/subscription`;
+    activity$set$thread$subscription: (params: Params$activity$set$thread$subscription, option?: RequestOption): Promise<Response$activity$set$thread$subscription$Status$200["application/json"]> => {
+      const url = `${baseUrl}/notifications/threads/${params.parameter.thread_id}/subscription`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -23826,7 +23302,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /notifications/threads/{thread_id}/subscription
      */
     activity$delete$thread$subscription: (params: Params$activity$delete$thread$subscription, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/notifications/threads/${params.parameter.thread_id}/subscription`;
+      const url = `${baseUrl}/notifications/threads/${params.parameter.thread_id}/subscription`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -23836,11 +23312,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: meta/get-octocat
      * Request URI: /octocat
      */
-    meta$get$octocat: (
-      params: Params$meta$get$octocat,
-      option?: RequestOption,
-    ): Promise<Response$meta$get$octocat$Status$200["application/octocat-stream"]> => {
-      const url = baseUrl + `/octocat`;
+    meta$get$octocat: (params: Params$meta$get$octocat, option?: RequestOption): Promise<Response$meta$get$octocat$Status$200["application/octocat-stream"]> => {
+      const url = `${baseUrl}/octocat`;
       const headers = {
         Accept: "application/octocat-stream",
       };
@@ -23858,7 +23331,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /organizations
      */
     orgs$list: (params: Params$orgs$list, option?: RequestOption): Promise<Response$orgs$list$Status$200["application/json"]> => {
-      const url = baseUrl + `/organizations`;
+      const url = `${baseUrl}/organizations`;
       const headers = {
         Accept: "application/json",
       };
@@ -23877,11 +23350,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/list-custom-roles
      * Request URI: /organizations/{organization_id}/custom_roles
      */
-    orgs$list$custom$roles: (
-      params: Params$orgs$list$custom$roles,
-      option?: RequestOption,
-    ): Promise<Response$orgs$list$custom$roles$Status$200["application/json"]> => {
-      const url = baseUrl + `/organizations/${params.parameter.organization_id}/custom_roles`;
+    orgs$list$custom$roles: (params: Params$orgs$list$custom$roles, option?: RequestOption): Promise<Response$orgs$list$custom$roles$Status$200["application/json"]> => {
+      const url = `${baseUrl}/organizations/${params.parameter.organization_id}/custom_roles`;
       const headers = {
         Accept: "application/json",
       };
@@ -23896,7 +23366,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}
      */
     orgs$get: (params: Params$orgs$get, option?: RequestOption): Promise<Response$orgs$get$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}`;
       const headers = {
         Accept: "application/json",
       };
@@ -23911,7 +23381,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}
      */
     orgs$update: (params: Params$orgs$update, option?: RequestOption): Promise<Response$orgs$update$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -23930,7 +23400,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$get$github$actions$permissions$organization,
       option?: RequestOption,
     ): Promise<Response$actions$get$github$actions$permissions$organization$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/permissions`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/permissions`;
       const headers = {
         Accept: "application/json",
       };
@@ -23946,11 +23416,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/set-github-actions-permissions-organization
      * Request URI: /orgs/{org}/actions/permissions
      */
-    actions$set$github$actions$permissions$organization: (
-      params: Params$actions$set$github$actions$permissions$organization,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/permissions`;
+    actions$set$github$actions$permissions$organization: (params: Params$actions$set$github$actions$permissions$organization, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/permissions`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -23968,7 +23435,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$list$selected$repositories$enabled$github$actions$organization,
       option?: RequestOption,
     ): Promise<Response$actions$list$selected$repositories$enabled$github$actions$organization$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/permissions/repositories`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/permissions/repositories`;
       const headers = {
         Accept: "application/json",
       };
@@ -23990,7 +23457,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$set$selected$repositories$enabled$github$actions$organization,
       option?: RequestOption,
     ): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/permissions/repositories`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/permissions/repositories`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -24004,11 +23471,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/enable-selected-repository-github-actions-organization
      * Request URI: /orgs/{org}/actions/permissions/repositories/{repository_id}
      */
-    actions$enable$selected$repository$github$actions$organization: (
-      params: Params$actions$enable$selected$repository$github$actions$organization,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/permissions/repositories/${params.parameter.repository_id}`;
+    actions$enable$selected$repository$github$actions$organization: (params: Params$actions$enable$selected$repository$github$actions$organization, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/permissions/repositories/${params.parameter.repository_id}`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -24020,11 +23484,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/disable-selected-repository-github-actions-organization
      * Request URI: /orgs/{org}/actions/permissions/repositories/{repository_id}
      */
-    actions$disable$selected$repository$github$actions$organization: (
-      params: Params$actions$disable$selected$repository$github$actions$organization,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/permissions/repositories/${params.parameter.repository_id}`;
+    actions$disable$selected$repository$github$actions$organization: (params: Params$actions$disable$selected$repository$github$actions$organization, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/permissions/repositories/${params.parameter.repository_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -24040,7 +23501,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$get$allowed$actions$organization,
       option?: RequestOption,
     ): Promise<Response$actions$get$allowed$actions$organization$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/permissions/selected-actions`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/permissions/selected-actions`;
       const headers = {
         Accept: "application/json",
       };
@@ -24058,11 +23519,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/set-allowed-actions-organization
      * Request URI: /orgs/{org}/actions/permissions/selected-actions
      */
-    actions$set$allowed$actions$organization: (
-      params: Params$actions$set$allowed$actions$organization,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/permissions/selected-actions`;
+    actions$set$allowed$actions$organization: (params: Params$actions$set$allowed$actions$organization, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/permissions/selected-actions`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -24079,7 +23537,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$list$self$hosted$runner$groups$for$org,
       option?: RequestOption,
     ): Promise<Response$actions$list$self$hosted$runner$groups$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runner-groups`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runner-groups`;
       const headers = {
         Accept: "application/json",
       };
@@ -24103,7 +23561,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$create$self$hosted$runner$group$for$org,
       option?: RequestOption,
     ): Promise<Response$actions$create$self$hosted$runner$group$for$org$Status$201["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runner-groups`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runner-groups`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -24121,7 +23579,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$get$self$hosted$runner$group$for$org,
       option?: RequestOption,
     ): Promise<Response$actions$get$self$hosted$runner$group$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -24134,11 +23592,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/delete-self-hosted-runner-group-from-org
      * Request URI: /orgs/{org}/actions/runner-groups/{runner_group_id}
      */
-    actions$delete$self$hosted$runner$group$from$org: (
-      params: Params$actions$delete$self$hosted$runner$group$from$org,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}`;
+    actions$delete$self$hosted$runner$group$from$org: (params: Params$actions$delete$self$hosted$runner$group$from$org, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -24153,7 +23608,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$update$self$hosted$runner$group$for$org,
       option?: RequestOption,
     ): Promise<Response$actions$update$self$hosted$runner$group$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -24174,7 +23629,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$list$repo$access$to$self$hosted$runner$group$in$org,
       option?: RequestOption,
     ): Promise<Response$actions$list$repo$access$to$self$hosted$runner$group$in$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/repositories`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/repositories`;
       const headers = {
         Accept: "application/json",
       };
@@ -24191,11 +23646,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/set-repo-access-to-self-hosted-runner-group-in-org
      * Request URI: /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories
      */
-    actions$set$repo$access$to$self$hosted$runner$group$in$org: (
-      params: Params$actions$set$repo$access$to$self$hosted$runner$group$in$org,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/repositories`;
+    actions$set$repo$access$to$self$hosted$runner$group$in$org: (params: Params$actions$set$repo$access$to$self$hosted$runner$group$in$org, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/repositories`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -24208,13 +23660,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/add-repo-access-to-self-hosted-runner-group-in-org
      * Request URI: /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories/{repository_id}
      */
-    actions$add$repo$access$to$self$hosted$runner$group$in$org: (
-      params: Params$actions$add$repo$access$to$self$hosted$runner$group$in$org,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/repositories/${params.parameter.repository_id}`;
+    actions$add$repo$access$to$self$hosted$runner$group$in$org: (params: Params$actions$add$repo$access$to$self$hosted$runner$group$in$org, option?: RequestOption): Promise<void> => {
+      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/repositories/${params.parameter.repository_id}`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -24225,13 +23672,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/remove-repo-access-to-self-hosted-runner-group-in-org
      * Request URI: /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories/{repository_id}
      */
-    actions$remove$repo$access$to$self$hosted$runner$group$in$org: (
-      params: Params$actions$remove$repo$access$to$self$hosted$runner$group$in$org,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/repositories/${params.parameter.repository_id}`;
+    actions$remove$repo$access$to$self$hosted$runner$group$in$org: (params: Params$actions$remove$repo$access$to$self$hosted$runner$group$in$org, option?: RequestOption): Promise<void> => {
+      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/repositories/${params.parameter.repository_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -24246,7 +23688,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$list$self$hosted$runners$in$group$for$org,
       option?: RequestOption,
     ): Promise<Response$actions$list$self$hosted$runners$in$group$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/runners`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/runners`;
       const headers = {
         Accept: "application/json",
       };
@@ -24263,11 +23705,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/set-self-hosted-runners-in-group-for-org
      * Request URI: /orgs/{org}/actions/runner-groups/{runner_group_id}/runners
      */
-    actions$set$self$hosted$runners$in$group$for$org: (
-      params: Params$actions$set$self$hosted$runners$in$group$for$org,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/runners`;
+    actions$set$self$hosted$runners$in$group$for$org: (params: Params$actions$set$self$hosted$runners$in$group$for$org, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/runners`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -24280,13 +23719,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/add-self-hosted-runner-to-group-for-org
      * Request URI: /orgs/{org}/actions/runner-groups/{runner_group_id}/runners/{runner_id}
      */
-    actions$add$self$hosted$runner$to$group$for$org: (
-      params: Params$actions$add$self$hosted$runner$to$group$for$org,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/runners/${params.parameter.runner_id}`;
+    actions$add$self$hosted$runner$to$group$for$org: (params: Params$actions$add$self$hosted$runner$to$group$for$org, option?: RequestOption): Promise<void> => {
+      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/runners/${params.parameter.runner_id}`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -24297,13 +23731,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/remove-self-hosted-runner-from-group-for-org
      * Request URI: /orgs/{org}/actions/runner-groups/{runner_group_id}/runners/{runner_id}
      */
-    actions$remove$self$hosted$runner$from$group$for$org: (
-      params: Params$actions$remove$self$hosted$runner$from$group$for$org,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/runners/${params.parameter.runner_id}`;
+    actions$remove$self$hosted$runner$from$group$for$org: (params: Params$actions$remove$self$hosted$runner$from$group$for$org, option?: RequestOption): Promise<void> => {
+      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runner-groups/${params.parameter.runner_group_id}/runners/${params.parameter.runner_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -24319,7 +23748,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$list$self$hosted$runners$for$org,
       option?: RequestOption,
     ): Promise<Response$actions$list$self$hosted$runners$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runners`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runners`;
       const headers = {
         Accept: "application/json",
       };
@@ -24341,7 +23770,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$list$runner$applications$for$org,
       option?: RequestOption,
     ): Promise<Response$actions$list$runner$applications$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runners/downloads`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runners/downloads`;
       const headers = {
         Accept: "application/json",
       };
@@ -24367,7 +23796,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$create$registration$token$for$org,
       option?: RequestOption,
     ): Promise<Response$actions$create$registration$token$for$org$Status$201["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runners/registration-token`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runners/registration-token`;
       const headers = {
         Accept: "application/json",
       };
@@ -24394,7 +23823,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$create$remove$token$for$org,
       option?: RequestOption,
     ): Promise<Response$actions$create$remove$token$for$org$Status$201["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runners/remove-token`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runners/remove-token`;
       const headers = {
         Accept: "application/json",
       };
@@ -24412,7 +23841,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$get$self$hosted$runner$for$org,
       option?: RequestOption,
     ): Promise<Response$actions$get$self$hosted$runner$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -24426,11 +23855,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/delete-self-hosted-runner-from-org
      * Request URI: /orgs/{org}/actions/runners/{runner_id}
      */
-    actions$delete$self$hosted$runner$from$org: (
-      params: Params$actions$delete$self$hosted$runner$from$org,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}`;
+    actions$delete$self$hosted$runner$from$org: (params: Params$actions$delete$self$hosted$runner$from$org, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -24446,7 +23872,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$list$labels$for$self$hosted$runner$for$org,
       option?: RequestOption,
     ): Promise<Response$actions$list$labels$for$self$hosted$runner$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}/labels`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}/labels`;
       const headers = {
         Accept: "application/json",
       };
@@ -24465,7 +23891,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$set$custom$labels$for$self$hosted$runner$for$org,
       option?: RequestOption,
     ): Promise<Response$actions$set$custom$labels$for$self$hosted$runner$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}/labels`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}/labels`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -24484,7 +23910,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$add$custom$labels$to$self$hosted$runner$for$org,
       option?: RequestOption,
     ): Promise<Response$actions$add$custom$labels$to$self$hosted$runner$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}/labels`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}/labels`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -24504,7 +23930,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$remove$all$custom$labels$from$self$hosted$runner$for$org,
       option?: RequestOption,
     ): Promise<Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}/labels`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}/labels`;
       const headers = {
         Accept: "application/json",
       };
@@ -24526,7 +23952,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$remove$custom$label$from$self$hosted$runner$for$org,
       option?: RequestOption,
     ): Promise<Response$actions$remove$custom$label$from$self$hosted$runner$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}/labels/${params.parameter.name}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/runners/${params.parameter.runner_id}/labels/${params.parameter.name}`;
       const headers = {
         Accept: "application/json",
       };
@@ -24538,11 +23964,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/list-org-secrets
      * Request URI: /orgs/{org}/actions/secrets
      */
-    actions$list$org$secrets: (
-      params: Params$actions$list$org$secrets,
-      option?: RequestOption,
-    ): Promise<Response$actions$list$org$secrets$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/secrets`;
+    actions$list$org$secrets: (params: Params$actions$list$org$secrets, option?: RequestOption): Promise<Response$actions$list$org$secrets$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/secrets`;
       const headers = {
         Accept: "application/json",
       };
@@ -24558,11 +23981,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/get-org-public-key
      * Request URI: /orgs/{org}/actions/secrets/public-key
      */
-    actions$get$org$public$key: (
-      params: Params$actions$get$org$public$key,
-      option?: RequestOption,
-    ): Promise<Response$actions$get$org$public$key$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/secrets/public-key`;
+    actions$get$org$public$key: (params: Params$actions$get$org$public$key, option?: RequestOption): Promise<Response$actions$get$org$public$key$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/secrets/public-key`;
       const headers = {
         Accept: "application/json",
       };
@@ -24574,11 +23994,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/get-org-secret
      * Request URI: /orgs/{org}/actions/secrets/{secret_name}
      */
-    actions$get$org$secret: (
-      params: Params$actions$get$org$secret,
-      option?: RequestOption,
-    ): Promise<Response$actions$get$org$secret$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}`;
+    actions$get$org$secret: (params: Params$actions$get$org$secret, option?: RequestOption): Promise<Response$actions$get$org$secret$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}`;
       const headers = {
         Accept: "application/json",
       };
@@ -24668,7 +24085,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$create$or$update$org$secret,
       option?: RequestOption,
     ): Promise<Response$actions$create$or$update$org$secret$Status$201["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -24682,7 +24099,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/actions/secrets/{secret_name}
      */
     actions$delete$org$secret: (params: Params$actions$delete$org$secret, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -24696,7 +24113,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$list$selected$repos$for$org$secret,
       option?: RequestOption,
     ): Promise<Response$actions$list$selected$repos$for$org$secret$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}/repositories`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}/repositories`;
       const headers = {
         Accept: "application/json",
       };
@@ -24712,11 +24129,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/set-selected-repos-for-org-secret
      * Request URI: /orgs/{org}/actions/secrets/{secret_name}/repositories
      */
-    actions$set$selected$repos$for$org$secret: (
-      params: Params$actions$set$selected$repos$for$org$secret,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}/repositories`;
+    actions$set$selected$repos$for$org$secret: (params: Params$actions$set$selected$repos$for$org$secret, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}/repositories`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -24728,13 +24142,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/add-selected-repo-to-org-secret
      * Request URI: /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}
      */
-    actions$add$selected$repo$to$org$secret: (
-      params: Params$actions$add$selected$repo$to$org$secret,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}/repositories/${params.parameter.repository_id}`;
+    actions$add$selected$repo$to$org$secret: (params: Params$actions$add$selected$repo$to$org$secret, option?: RequestOption): Promise<void> => {
+      const url = baseUrl + `/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}/repositories/${params.parameter.repository_id}`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -24744,13 +24153,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/remove-selected-repo-from-org-secret
      * Request URI: /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}
      */
-    actions$remove$selected$repo$from$org$secret: (
-      params: Params$actions$remove$selected$repo$from$org$secret,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}/repositories/${params.parameter.repository_id}`;
+    actions$remove$selected$repo$from$org$secret: (params: Params$actions$remove$selected$repo$from$org$secret, option?: RequestOption): Promise<void> => {
+      const url = baseUrl + `/orgs/${params.parameter.org}/actions/secrets/${params.parameter.secret_name}/repositories/${params.parameter.repository_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -24762,11 +24166,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/get-audit-log
      * Request URI: /orgs/{org}/audit-log
      */
-    orgs$get$audit$log: (
-      params: Params$orgs$get$audit$log,
-      option?: RequestOption,
-    ): Promise<Response$orgs$get$audit$log$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/audit-log`;
+    orgs$get$audit$log: (params: Params$orgs$get$audit$log, option?: RequestOption): Promise<Response$orgs$get$audit$log$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/audit-log`;
       const headers = {
         Accept: "application/json",
       };
@@ -24787,11 +24188,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: dependabot/list-org-secrets
      * Request URI: /orgs/{org}/dependabot/secrets
      */
-    dependabot$list$org$secrets: (
-      params: Params$dependabot$list$org$secrets,
-      option?: RequestOption,
-    ): Promise<Response$dependabot$list$org$secrets$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets`;
+    dependabot$list$org$secrets: (params: Params$dependabot$list$org$secrets, option?: RequestOption): Promise<Response$dependabot$list$org$secrets$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/dependabot/secrets`;
       const headers = {
         Accept: "application/json",
       };
@@ -24807,11 +24205,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: dependabot/get-org-public-key
      * Request URI: /orgs/{org}/dependabot/secrets/public-key
      */
-    dependabot$get$org$public$key: (
-      params: Params$dependabot$get$org$public$key,
-      option?: RequestOption,
-    ): Promise<Response$dependabot$get$org$public$key$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets/public-key`;
+    dependabot$get$org$public$key: (params: Params$dependabot$get$org$public$key, option?: RequestOption): Promise<Response$dependabot$get$org$public$key$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/dependabot/secrets/public-key`;
       const headers = {
         Accept: "application/json",
       };
@@ -24823,11 +24218,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: dependabot/get-org-secret
      * Request URI: /orgs/{org}/dependabot/secrets/{secret_name}
      */
-    dependabot$get$org$secret: (
-      params: Params$dependabot$get$org$secret,
-      option?: RequestOption,
-    ): Promise<Response$dependabot$get$org$secret$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}`;
+    dependabot$get$org$secret: (params: Params$dependabot$get$org$secret, option?: RequestOption): Promise<Response$dependabot$get$org$secret$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}`;
       const headers = {
         Accept: "application/json",
       };
@@ -24917,7 +24309,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$dependabot$create$or$update$org$secret,
       option?: RequestOption,
     ): Promise<Response$dependabot$create$or$update$org$secret$Status$201["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -24931,7 +24323,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/dependabot/secrets/{secret_name}
      */
     dependabot$delete$org$secret: (params: Params$dependabot$delete$org$secret, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -24945,7 +24337,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$dependabot$list$selected$repos$for$org$secret,
       option?: RequestOption,
     ): Promise<Response$dependabot$list$selected$repos$for$org$secret$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}/repositories`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}/repositories`;
       const headers = {
         Accept: "application/json",
       };
@@ -24961,11 +24353,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: dependabot/set-selected-repos-for-org-secret
      * Request URI: /orgs/{org}/dependabot/secrets/{secret_name}/repositories
      */
-    dependabot$set$selected$repos$for$org$secret: (
-      params: Params$dependabot$set$selected$repos$for$org$secret,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}/repositories`;
+    dependabot$set$selected$repos$for$org$secret: (params: Params$dependabot$set$selected$repos$for$org$secret, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}/repositories`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -24977,13 +24366,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: dependabot/add-selected-repo-to-org-secret
      * Request URI: /orgs/{org}/dependabot/secrets/{secret_name}/repositories/{repository_id}
      */
-    dependabot$add$selected$repo$to$org$secret: (
-      params: Params$dependabot$add$selected$repo$to$org$secret,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}/repositories/${params.parameter.repository_id}`;
+    dependabot$add$selected$repo$to$org$secret: (params: Params$dependabot$add$selected$repo$to$org$secret, option?: RequestOption): Promise<void> => {
+      const url = baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}/repositories/${params.parameter.repository_id}`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -24993,13 +24377,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: dependabot/remove-selected-repo-from-org-secret
      * Request URI: /orgs/{org}/dependabot/secrets/{secret_name}/repositories/{repository_id}
      */
-    dependabot$remove$selected$repo$from$org$secret: (
-      params: Params$dependabot$remove$selected$repo$from$org$secret,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}/repositories/${params.parameter.repository_id}`;
+    dependabot$remove$selected$repo$from$org$secret: (params: Params$dependabot$remove$selected$repo$from$org$secret, option?: RequestOption): Promise<void> => {
+      const url = baseUrl + `/orgs/${params.parameter.org}/dependabot/secrets/${params.parameter.secret_name}/repositories/${params.parameter.repository_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -25008,11 +24387,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: activity/list-public-org-events
      * Request URI: /orgs/{org}/events
      */
-    activity$list$public$org$events: (
-      params: Params$activity$list$public$org$events,
-      option?: RequestOption,
-    ): Promise<Response$activity$list$public$org$events$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/events`;
+    activity$list$public$org$events: (params: Params$activity$list$public$org$events, option?: RequestOption): Promise<Response$activity$list$public$org$events$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/events`;
       const headers = {
         Accept: "application/json",
       };
@@ -25027,11 +24403,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/list-webhooks
      * Request URI: /orgs/{org}/hooks
      */
-    orgs$list$webhooks: (
-      params: Params$orgs$list$webhooks,
-      option?: RequestOption,
-    ): Promise<Response$orgs$list$webhooks$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/hooks`;
+    orgs$list$webhooks: (params: Params$orgs$list$webhooks, option?: RequestOption): Promise<Response$orgs$list$webhooks$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/hooks`;
       const headers = {
         Accept: "application/json",
       };
@@ -25047,11 +24420,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/create-webhook
      * Request URI: /orgs/{org}/hooks
      */
-    orgs$create$webhook: (
-      params: Params$orgs$create$webhook,
-      option?: RequestOption,
-    ): Promise<Response$orgs$create$webhook$Status$201["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/hooks`;
+    orgs$create$webhook: (params: Params$orgs$create$webhook, option?: RequestOption): Promise<Response$orgs$create$webhook$Status$201["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/hooks`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -25064,11 +24434,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/get-webhook
      * Request URI: /orgs/{org}/hooks/{hook_id}
      */
-    orgs$get$webhook: (
-      params: Params$orgs$get$webhook,
-      option?: RequestOption,
-    ): Promise<Response$orgs$get$webhook$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}`;
+    orgs$get$webhook: (params: Params$orgs$get$webhook, option?: RequestOption): Promise<Response$orgs$get$webhook$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -25080,7 +24447,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/hooks/{hook_id}
      */
     orgs$delete$webhook: (params: Params$orgs$delete$webhook, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -25090,11 +24457,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/update-webhook
      * Request URI: /orgs/{org}/hooks/{hook_id}
      */
-    orgs$update$webhook: (
-      params: Params$orgs$update$webhook,
-      option?: RequestOption,
-    ): Promise<Response$orgs$update$webhook$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}`;
+    orgs$update$webhook: (params: Params$orgs$update$webhook, option?: RequestOption): Promise<Response$orgs$update$webhook$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -25109,11 +24473,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/get-webhook-config-for-org
      * Request URI: /orgs/{org}/hooks/{hook_id}/config
      */
-    orgs$get$webhook$config$for$org: (
-      params: Params$orgs$get$webhook$config$for$org,
-      option?: RequestOption,
-    ): Promise<Response$orgs$get$webhook$config$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}/config`;
+    orgs$get$webhook$config$for$org: (params: Params$orgs$get$webhook$config$for$org, option?: RequestOption): Promise<Response$orgs$get$webhook$config$for$org$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}/config`;
       const headers = {
         Accept: "application/json",
       };
@@ -25131,7 +24492,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$orgs$update$webhook$config$for$org,
       option?: RequestOption,
     ): Promise<Response$orgs$update$webhook$config$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}/config`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}/config`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -25144,11 +24505,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/list-webhook-deliveries
      * Request URI: /orgs/{org}/hooks/{hook_id}/deliveries
      */
-    orgs$list$webhook$deliveries: (
-      params: Params$orgs$list$webhook$deliveries,
-      option?: RequestOption,
-    ): Promise<Response$orgs$list$webhook$deliveries$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}/deliveries`;
+    orgs$list$webhook$deliveries: (params: Params$orgs$list$webhook$deliveries, option?: RequestOption): Promise<Response$orgs$list$webhook$deliveries$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}/deliveries`;
       const headers = {
         Accept: "application/json",
       };
@@ -25164,11 +24522,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/get-webhook-delivery
      * Request URI: /orgs/{org}/hooks/{hook_id}/deliveries/{delivery_id}
      */
-    orgs$get$webhook$delivery: (
-      params: Params$orgs$get$webhook$delivery,
-      option?: RequestOption,
-    ): Promise<Response$orgs$get$webhook$delivery$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}/deliveries/${params.parameter.delivery_id}`;
+    orgs$get$webhook$delivery: (params: Params$orgs$get$webhook$delivery, option?: RequestOption): Promise<Response$orgs$get$webhook$delivery$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}/deliveries/${params.parameter.delivery_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -25180,12 +24535,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/redeliver-webhook-delivery
      * Request URI: /orgs/{org}/hooks/{hook_id}/deliveries/{delivery_id}/attempts
      */
-    orgs$redeliver$webhook$delivery: (
-      params: Params$orgs$redeliver$webhook$delivery,
-      option?: RequestOption,
-    ): Promise<Response$orgs$redeliver$webhook$delivery$Status$202["application/json"]> => {
-      const url =
-        baseUrl + `/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}/deliveries/${params.parameter.delivery_id}/attempts`;
+    orgs$redeliver$webhook$delivery: (params: Params$orgs$redeliver$webhook$delivery, option?: RequestOption): Promise<Response$orgs$redeliver$webhook$delivery$Status$202["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}/deliveries/${params.parameter.delivery_id}/attempts`;
       const headers = {
         Accept: "application/json",
       };
@@ -25198,7 +24549,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/hooks/{hook_id}/pings
      */
     orgs$ping$webhook: (params: Params$orgs$ping$webhook, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}/pings`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/hooks/${params.parameter.hook_id}/pings`;
       const headers = {};
       return apiClient.request("POST", url, headers, undefined, undefined, option);
     },
@@ -25210,11 +24561,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/get-org-installation
      * Request URI: /orgs/{org}/installation
      */
-    apps$get$org$installation: (
-      params: Params$apps$get$org$installation,
-      option?: RequestOption,
-    ): Promise<Response$apps$get$org$installation$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/installation`;
+    apps$get$org$installation: (params: Params$apps$get$org$installation, option?: RequestOption): Promise<Response$apps$get$org$installation$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/installation`;
       const headers = {
         Accept: "application/json",
       };
@@ -25226,11 +24574,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/list-app-installations
      * Request URI: /orgs/{org}/installations
      */
-    orgs$list$app$installations: (
-      params: Params$orgs$list$app$installations,
-      option?: RequestOption,
-    ): Promise<Response$orgs$list$app$installations$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/installations`;
+    orgs$list$app$installations: (params: Params$orgs$list$app$installations, option?: RequestOption): Promise<Response$orgs$list$app$installations$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/installations`;
       const headers = {
         Accept: "application/json",
       };
@@ -25251,11 +24596,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/list-for-org
      * Request URI: /orgs/{org}/issues
      */
-    issues$list$for$org: (
-      params: Params$issues$list$for$org,
-      option?: RequestOption,
-    ): Promise<Response$issues$list$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/issues`;
+    issues$list$for$org: (params: Params$issues$list$for$org, option?: RequestOption): Promise<Response$issues$list$for$org$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/issues`;
       const headers = {
         Accept: "application/json",
       };
@@ -25277,11 +24619,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/list-members
      * Request URI: /orgs/{org}/members
      */
-    orgs$list$members: (
-      params: Params$orgs$list$members,
-      option?: RequestOption,
-    ): Promise<Response$orgs$list$members$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/members`;
+    orgs$list$members: (params: Params$orgs$list$members, option?: RequestOption): Promise<Response$orgs$list$members$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/members`;
       const headers = {
         Accept: "application/json",
       };
@@ -25300,7 +24639,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/members/{username}
      */
     orgs$check$membership$for$user: (params: Params$orgs$check$membership$for$user, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/members/${params.parameter.username}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/members/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -25311,7 +24650,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/members/{username}
      */
     orgs$remove$member: (params: Params$orgs$remove$member, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/members/${params.parameter.username}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/members/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -25321,11 +24660,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/get-membership-for-user
      * Request URI: /orgs/{org}/memberships/{username}
      */
-    orgs$get$membership$for$user: (
-      params: Params$orgs$get$membership$for$user,
-      option?: RequestOption,
-    ): Promise<Response$orgs$get$membership$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/memberships/${params.parameter.username}`;
+    orgs$get$membership$for$user: (params: Params$orgs$get$membership$for$user, option?: RequestOption): Promise<Response$orgs$get$membership$for$user$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/memberships/${params.parameter.username}`;
       const headers = {
         Accept: "application/json",
       };
@@ -25345,11 +24681,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/set-membership-for-user
      * Request URI: /orgs/{org}/memberships/{username}
      */
-    orgs$set$membership$for$user: (
-      params: Params$orgs$set$membership$for$user,
-      option?: RequestOption,
-    ): Promise<Response$orgs$set$membership$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/memberships/${params.parameter.username}`;
+    orgs$set$membership$for$user: (params: Params$orgs$set$membership$for$user, option?: RequestOption): Promise<Response$orgs$set$membership$for$user$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/memberships/${params.parameter.username}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -25365,7 +24698,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/memberships/{username}
      */
     orgs$remove$membership$for$user: (params: Params$orgs$remove$membership$for$user, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/memberships/${params.parameter.username}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/memberships/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -25375,11 +24708,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: migrations/list-for-org
      * Request URI: /orgs/{org}/migrations
      */
-    migrations$list$for$org: (
-      params: Params$migrations$list$for$org,
-      option?: RequestOption,
-    ): Promise<Response$migrations$list$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/migrations`;
+    migrations$list$for$org: (params: Params$migrations$list$for$org, option?: RequestOption): Promise<Response$migrations$list$for$org$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/migrations`;
       const headers = {
         Accept: "application/json",
       };
@@ -25396,11 +24726,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: migrations/start-for-org
      * Request URI: /orgs/{org}/migrations
      */
-    migrations$start$for$org: (
-      params: Params$migrations$start$for$org,
-      option?: RequestOption,
-    ): Promise<Response$migrations$start$for$org$Status$201["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/migrations`;
+    migrations$start$for$org: (params: Params$migrations$start$for$org, option?: RequestOption): Promise<Response$migrations$start$for$org$Status$201["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/migrations`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -25420,11 +24747,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: migrations/get-status-for-org
      * Request URI: /orgs/{org}/migrations/{migration_id}
      */
-    migrations$get$status$for$org: (
-      params: Params$migrations$get$status$for$org,
-      option?: RequestOption,
-    ): Promise<Response$migrations$get$status$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/migrations/${params.parameter.migration_id}`;
+    migrations$get$status$for$org: (params: Params$migrations$get$status$for$org, option?: RequestOption): Promise<Response$migrations$get$status$for$org$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/migrations/${params.parameter.migration_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -25439,11 +24763,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/list-outside-collaborators
      * Request URI: /orgs/{org}/outside_collaborators
      */
-    orgs$list$outside$collaborators: (
-      params: Params$orgs$list$outside$collaborators,
-      option?: RequestOption,
-    ): Promise<Response$orgs$list$outside$collaborators$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/outside_collaborators`;
+    orgs$list$outside$collaborators: (params: Params$orgs$list$outside$collaborators, option?: RequestOption): Promise<Response$orgs$list$outside$collaborators$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/outside_collaborators`;
       const headers = {
         Accept: "application/json",
       };
@@ -25464,7 +24785,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$orgs$convert$member$to$outside$collaborator,
       option?: RequestOption,
     ): Promise<Response$orgs$convert$member$to$outside$collaborator$Status$202["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/outside_collaborators/${params.parameter.username}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/outside_collaborators/${params.parameter.username}`;
       const headers = {
         Accept: "application/json",
       };
@@ -25477,7 +24798,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/outside_collaborators/{username}
      */
     orgs$remove$outside$collaborator: (params: Params$orgs$remove$outside$collaborator, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/outside_collaborators/${params.parameter.username}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/outside_collaborators/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -25491,7 +24812,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$list$pre$receive$hooks$for$org,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$list$pre$receive$hooks$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/pre-receive-hooks`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/pre-receive-hooks`;
       const headers = {
         Accept: "application/json",
       };
@@ -25512,7 +24833,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$get$pre$receive$hook$for$org,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$get$pre$receive$hook$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -25528,7 +24849,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$remove$pre$receive$hook$enforcement$for$org,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$remove$pre$receive$hook$enforcement$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -25544,7 +24865,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$update$pre$receive$hook$enforcement$for$org,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$update$pre$receive$hook$enforcement$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -25557,11 +24878,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/list-for-org
      * Request URI: /orgs/{org}/projects
      */
-    projects$list$for$org: (
-      params: Params$projects$list$for$org,
-      option?: RequestOption,
-    ): Promise<Response$projects$list$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/projects`;
+    projects$list$for$org: (params: Params$projects$list$for$org, option?: RequestOption): Promise<Response$projects$list$for$org$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/projects`;
       const headers = {
         Accept: "application/json",
       };
@@ -25578,11 +24896,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/create-for-org
      * Request URI: /orgs/{org}/projects
      */
-    projects$create$for$org: (
-      params: Params$projects$create$for$org,
-      option?: RequestOption,
-    ): Promise<Response$projects$create$for$org$Status$201["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/projects`;
+    projects$create$for$org: (params: Params$projects$create$for$org, option?: RequestOption): Promise<Response$projects$create$for$org$Status$201["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/projects`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -25595,11 +24910,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/list-public-members
      * Request URI: /orgs/{org}/public_members
      */
-    orgs$list$public$members: (
-      params: Params$orgs$list$public$members,
-      option?: RequestOption,
-    ): Promise<Response$orgs$list$public$members$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/public_members`;
+    orgs$list$public$members: (params: Params$orgs$list$public$members, option?: RequestOption): Promise<Response$orgs$list$public$members$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/public_members`;
       const headers = {
         Accept: "application/json",
       };
@@ -25615,7 +24927,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/public_members/{username}
      */
     orgs$check$public$membership$for$user: (params: Params$orgs$check$public$membership$for$user, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/public_members/${params.parameter.username}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/public_members/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -25627,11 +24939,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/set-public-membership-for-authenticated-user
      * Request URI: /orgs/{org}/public_members/{username}
      */
-    orgs$set$public$membership$for$authenticated$user: (
-      params: Params$orgs$set$public$membership$for$authenticated$user,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/public_members/${params.parameter.username}`;
+    orgs$set$public$membership$for$authenticated$user: (params: Params$orgs$set$public$membership$for$authenticated$user, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/public_members/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -25640,11 +24949,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/remove-public-membership-for-authenticated-user
      * Request URI: /orgs/{org}/public_members/{username}
      */
-    orgs$remove$public$membership$for$authenticated$user: (
-      params: Params$orgs$remove$public$membership$for$authenticated$user,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/public_members/${params.parameter.username}`;
+    orgs$remove$public$membership$for$authenticated$user: (params: Params$orgs$remove$public$membership$for$authenticated$user, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/public_members/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -25654,11 +24960,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-for-org
      * Request URI: /orgs/{org}/repos
      */
-    repos$list$for$org: (
-      params: Params$repos$list$for$org,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/repos`;
+    repos$list$for$org: (params: Params$repos$list$for$org, option?: RequestOption): Promise<Response$repos$list$for$org$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/repos`;
       const headers = {
         Accept: "application/json",
       };
@@ -25684,11 +24987,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/create-in-org
      * Request URI: /orgs/{org}/repos
      */
-    repos$create$in$org: (
-      params: Params$repos$create$in$org,
-      option?: RequestOption,
-    ): Promise<Response$repos$create$in$org$Status$201["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/repos`;
+    repos$create$in$org: (params: Params$repos$create$in$org, option?: RequestOption): Promise<Response$repos$create$in$org$Status$201["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/repos`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -25708,7 +25008,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$secret$scanning$list$alerts$for$org,
       option?: RequestOption,
     ): Promise<Response$secret$scanning$list$alerts$for$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/secret-scanning/alerts`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/secret-scanning/alerts`;
       const headers = {
         Accept: "application/json",
       };
@@ -25733,7 +25033,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$billing$get$github$advanced$security$billing$org,
       option?: RequestOption,
     ): Promise<Response$billing$get$github$advanced$security$billing$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/settings/billing/advanced-security`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/settings/billing/advanced-security`;
       const headers = {
         Accept: "application/json",
       };
@@ -25750,7 +25050,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/teams
      */
     teams$list: (params: Params$teams$list, option?: RequestOption): Promise<Response$teams$list$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams`;
       const headers = {
         Accept: "application/json",
       };
@@ -25769,7 +25069,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/teams
      */
     teams$create: (params: Params$teams$create, option?: RequestOption): Promise<Response$teams$create$Status$201["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -25784,11 +25084,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/get-by-name
      * Request URI: /orgs/{org}/teams/{team_slug}
      */
-    teams$get$by$name: (
-      params: Params$teams$get$by$name,
-      option?: RequestOption,
-    ): Promise<Response$teams$get$by$name$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}`;
+    teams$get$by$name: (params: Params$teams$get$by$name, option?: RequestOption): Promise<Response$teams$get$by$name$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}`;
       const headers = {
         Accept: "application/json",
       };
@@ -25805,7 +25102,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/teams/{team_slug}
      */
     teams$delete$in$org: (params: Params$teams$delete$in$org, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -25817,11 +25114,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/update-in-org
      * Request URI: /orgs/{org}/teams/{team_slug}
      */
-    teams$update$in$org: (
-      params: Params$teams$update$in$org,
-      option?: RequestOption,
-    ): Promise<Response$teams$update$in$org$Status$201["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}`;
+    teams$update$in$org: (params: Params$teams$update$in$org, option?: RequestOption): Promise<Response$teams$update$in$org$Status$201["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -25836,11 +25130,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/list-discussions-in-org
      * Request URI: /orgs/{org}/teams/{team_slug}/discussions
      */
-    teams$list$discussions$in$org: (
-      params: Params$teams$list$discussions$in$org,
-      option?: RequestOption,
-    ): Promise<Response$teams$list$discussions$in$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions`;
+    teams$list$discussions$in$org: (params: Params$teams$list$discussions$in$org, option?: RequestOption): Promise<Response$teams$list$discussions$in$org$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions`;
       const headers = {
         Accept: "application/json",
       };
@@ -25862,11 +25153,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/create-discussion-in-org
      * Request URI: /orgs/{org}/teams/{team_slug}/discussions
      */
-    teams$create$discussion$in$org: (
-      params: Params$teams$create$discussion$in$org,
-      option?: RequestOption,
-    ): Promise<Response$teams$create$discussion$in$org$Status$201["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions`;
+    teams$create$discussion$in$org: (params: Params$teams$create$discussion$in$org, option?: RequestOption): Promise<Response$teams$create$discussion$in$org$Status$201["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -25881,12 +25169,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/get-discussion-in-org
      * Request URI: /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}
      */
-    teams$get$discussion$in$org: (
-      params: Params$teams$get$discussion$in$org,
-      option?: RequestOption,
-    ): Promise<Response$teams$get$discussion$in$org$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}`;
+    teams$get$discussion$in$org: (params: Params$teams$get$discussion$in$org, option?: RequestOption): Promise<Response$teams$get$discussion$in$org$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}`;
       const headers = {
         Accept: "application/json",
       };
@@ -25901,8 +25185,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}
      */
     teams$delete$discussion$in$org: (params: Params$teams$delete$discussion$in$org, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -25914,12 +25197,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/update-discussion-in-org
      * Request URI: /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}
      */
-    teams$update$discussion$in$org: (
-      params: Params$teams$update$discussion$in$org,
-      option?: RequestOption,
-    ): Promise<Response$teams$update$discussion$in$org$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}`;
+    teams$update$discussion$in$org: (params: Params$teams$update$discussion$in$org, option?: RequestOption): Promise<Response$teams$update$discussion$in$org$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -25938,9 +25217,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$list$discussion$comments$in$org,
       option?: RequestOption,
     ): Promise<Response$teams$list$discussion$comments$in$org$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments`;
+      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments`;
       const headers = {
         Accept: "application/json",
       };
@@ -25965,9 +25242,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$create$discussion$comment$in$org,
       option?: RequestOption,
     ): Promise<Response$teams$create$discussion$comment$in$org$Status$201["application/json"]> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments`;
+      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -25986,9 +25261,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$get$discussion$comment$in$org,
       option?: RequestOption,
     ): Promise<Response$teams$get$discussion$comment$in$org$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}`;
+      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}`;
       const headers = {
         Accept: "application/json",
       };
@@ -26003,9 +25276,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}
      */
     teams$delete$discussion$comment$in$org: (params: Params$teams$delete$discussion$comment$in$org, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}`;
+      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -26021,9 +25292,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$update$discussion$comment$in$org,
       option?: RequestOption,
     ): Promise<Response$teams$update$discussion$comment$in$org$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}`;
+      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -26042,9 +25311,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$reactions$list$for$team$discussion$comment$in$org,
       option?: RequestOption,
     ): Promise<Response$reactions$list$for$team$discussion$comment$in$org$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}/reactions`;
+      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}/reactions`;
       const headers = {
         Accept: "application/json",
       };
@@ -26066,15 +25333,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
     reactions$create$for$team$discussion$comment$in$org: (
       params: Params$reactions$create$for$team$discussion$comment$in$org,
       option?: RequestOption,
-    ): Promise<
-      (
-        | Response$reactions$create$for$team$discussion$comment$in$org$Status$200
-        | Response$reactions$create$for$team$discussion$comment$in$org$Status$201
-      )["application/json"]
-    > => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}/reactions`;
+    ): Promise<(Response$reactions$create$for$team$discussion$comment$in$org$Status$200 | Response$reactions$create$for$team$discussion$comment$in$org$Status$201)["application/json"]> => {
+      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}/reactions`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -26089,10 +25349,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: reactions/delete-for-team-discussion-comment
      * Request URI: /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions/{reaction_id}
      */
-    reactions$delete$for$team$discussion$comment: (
-      params: Params$reactions$delete$for$team$discussion$comment,
-      option?: RequestOption,
-    ): Promise<void> => {
+    reactions$delete$for$team$discussion$comment: (params: Params$reactions$delete$for$team$discussion$comment, option?: RequestOption): Promise<void> => {
       const url =
         baseUrl +
         `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}/reactions/${params.parameter.reaction_id}`;
@@ -26111,9 +25368,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$reactions$list$for$team$discussion$in$org,
       option?: RequestOption,
     ): Promise<Response$reactions$list$for$team$discussion$in$org$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/reactions`;
+      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/reactions`;
       const headers = {
         Accept: "application/json",
       };
@@ -26135,15 +25390,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
     reactions$create$for$team$discussion$in$org: (
       params: Params$reactions$create$for$team$discussion$in$org,
       option?: RequestOption,
-    ): Promise<
-      (
-        | Response$reactions$create$for$team$discussion$in$org$Status$200
-        | Response$reactions$create$for$team$discussion$in$org$Status$201
-      )["application/json"]
-    > => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/reactions`;
+    ): Promise<(Response$reactions$create$for$team$discussion$in$org$Status$200 | Response$reactions$create$for$team$discussion$in$org$Status$201)["application/json"]> => {
+      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/reactions`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -26159,9 +25407,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions/{reaction_id}
      */
     reactions$delete$for$team$discussion: (params: Params$reactions$delete$for$team$discussion, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl +
-        `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/reactions/${params.parameter.reaction_id}`;
+      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/discussions/${params.parameter.discussion_number}/reactions/${params.parameter.reaction_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -26173,11 +25419,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/list-members-in-org
      * Request URI: /orgs/{org}/teams/{team_slug}/members
      */
-    teams$list$members$in$org: (
-      params: Params$teams$list$members$in$org,
-      option?: RequestOption,
-    ): Promise<Response$teams$list$members$in$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/members`;
+    teams$list$members$in$org: (params: Params$teams$list$members$in$org, option?: RequestOption): Promise<Response$teams$list$members$in$org$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/members`;
       const headers = {
         Accept: "application/json",
       };
@@ -26207,7 +25450,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$get$membership$for$user$in$org,
       option?: RequestOption,
     ): Promise<Response$teams$get$membership$for$user$in$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/memberships/${params.parameter.username}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/memberships/${params.parameter.username}`;
       const headers = {
         Accept: "application/json",
       };
@@ -26233,7 +25476,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$add$or$update$membership$for$user$in$org,
       option?: RequestOption,
     ): Promise<Response$teams$add$or$update$membership$for$user$in$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/memberships/${params.parameter.username}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/memberships/${params.parameter.username}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -26252,11 +25495,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/remove-membership-for-user-in-org
      * Request URI: /orgs/{org}/teams/{team_slug}/memberships/{username}
      */
-    teams$remove$membership$for$user$in$org: (
-      params: Params$teams$remove$membership$for$user$in$org,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/memberships/${params.parameter.username}`;
+    teams$remove$membership$for$user$in$org: (params: Params$teams$remove$membership$for$user$in$org, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/memberships/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -26268,11 +25508,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/list-projects-in-org
      * Request URI: /orgs/{org}/teams/{team_slug}/projects
      */
-    teams$list$projects$in$org: (
-      params: Params$teams$list$projects$in$org,
-      option?: RequestOption,
-    ): Promise<Response$teams$list$projects$in$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/projects`;
+    teams$list$projects$in$org: (params: Params$teams$list$projects$in$org, option?: RequestOption): Promise<Response$teams$list$projects$in$org$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/projects`;
       const headers = {
         Accept: "application/json",
       };
@@ -26294,7 +25531,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$check$permissions$for$project$in$org,
       option?: RequestOption,
     ): Promise<Response$teams$check$permissions$for$project$in$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/projects/${params.parameter.project_id}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/projects/${params.parameter.project_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -26308,11 +25545,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/add-or-update-project-permissions-in-org
      * Request URI: /orgs/{org}/teams/{team_slug}/projects/{project_id}
      */
-    teams$add$or$update$project$permissions$in$org: (
-      params: Params$teams$add$or$update$project$permissions$in$org,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/projects/${params.parameter.project_id}`;
+    teams$add$or$update$project$permissions$in$org: (params: Params$teams$add$or$update$project$permissions$in$org, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/projects/${params.parameter.project_id}`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -26327,7 +25561,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/teams/{team_slug}/projects/{project_id}
      */
     teams$remove$project$in$org: (params: Params$teams$remove$project$in$org, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/projects/${params.parameter.project_id}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/projects/${params.parameter.project_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -26339,11 +25573,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/list-repos-in-org
      * Request URI: /orgs/{org}/teams/{team_slug}/repos
      */
-    teams$list$repos$in$org: (
-      params: Params$teams$list$repos$in$org,
-      option?: RequestOption,
-    ): Promise<Response$teams$list$repos$in$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/repos`;
+    teams$list$repos$in$org: (params: Params$teams$list$repos$in$org, option?: RequestOption): Promise<Response$teams$list$repos$in$org$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/repos`;
       const headers = {
         Accept: "application/json",
       };
@@ -26369,8 +25600,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$check$permissions$for$repo$in$org,
       option?: RequestOption,
     ): Promise<Response$teams$check$permissions$for$repo$in$org$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/repos/${params.parameter.owner}/${params.parameter.repo}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/repos/${params.parameter.owner}/${params.parameter.repo}`;
       const headers = {
         Accept: "application/json",
       };
@@ -26386,12 +25616,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/add-or-update-repo-permissions-in-org
      * Request URI: /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
      */
-    teams$add$or$update$repo$permissions$in$org: (
-      params: Params$teams$add$or$update$repo$permissions$in$org,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url =
-        baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/repos/${params.parameter.owner}/${params.parameter.repo}`;
+    teams$add$or$update$repo$permissions$in$org: (params: Params$teams$add$or$update$repo$permissions$in$org, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/repos/${params.parameter.owner}/${params.parameter.repo}`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -26406,8 +25632,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
      */
     teams$remove$repo$in$org: (params: Params$teams$remove$repo$in$org, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/repos/${params.parameter.owner}/${params.parameter.repo}`;
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/repos/${params.parameter.owner}/${params.parameter.repo}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -26419,11 +25644,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/list-child-in-org
      * Request URI: /orgs/{org}/teams/{team_slug}/teams
      */
-    teams$list$child$in$org: (
-      params: Params$teams$list$child$in$org,
-      option?: RequestOption,
-    ): Promise<Response$teams$list$child$in$org$Status$200["application/json"]> => {
-      const url = baseUrl + `/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/teams`;
+    teams$list$child$in$org: (params: Params$teams$list$child$in$org, option?: RequestOption): Promise<Response$teams$list$child$in$org$Status$200["application/json"]> => {
+      const url = `${baseUrl}/orgs/${params.parameter.org}/teams/${params.parameter.team_slug}/teams`;
       const headers = {
         Accept: "application/json",
       };
@@ -26438,11 +25660,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/get-card
      * Request URI: /projects/columns/cards/{card_id}
      */
-    projects$get$card: (
-      params: Params$projects$get$card,
-      option?: RequestOption,
-    ): Promise<Response$projects$get$card$Status$200["application/json"]> => {
-      const url = baseUrl + `/projects/columns/cards/${params.parameter.card_id}`;
+    projects$get$card: (params: Params$projects$get$card, option?: RequestOption): Promise<Response$projects$get$card$Status$200["application/json"]> => {
+      const url = `${baseUrl}/projects/columns/cards/${params.parameter.card_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -26454,7 +25673,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /projects/columns/cards/{card_id}
      */
     projects$delete$card: (params: Params$projects$delete$card, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/projects/columns/cards/${params.parameter.card_id}`;
+      const url = `${baseUrl}/projects/columns/cards/${params.parameter.card_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -26463,11 +25682,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/update-card
      * Request URI: /projects/columns/cards/{card_id}
      */
-    projects$update$card: (
-      params: Params$projects$update$card,
-      option?: RequestOption,
-    ): Promise<Response$projects$update$card$Status$200["application/json"]> => {
-      const url = baseUrl + `/projects/columns/cards/${params.parameter.card_id}`;
+    projects$update$card: (params: Params$projects$update$card, option?: RequestOption): Promise<Response$projects$update$card$Status$200["application/json"]> => {
+      const url = `${baseUrl}/projects/columns/cards/${params.parameter.card_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -26479,11 +25695,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/move-card
      * Request URI: /projects/columns/cards/{card_id}/moves
      */
-    projects$move$card: (
-      params: Params$projects$move$card,
-      option?: RequestOption,
-    ): Promise<Response$projects$move$card$Status$201["application/json"]> => {
-      const url = baseUrl + `/projects/columns/cards/${params.parameter.card_id}/moves`;
+    projects$move$card: (params: Params$projects$move$card, option?: RequestOption): Promise<Response$projects$move$card$Status$201["application/json"]> => {
+      const url = `${baseUrl}/projects/columns/cards/${params.parameter.card_id}/moves`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -26495,11 +25708,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/get-column
      * Request URI: /projects/columns/{column_id}
      */
-    projects$get$column: (
-      params: Params$projects$get$column,
-      option?: RequestOption,
-    ): Promise<Response$projects$get$column$Status$200["application/json"]> => {
-      const url = baseUrl + `/projects/columns/${params.parameter.column_id}`;
+    projects$get$column: (params: Params$projects$get$column, option?: RequestOption): Promise<Response$projects$get$column$Status$200["application/json"]> => {
+      const url = `${baseUrl}/projects/columns/${params.parameter.column_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -26511,7 +25721,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /projects/columns/{column_id}
      */
     projects$delete$column: (params: Params$projects$delete$column, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/projects/columns/${params.parameter.column_id}`;
+      const url = `${baseUrl}/projects/columns/${params.parameter.column_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -26520,11 +25730,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/update-column
      * Request URI: /projects/columns/{column_id}
      */
-    projects$update$column: (
-      params: Params$projects$update$column,
-      option?: RequestOption,
-    ): Promise<Response$projects$update$column$Status$200["application/json"]> => {
-      const url = baseUrl + `/projects/columns/${params.parameter.column_id}`;
+    projects$update$column: (params: Params$projects$update$column, option?: RequestOption): Promise<Response$projects$update$column$Status$200["application/json"]> => {
+      const url = `${baseUrl}/projects/columns/${params.parameter.column_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -26536,11 +25743,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/list-cards
      * Request URI: /projects/columns/{column_id}/cards
      */
-    projects$list$cards: (
-      params: Params$projects$list$cards,
-      option?: RequestOption,
-    ): Promise<Response$projects$list$cards$Status$200["application/json"]> => {
-      const url = baseUrl + `/projects/columns/${params.parameter.column_id}/cards`;
+    projects$list$cards: (params: Params$projects$list$cards, option?: RequestOption): Promise<Response$projects$list$cards$Status$200["application/json"]> => {
+      const url = `${baseUrl}/projects/columns/${params.parameter.column_id}/cards`;
       const headers = {
         Accept: "application/json",
       };
@@ -26556,11 +25760,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/create-card
      * Request URI: /projects/columns/{column_id}/cards
      */
-    projects$create$card: (
-      params: Params$projects$create$card,
-      option?: RequestOption,
-    ): Promise<Response$projects$create$card$Status$201["application/json"]> => {
-      const url = baseUrl + `/projects/columns/${params.parameter.column_id}/cards`;
+    projects$create$card: (params: Params$projects$create$card, option?: RequestOption): Promise<Response$projects$create$card$Status$201["application/json"]> => {
+      const url = `${baseUrl}/projects/columns/${params.parameter.column_id}/cards`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -26572,11 +25773,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/move-column
      * Request URI: /projects/columns/{column_id}/moves
      */
-    projects$move$column: (
-      params: Params$projects$move$column,
-      option?: RequestOption,
-    ): Promise<Response$projects$move$column$Status$201["application/json"]> => {
-      const url = baseUrl + `/projects/columns/${params.parameter.column_id}/moves`;
+    projects$move$column: (params: Params$projects$move$column, option?: RequestOption): Promise<Response$projects$move$column$Status$201["application/json"]> => {
+      const url = `${baseUrl}/projects/columns/${params.parameter.column_id}/moves`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -26590,7 +25788,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /projects/{project_id}
      */
     projects$get: (params: Params$projects$get, option?: RequestOption): Promise<Response$projects$get$Status$200["application/json"]> => {
-      const url = baseUrl + `/projects/${params.parameter.project_id}`;
+      const url = `${baseUrl}/projects/${params.parameter.project_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -26603,7 +25801,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /projects/{project_id}
      */
     projects$delete: (params: Params$projects$delete, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/projects/${params.parameter.project_id}`;
+      const url = `${baseUrl}/projects/${params.parameter.project_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -26613,11 +25811,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/update
      * Request URI: /projects/{project_id}
      */
-    projects$update: (
-      params: Params$projects$update,
-      option?: RequestOption,
-    ): Promise<Response$projects$update$Status$200["application/json"]> => {
-      const url = baseUrl + `/projects/${params.parameter.project_id}`;
+    projects$update: (params: Params$projects$update, option?: RequestOption): Promise<Response$projects$update$Status$200["application/json"]> => {
+      const url = `${baseUrl}/projects/${params.parameter.project_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -26630,11 +25825,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/list-collaborators
      * Request URI: /projects/{project_id}/collaborators
      */
-    projects$list$collaborators: (
-      params: Params$projects$list$collaborators,
-      option?: RequestOption,
-    ): Promise<Response$projects$list$collaborators$Status$200["application/json"]> => {
-      const url = baseUrl + `/projects/${params.parameter.project_id}/collaborators`;
+    projects$list$collaborators: (params: Params$projects$list$collaborators, option?: RequestOption): Promise<Response$projects$list$collaborators$Status$200["application/json"]> => {
+      const url = `${baseUrl}/projects/${params.parameter.project_id}/collaborators`;
       const headers = {
         Accept: "application/json",
       };
@@ -26652,7 +25844,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /projects/{project_id}/collaborators/{username}
      */
     projects$add$collaborator: (params: Params$projects$add$collaborator, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/projects/${params.parameter.project_id}/collaborators/${params.parameter.username}`;
+      const url = `${baseUrl}/projects/${params.parameter.project_id}/collaborators/${params.parameter.username}`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -26665,7 +25857,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /projects/{project_id}/collaborators/{username}
      */
     projects$remove$collaborator: (params: Params$projects$remove$collaborator, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/projects/${params.parameter.project_id}/collaborators/${params.parameter.username}`;
+      const url = `${baseUrl}/projects/${params.parameter.project_id}/collaborators/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -26675,11 +25867,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/get-permission-for-user
      * Request URI: /projects/{project_id}/collaborators/{username}/permission
      */
-    projects$get$permission$for$user: (
-      params: Params$projects$get$permission$for$user,
-      option?: RequestOption,
-    ): Promise<Response$projects$get$permission$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/projects/${params.parameter.project_id}/collaborators/${params.parameter.username}/permission`;
+    projects$get$permission$for$user: (params: Params$projects$get$permission$for$user, option?: RequestOption): Promise<Response$projects$get$permission$for$user$Status$200["application/json"]> => {
+      const url = `${baseUrl}/projects/${params.parameter.project_id}/collaborators/${params.parameter.username}/permission`;
       const headers = {
         Accept: "application/json",
       };
@@ -26690,11 +25879,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/list-columns
      * Request URI: /projects/{project_id}/columns
      */
-    projects$list$columns: (
-      params: Params$projects$list$columns,
-      option?: RequestOption,
-    ): Promise<Response$projects$list$columns$Status$200["application/json"]> => {
-      const url = baseUrl + `/projects/${params.parameter.project_id}/columns`;
+    projects$list$columns: (params: Params$projects$list$columns, option?: RequestOption): Promise<Response$projects$list$columns$Status$200["application/json"]> => {
+      const url = `${baseUrl}/projects/${params.parameter.project_id}/columns`;
       const headers = {
         Accept: "application/json",
       };
@@ -26709,11 +25895,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/create-column
      * Request URI: /projects/{project_id}/columns
      */
-    projects$create$column: (
-      params: Params$projects$create$column,
-      option?: RequestOption,
-    ): Promise<Response$projects$create$column$Status$201["application/json"]> => {
-      const url = baseUrl + `/projects/${params.parameter.project_id}/columns`;
+    projects$create$column: (params: Params$projects$create$column, option?: RequestOption): Promise<Response$projects$create$column$Status$201["application/json"]> => {
+      const url = `${baseUrl}/projects/${params.parameter.project_id}/columns`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -26729,7 +25912,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /rate_limit
      */
     rate$limit$get: (option?: RequestOption): Promise<Response$rate$limit$get$Status$200["application/json"]> => {
-      const url = baseUrl + `/rate_limit`;
+      const url = `${baseUrl}/rate_limit`;
       const headers = {
         Accept: "application/json",
       };
@@ -26744,7 +25927,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /reactions/{reaction_id}
      */
     reactions$delete$legacy: (params: Params$reactions$delete$legacy, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/reactions/${params.parameter.reaction_id}`;
+      const url = `${baseUrl}/reactions/${params.parameter.reaction_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -26755,7 +25938,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}
      */
     repos$get: (params: Params$repos$get, option?: RequestOption): Promise<Response$repos$get$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}`;
       const headers = {
         Accept: "application/json",
       };
@@ -26771,7 +25954,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}
      */
     repos$delete: (params: Params$repos$delete, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -26782,7 +25965,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}
      */
     repos$update: (params: Params$repos$update, option?: RequestOption): Promise<Response$repos$update$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -26795,11 +25978,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/list-artifacts-for-repo
      * Request URI: /repos/{owner}/{repo}/actions/artifacts
      */
-    actions$list$artifacts$for$repo: (
-      params: Params$actions$list$artifacts$for$repo,
-      option?: RequestOption,
-    ): Promise<Response$actions$list$artifacts$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/artifacts`;
+    actions$list$artifacts$for$repo: (params: Params$actions$list$artifacts$for$repo, option?: RequestOption): Promise<Response$actions$list$artifacts$for$repo$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/artifacts`;
       const headers = {
         Accept: "application/json",
       };
@@ -26815,11 +25995,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/get-artifact
      * Request URI: /repos/{owner}/{repo}/actions/artifacts/{artifact_id}
      */
-    actions$get$artifact: (
-      params: Params$actions$get$artifact,
-      option?: RequestOption,
-    ): Promise<Response$actions$get$artifact$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/artifacts/${params.parameter.artifact_id}`;
+    actions$get$artifact: (params: Params$actions$get$artifact, option?: RequestOption): Promise<Response$actions$get$artifact$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/artifacts/${params.parameter.artifact_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -26832,7 +26009,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/actions/artifacts/{artifact_id}
      */
     actions$delete$artifact: (params: Params$actions$delete$artifact, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/artifacts/${params.parameter.artifact_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/artifacts/${params.parameter.artifact_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -26846,9 +26023,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}
      */
     actions$download$artifact: (params: Params$actions$download$artifact, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/artifacts/${params.parameter.artifact_id}/${params.parameter.archive_format}`;
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/artifacts/${params.parameter.artifact_id}/${params.parameter.archive_format}`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -26858,11 +26033,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/get-job-for-workflow-run
      * Request URI: /repos/{owner}/{repo}/actions/jobs/{job_id}
      */
-    actions$get$job$for$workflow$run: (
-      params: Params$actions$get$job$for$workflow$run,
-      option?: RequestOption,
-    ): Promise<Response$actions$get$job$for$workflow$run$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/jobs/${params.parameter.job_id}`;
+    actions$get$job$for$workflow$run: (params: Params$actions$get$job$for$workflow$run, option?: RequestOption): Promise<Response$actions$get$job$for$workflow$run$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/jobs/${params.parameter.job_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -26877,11 +26049,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/download-job-logs-for-workflow-run
      * Request URI: /repos/{owner}/{repo}/actions/jobs/{job_id}/logs
      */
-    actions$download$job$logs$for$workflow$run: (
-      params: Params$actions$download$job$logs$for$workflow$run,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/jobs/${params.parameter.job_id}/logs`;
+    actions$download$job$logs$for$workflow$run: (params: Params$actions$download$job$logs$for$workflow$run, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/jobs/${params.parameter.job_id}/logs`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -26898,7 +26067,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$get$github$actions$permissions$repository,
       option?: RequestOption,
     ): Promise<Response$actions$get$github$actions$permissions$repository$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/permissions`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/permissions`;
       const headers = {
         Accept: "application/json",
       };
@@ -26914,11 +26083,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/set-github-actions-permissions-repository
      * Request URI: /repos/{owner}/{repo}/actions/permissions
      */
-    actions$set$github$actions$permissions$repository: (
-      params: Params$actions$set$github$actions$permissions$repository,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/permissions`;
+    actions$set$github$actions$permissions$repository: (params: Params$actions$set$github$actions$permissions$repository, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/permissions`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -26936,7 +26102,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$get$allowed$actions$repository,
       option?: RequestOption,
     ): Promise<Response$actions$get$allowed$actions$repository$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/permissions/selected-actions`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/permissions/selected-actions`;
       const headers = {
         Accept: "application/json",
       };
@@ -26955,7 +26121,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/actions/permissions/selected-actions
      */
     actions$set$allowed$actions$repository: (params: Params$actions$set$allowed$actions$repository, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/permissions/selected-actions`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/permissions/selected-actions`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -26971,7 +26137,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$list$self$hosted$runners$for$repo,
       option?: RequestOption,
     ): Promise<Response$actions$list$self$hosted$runners$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners`;
       const headers = {
         Accept: "application/json",
       };
@@ -26993,7 +26159,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$list$runner$applications$for$repo,
       option?: RequestOption,
     ): Promise<Response$actions$list$runner$applications$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/downloads`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/downloads`;
       const headers = {
         Accept: "application/json",
       };
@@ -27018,7 +26184,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$create$registration$token$for$repo,
       option?: RequestOption,
     ): Promise<Response$actions$create$registration$token$for$repo$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/registration-token`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/registration-token`;
       const headers = {
         Accept: "application/json",
       };
@@ -27043,7 +26209,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$create$remove$token$for$repo,
       option?: RequestOption,
     ): Promise<Response$actions$create$remove$token$for$repo$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/remove-token`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/remove-token`;
       const headers = {
         Accept: "application/json",
       };
@@ -27062,7 +26228,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$get$self$hosted$runner$for$repo,
       option?: RequestOption,
     ): Promise<Response$actions$get$self$hosted$runner$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -27077,11 +26243,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/delete-self-hosted-runner-from-repo
      * Request URI: /repos/{owner}/{repo}/actions/runners/{runner_id}
      */
-    actions$delete$self$hosted$runner$from$repo: (
-      params: Params$actions$delete$self$hosted$runner$from$repo,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}`;
+    actions$delete$self$hosted$runner$from$repo: (params: Params$actions$delete$self$hosted$runner$from$repo, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -27098,7 +26261,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$list$labels$for$self$hosted$runner$for$repo,
       option?: RequestOption,
     ): Promise<Response$actions$list$labels$for$self$hosted$runner$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}/labels`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}/labels`;
       const headers = {
         Accept: "application/json",
       };
@@ -27118,7 +26281,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$set$custom$labels$for$self$hosted$runner$for$repo,
       option?: RequestOption,
     ): Promise<Response$actions$set$custom$labels$for$self$hosted$runner$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}/labels`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}/labels`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -27138,7 +26301,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$add$custom$labels$to$self$hosted$runner$for$repo,
       option?: RequestOption,
     ): Promise<Response$actions$add$custom$labels$to$self$hosted$runner$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}/labels`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}/labels`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -27159,7 +26322,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo,
       option?: RequestOption,
     ): Promise<Response$actions$remove$all$custom$labels$from$self$hosted$runner$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}/labels`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}/labels`;
       const headers = {
         Accept: "application/json",
       };
@@ -27182,9 +26345,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$remove$custom$label$from$self$hosted$runner$for$repo,
       option?: RequestOption,
     ): Promise<Response$actions$remove$custom$label$from$self$hosted$runner$for$repo$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}/labels/${params.parameter.name}`;
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runners/${params.parameter.runner_id}/labels/${params.parameter.name}`;
       const headers = {
         Accept: "application/json",
       };
@@ -27202,7 +26363,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$list$workflow$runs$for$repo,
       option?: RequestOption,
     ): Promise<Response$actions$list$workflow$runs$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs`;
       const headers = {
         Accept: "application/json",
       };
@@ -27224,11 +26385,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/get-workflow-run
      * Request URI: /repos/{owner}/{repo}/actions/runs/{run_id}
      */
-    actions$get$workflow$run: (
-      params: Params$actions$get$workflow$run,
-      option?: RequestOption,
-    ): Promise<Response$actions$get$workflow$run$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}`;
+    actions$get$workflow$run: (params: Params$actions$get$workflow$run, option?: RequestOption): Promise<Response$actions$get$workflow$run$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -27246,7 +26404,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/actions/runs/{run_id}
      */
     actions$delete$workflow$run: (params: Params$actions$delete$workflow$run, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -27256,11 +26414,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/get-reviews-for-run
      * Request URI: /repos/{owner}/{repo}/actions/runs/{run_id}/approvals
      */
-    actions$get$reviews$for$run: (
-      params: Params$actions$get$reviews$for$run,
-      option?: RequestOption,
-    ): Promise<Response$actions$get$reviews$for$run$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/approvals`;
+    actions$get$reviews$for$run: (params: Params$actions$get$reviews$for$run, option?: RequestOption): Promise<Response$actions$get$reviews$for$run$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/approvals`;
       const headers = {
         Accept: "application/json",
       };
@@ -27276,7 +26431,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$list$workflow$run$artifacts,
       option?: RequestOption,
     ): Promise<Response$actions$list$workflow$run$artifacts$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/artifacts`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/artifacts`;
       const headers = {
         Accept: "application/json",
       };
@@ -27292,11 +26447,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/cancel-workflow-run
      * Request URI: /repos/{owner}/{repo}/actions/runs/{run_id}/cancel
      */
-    actions$cancel$workflow$run: (
-      params: Params$actions$cancel$workflow$run,
-      option?: RequestOption,
-    ): Promise<Response$actions$cancel$workflow$run$Status$202["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/cancel`;
+    actions$cancel$workflow$run: (params: Params$actions$cancel$workflow$run, option?: RequestOption): Promise<Response$actions$cancel$workflow$run$Status$202["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/cancel`;
       const headers = {
         Accept: "application/json",
       };
@@ -27312,7 +26464,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$list$jobs$for$workflow$run,
       option?: RequestOption,
     ): Promise<Response$actions$list$jobs$for$workflow$run$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/jobs`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/jobs`;
       const headers = {
         Accept: "application/json",
       };
@@ -27333,7 +26485,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/actions/runs/{run_id}/logs
      */
     actions$download$workflow$run$logs: (params: Params$actions$download$workflow$run$logs, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/logs`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/logs`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -27344,7 +26496,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/actions/runs/{run_id}/logs
      */
     actions$delete$workflow$run$logs: (params: Params$actions$delete$workflow$run$logs, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/logs`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/logs`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -27360,8 +26512,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$get$pending$deployments$for$run,
       option?: RequestOption,
     ): Promise<Response$actions$get$pending$deployments$for$run$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/pending_deployments`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/pending_deployments`;
       const headers = {
         Accept: "application/json",
       };
@@ -27379,8 +26530,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$review$pending$deployments$for$run,
       option?: RequestOption,
     ): Promise<Response$actions$review$pending$deployments$for$run$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/pending_deployments`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/pending_deployments`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -27393,11 +26543,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/re-run-workflow
      * Request URI: /repos/{owner}/{repo}/actions/runs/{run_id}/rerun
      */
-    actions$re$run$workflow: (
-      params: Params$actions$re$run$workflow,
-      option?: RequestOption,
-    ): Promise<Response$actions$re$run$workflow$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/rerun`;
+    actions$re$run$workflow: (params: Params$actions$re$run$workflow, option?: RequestOption): Promise<Response$actions$re$run$workflow$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/runs/${params.parameter.run_id}/rerun`;
       const headers = {
         Accept: "application/json",
       };
@@ -27409,11 +26556,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/list-repo-secrets
      * Request URI: /repos/{owner}/{repo}/actions/secrets
      */
-    actions$list$repo$secrets: (
-      params: Params$actions$list$repo$secrets,
-      option?: RequestOption,
-    ): Promise<Response$actions$list$repo$secrets$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/secrets`;
+    actions$list$repo$secrets: (params: Params$actions$list$repo$secrets, option?: RequestOption): Promise<Response$actions$list$repo$secrets$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/secrets`;
       const headers = {
         Accept: "application/json",
       };
@@ -27429,11 +26573,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/get-repo-public-key
      * Request URI: /repos/{owner}/{repo}/actions/secrets/public-key
      */
-    actions$get$repo$public$key: (
-      params: Params$actions$get$repo$public$key,
-      option?: RequestOption,
-    ): Promise<Response$actions$get$repo$public$key$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/secrets/public-key`;
+    actions$get$repo$public$key: (params: Params$actions$get$repo$public$key, option?: RequestOption): Promise<Response$actions$get$repo$public$key$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/secrets/public-key`;
       const headers = {
         Accept: "application/json",
       };
@@ -27445,11 +26586,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/get-repo-secret
      * Request URI: /repos/{owner}/{repo}/actions/secrets/{secret_name}
      */
-    actions$get$repo$secret: (
-      params: Params$actions$get$repo$secret,
-      option?: RequestOption,
-    ): Promise<Response$actions$get$repo$secret$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/secrets/${params.parameter.secret_name}`;
+    actions$get$repo$secret: (params: Params$actions$get$repo$secret, option?: RequestOption): Promise<Response$actions$get$repo$secret$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/secrets/${params.parameter.secret_name}`;
       const headers = {
         Accept: "application/json",
       };
@@ -27539,7 +26677,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$create$or$update$repo$secret,
       option?: RequestOption,
     ): Promise<Response$actions$create$or$update$repo$secret$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/secrets/${params.parameter.secret_name}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/secrets/${params.parameter.secret_name}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -27553,7 +26691,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/actions/secrets/{secret_name}
      */
     actions$delete$repo$secret: (params: Params$actions$delete$repo$secret, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/secrets/${params.parameter.secret_name}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/secrets/${params.parameter.secret_name}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -27563,11 +26701,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/list-repo-workflows
      * Request URI: /repos/{owner}/{repo}/actions/workflows
      */
-    actions$list$repo$workflows: (
-      params: Params$actions$list$repo$workflows,
-      option?: RequestOption,
-    ): Promise<Response$actions$list$repo$workflows$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/workflows`;
+    actions$list$repo$workflows: (params: Params$actions$list$repo$workflows, option?: RequestOption): Promise<Response$actions$list$repo$workflows$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/workflows`;
       const headers = {
         Accept: "application/json",
       };
@@ -27583,11 +26718,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/get-workflow
      * Request URI: /repos/{owner}/{repo}/actions/workflows/{workflow_id}
      */
-    actions$get$workflow: (
-      params: Params$actions$get$workflow,
-      option?: RequestOption,
-    ): Promise<Response$actions$get$workflow$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/workflows/${params.parameter.workflow_id}`;
+    actions$get$workflow: (params: Params$actions$get$workflow, option?: RequestOption): Promise<Response$actions$get$workflow$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/workflows/${params.parameter.workflow_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -27602,8 +26734,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable
      */
     actions$disable$workflow: (params: Params$actions$disable$workflow, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/workflows/${params.parameter.workflow_id}/disable`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/workflows/${params.parameter.workflow_id}/disable`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -27618,8 +26749,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches
      */
     actions$create$workflow$dispatch: (params: Params$actions$create$workflow$dispatch, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/workflows/${params.parameter.workflow_id}/dispatches`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/workflows/${params.parameter.workflow_id}/dispatches`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -27634,8 +26764,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable
      */
     actions$enable$workflow: (params: Params$actions$enable$workflow, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/workflows/${params.parameter.workflow_id}/enable`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/workflows/${params.parameter.workflow_id}/enable`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -27647,11 +26776,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/list-workflow-runs
      * Request URI: /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs
      */
-    actions$list$workflow$runs: (
-      params: Params$actions$list$workflow$runs,
-      option?: RequestOption,
-    ): Promise<Response$actions$list$workflow$runs$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/actions/workflows/${params.parameter.workflow_id}/runs`;
+    actions$list$workflow$runs: (params: Params$actions$list$workflow$runs, option?: RequestOption): Promise<Response$actions$list$workflow$runs$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/actions/workflows/${params.parameter.workflow_id}/runs`;
       const headers = {
         Accept: "application/json",
       };
@@ -27673,11 +26799,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/list-assignees
      * Request URI: /repos/{owner}/{repo}/assignees
      */
-    issues$list$assignees: (
-      params: Params$issues$list$assignees,
-      option?: RequestOption,
-    ): Promise<Response$issues$list$assignees$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/assignees`;
+    issues$list$assignees: (params: Params$issues$list$assignees, option?: RequestOption): Promise<Response$issues$list$assignees$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/assignees`;
       const headers = {
         Accept: "application/json",
       };
@@ -27698,7 +26821,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/assignees/{assignee}
      */
     issues$check$user$can$be$assigned: (params: Params$issues$check$user$can$be$assigned, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/assignees/${params.parameter.assignee}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/assignees/${params.parameter.assignee}`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -27710,11 +26833,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-autolinks
      * Request URI: /repos/{owner}/{repo}/autolinks
      */
-    repos$list$autolinks: (
-      params: Params$repos$list$autolinks,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$autolinks$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/autolinks`;
+    repos$list$autolinks: (params: Params$repos$list$autolinks, option?: RequestOption): Promise<Response$repos$list$autolinks$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/autolinks`;
       const headers = {
         Accept: "application/json",
       };
@@ -27729,11 +26849,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/create-autolink
      * Request URI: /repos/{owner}/{repo}/autolinks
      */
-    repos$create$autolink: (
-      params: Params$repos$create$autolink,
-      option?: RequestOption,
-    ): Promise<Response$repos$create$autolink$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/autolinks`;
+    repos$create$autolink: (params: Params$repos$create$autolink, option?: RequestOption): Promise<Response$repos$create$autolink$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/autolinks`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -27748,11 +26865,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-autolink
      * Request URI: /repos/{owner}/{repo}/autolinks/{autolink_id}
      */
-    repos$get$autolink: (
-      params: Params$repos$get$autolink,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$autolink$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/autolinks/${params.parameter.autolink_id}`;
+    repos$get$autolink: (params: Params$repos$get$autolink, option?: RequestOption): Promise<Response$repos$get$autolink$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/autolinks/${params.parameter.autolink_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -27767,7 +26881,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/autolinks/{autolink_id}
      */
     repos$delete$autolink: (params: Params$repos$delete$autolink, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/autolinks/${params.parameter.autolink_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/autolinks/${params.parameter.autolink_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -27776,11 +26890,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-branches
      * Request URI: /repos/{owner}/{repo}/branches
      */
-    repos$list$branches: (
-      params: Params$repos$list$branches,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$branches$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches`;
+    repos$list$branches: (params: Params$repos$list$branches, option?: RequestOption): Promise<Response$repos$list$branches$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches`;
       const headers = {
         Accept: "application/json",
       };
@@ -27796,11 +26907,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-branch
      * Request URI: /repos/{owner}/{repo}/branches/{branch}
      */
-    repos$get$branch: (
-      params: Params$repos$get$branch,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$branch$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}`;
+    repos$get$branch: (params: Params$repos$get$branch, option?: RequestOption): Promise<Response$repos$get$branch$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}`;
       const headers = {
         Accept: "application/json",
       };
@@ -27812,11 +26920,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-branch-protection
      * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection
      */
-    repos$get$branch$protection: (
-      params: Params$repos$get$branch$protection,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$branch$protection$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection`;
+    repos$get$branch$protection: (params: Params$repos$get$branch$protection, option?: RequestOption): Promise<Response$repos$get$branch$protection$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection`;
       const headers = {
         Accept: "application/json",
       };
@@ -27834,11 +26939,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/update-branch-protection
      * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection
      */
-    repos$update$branch$protection: (
-      params: Params$repos$update$branch$protection,
-      option?: RequestOption,
-    ): Promise<Response$repos$update$branch$protection$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection`;
+    repos$update$branch$protection: (params: Params$repos$update$branch$protection, option?: RequestOption): Promise<Response$repos$update$branch$protection$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -27852,7 +26954,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection
      */
     repos$delete$branch$protection: (params: Params$repos$delete$branch$protection, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -27866,8 +26968,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$get$admin$branch$protection,
       option?: RequestOption,
     ): Promise<Response$repos$get$admin$branch$protection$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/enforce_admins`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/enforce_admins`;
       const headers = {
         Accept: "application/json",
       };
@@ -27885,8 +26986,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$set$admin$branch$protection,
       option?: RequestOption,
     ): Promise<Response$repos$set$admin$branch$protection$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/enforce_admins`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/enforce_admins`;
       const headers = {
         Accept: "application/json",
       };
@@ -27901,8 +27001,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins
      */
     repos$delete$admin$branch$protection: (params: Params$repos$delete$admin$branch$protection, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/enforce_admins`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/enforce_admins`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -27916,9 +27015,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$get$pull$request$review$protection,
       option?: RequestOption,
     ): Promise<Response$repos$get$pull$request$review$protection$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_pull_request_reviews`;
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_pull_request_reviews`;
       const headers = {
         Accept: "application/json",
       };
@@ -27930,13 +27027,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/delete-pull-request-review-protection
      * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews
      */
-    repos$delete$pull$request$review$protection: (
-      params: Params$repos$delete$pull$request$review$protection,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_pull_request_reviews`;
+    repos$delete$pull$request$review$protection: (params: Params$repos$delete$pull$request$review$protection, option?: RequestOption): Promise<void> => {
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_pull_request_reviews`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -27954,9 +27046,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$update$pull$request$review$protection,
       option?: RequestOption,
     ): Promise<Response$repos$update$pull$request$review$protection$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_pull_request_reviews`;
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_pull_request_reviews`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -27977,9 +27067,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$get$commit$signature$protection,
       option?: RequestOption,
     ): Promise<Response$repos$get$commit$signature$protection$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_signatures`;
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_signatures`;
       const headers = {
         Accept: "application/json",
       };
@@ -27997,9 +27085,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$create$commit$signature$protection,
       option?: RequestOption,
     ): Promise<Response$repos$create$commit$signature$protection$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_signatures`;
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_signatures`;
       const headers = {
         Accept: "application/json",
       };
@@ -28013,13 +27099,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/delete-commit-signature-protection
      * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures
      */
-    repos$delete$commit$signature$protection: (
-      params: Params$repos$delete$commit$signature$protection,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_signatures`;
+    repos$delete$commit$signature$protection: (params: Params$repos$delete$commit$signature$protection, option?: RequestOption): Promise<void> => {
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_signatures`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -28033,9 +27114,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$get$status$checks$protection,
       option?: RequestOption,
     ): Promise<Response$repos$get$status$checks$protection$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_status_checks`;
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_status_checks`;
       const headers = {
         Accept: "application/json",
       };
@@ -28048,9 +27127,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks
      */
     repos$remove$status$check$protection: (params: Params$repos$remove$status$check$protection, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_status_checks`;
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_status_checks`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -28066,9 +27143,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$update$status$check$protection,
       option?: RequestOption,
     ): Promise<Response$repos$update$status$check$protection$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_status_checks`;
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_status_checks`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28085,9 +27160,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$get$all$status$check$contexts,
       option?: RequestOption,
     ): Promise<Response$repos$get$all$status$check$contexts$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_status_checks/contexts`;
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_status_checks/contexts`;
       const headers = {
         Accept: "application/json",
       };
@@ -28099,13 +27172,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/set-status-check-contexts
      * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
      */
-    repos$set$status$check$contexts: (
-      params: Params$repos$set$status$check$contexts,
-      option?: RequestOption,
-    ): Promise<Response$repos$set$status$check$contexts$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_status_checks/contexts`;
+    repos$set$status$check$contexts: (params: Params$repos$set$status$check$contexts, option?: RequestOption): Promise<Response$repos$set$status$check$contexts$Status$200["application/json"]> => {
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_status_checks/contexts`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28118,13 +27186,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/add-status-check-contexts
      * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
      */
-    repos$add$status$check$contexts: (
-      params: Params$repos$add$status$check$contexts,
-      option?: RequestOption,
-    ): Promise<Response$repos$add$status$check$contexts$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_status_checks/contexts`;
+    repos$add$status$check$contexts: (params: Params$repos$add$status$check$contexts, option?: RequestOption): Promise<Response$repos$add$status$check$contexts$Status$200["application/json"]> => {
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_status_checks/contexts`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28141,9 +27204,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$remove$status$check$contexts,
       option?: RequestOption,
     ): Promise<Response$repos$remove$status$check$contexts$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_status_checks/contexts`;
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/required_status_checks/contexts`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28160,12 +27221,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-access-restrictions
      * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions
      */
-    repos$get$access$restrictions: (
-      params: Params$repos$get$access$restrictions,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$access$restrictions$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions`;
+    repos$get$access$restrictions: (params: Params$repos$get$access$restrictions, option?: RequestOption): Promise<Response$repos$get$access$restrictions$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions`;
       const headers = {
         Accept: "application/json",
       };
@@ -28180,8 +27237,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions
      */
     repos$delete$access$restrictions: (params: Params$repos$delete$access$restrictions, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -28197,8 +27253,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$get$apps$with$access$to$protected$branch,
       option?: RequestOption,
     ): Promise<Response$repos$get$apps$with$access$to$protected$branch$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/apps`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/apps`;
       const headers = {
         Accept: "application/json",
       };
@@ -28220,8 +27275,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$set$app$access$restrictions,
       option?: RequestOption,
     ): Promise<Response$repos$set$app$access$restrictions$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/apps`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/apps`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28244,8 +27298,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$add$app$access$restrictions,
       option?: RequestOption,
     ): Promise<Response$repos$add$app$access$restrictions$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/apps`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/apps`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28268,8 +27321,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$remove$app$access$restrictions,
       option?: RequestOption,
     ): Promise<Response$repos$remove$app$access$restrictions$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/apps`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/apps`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28288,8 +27340,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$get$teams$with$access$to$protected$branch,
       option?: RequestOption,
     ): Promise<Response$repos$get$teams$with$access$to$protected$branch$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/teams`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/teams`;
       const headers = {
         Accept: "application/json",
       };
@@ -28311,8 +27362,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$set$team$access$restrictions,
       option?: RequestOption,
     ): Promise<Response$repos$set$team$access$restrictions$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/teams`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/teams`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28335,8 +27385,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$add$team$access$restrictions,
       option?: RequestOption,
     ): Promise<Response$repos$add$team$access$restrictions$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/teams`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/teams`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28359,8 +27408,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$remove$team$access$restrictions,
       option?: RequestOption,
     ): Promise<Response$repos$remove$team$access$restrictions$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/teams`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/teams`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28379,8 +27427,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$get$users$with$access$to$protected$branch,
       option?: RequestOption,
     ): Promise<Response$repos$get$users$with$access$to$protected$branch$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/users`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/users`;
       const headers = {
         Accept: "application/json",
       };
@@ -28402,8 +27449,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$set$user$access$restrictions,
       option?: RequestOption,
     ): Promise<Response$repos$set$user$access$restrictions$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/users`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/users`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28426,8 +27472,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$add$user$access$restrictions,
       option?: RequestOption,
     ): Promise<Response$repos$add$user$access$restrictions$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/users`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/users`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28450,8 +27495,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$remove$user$access$restrictions,
       option?: RequestOption,
     ): Promise<Response$repos$remove$user$access$restrictions$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/users`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/protection/restrictions/users`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28478,11 +27522,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/rename-branch
      * Request URI: /repos/{owner}/{repo}/branches/{branch}/rename
      */
-    repos$rename$branch: (
-      params: Params$repos$rename$branch,
-      option?: RequestOption,
-    ): Promise<Response$repos$rename$branch$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/rename`;
+    repos$rename$branch: (params: Params$repos$rename$branch, option?: RequestOption): Promise<Response$repos$rename$branch$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/branches/${params.parameter.branch}/rename`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28500,7 +27541,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/check-runs
      */
     checks$create: (params: Params$checks$create, option?: RequestOption): Promise<Response$checks$create$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/check-runs`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/check-runs`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28516,7 +27557,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/check-runs/{check_run_id}
      */
     checks$get: (params: Params$checks$get, option?: RequestOption): Promise<Response$checks$get$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/check-runs/${params.parameter.check_run_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/check-runs/${params.parameter.check_run_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -28531,7 +27572,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/check-runs/{check_run_id}
      */
     checks$update: (params: Params$checks$update, option?: RequestOption): Promise<Response$checks$update$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/check-runs/${params.parameter.check_run_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/check-runs/${params.parameter.check_run_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28544,11 +27585,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: checks/list-annotations
      * Request URI: /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations
      */
-    checks$list$annotations: (
-      params: Params$checks$list$annotations,
-      option?: RequestOption,
-    ): Promise<Response$checks$list$annotations$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/check-runs/${params.parameter.check_run_id}/annotations`;
+    checks$list$annotations: (params: Params$checks$list$annotations, option?: RequestOption): Promise<Response$checks$list$annotations$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/check-runs/${params.parameter.check_run_id}/annotations`;
       const headers = {
         Accept: "application/json",
       };
@@ -28566,11 +27604,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: checks/rerequest-run
      * Request URI: /repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest
      */
-    checks$rerequest$run: (
-      params: Params$checks$rerequest$run,
-      option?: RequestOption,
-    ): Promise<Response$checks$rerequest$run$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/check-runs/${params.parameter.check_run_id}/rerequest`;
+    checks$rerequest$run: (params: Params$checks$rerequest$run, option?: RequestOption): Promise<Response$checks$rerequest$run$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/check-runs/${params.parameter.check_run_id}/rerequest`;
       const headers = {
         Accept: "application/json",
       };
@@ -28588,7 +27623,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$checks$create$suite,
       option?: RequestOption,
     ): Promise<(Response$checks$create$suite$Status$200 | Response$checks$create$suite$Status$201)["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/check-suites`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/check-suites`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28601,11 +27636,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: checks/set-suites-preferences
      * Request URI: /repos/{owner}/{repo}/check-suites/preferences
      */
-    checks$set$suites$preferences: (
-      params: Params$checks$set$suites$preferences,
-      option?: RequestOption,
-    ): Promise<Response$checks$set$suites$preferences$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/check-suites/preferences`;
+    checks$set$suites$preferences: (params: Params$checks$set$suites$preferences, option?: RequestOption): Promise<Response$checks$set$suites$preferences$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/check-suites/preferences`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28620,11 +27652,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: checks/get-suite
      * Request URI: /repos/{owner}/{repo}/check-suites/{check_suite_id}
      */
-    checks$get$suite: (
-      params: Params$checks$get$suite,
-      option?: RequestOption,
-    ): Promise<Response$checks$get$suite$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/check-suites/${params.parameter.check_suite_id}`;
+    checks$get$suite: (params: Params$checks$get$suite, option?: RequestOption): Promise<Response$checks$get$suite$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/check-suites/${params.parameter.check_suite_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -28638,12 +27667,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: checks/list-for-suite
      * Request URI: /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs
      */
-    checks$list$for$suite: (
-      params: Params$checks$list$for$suite,
-      option?: RequestOption,
-    ): Promise<Response$checks$list$for$suite$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/check-suites/${params.parameter.check_suite_id}/check-runs`;
+    checks$list$for$suite: (params: Params$checks$list$for$suite, option?: RequestOption): Promise<Response$checks$list$for$suite$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/check-suites/${params.parameter.check_suite_id}/check-runs`;
       const headers = {
         Accept: "application/json",
       };
@@ -28664,12 +27689,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: checks/rerequest-suite
      * Request URI: /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest
      */
-    checks$rerequest$suite: (
-      params: Params$checks$rerequest$suite,
-      option?: RequestOption,
-    ): Promise<Response$checks$rerequest$suite$Status$201["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/check-suites/${params.parameter.check_suite_id}/rerequest`;
+    checks$rerequest$suite: (params: Params$checks$rerequest$suite, option?: RequestOption): Promise<Response$checks$rerequest$suite$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/check-suites/${params.parameter.check_suite_id}/rerequest`;
       const headers = {
         Accept: "application/json",
       };
@@ -28694,7 +27715,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$code$scanning$list$alerts$for$repo,
       option?: RequestOption,
     ): Promise<Response$code$scanning$list$alerts$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/alerts`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/alerts`;
       const headers = {
         Accept: "application/json",
       };
@@ -28719,11 +27740,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: code-scanning/get-alert
      * Request URI: /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}
      */
-    code$scanning$get$alert: (
-      params: Params$code$scanning$get$alert,
-      option?: RequestOption,
-    ): Promise<Response$code$scanning$get$alert$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/alerts/${params.parameter.alert_number}`;
+    code$scanning$get$alert: (params: Params$code$scanning$get$alert, option?: RequestOption): Promise<Response$code$scanning$get$alert$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/alerts/${params.parameter.alert_number}`;
       const headers = {
         Accept: "application/json",
       };
@@ -28735,11 +27753,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: code-scanning/update-alert
      * Request URI: /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}
      */
-    code$scanning$update$alert: (
-      params: Params$code$scanning$update$alert,
-      option?: RequestOption,
-    ): Promise<Response$code$scanning$update$alert$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/alerts/${params.parameter.alert_number}`;
+    code$scanning$update$alert: (params: Params$code$scanning$update$alert, option?: RequestOption): Promise<Response$code$scanning$update$alert$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/alerts/${params.parameter.alert_number}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28759,8 +27774,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$code$scanning$list$alert$instances,
       option?: RequestOption,
     ): Promise<Response$code$scanning$list$alert$instances$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/alerts/${params.parameter.alert_number}/instances`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/alerts/${params.parameter.alert_number}/instances`;
       const headers = {
         Accept: "application/json",
       };
@@ -28797,7 +27811,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$code$scanning$list$recent$analyses,
       option?: RequestOption,
     ): Promise<Response$code$scanning$list$recent$analyses$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/analyses`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/analyses`;
       const headers = {
         Accept: "application/json",
       };
@@ -28839,7 +27853,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$code$scanning$get$analysis<ResponseContentType>,
       option?: RequestOption,
     ): Promise<Response$code$scanning$get$analysis$Status$200[ResponseContentType]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/analyses/${params.parameter.analysis_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/analyses/${params.parameter.analysis_id}`;
       const headers = {
         Accept: params.headers.Accept,
       };
@@ -28916,11 +27930,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: code-scanning/delete-analysis
      * Request URI: /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}
      */
-    code$scanning$delete$analysis: (
-      params: Params$code$scanning$delete$analysis,
-      option?: RequestOption,
-    ): Promise<Response$code$scanning$delete$analysis$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/analyses/${params.parameter.analysis_id}`;
+    code$scanning$delete$analysis: (params: Params$code$scanning$delete$analysis, option?: RequestOption): Promise<Response$code$scanning$delete$analysis$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/analyses/${params.parameter.analysis_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -28951,11 +27962,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: code-scanning/upload-sarif
      * Request URI: /repos/{owner}/{repo}/code-scanning/sarifs
      */
-    code$scanning$upload$sarif: (
-      params: Params$code$scanning$upload$sarif,
-      option?: RequestOption,
-    ): Promise<Response$code$scanning$upload$sarif$Status$202["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/sarifs`;
+    code$scanning$upload$sarif: (params: Params$code$scanning$upload$sarif, option?: RequestOption): Promise<Response$code$scanning$upload$sarif$Status$202["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/sarifs`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -28968,11 +27976,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: code-scanning/get-sarif
      * Request URI: /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}
      */
-    code$scanning$get$sarif: (
-      params: Params$code$scanning$get$sarif,
-      option?: RequestOption,
-    ): Promise<Response$code$scanning$get$sarif$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/sarifs/${params.parameter.sarif_id}`;
+    code$scanning$get$sarif: (params: Params$code$scanning$get$sarif, option?: RequestOption): Promise<Response$code$scanning$get$sarif$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/code-scanning/sarifs/${params.parameter.sarif_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -28990,11 +27995,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-collaborators
      * Request URI: /repos/{owner}/{repo}/collaborators
      */
-    repos$list$collaborators: (
-      params: Params$repos$list$collaborators,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$collaborators$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/collaborators`;
+    repos$list$collaborators: (params: Params$repos$list$collaborators, option?: RequestOption): Promise<Response$repos$list$collaborators$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/collaborators`;
       const headers = {
         Accept: "application/json",
       };
@@ -29018,7 +28020,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/collaborators/{username}
      */
     repos$check$collaborator: (params: Params$repos$check$collaborator, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/collaborators/${params.parameter.username}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/collaborators/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -29042,11 +28044,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/add-collaborator
      * Request URI: /repos/{owner}/{repo}/collaborators/{username}
      */
-    repos$add$collaborator: (
-      params: Params$repos$add$collaborator,
-      option?: RequestOption,
-    ): Promise<Response$repos$add$collaborator$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/collaborators/${params.parameter.username}`;
+    repos$add$collaborator: (params: Params$repos$add$collaborator, option?: RequestOption): Promise<Response$repos$add$collaborator$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/collaborators/${params.parameter.username}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -29059,7 +28058,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/collaborators/{username}
      */
     repos$remove$collaborator: (params: Params$repos$remove$collaborator, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/collaborators/${params.parameter.username}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/collaborators/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -29073,7 +28072,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$get$collaborator$permission$level,
       option?: RequestOption,
     ): Promise<Response$repos$get$collaborator$permission$level$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/collaborators/${params.parameter.username}/permission`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/collaborators/${params.parameter.username}/permission`;
       const headers = {
         Accept: "application/json",
       };
@@ -29091,7 +28090,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$list$commit$comments$for$repo,
       option?: RequestOption,
     ): Promise<Response$repos$list$commit$comments$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/comments`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/comments`;
       const headers = {
         Accept: "application/json",
       };
@@ -29106,11 +28105,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-commit-comment
      * Request URI: /repos/{owner}/{repo}/comments/{comment_id}
      */
-    repos$get$commit$comment: (
-      params: Params$repos$get$commit$comment,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$commit$comment$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/comments/${params.parameter.comment_id}`;
+    repos$get$commit$comment: (params: Params$repos$get$commit$comment, option?: RequestOption): Promise<Response$repos$get$commit$comment$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/comments/${params.parameter.comment_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -29122,7 +28118,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/comments/{comment_id}
      */
     repos$delete$commit$comment: (params: Params$repos$delete$commit$comment, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/comments/${params.parameter.comment_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/comments/${params.parameter.comment_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -29131,11 +28127,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/update-commit-comment
      * Request URI: /repos/{owner}/{repo}/comments/{comment_id}
      */
-    repos$update$commit$comment: (
-      params: Params$repos$update$commit$comment,
-      option?: RequestOption,
-    ): Promise<Response$repos$update$commit$comment$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/comments/${params.parameter.comment_id}`;
+    repos$update$commit$comment: (params: Params$repos$update$commit$comment, option?: RequestOption): Promise<Response$repos$update$commit$comment$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/comments/${params.parameter.comment_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -29152,7 +28145,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$reactions$list$for$commit$comment,
       option?: RequestOption,
     ): Promise<Response$reactions$list$for$commit$comment$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/comments/${params.parameter.comment_id}/reactions`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/comments/${params.parameter.comment_id}/reactions`;
       const headers = {
         Accept: "application/json",
       };
@@ -29172,10 +28165,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
     reactions$create$for$commit$comment: (
       params: Params$reactions$create$for$commit$comment,
       option?: RequestOption,
-    ): Promise<
-      (Response$reactions$create$for$commit$comment$Status$200 | Response$reactions$create$for$commit$comment$Status$201)["application/json"]
-    > => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/comments/${params.parameter.comment_id}/reactions`;
+    ): Promise<(Response$reactions$create$for$commit$comment$Status$200 | Response$reactions$create$for$commit$comment$Status$201)["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/comments/${params.parameter.comment_id}/reactions`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -29191,9 +28182,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}
      */
     reactions$delete$for$commit$comment: (params: Params$reactions$delete$for$commit$comment, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/comments/${params.parameter.comment_id}/reactions/${params.parameter.reaction_id}`;
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/comments/${params.parameter.comment_id}/reactions/${params.parameter.reaction_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -29230,11 +28219,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-commits
      * Request URI: /repos/{owner}/{repo}/commits
      */
-    repos$list$commits: (
-      params: Params$repos$list$commits,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$commits$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/commits`;
+    repos$list$commits: (params: Params$repos$list$commits, option?: RequestOption): Promise<Response$repos$list$commits$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/commits`;
       const headers = {
         Accept: "application/json",
       };
@@ -29261,8 +28247,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$list$branches$for$head$commit,
       option?: RequestOption,
     ): Promise<Response$repos$list$branches$for$head$commit$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.commit_sha}/branches-where-head`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.commit_sha}/branches-where-head`;
       const headers = {
         Accept: "application/json",
       };
@@ -29274,11 +28259,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-comments-for-commit
      * Request URI: /repos/{owner}/{repo}/commits/{commit_sha}/comments
      */
-    repos$list$comments$for$commit: (
-      params: Params$repos$list$comments$for$commit,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$comments$for$commit$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.commit_sha}/comments`;
+    repos$list$comments$for$commit: (params: Params$repos$list$comments$for$commit, option?: RequestOption): Promise<Response$repos$list$comments$for$commit$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.commit_sha}/comments`;
       const headers = {
         Accept: "application/json",
       };
@@ -29296,11 +28278,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/create-commit-comment
      * Request URI: /repos/{owner}/{repo}/commits/{commit_sha}/comments
      */
-    repos$create$commit$comment: (
-      params: Params$repos$create$commit$comment,
-      option?: RequestOption,
-    ): Promise<Response$repos$create$commit$comment$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.commit_sha}/comments`;
+    repos$create$commit$comment: (params: Params$repos$create$commit$comment, option?: RequestOption): Promise<Response$repos$create$commit$comment$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.commit_sha}/comments`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -29317,7 +28296,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$list$pull$requests$associated$with$commit,
       option?: RequestOption,
     ): Promise<Response$repos$list$pull$requests$associated$with$commit$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.commit_sha}/pulls`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.commit_sha}/pulls`;
       const headers = {
         Accept: "application/json",
       };
@@ -29368,11 +28347,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-commit
      * Request URI: /repos/{owner}/{repo}/commits/{ref}
      */
-    repos$get$commit: (
-      params: Params$repos$get$commit,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$commit$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.ref}`;
+    repos$get$commit: (params: Params$repos$get$commit, option?: RequestOption): Promise<Response$repos$get$commit$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.ref}`;
       const headers = {
         Accept: "application/json",
       };
@@ -29390,11 +28366,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: checks/list-for-ref
      * Request URI: /repos/{owner}/{repo}/commits/{ref}/check-runs
      */
-    checks$list$for$ref: (
-      params: Params$checks$list$for$ref,
-      option?: RequestOption,
-    ): Promise<Response$checks$list$for$ref$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.ref}/check-runs`;
+    checks$list$for$ref: (params: Params$checks$list$for$ref, option?: RequestOption): Promise<Response$checks$list$for$ref$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.ref}/check-runs`;
       const headers = {
         Accept: "application/json",
       };
@@ -29416,11 +28389,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: checks/list-suites-for-ref
      * Request URI: /repos/{owner}/{repo}/commits/{ref}/check-suites
      */
-    checks$list$suites$for$ref: (
-      params: Params$checks$list$suites$for$ref,
-      option?: RequestOption,
-    ): Promise<Response$checks$list$suites$for$ref$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.ref}/check-suites`;
+    checks$list$suites$for$ref: (params: Params$checks$list$suites$for$ref, option?: RequestOption): Promise<Response$checks$list$suites$for$ref$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.ref}/check-suites`;
       const headers = {
         Accept: "application/json",
       };
@@ -29449,7 +28419,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$get$combined$status$for$ref,
       option?: RequestOption,
     ): Promise<Response$repos$get$combined$status$for$ref$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.ref}/status`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.ref}/status`;
       const headers = {
         Accept: "application/json",
       };
@@ -29471,7 +28441,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$list$commit$statuses$for$ref,
       option?: RequestOption,
     ): Promise<Response$repos$list$commit$statuses$for$ref$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.ref}/statuses`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/commits/${params.parameter.ref}/statuses`;
       const headers = {
         Accept: "application/json",
       };
@@ -29526,11 +28496,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/compare-commits
      * Request URI: /repos/{owner}/{repo}/compare/{basehead}
      */
-    repos$compare$commits: (
-      params: Params$repos$compare$commits,
-      option?: RequestOption,
-    ): Promise<Response$repos$compare$commits$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/compare/${params.parameter.basehead}`;
+    repos$compare$commits: (params: Params$repos$compare$commits, option?: RequestOption): Promise<Response$repos$compare$commits$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/compare/${params.parameter.basehead}`;
       const headers = {
         Accept: "application/json",
       };
@@ -29581,7 +28548,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$get$content<ResponseContentType>,
       option?: RequestOption,
     ): Promise<Response$repos$get$content$Status$200[ResponseContentType]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/contents/${params.parameter.path}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/contents/${params.parameter.path}`;
       const headers = {
         Accept: params.headers.Accept,
       };
@@ -29599,10 +28566,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
     repos$create$or$update$file$contents: (
       params: Params$repos$create$or$update$file$contents,
       option?: RequestOption,
-    ): Promise<
-      (Response$repos$create$or$update$file$contents$Status$200 | Response$repos$create$or$update$file$contents$Status$201)["application/json"]
-    > => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/contents/${params.parameter.path}`;
+    ): Promise<(Response$repos$create$or$update$file$contents$Status$200 | Response$repos$create$or$update$file$contents$Status$201)["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/contents/${params.parameter.path}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -29621,11 +28586,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/delete-file
      * Request URI: /repos/{owner}/{repo}/contents/{path}
      */
-    repos$delete$file: (
-      params: Params$repos$delete$file,
-      option?: RequestOption,
-    ): Promise<Response$repos$delete$file$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/contents/${params.parameter.path}`;
+    repos$delete$file: (params: Params$repos$delete$file, option?: RequestOption): Promise<Response$repos$delete$file$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/contents/${params.parameter.path}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -29640,11 +28602,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-contributors
      * Request URI: /repos/{owner}/{repo}/contributors
      */
-    repos$list$contributors: (
-      params: Params$repos$list$contributors,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$contributors$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/contributors`;
+    repos$list$contributors: (params: Params$repos$list$contributors, option?: RequestOption): Promise<Response$repos$list$contributors$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/contributors`;
       const headers = {
         Accept: "application/json",
       };
@@ -29661,11 +28620,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: dependabot/list-repo-secrets
      * Request URI: /repos/{owner}/{repo}/dependabot/secrets
      */
-    dependabot$list$repo$secrets: (
-      params: Params$dependabot$list$repo$secrets,
-      option?: RequestOption,
-    ): Promise<Response$dependabot$list$repo$secrets$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/dependabot/secrets`;
+    dependabot$list$repo$secrets: (params: Params$dependabot$list$repo$secrets, option?: RequestOption): Promise<Response$dependabot$list$repo$secrets$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/dependabot/secrets`;
       const headers = {
         Accept: "application/json",
       };
@@ -29681,11 +28637,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: dependabot/get-repo-public-key
      * Request URI: /repos/{owner}/{repo}/dependabot/secrets/public-key
      */
-    dependabot$get$repo$public$key: (
-      params: Params$dependabot$get$repo$public$key,
-      option?: RequestOption,
-    ): Promise<Response$dependabot$get$repo$public$key$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/dependabot/secrets/public-key`;
+    dependabot$get$repo$public$key: (params: Params$dependabot$get$repo$public$key, option?: RequestOption): Promise<Response$dependabot$get$repo$public$key$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/dependabot/secrets/public-key`;
       const headers = {
         Accept: "application/json",
       };
@@ -29697,11 +28650,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: dependabot/get-repo-secret
      * Request URI: /repos/{owner}/{repo}/dependabot/secrets/{secret_name}
      */
-    dependabot$get$repo$secret: (
-      params: Params$dependabot$get$repo$secret,
-      option?: RequestOption,
-    ): Promise<Response$dependabot$get$repo$secret$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/dependabot/secrets/${params.parameter.secret_name}`;
+    dependabot$get$repo$secret: (params: Params$dependabot$get$repo$secret, option?: RequestOption): Promise<Response$dependabot$get$repo$secret$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/dependabot/secrets/${params.parameter.secret_name}`;
       const headers = {
         Accept: "application/json",
       };
@@ -29791,7 +28741,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$dependabot$create$or$update$repo$secret,
       option?: RequestOption,
     ): Promise<Response$dependabot$create$or$update$repo$secret$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/dependabot/secrets/${params.parameter.secret_name}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/dependabot/secrets/${params.parameter.secret_name}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -29805,7 +28755,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/dependabot/secrets/{secret_name}
      */
     dependabot$delete$repo$secret: (params: Params$dependabot$delete$repo$secret, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/dependabot/secrets/${params.parameter.secret_name}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/dependabot/secrets/${params.parameter.secret_name}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -29815,11 +28765,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-deployments
      * Request URI: /repos/{owner}/{repo}/deployments
      */
-    repos$list$deployments: (
-      params: Params$repos$list$deployments,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$deployments$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/deployments`;
+    repos$list$deployments: (params: Params$repos$list$deployments, option?: RequestOption): Promise<Response$repos$list$deployments$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/deployments`;
       const headers = {
         Accept: "application/json",
       };
@@ -29887,7 +28834,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$create$deployment,
       option?: RequestOption,
     ): Promise<(Response$repos$create$deployment$Status$201 | Response$repos$create$deployment$Status$202)["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/deployments`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/deployments`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -29899,11 +28846,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-deployment
      * Request URI: /repos/{owner}/{repo}/deployments/{deployment_id}
      */
-    repos$get$deployment: (
-      params: Params$repos$get$deployment,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$deployment$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/deployments/${params.parameter.deployment_id}`;
+    repos$get$deployment: (params: Params$repos$get$deployment, option?: RequestOption): Promise<Response$repos$get$deployment$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/deployments/${params.parameter.deployment_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -29923,7 +28867,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/deployments/{deployment_id}
      */
     repos$delete$deployment: (params: Params$repos$delete$deployment, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/deployments/${params.parameter.deployment_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/deployments/${params.parameter.deployment_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -29933,11 +28877,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-deployment-statuses
      * Request URI: /repos/{owner}/{repo}/deployments/{deployment_id}/statuses
      */
-    repos$list$deployment$statuses: (
-      params: Params$repos$list$deployment$statuses,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$deployment$statuses$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/deployments/${params.parameter.deployment_id}/statuses`;
+    repos$list$deployment$statuses: (params: Params$repos$list$deployment$statuses, option?: RequestOption): Promise<Response$repos$list$deployment$statuses$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/deployments/${params.parameter.deployment_id}/statuses`;
       const headers = {
         Accept: "application/json",
       };
@@ -29955,11 +28896,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/create-deployment-status
      * Request URI: /repos/{owner}/{repo}/deployments/{deployment_id}/statuses
      */
-    repos$create$deployment$status: (
-      params: Params$repos$create$deployment$status,
-      option?: RequestOption,
-    ): Promise<Response$repos$create$deployment$status$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/deployments/${params.parameter.deployment_id}/statuses`;
+    repos$create$deployment$status: (params: Params$repos$create$deployment$status, option?: RequestOption): Promise<Response$repos$create$deployment$status$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/deployments/${params.parameter.deployment_id}/statuses`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -29972,13 +28910,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-deployment-status
      * Request URI: /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}
      */
-    repos$get$deployment$status: (
-      params: Params$repos$get$deployment$status,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$deployment$status$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/deployments/${params.parameter.deployment_id}/statuses/${params.parameter.status_id}`;
+    repos$get$deployment$status: (params: Params$repos$get$deployment$status, option?: RequestOption): Promise<Response$repos$get$deployment$status$Status$200["application/json"]> => {
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/deployments/${params.parameter.deployment_id}/statuses/${params.parameter.status_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -30000,7 +28933,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/dispatches
      */
     repos$create$dispatch$event: (params: Params$repos$create$dispatch$event, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/dispatches`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/dispatches`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -30014,11 +28947,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-all-environments
      * Request URI: /repos/{owner}/{repo}/environments
      */
-    repos$get$all$environments: (
-      params: Params$repos$get$all$environments,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$all$environments$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/environments`;
+    repos$get$all$environments: (params: Params$repos$get$all$environments, option?: RequestOption): Promise<Response$repos$get$all$environments$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/environments`;
       const headers = {
         Accept: "application/json",
       };
@@ -30030,11 +28960,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-environment
      * Request URI: /repos/{owner}/{repo}/environments/{environment_name}
      */
-    repos$get$environment: (
-      params: Params$repos$get$environment,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$environment$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/environments/${params.parameter.environment_name}`;
+    repos$get$environment: (params: Params$repos$get$environment, option?: RequestOption): Promise<Response$repos$get$environment$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/environments/${params.parameter.environment_name}`;
       const headers = {
         Accept: "application/json",
       };
@@ -30056,7 +28983,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$create$or$update$environment,
       option?: RequestOption,
     ): Promise<Response$repos$create$or$update$environment$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/environments/${params.parameter.environment_name}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/environments/${params.parameter.environment_name}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30070,7 +28997,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/environments/{environment_name}
      */
     repos$delete$an$environment: (params: Params$repos$delete$an$environment, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/environments/${params.parameter.environment_name}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/environments/${params.parameter.environment_name}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -30079,11 +29006,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: activity/list-repo-events
      * Request URI: /repos/{owner}/{repo}/events
      */
-    activity$list$repo$events: (
-      params: Params$activity$list$repo$events,
-      option?: RequestOption,
-    ): Promise<Response$activity$list$repo$events$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/events`;
+    activity$list$repo$events: (params: Params$activity$list$repo$events, option?: RequestOption): Promise<Response$activity$list$repo$events$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/events`;
       const headers = {
         Accept: "application/json",
       };
@@ -30098,11 +29022,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-forks
      * Request URI: /repos/{owner}/{repo}/forks
      */
-    repos$list$forks: (
-      params: Params$repos$list$forks,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$forks$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/forks`;
+    repos$list$forks: (params: Params$repos$list$forks, option?: RequestOption): Promise<Response$repos$list$forks$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/forks`;
       const headers = {
         Accept: "application/json",
       };
@@ -30121,11 +29042,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/create-fork
      * Request URI: /repos/{owner}/{repo}/forks
      */
-    repos$create$fork: (
-      params: Params$repos$create$fork,
-      option?: RequestOption,
-    ): Promise<Response$repos$create$fork$Status$202["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/forks`;
+    repos$create$fork: (params: Params$repos$create$fork, option?: RequestOption): Promise<Response$repos$create$fork$Status$202["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/forks`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30137,11 +29055,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: git/create-blob
      * Request URI: /repos/{owner}/{repo}/git/blobs
      */
-    git$create$blob: (
-      params: Params$git$create$blob,
-      option?: RequestOption,
-    ): Promise<Response$git$create$blob$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/git/blobs`;
+    git$create$blob: (params: Params$git$create$blob, option?: RequestOption): Promise<Response$git$create$blob$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/git/blobs`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30157,7 +29072,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/git/blobs/{file_sha}
      */
     git$get$blob: (params: Params$git$get$blob, option?: RequestOption): Promise<Response$git$get$blob$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/git/blobs/${params.parameter.file_sha}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/git/blobs/${params.parameter.file_sha}`;
       const headers = {
         Accept: "application/json",
       };
@@ -30198,11 +29113,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: git/create-commit
      * Request URI: /repos/{owner}/{repo}/git/commits
      */
-    git$create$commit: (
-      params: Params$git$create$commit,
-      option?: RequestOption,
-    ): Promise<Response$git$create$commit$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/git/commits`;
+    git$create$commit: (params: Params$git$create$commit, option?: RequestOption): Promise<Response$git$create$commit$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/git/commits`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30244,11 +29156,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: git/get-commit
      * Request URI: /repos/{owner}/{repo}/git/commits/{commit_sha}
      */
-    git$get$commit: (
-      params: Params$git$get$commit,
-      option?: RequestOption,
-    ): Promise<Response$git$get$commit$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/git/commits/${params.parameter.commit_sha}`;
+    git$get$commit: (params: Params$git$get$commit, option?: RequestOption): Promise<Response$git$get$commit$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/git/commits/${params.parameter.commit_sha}`;
       const headers = {
         Accept: "application/json",
       };
@@ -30266,11 +29175,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: git/list-matching-refs
      * Request URI: /repos/{owner}/{repo}/git/matching-refs/{ref}
      */
-    git$list$matching$refs: (
-      params: Params$git$list$matching$refs,
-      option?: RequestOption,
-    ): Promise<Response$git$list$matching$refs$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/git/matching-refs/${params.parameter.ref}`;
+    git$list$matching$refs: (params: Params$git$list$matching$refs, option?: RequestOption): Promise<Response$git$list$matching$refs$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/git/matching-refs/${params.parameter.ref}`;
       const headers = {
         Accept: "application/json",
       };
@@ -30289,7 +29195,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/git/ref/{ref}
      */
     git$get$ref: (params: Params$git$get$ref, option?: RequestOption): Promise<Response$git$get$ref$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/git/ref/${params.parameter.ref}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/git/ref/${params.parameter.ref}`;
       const headers = {
         Accept: "application/json",
       };
@@ -30301,11 +29207,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: git/create-ref
      * Request URI: /repos/{owner}/{repo}/git/refs
      */
-    git$create$ref: (
-      params: Params$git$create$ref,
-      option?: RequestOption,
-    ): Promise<Response$git$create$ref$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/git/refs`;
+    git$create$ref: (params: Params$git$create$ref, option?: RequestOption): Promise<Response$git$create$ref$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/git/refs`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30318,7 +29221,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/git/refs/{ref}
      */
     git$delete$ref: (params: Params$git$delete$ref, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/git/refs/${params.parameter.ref}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/git/refs/${params.parameter.ref}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -30327,11 +29230,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: git/update-ref
      * Request URI: /repos/{owner}/{repo}/git/refs/{ref}
      */
-    git$update$ref: (
-      params: Params$git$update$ref,
-      option?: RequestOption,
-    ): Promise<Response$git$update$ref$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/git/refs/${params.parameter.ref}`;
+    git$update$ref: (params: Params$git$update$ref, option?: RequestOption): Promise<Response$git$update$ref$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/git/refs/${params.parameter.ref}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30373,11 +29273,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: git/create-tag
      * Request URI: /repos/{owner}/{repo}/git/tags
      */
-    git$create$tag: (
-      params: Params$git$create$tag,
-      option?: RequestOption,
-    ): Promise<Response$git$create$tag$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/git/tags`;
+    git$create$tag: (params: Params$git$create$tag, option?: RequestOption): Promise<Response$git$create$tag$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/git/tags`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30418,7 +29315,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/git/tags/{tag_sha}
      */
     git$get$tag: (params: Params$git$get$tag, option?: RequestOption): Promise<Response$git$get$tag$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/git/tags/${params.parameter.tag_sha}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/git/tags/${params.parameter.tag_sha}`;
       const headers = {
         Accept: "application/json",
       };
@@ -30432,11 +29329,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: git/create-tree
      * Request URI: /repos/{owner}/{repo}/git/trees
      */
-    git$create$tree: (
-      params: Params$git$create$tree,
-      option?: RequestOption,
-    ): Promise<Response$git$create$tree$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/git/trees`;
+    git$create$tree: (params: Params$git$create$tree, option?: RequestOption): Promise<Response$git$create$tree$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/git/trees`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30452,7 +29346,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/git/trees/{tree_sha}
      */
     git$get$tree: (params: Params$git$get$tree, option?: RequestOption): Promise<Response$git$get$tree$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/git/trees/${params.parameter.tree_sha}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/git/trees/${params.parameter.tree_sha}`;
       const headers = {
         Accept: "application/json",
       };
@@ -30466,11 +29360,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-webhooks
      * Request URI: /repos/{owner}/{repo}/hooks
      */
-    repos$list$webhooks: (
-      params: Params$repos$list$webhooks,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$webhooks$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks`;
+    repos$list$webhooks: (params: Params$repos$list$webhooks, option?: RequestOption): Promise<Response$repos$list$webhooks$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/hooks`;
       const headers = {
         Accept: "application/json",
       };
@@ -30487,11 +29378,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/create-webhook
      * Request URI: /repos/{owner}/{repo}/hooks
      */
-    repos$create$webhook: (
-      params: Params$repos$create$webhook,
-      option?: RequestOption,
-    ): Promise<Response$repos$create$webhook$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks`;
+    repos$create$webhook: (params: Params$repos$create$webhook, option?: RequestOption): Promise<Response$repos$create$webhook$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/hooks`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30504,11 +29392,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-webhook
      * Request URI: /repos/{owner}/{repo}/hooks/{hook_id}
      */
-    repos$get$webhook: (
-      params: Params$repos$get$webhook,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$webhook$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}`;
+    repos$get$webhook: (params: Params$repos$get$webhook, option?: RequestOption): Promise<Response$repos$get$webhook$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -30520,7 +29405,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/hooks/{hook_id}
      */
     repos$delete$webhook: (params: Params$repos$delete$webhook, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -30530,11 +29415,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/update-webhook
      * Request URI: /repos/{owner}/{repo}/hooks/{hook_id}
      */
-    repos$update$webhook: (
-      params: Params$repos$update$webhook,
-      option?: RequestOption,
-    ): Promise<Response$repos$update$webhook$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}`;
+    repos$update$webhook: (params: Params$repos$update$webhook, option?: RequestOption): Promise<Response$repos$update$webhook$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30553,7 +29435,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$get$webhook$config$for$repo,
       option?: RequestOption,
     ): Promise<Response$repos$get$webhook$config$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/config`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/config`;
       const headers = {
         Accept: "application/json",
       };
@@ -30571,7 +29453,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$update$webhook$config$for$repo,
       option?: RequestOption,
     ): Promise<Response$repos$update$webhook$config$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/config`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/config`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30584,11 +29466,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-webhook-deliveries
      * Request URI: /repos/{owner}/{repo}/hooks/{hook_id}/deliveries
      */
-    repos$list$webhook$deliveries: (
-      params: Params$repos$list$webhook$deliveries,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$webhook$deliveries$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/deliveries`;
+    repos$list$webhook$deliveries: (params: Params$repos$list$webhook$deliveries, option?: RequestOption): Promise<Response$repos$list$webhook$deliveries$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/deliveries`;
       const headers = {
         Accept: "application/json",
       };
@@ -30604,13 +29483,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-webhook-delivery
      * Request URI: /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}
      */
-    repos$get$webhook$delivery: (
-      params: Params$repos$get$webhook$delivery,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$webhook$delivery$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/deliveries/${params.parameter.delivery_id}`;
+    repos$get$webhook$delivery: (params: Params$repos$get$webhook$delivery, option?: RequestOption): Promise<Response$repos$get$webhook$delivery$Status$200["application/json"]> => {
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/deliveries/${params.parameter.delivery_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -30622,13 +29496,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/redeliver-webhook-delivery
      * Request URI: /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts
      */
-    repos$redeliver$webhook$delivery: (
-      params: Params$repos$redeliver$webhook$delivery,
-      option?: RequestOption,
-    ): Promise<Response$repos$redeliver$webhook$delivery$Status$202["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/deliveries/${params.parameter.delivery_id}/attempts`;
+    repos$redeliver$webhook$delivery: (params: Params$repos$redeliver$webhook$delivery, option?: RequestOption): Promise<Response$repos$redeliver$webhook$delivery$Status$202["application/json"]> => {
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/deliveries/${params.parameter.delivery_id}/attempts`;
       const headers = {
         Accept: "application/json",
       };
@@ -30641,7 +29510,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/hooks/{hook_id}/pings
      */
     repos$ping$webhook: (params: Params$repos$ping$webhook, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/pings`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/pings`;
       const headers = {};
       return apiClient.request("POST", url, headers, undefined, undefined, option);
     },
@@ -30654,7 +29523,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/hooks/{hook_id}/tests
      */
     repos$test$push$webhook: (params: Params$repos$test$push$webhook, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/tests`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/hooks/${params.parameter.hook_id}/tests`;
       const headers = {};
       return apiClient.request("POST", url, headers, undefined, undefined, option);
     },
@@ -30666,11 +29535,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/get-repo-installation
      * Request URI: /repos/{owner}/{repo}/installation
      */
-    apps$get$repo$installation: (
-      params: Params$apps$get$repo$installation,
-      option?: RequestOption,
-    ): Promise<Response$apps$get$repo$installation$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/installation`;
+    apps$get$repo$installation: (params: Params$apps$get$repo$installation, option?: RequestOption): Promise<Response$apps$get$repo$installation$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/installation`;
       const headers = {
         Accept: "application/json",
       };
@@ -30682,11 +29548,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-invitations
      * Request URI: /repos/{owner}/{repo}/invitations
      */
-    repos$list$invitations: (
-      params: Params$repos$list$invitations,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$invitations$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/invitations`;
+    repos$list$invitations: (params: Params$repos$list$invitations, option?: RequestOption): Promise<Response$repos$list$invitations$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/invitations`;
       const headers = {
         Accept: "application/json",
       };
@@ -30702,7 +29565,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/invitations/{invitation_id}
      */
     repos$delete$invitation: (params: Params$repos$delete$invitation, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/invitations/${params.parameter.invitation_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/invitations/${params.parameter.invitation_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -30711,11 +29574,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/update-invitation
      * Request URI: /repos/{owner}/{repo}/invitations/{invitation_id}
      */
-    repos$update$invitation: (
-      params: Params$repos$update$invitation,
-      option?: RequestOption,
-    ): Promise<Response$repos$update$invitation$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/invitations/${params.parameter.invitation_id}`;
+    repos$update$invitation: (params: Params$repos$update$invitation, option?: RequestOption): Promise<Response$repos$update$invitation$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/invitations/${params.parameter.invitation_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30733,11 +29593,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/list-for-repo
      * Request URI: /repos/{owner}/{repo}/issues
      */
-    issues$list$for$repo: (
-      params: Params$issues$list$for$repo,
-      option?: RequestOption,
-    ): Promise<Response$issues$list$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues`;
+    issues$list$for$repo: (params: Params$issues$list$for$repo, option?: RequestOption): Promise<Response$issues$list$for$repo$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues`;
       const headers = {
         Accept: "application/json",
       };
@@ -30765,7 +29622,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/issues
      */
     issues$create: (params: Params$issues$create, option?: RequestOption): Promise<Response$issues$create$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30778,11 +29635,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/list-comments-for-repo
      * Request URI: /repos/{owner}/{repo}/issues/comments
      */
-    issues$list$comments$for$repo: (
-      params: Params$issues$list$comments$for$repo,
-      option?: RequestOption,
-    ): Promise<Response$issues$list$comments$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/comments`;
+    issues$list$comments$for$repo: (params: Params$issues$list$comments$for$repo, option?: RequestOption): Promise<Response$issues$list$comments$for$repo$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/comments`;
       const headers = {
         Accept: "application/json",
       };
@@ -30800,11 +29654,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/get-comment
      * Request URI: /repos/{owner}/{repo}/issues/comments/{comment_id}
      */
-    issues$get$comment: (
-      params: Params$issues$get$comment,
-      option?: RequestOption,
-    ): Promise<Response$issues$get$comment$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/comments/${params.parameter.comment_id}`;
+    issues$get$comment: (params: Params$issues$get$comment, option?: RequestOption): Promise<Response$issues$get$comment$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/comments/${params.parameter.comment_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -30816,7 +29667,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/issues/comments/{comment_id}
      */
     issues$delete$comment: (params: Params$issues$delete$comment, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/comments/${params.parameter.comment_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/comments/${params.parameter.comment_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -30825,11 +29676,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/update-comment
      * Request URI: /repos/{owner}/{repo}/issues/comments/{comment_id}
      */
-    issues$update$comment: (
-      params: Params$issues$update$comment,
-      option?: RequestOption,
-    ): Promise<Response$issues$update$comment$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/comments/${params.parameter.comment_id}`;
+    issues$update$comment: (params: Params$issues$update$comment, option?: RequestOption): Promise<Response$issues$update$comment$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/comments/${params.parameter.comment_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30842,12 +29690,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: reactions/list-for-issue-comment
      * Request URI: /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions
      */
-    reactions$list$for$issue$comment: (
-      params: Params$reactions$list$for$issue$comment,
-      option?: RequestOption,
-    ): Promise<Response$reactions$list$for$issue$comment$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/comments/${params.parameter.comment_id}/reactions`;
+    reactions$list$for$issue$comment: (params: Params$reactions$list$for$issue$comment, option?: RequestOption): Promise<Response$reactions$list$for$issue$comment$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/comments/${params.parameter.comment_id}/reactions`;
       const headers = {
         Accept: "application/json",
       };
@@ -30867,11 +29711,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
     reactions$create$for$issue$comment: (
       params: Params$reactions$create$for$issue$comment,
       option?: RequestOption,
-    ): Promise<
-      (Response$reactions$create$for$issue$comment$Status$200 | Response$reactions$create$for$issue$comment$Status$201)["application/json"]
-    > => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/comments/${params.parameter.comment_id}/reactions`;
+    ): Promise<(Response$reactions$create$for$issue$comment$Status$200 | Response$reactions$create$for$issue$comment$Status$201)["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/comments/${params.parameter.comment_id}/reactions`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30887,9 +29728,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}
      */
     reactions$delete$for$issue$comment: (params: Params$reactions$delete$for$issue$comment, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/comments/${params.parameter.comment_id}/reactions/${params.parameter.reaction_id}`;
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/comments/${params.parameter.comment_id}/reactions/${params.parameter.reaction_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -30898,11 +29737,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/list-events-for-repo
      * Request URI: /repos/{owner}/{repo}/issues/events
      */
-    issues$list$events$for$repo: (
-      params: Params$issues$list$events$for$repo,
-      option?: RequestOption,
-    ): Promise<Response$issues$list$events$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/events`;
+    issues$list$events$for$repo: (params: Params$issues$list$events$for$repo, option?: RequestOption): Promise<Response$issues$list$events$for$repo$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/events`;
       const headers = {
         Accept: "application/json",
       };
@@ -30917,11 +29753,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/get-event
      * Request URI: /repos/{owner}/{repo}/issues/events/{event_id}
      */
-    issues$get$event: (
-      params: Params$issues$get$event,
-      option?: RequestOption,
-    ): Promise<Response$issues$get$event$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/events/${params.parameter.event_id}`;
+    issues$get$event: (params: Params$issues$get$event, option?: RequestOption): Promise<Response$issues$get$event$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/events/${params.parameter.event_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -30944,7 +29777,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}
      */
     issues$get: (params: Params$issues$get, option?: RequestOption): Promise<Response$issues$get$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}`;
       const headers = {
         Accept: "application/json",
       };
@@ -30957,7 +29790,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}
      */
     issues$update: (params: Params$issues$update, option?: RequestOption): Promise<Response$issues$update$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30970,11 +29803,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/add-assignees
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/assignees
      */
-    issues$add$assignees: (
-      params: Params$issues$add$assignees,
-      option?: RequestOption,
-    ): Promise<Response$issues$add$assignees$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/assignees`;
+    issues$add$assignees: (params: Params$issues$add$assignees, option?: RequestOption): Promise<Response$issues$add$assignees$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/assignees`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -30987,11 +29817,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/remove-assignees
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/assignees
      */
-    issues$remove$assignees: (
-      params: Params$issues$remove$assignees,
-      option?: RequestOption,
-    ): Promise<Response$issues$remove$assignees$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/assignees`;
+    issues$remove$assignees: (params: Params$issues$remove$assignees, option?: RequestOption): Promise<Response$issues$remove$assignees$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/assignees`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31004,11 +29831,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/list-comments
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/comments
      */
-    issues$list$comments: (
-      params: Params$issues$list$comments,
-      option?: RequestOption,
-    ): Promise<Response$issues$list$comments$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/comments`;
+    issues$list$comments: (params: Params$issues$list$comments, option?: RequestOption): Promise<Response$issues$list$comments$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/comments`;
       const headers = {
         Accept: "application/json",
       };
@@ -31025,11 +29849,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/create-comment
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/comments
      */
-    issues$create$comment: (
-      params: Params$issues$create$comment,
-      option?: RequestOption,
-    ): Promise<Response$issues$create$comment$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/comments`;
+    issues$create$comment: (params: Params$issues$create$comment, option?: RequestOption): Promise<Response$issues$create$comment$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/comments`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31041,11 +29862,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/list-events
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/events
      */
-    issues$list$events: (
-      params: Params$issues$list$events,
-      option?: RequestOption,
-    ): Promise<Response$issues$list$events$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/events`;
+    issues$list$events: (params: Params$issues$list$events, option?: RequestOption): Promise<Response$issues$list$events$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/events`;
       const headers = {
         Accept: "application/json",
       };
@@ -31060,11 +29878,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/list-labels-on-issue
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/labels
      */
-    issues$list$labels$on$issue: (
-      params: Params$issues$list$labels$on$issue,
-      option?: RequestOption,
-    ): Promise<Response$issues$list$labels$on$issue$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/labels`;
+    issues$list$labels$on$issue: (params: Params$issues$list$labels$on$issue, option?: RequestOption): Promise<Response$issues$list$labels$on$issue$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/labels`;
       const headers = {
         Accept: "application/json",
       };
@@ -31080,11 +29895,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/set-labels
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/labels
      */
-    issues$set$labels: (
-      params: Params$issues$set$labels,
-      option?: RequestOption,
-    ): Promise<Response$issues$set$labels$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/labels`;
+    issues$set$labels: (params: Params$issues$set$labels, option?: RequestOption): Promise<Response$issues$set$labels$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/labels`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31096,11 +29908,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/add-labels
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/labels
      */
-    issues$add$labels: (
-      params: Params$issues$add$labels,
-      option?: RequestOption,
-    ): Promise<Response$issues$add$labels$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/labels`;
+    issues$add$labels: (params: Params$issues$add$labels, option?: RequestOption): Promise<Response$issues$add$labels$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/labels`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31113,7 +29922,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/labels
      */
     issues$remove$all$labels: (params: Params$issues$remove$all$labels, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/labels`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/labels`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -31123,13 +29932,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/remove-label
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}
      */
-    issues$remove$label: (
-      params: Params$issues$remove$label,
-      option?: RequestOption,
-    ): Promise<Response$issues$remove$label$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/labels/${params.parameter.name}`;
+    issues$remove$label: (params: Params$issues$remove$label, option?: RequestOption): Promise<Response$issues$remove$label$Status$200["application/json"]> => {
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/labels/${params.parameter.name}`;
       const headers = {
         Accept: "application/json",
       };
@@ -31144,7 +29948,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/lock
      */
     issues$lock: (params: Params$issues$lock, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/lock`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/lock`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -31157,7 +29961,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/lock
      */
     issues$unlock: (params: Params$issues$unlock, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/lock`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/lock`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -31167,11 +29971,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: reactions/list-for-issue
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/reactions
      */
-    reactions$list$for$issue: (
-      params: Params$reactions$list$for$issue,
-      option?: RequestOption,
-    ): Promise<Response$reactions$list$for$issue$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/reactions`;
+    reactions$list$for$issue: (params: Params$reactions$list$for$issue, option?: RequestOption): Promise<Response$reactions$list$for$issue$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/reactions`;
       const headers = {
         Accept: "application/json",
       };
@@ -31192,7 +29993,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$reactions$create$for$issue,
       option?: RequestOption,
     ): Promise<(Response$reactions$create$for$issue$Status$200 | Response$reactions$create$for$issue$Status$201)["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/reactions`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/reactions`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31208,9 +30009,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}
      */
     reactions$delete$for$issue: (params: Params$reactions$delete$for$issue, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/reactions/${params.parameter.reaction_id}`;
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/reactions/${params.parameter.reaction_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -31219,11 +30018,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/list-events-for-timeline
      * Request URI: /repos/{owner}/{repo}/issues/{issue_number}/timeline
      */
-    issues$list$events$for$timeline: (
-      params: Params$issues$list$events$for$timeline,
-      option?: RequestOption,
-    ): Promise<Response$issues$list$events$for$timeline$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/timeline`;
+    issues$list$events$for$timeline: (params: Params$issues$list$events$for$timeline, option?: RequestOption): Promise<Response$issues$list$events$for$timeline$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/issues/${params.parameter.issue_number}/timeline`;
       const headers = {
         Accept: "application/json",
       };
@@ -31238,11 +30034,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-deploy-keys
      * Request URI: /repos/{owner}/{repo}/keys
      */
-    repos$list$deploy$keys: (
-      params: Params$repos$list$deploy$keys,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$deploy$keys$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/keys`;
+    repos$list$deploy$keys: (params: Params$repos$list$deploy$keys, option?: RequestOption): Promise<Response$repos$list$deploy$keys$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/keys`;
       const headers = {
         Accept: "application/json",
       };
@@ -31258,11 +30051,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/create-deploy-key
      * Request URI: /repos/{owner}/{repo}/keys
      */
-    repos$create$deploy$key: (
-      params: Params$repos$create$deploy$key,
-      option?: RequestOption,
-    ): Promise<Response$repos$create$deploy$key$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/keys`;
+    repos$create$deploy$key: (params: Params$repos$create$deploy$key, option?: RequestOption): Promise<Response$repos$create$deploy$key$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/keys`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31274,11 +30064,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-deploy-key
      * Request URI: /repos/{owner}/{repo}/keys/{key_id}
      */
-    repos$get$deploy$key: (
-      params: Params$repos$get$deploy$key,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$deploy$key$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/keys/${params.parameter.key_id}`;
+    repos$get$deploy$key: (params: Params$repos$get$deploy$key, option?: RequestOption): Promise<Response$repos$get$deploy$key$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/keys/${params.parameter.key_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -31291,7 +30078,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/keys/{key_id}
      */
     repos$delete$deploy$key: (params: Params$repos$delete$deploy$key, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/keys/${params.parameter.key_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/keys/${params.parameter.key_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -31300,11 +30087,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/list-labels-for-repo
      * Request URI: /repos/{owner}/{repo}/labels
      */
-    issues$list$labels$for$repo: (
-      params: Params$issues$list$labels$for$repo,
-      option?: RequestOption,
-    ): Promise<Response$issues$list$labels$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/labels`;
+    issues$list$labels$for$repo: (params: Params$issues$list$labels$for$repo, option?: RequestOption): Promise<Response$issues$list$labels$for$repo$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/labels`;
       const headers = {
         Accept: "application/json",
       };
@@ -31319,11 +30103,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/create-label
      * Request URI: /repos/{owner}/{repo}/labels
      */
-    issues$create$label: (
-      params: Params$issues$create$label,
-      option?: RequestOption,
-    ): Promise<Response$issues$create$label$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/labels`;
+    issues$create$label: (params: Params$issues$create$label, option?: RequestOption): Promise<Response$issues$create$label$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/labels`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31335,11 +30116,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/get-label
      * Request URI: /repos/{owner}/{repo}/labels/{name}
      */
-    issues$get$label: (
-      params: Params$issues$get$label,
-      option?: RequestOption,
-    ): Promise<Response$issues$get$label$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/labels/${params.parameter.name}`;
+    issues$get$label: (params: Params$issues$get$label, option?: RequestOption): Promise<Response$issues$get$label$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/labels/${params.parameter.name}`;
       const headers = {
         Accept: "application/json",
       };
@@ -31351,7 +30129,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/labels/{name}
      */
     issues$delete$label: (params: Params$issues$delete$label, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/labels/${params.parameter.name}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/labels/${params.parameter.name}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -31360,11 +30138,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/update-label
      * Request URI: /repos/{owner}/{repo}/labels/{name}
      */
-    issues$update$label: (
-      params: Params$issues$update$label,
-      option?: RequestOption,
-    ): Promise<Response$issues$update$label$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/labels/${params.parameter.name}`;
+    issues$update$label: (params: Params$issues$update$label, option?: RequestOption): Promise<Response$issues$update$label$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/labels/${params.parameter.name}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31377,11 +30152,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-languages
      * Request URI: /repos/{owner}/{repo}/languages
      */
-    repos$list$languages: (
-      params: Params$repos$list$languages,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$languages$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/languages`;
+    repos$list$languages: (params: Params$repos$list$languages, option?: RequestOption): Promise<Response$repos$list$languages$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/languages`;
       const headers = {
         Accept: "application/json",
       };
@@ -31392,11 +30164,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/enable-lfs-for-repo
      * Request URI: /repos/{owner}/{repo}/lfs
      */
-    repos$enable$lfs$for$repo: (
-      params: Params$repos$enable$lfs$for$repo,
-      option?: RequestOption,
-    ): Promise<Response$repos$enable$lfs$for$repo$Status$202["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/lfs`;
+    repos$enable$lfs$for$repo: (params: Params$repos$enable$lfs$for$repo, option?: RequestOption): Promise<Response$repos$enable$lfs$for$repo$Status$202["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/lfs`;
       const headers = {
         Accept: "application/json",
       };
@@ -31408,7 +30177,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/lfs
      */
     repos$disable$lfs$for$repo: (params: Params$repos$disable$lfs$for$repo, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/lfs`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/lfs`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -31420,11 +30189,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: licenses/get-for-repo
      * Request URI: /repos/{owner}/{repo}/license
      */
-    licenses$get$for$repo: (
-      params: Params$licenses$get$for$repo,
-      option?: RequestOption,
-    ): Promise<Response$licenses$get$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/license`;
+    licenses$get$for$repo: (params: Params$licenses$get$for$repo, option?: RequestOption): Promise<Response$licenses$get$for$repo$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/license`;
       const headers = {
         Accept: "application/json",
       };
@@ -31436,11 +30202,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/merge-upstream
      * Request URI: /repos/{owner}/{repo}/merge-upstream
      */
-    repos$merge$upstream: (
-      params: Params$repos$merge$upstream,
-      option?: RequestOption,
-    ): Promise<Response$repos$merge$upstream$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/merge-upstream`;
+    repos$merge$upstream: (params: Params$repos$merge$upstream, option?: RequestOption): Promise<Response$repos$merge$upstream$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/merge-upstream`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31453,7 +30216,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/merges
      */
     repos$merge: (params: Params$repos$merge, option?: RequestOption): Promise<Response$repos$merge$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/merges`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/merges`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31465,11 +30228,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/list-milestones
      * Request URI: /repos/{owner}/{repo}/milestones
      */
-    issues$list$milestones: (
-      params: Params$issues$list$milestones,
-      option?: RequestOption,
-    ): Promise<Response$issues$list$milestones$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/milestones`;
+    issues$list$milestones: (params: Params$issues$list$milestones, option?: RequestOption): Promise<Response$issues$list$milestones$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/milestones`;
       const headers = {
         Accept: "application/json",
       };
@@ -31487,11 +30247,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/create-milestone
      * Request URI: /repos/{owner}/{repo}/milestones
      */
-    issues$create$milestone: (
-      params: Params$issues$create$milestone,
-      option?: RequestOption,
-    ): Promise<Response$issues$create$milestone$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/milestones`;
+    issues$create$milestone: (params: Params$issues$create$milestone, option?: RequestOption): Promise<Response$issues$create$milestone$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/milestones`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31503,11 +30260,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/get-milestone
      * Request URI: /repos/{owner}/{repo}/milestones/{milestone_number}
      */
-    issues$get$milestone: (
-      params: Params$issues$get$milestone,
-      option?: RequestOption,
-    ): Promise<Response$issues$get$milestone$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/milestones/${params.parameter.milestone_number}`;
+    issues$get$milestone: (params: Params$issues$get$milestone, option?: RequestOption): Promise<Response$issues$get$milestone$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/milestones/${params.parameter.milestone_number}`;
       const headers = {
         Accept: "application/json",
       };
@@ -31519,7 +30273,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/milestones/{milestone_number}
      */
     issues$delete$milestone: (params: Params$issues$delete$milestone, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/milestones/${params.parameter.milestone_number}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/milestones/${params.parameter.milestone_number}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -31528,11 +30282,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/update-milestone
      * Request URI: /repos/{owner}/{repo}/milestones/{milestone_number}
      */
-    issues$update$milestone: (
-      params: Params$issues$update$milestone,
-      option?: RequestOption,
-    ): Promise<Response$issues$update$milestone$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/milestones/${params.parameter.milestone_number}`;
+    issues$update$milestone: (params: Params$issues$update$milestone, option?: RequestOption): Promise<Response$issues$update$milestone$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/milestones/${params.parameter.milestone_number}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31544,11 +30295,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: issues/list-labels-for-milestone
      * Request URI: /repos/{owner}/{repo}/milestones/{milestone_number}/labels
      */
-    issues$list$labels$for$milestone: (
-      params: Params$issues$list$labels$for$milestone,
-      option?: RequestOption,
-    ): Promise<Response$issues$list$labels$for$milestone$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/milestones/${params.parameter.milestone_number}/labels`;
+    issues$list$labels$for$milestone: (params: Params$issues$list$labels$for$milestone, option?: RequestOption): Promise<Response$issues$list$labels$for$milestone$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/milestones/${params.parameter.milestone_number}/labels`;
       const headers = {
         Accept: "application/json",
       };
@@ -31568,7 +30316,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$activity$list$repo$notifications$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$activity$list$repo$notifications$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/notifications`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/notifications`;
       const headers = {
         Accept: "application/json",
       };
@@ -31592,7 +30340,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$activity$mark$repo$notifications$as$read,
       option?: RequestOption,
     ): Promise<Response$activity$mark$repo$notifications$as$read$Status$202["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/notifications`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/notifications`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31604,11 +30352,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-pages
      * Request URI: /repos/{owner}/{repo}/pages
      */
-    repos$get$pages: (
-      params: Params$repos$get$pages,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$pages$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pages`;
+    repos$get$pages: (params: Params$repos$get$pages, option?: RequestOption): Promise<Response$repos$get$pages$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pages`;
       const headers = {
         Accept: "application/json",
       };
@@ -31620,11 +30365,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/update-information-about-pages-site
      * Request URI: /repos/{owner}/{repo}/pages
      */
-    repos$update$information$about$pages$site: (
-      params: Params$repos$update$information$about$pages$site,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pages`;
+    repos$update$information$about$pages$site: (params: Params$repos$update$information$about$pages$site, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pages`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -31636,11 +30378,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/create-pages-site
      * Request URI: /repos/{owner}/{repo}/pages
      */
-    repos$create$pages$site: (
-      params: Params$repos$create$pages$site,
-      option?: RequestOption,
-    ): Promise<Response$repos$create$pages$site$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pages`;
+    repos$create$pages$site: (params: Params$repos$create$pages$site, option?: RequestOption): Promise<Response$repos$create$pages$site$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pages`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31653,7 +30392,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/pages
      */
     repos$delete$pages$site: (params: Params$repos$delete$pages$site, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pages`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pages`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -31662,11 +30401,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-pages-builds
      * Request URI: /repos/{owner}/{repo}/pages/builds
      */
-    repos$list$pages$builds: (
-      params: Params$repos$list$pages$builds,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$pages$builds$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pages/builds`;
+    repos$list$pages$builds: (params: Params$repos$list$pages$builds, option?: RequestOption): Promise<Response$repos$list$pages$builds$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pages/builds`;
       const headers = {
         Accept: "application/json",
       };
@@ -31684,11 +30420,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/request-pages-build
      * Request URI: /repos/{owner}/{repo}/pages/builds
      */
-    repos$request$pages$build: (
-      params: Params$repos$request$pages$build,
-      option?: RequestOption,
-    ): Promise<Response$repos$request$pages$build$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pages/builds`;
+    repos$request$pages$build: (params: Params$repos$request$pages$build, option?: RequestOption): Promise<Response$repos$request$pages$build$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pages/builds`;
       const headers = {
         Accept: "application/json",
       };
@@ -31699,11 +30432,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-latest-pages-build
      * Request URI: /repos/{owner}/{repo}/pages/builds/latest
      */
-    repos$get$latest$pages$build: (
-      params: Params$repos$get$latest$pages$build,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$latest$pages$build$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pages/builds/latest`;
+    repos$get$latest$pages$build: (params: Params$repos$get$latest$pages$build, option?: RequestOption): Promise<Response$repos$get$latest$pages$build$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pages/builds/latest`;
       const headers = {
         Accept: "application/json",
       };
@@ -31714,11 +30444,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-pages-build
      * Request URI: /repos/{owner}/{repo}/pages/builds/{build_id}
      */
-    repos$get$pages$build: (
-      params: Params$repos$get$pages$build,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$pages$build$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pages/builds/${params.parameter.build_id}`;
+    repos$get$pages$build: (params: Params$repos$get$pages$build, option?: RequestOption): Promise<Response$repos$get$pages$build$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pages/builds/${params.parameter.build_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -31734,7 +30461,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$list$pre$receive$hooks$for$repo,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$list$pre$receive$hooks$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pre-receive-hooks`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pre-receive-hooks`;
       const headers = {
         Accept: "application/json",
       };
@@ -31755,8 +30482,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$get$pre$receive$hook$for$repo,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$get$pre$receive$hook$for$repo$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -31774,8 +30500,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$remove$pre$receive$hook$enforcement$for$repo,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$remove$pre$receive$hook$enforcement$for$repo$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -31791,8 +30516,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$update$pre$receive$hook$enforcement$for$repo,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$update$pre$receive$hook$enforcement$for$repo$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pre-receive-hooks/${params.parameter.pre_receive_hook_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31805,11 +30529,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/list-for-repo
      * Request URI: /repos/{owner}/{repo}/projects
      */
-    projects$list$for$repo: (
-      params: Params$projects$list$for$repo,
-      option?: RequestOption,
-    ): Promise<Response$projects$list$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/projects`;
+    projects$list$for$repo: (params: Params$projects$list$for$repo, option?: RequestOption): Promise<Response$projects$list$for$repo$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/projects`;
       const headers = {
         Accept: "application/json",
       };
@@ -31826,11 +30547,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/create-for-repo
      * Request URI: /repos/{owner}/{repo}/projects
      */
-    projects$create$for$repo: (
-      params: Params$projects$create$for$repo,
-      option?: RequestOption,
-    ): Promise<Response$projects$create$for$repo$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/projects`;
+    projects$create$for$repo: (params: Params$projects$create$for$repo, option?: RequestOption): Promise<Response$projects$create$for$repo$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/projects`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31844,7 +30562,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/pulls
      */
     pulls$list: (params: Params$pulls$list, option?: RequestOption): Promise<Response$pulls$list$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls`;
       const headers = {
         Accept: "application/json",
       };
@@ -31872,7 +30590,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/pulls
      */
     pulls$create: (params: Params$pulls$create, option?: RequestOption): Promise<Response$pulls$create$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31889,7 +30607,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$pulls$list$review$comments$for$repo,
       option?: RequestOption,
     ): Promise<Response$pulls$list$review$comments$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/comments`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/comments`;
       const headers = {
         Accept: "application/json",
       };
@@ -31908,11 +30626,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/get-review-comment
      * Request URI: /repos/{owner}/{repo}/pulls/comments/{comment_id}
      */
-    pulls$get$review$comment: (
-      params: Params$pulls$get$review$comment,
-      option?: RequestOption,
-    ): Promise<Response$pulls$get$review$comment$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/comments/${params.parameter.comment_id}`;
+    pulls$get$review$comment: (params: Params$pulls$get$review$comment, option?: RequestOption): Promise<Response$pulls$get$review$comment$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/comments/${params.parameter.comment_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -31925,7 +30640,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/pulls/comments/{comment_id}
      */
     pulls$delete$review$comment: (params: Params$pulls$delete$review$comment, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/comments/${params.parameter.comment_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/comments/${params.parameter.comment_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -31935,11 +30650,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/update-review-comment
      * Request URI: /repos/{owner}/{repo}/pulls/comments/{comment_id}
      */
-    pulls$update$review$comment: (
-      params: Params$pulls$update$review$comment,
-      option?: RequestOption,
-    ): Promise<Response$pulls$update$review$comment$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/comments/${params.parameter.comment_id}`;
+    pulls$update$review$comment: (params: Params$pulls$update$review$comment, option?: RequestOption): Promise<Response$pulls$update$review$comment$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/comments/${params.parameter.comment_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31956,7 +30668,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$reactions$list$for$pull$request$review$comment,
       option?: RequestOption,
     ): Promise<Response$reactions$list$for$pull$request$review$comment$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/comments/${params.parameter.comment_id}/reactions`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/comments/${params.parameter.comment_id}/reactions`;
       const headers = {
         Accept: "application/json",
       };
@@ -31976,13 +30688,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
     reactions$create$for$pull$request$review$comment: (
       params: Params$reactions$create$for$pull$request$review$comment,
       option?: RequestOption,
-    ): Promise<
-      (
-        | Response$reactions$create$for$pull$request$review$comment$Status$200
-        | Response$reactions$create$for$pull$request$review$comment$Status$201
-      )["application/json"]
-    > => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/comments/${params.parameter.comment_id}/reactions`;
+    ): Promise<(Response$reactions$create$for$pull$request$review$comment$Status$200 | Response$reactions$create$for$pull$request$review$comment$Status$201)["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/comments/${params.parameter.comment_id}/reactions`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -31997,13 +30704,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: reactions/delete-for-pull-request-comment
      * Request URI: /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}
      */
-    reactions$delete$for$pull$request$comment: (
-      params: Params$reactions$delete$for$pull$request$comment,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/comments/${params.parameter.comment_id}/reactions/${params.parameter.reaction_id}`;
+    reactions$delete$for$pull$request$comment: (params: Params$reactions$delete$for$pull$request$comment, option?: RequestOption): Promise<void> => {
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/comments/${params.parameter.comment_id}/reactions/${params.parameter.reaction_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -32028,7 +30730,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}
      */
     pulls$get: (params: Params$pulls$get, option?: RequestOption): Promise<Response$pulls$get$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}`;
       const headers = {
         Accept: "application/json",
       };
@@ -32043,7 +30745,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}
      */
     pulls$update: (params: Params$pulls$update, option?: RequestOption): Promise<Response$pulls$update$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32056,11 +30758,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/list-review-comments
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/comments
      */
-    pulls$list$review$comments: (
-      params: Params$pulls$list$review$comments,
-      option?: RequestOption,
-    ): Promise<Response$pulls$list$review$comments$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/comments`;
+    pulls$list$review$comments: (params: Params$pulls$list$review$comments, option?: RequestOption): Promise<Response$pulls$list$review$comments$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/comments`;
       const headers = {
         Accept: "application/json",
       };
@@ -32086,11 +30785,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/create-review-comment
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/comments
      */
-    pulls$create$review$comment: (
-      params: Params$pulls$create$review$comment,
-      option?: RequestOption,
-    ): Promise<Response$pulls$create$review$comment$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/comments`;
+    pulls$create$review$comment: (params: Params$pulls$create$review$comment, option?: RequestOption): Promise<Response$pulls$create$review$comment$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/comments`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32109,9 +30805,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$pulls$create$reply$for$review$comment,
       option?: RequestOption,
     ): Promise<Response$pulls$create$reply$for$review$comment$Status$201["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/comments/${params.parameter.comment_id}/replies`;
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/comments/${params.parameter.comment_id}/replies`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32124,11 +30818,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/list-commits
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/commits
      */
-    pulls$list$commits: (
-      params: Params$pulls$list$commits,
-      option?: RequestOption,
-    ): Promise<Response$pulls$list$commits$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/commits`;
+    pulls$list$commits: (params: Params$pulls$list$commits, option?: RequestOption): Promise<Response$pulls$list$commits$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/commits`;
       const headers = {
         Accept: "application/json",
       };
@@ -32144,11 +30835,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/list-files
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/files
      */
-    pulls$list$files: (
-      params: Params$pulls$list$files,
-      option?: RequestOption,
-    ): Promise<Response$pulls$list$files$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/files`;
+    pulls$list$files: (params: Params$pulls$list$files, option?: RequestOption): Promise<Response$pulls$list$files$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/files`;
       const headers = {
         Accept: "application/json",
       };
@@ -32164,7 +30852,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/merge
      */
     pulls$check$if$merged: (params: Params$pulls$check$if$merged, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/merge`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/merge`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -32175,7 +30863,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/merge
      */
     pulls$merge: (params: Params$pulls$merge, option?: RequestOption): Promise<Response$pulls$merge$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/merge`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/merge`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32187,12 +30875,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/list-requested-reviewers
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
      */
-    pulls$list$requested$reviewers: (
-      params: Params$pulls$list$requested$reviewers,
-      option?: RequestOption,
-    ): Promise<Response$pulls$list$requested$reviewers$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/requested_reviewers`;
+    pulls$list$requested$reviewers: (params: Params$pulls$list$requested$reviewers, option?: RequestOption): Promise<Response$pulls$list$requested$reviewers$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/requested_reviewers`;
       const headers = {
         Accept: "application/json",
       };
@@ -32208,12 +30892,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/request-reviewers
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
      */
-    pulls$request$reviewers: (
-      params: Params$pulls$request$reviewers,
-      option?: RequestOption,
-    ): Promise<Response$pulls$request$reviewers$Status$201["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/requested_reviewers`;
+    pulls$request$reviewers: (params: Params$pulls$request$reviewers, option?: RequestOption): Promise<Response$pulls$request$reviewers$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/requested_reviewers`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32225,12 +30905,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/remove-requested-reviewers
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
      */
-    pulls$remove$requested$reviewers: (
-      params: Params$pulls$remove$requested$reviewers,
-      option?: RequestOption,
-    ): Promise<Response$pulls$remove$requested$reviewers$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/requested_reviewers`;
+    pulls$remove$requested$reviewers: (params: Params$pulls$remove$requested$reviewers, option?: RequestOption): Promise<Response$pulls$remove$requested$reviewers$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/requested_reviewers`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32243,11 +30919,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/list-reviews
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/reviews
      */
-    pulls$list$reviews: (
-      params: Params$pulls$list$reviews,
-      option?: RequestOption,
-    ): Promise<Response$pulls$list$reviews$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews`;
+    pulls$list$reviews: (params: Params$pulls$list$reviews, option?: RequestOption): Promise<Response$pulls$list$reviews$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews`;
       const headers = {
         Accept: "application/json",
       };
@@ -32269,11 +30942,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/create-review
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/reviews
      */
-    pulls$create$review: (
-      params: Params$pulls$create$review,
-      option?: RequestOption,
-    ): Promise<Response$pulls$create$review$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews`;
+    pulls$create$review: (params: Params$pulls$create$review, option?: RequestOption): Promise<Response$pulls$create$review$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32285,13 +30955,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/get-review
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}
      */
-    pulls$get$review: (
-      params: Params$pulls$get$review,
-      option?: RequestOption,
-    ): Promise<Response$pulls$get$review$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews/${params.parameter.review_id}`;
+    pulls$get$review: (params: Params$pulls$get$review, option?: RequestOption): Promise<Response$pulls$get$review$Status$200["application/json"]> => {
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews/${params.parameter.review_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -32303,13 +30968,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/update-review
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}
      */
-    pulls$update$review: (
-      params: Params$pulls$update$review,
-      option?: RequestOption,
-    ): Promise<Response$pulls$update$review$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews/${params.parameter.review_id}`;
+    pulls$update$review: (params: Params$pulls$update$review, option?: RequestOption): Promise<Response$pulls$update$review$Status$200["application/json"]> => {
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews/${params.parameter.review_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32321,13 +30981,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/delete-pending-review
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}
      */
-    pulls$delete$pending$review: (
-      params: Params$pulls$delete$pending$review,
-      option?: RequestOption,
-    ): Promise<Response$pulls$delete$pending$review$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews/${params.parameter.review_id}`;
+    pulls$delete$pending$review: (params: Params$pulls$delete$pending$review, option?: RequestOption): Promise<Response$pulls$delete$pending$review$Status$200["application/json"]> => {
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews/${params.parameter.review_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -32339,13 +30994,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/list-comments-for-review
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments
      */
-    pulls$list$comments$for$review: (
-      params: Params$pulls$list$comments$for$review,
-      option?: RequestOption,
-    ): Promise<Response$pulls$list$comments$for$review$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews/${params.parameter.review_id}/comments`;
+    pulls$list$comments$for$review: (params: Params$pulls$list$comments$for$review, option?: RequestOption): Promise<Response$pulls$list$comments$for$review$Status$200["application/json"]> => {
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews/${params.parameter.review_id}/comments`;
       const headers = {
         Accept: "application/json",
       };
@@ -32361,13 +31011,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/dismiss-review
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals
      */
-    pulls$dismiss$review: (
-      params: Params$pulls$dismiss$review,
-      option?: RequestOption,
-    ): Promise<Response$pulls$dismiss$review$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews/${params.parameter.review_id}/dismissals`;
+    pulls$dismiss$review: (params: Params$pulls$dismiss$review, option?: RequestOption): Promise<Response$pulls$dismiss$review$Status$200["application/json"]> => {
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews/${params.parameter.review_id}/dismissals`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32379,13 +31024,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/submit-review
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/events
      */
-    pulls$submit$review: (
-      params: Params$pulls$submit$review,
-      option?: RequestOption,
-    ): Promise<Response$pulls$submit$review$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews/${params.parameter.review_id}/events`;
+    pulls$submit$review: (params: Params$pulls$submit$review, option?: RequestOption): Promise<Response$pulls$submit$review$Status$200["application/json"]> => {
+      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/reviews/${params.parameter.review_id}/events`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32398,11 +31038,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: pulls/update-branch
      * Request URI: /repos/{owner}/{repo}/pulls/{pull_number}/update-branch
      */
-    pulls$update$branch: (
-      params: Params$pulls$update$branch,
-      option?: RequestOption,
-    ): Promise<Response$pulls$update$branch$Status$202["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/update-branch`;
+    pulls$update$branch: (params: Params$pulls$update$branch, option?: RequestOption): Promise<Response$pulls$update$branch$Status$202["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/pulls/${params.parameter.pull_number}/update-branch`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32417,11 +31054,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-readme
      * Request URI: /repos/{owner}/{repo}/readme
      */
-    repos$get$readme: (
-      params: Params$repos$get$readme,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$readme$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/readme`;
+    repos$get$readme: (params: Params$repos$get$readme, option?: RequestOption): Promise<Response$repos$get$readme$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/readme`;
       const headers = {
         Accept: "application/json",
       };
@@ -32438,11 +31072,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-readme-in-directory
      * Request URI: /repos/{owner}/{repo}/readme/{dir}
      */
-    repos$get$readme$in$directory: (
-      params: Params$repos$get$readme$in$directory,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$readme$in$directory$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/readme/${params.parameter.dir}`;
+    repos$get$readme$in$directory: (params: Params$repos$get$readme$in$directory, option?: RequestOption): Promise<Response$repos$get$readme$in$directory$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/readme/${params.parameter.dir}`;
       const headers = {
         Accept: "application/json",
       };
@@ -32459,11 +31090,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-releases
      * Request URI: /repos/{owner}/{repo}/releases
      */
-    repos$list$releases: (
-      params: Params$repos$list$releases,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$releases$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases`;
+    repos$list$releases: (params: Params$repos$list$releases, option?: RequestOption): Promise<Response$repos$list$releases$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/releases`;
       const headers = {
         Accept: "application/json",
       };
@@ -32481,11 +31109,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/create-release
      * Request URI: /repos/{owner}/{repo}/releases
      */
-    repos$create$release: (
-      params: Params$repos$create$release,
-      option?: RequestOption,
-    ): Promise<Response$repos$create$release$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases`;
+    repos$create$release: (params: Params$repos$create$release, option?: RequestOption): Promise<Response$repos$create$release$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/releases`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32498,11 +31123,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-release-asset
      * Request URI: /repos/{owner}/{repo}/releases/assets/{asset_id}
      */
-    repos$get$release$asset: (
-      params: Params$repos$get$release$asset,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$release$asset$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases/assets/${params.parameter.asset_id}`;
+    repos$get$release$asset: (params: Params$repos$get$release$asset, option?: RequestOption): Promise<Response$repos$get$release$asset$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/releases/assets/${params.parameter.asset_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -32514,7 +31136,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/releases/assets/{asset_id}
      */
     repos$delete$release$asset: (params: Params$repos$delete$release$asset, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases/assets/${params.parameter.asset_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/releases/assets/${params.parameter.asset_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -32524,11 +31146,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/update-release-asset
      * Request URI: /repos/{owner}/{repo}/releases/assets/{asset_id}
      */
-    repos$update$release$asset: (
-      params: Params$repos$update$release$asset,
-      option?: RequestOption,
-    ): Promise<Response$repos$update$release$asset$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases/assets/${params.parameter.asset_id}`;
+    repos$update$release$asset: (params: Params$repos$update$release$asset, option?: RequestOption): Promise<Response$repos$update$release$asset$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/releases/assets/${params.parameter.asset_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32541,11 +31160,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/generate-release-notes
      * Request URI: /repos/{owner}/{repo}/releases/generate-notes
      */
-    repos$generate$release$notes: (
-      params: Params$repos$generate$release$notes,
-      option?: RequestOption,
-    ): Promise<Response$repos$generate$release$notes$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases/generate-notes`;
+    repos$generate$release$notes: (params: Params$repos$generate$release$notes, option?: RequestOption): Promise<Response$repos$generate$release$notes$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/releases/generate-notes`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32560,11 +31176,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-latest-release
      * Request URI: /repos/{owner}/{repo}/releases/latest
      */
-    repos$get$latest$release: (
-      params: Params$repos$get$latest$release,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$latest$release$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases/latest`;
+    repos$get$latest$release: (params: Params$repos$get$latest$release, option?: RequestOption): Promise<Response$repos$get$latest$release$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/releases/latest`;
       const headers = {
         Accept: "application/json",
       };
@@ -32576,11 +31189,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-release-by-tag
      * Request URI: /repos/{owner}/{repo}/releases/tags/{tag}
      */
-    repos$get$release$by$tag: (
-      params: Params$repos$get$release$by$tag,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$release$by$tag$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases/tags/${params.parameter.tag}`;
+    repos$get$release$by$tag: (params: Params$repos$get$release$by$tag, option?: RequestOption): Promise<Response$repos$get$release$by$tag$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/releases/tags/${params.parameter.tag}`;
       const headers = {
         Accept: "application/json",
       };
@@ -32592,11 +31202,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-release
      * Request URI: /repos/{owner}/{repo}/releases/{release_id}
      */
-    repos$get$release: (
-      params: Params$repos$get$release,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$release$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases/${params.parameter.release_id}`;
+    repos$get$release: (params: Params$repos$get$release, option?: RequestOption): Promise<Response$repos$get$release$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/releases/${params.parameter.release_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -32609,7 +31216,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/releases/{release_id}
      */
     repos$delete$release: (params: Params$repos$delete$release, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases/${params.parameter.release_id}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/releases/${params.parameter.release_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -32619,11 +31226,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/update-release
      * Request URI: /repos/{owner}/{repo}/releases/{release_id}
      */
-    repos$update$release: (
-      params: Params$repos$update$release,
-      option?: RequestOption,
-    ): Promise<Response$repos$update$release$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases/${params.parameter.release_id}`;
+    repos$update$release: (params: Params$repos$update$release, option?: RequestOption): Promise<Response$repos$update$release$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/releases/${params.parameter.release_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32635,11 +31239,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-release-assets
      * Request URI: /repos/{owner}/{repo}/releases/{release_id}/assets
      */
-    repos$list$release$assets: (
-      params: Params$repos$list$release$assets,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$release$assets$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases/${params.parameter.release_id}/assets`;
+    repos$list$release$assets: (params: Params$repos$list$release$assets, option?: RequestOption): Promise<Response$repos$list$release$assets$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/releases/${params.parameter.release_id}/assets`;
       const headers = {
         Accept: "application/json",
       };
@@ -32672,11 +31273,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/upload-release-asset
      * Request URI: /repos/{owner}/{repo}/releases/{release_id}/assets
      */
-    repos$upload$release$asset: (
-      params: Params$repos$upload$release$asset,
-      option?: RequestOption,
-    ): Promise<Response$repos$upload$release$asset$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases/${params.parameter.release_id}/assets`;
+    repos$upload$release$asset: (params: Params$repos$upload$release$asset, option?: RequestOption): Promise<Response$repos$upload$release$asset$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/releases/${params.parameter.release_id}/assets`;
       const headers = {
         "Content-Type": "*/*",
         Accept: "application/json",
@@ -32697,7 +31295,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$reactions$create$for$release,
       option?: RequestOption,
     ): Promise<(Response$reactions$create$for$release$Status$200 | Response$reactions$create$for$release$Status$201)["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/releases/${params.parameter.release_id}/reactions`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/releases/${params.parameter.release_id}/reactions`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32710,11 +31308,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-cache-info
      * Request URI: /repos/{owner}/{repo}/replicas/caches
      */
-    repos$list$cache$info: (
-      params: Params$repos$list$cache$info,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$cache$info$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/replicas/caches`;
+    repos$list$cache$info: (params: Params$repos$list$cache$info, option?: RequestOption): Promise<Response$repos$list$cache$info$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/replicas/caches`;
       const headers = {
         Accept: "application/json",
       };
@@ -32736,7 +31331,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$secret$scanning$list$alerts$for$repo,
       option?: RequestOption,
     ): Promise<Response$secret$scanning$list$alerts$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/secret-scanning/alerts`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/secret-scanning/alerts`;
       const headers = {
         Accept: "application/json",
       };
@@ -32757,11 +31352,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: secret-scanning/get-alert
      * Request URI: /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}
      */
-    secret$scanning$get$alert: (
-      params: Params$secret$scanning$get$alert,
-      option?: RequestOption,
-    ): Promise<Response$secret$scanning$get$alert$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/secret-scanning/alerts/${params.parameter.alert_number}`;
+    secret$scanning$get$alert: (params: Params$secret$scanning$get$alert, option?: RequestOption): Promise<Response$secret$scanning$get$alert$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/secret-scanning/alerts/${params.parameter.alert_number}`;
       const headers = {
         Accept: "application/json",
       };
@@ -32775,11 +31367,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: secret-scanning/update-alert
      * Request URI: /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}
      */
-    secret$scanning$update$alert: (
-      params: Params$secret$scanning$update$alert,
-      option?: RequestOption,
-    ): Promise<Response$secret$scanning$update$alert$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/secret-scanning/alerts/${params.parameter.alert_number}`;
+    secret$scanning$update$alert: (params: Params$secret$scanning$update$alert, option?: RequestOption): Promise<Response$secret$scanning$update$alert$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/secret-scanning/alerts/${params.parameter.alert_number}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32798,8 +31387,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$secret$scanning$list$locations$for$alert,
       option?: RequestOption,
     ): Promise<Response$secret$scanning$list$locations$for$alert$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/secret-scanning/alerts/${params.parameter.alert_number}/locations`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/secret-scanning/alerts/${params.parameter.alert_number}/locations`;
       const headers = {
         Accept: "application/json",
       };
@@ -32821,7 +31409,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$activity$list$stargazers$for$repo,
       option?: RequestOption,
     ): Promise<Response$activity$list$stargazers$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/stargazers`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/stargazers`;
       const headers = {
         Accept: "application/json",
       };
@@ -32840,10 +31428,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
     repos$get$code$frequency$stats: (
       params: Params$repos$get$code$frequency$stats,
       option?: RequestOption,
-    ): Promise<
-      (Response$repos$get$code$frequency$stats$Status$200 | Response$repos$get$code$frequency$stats$Status$202)["application/json"]
-    > => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/stats/code_frequency`;
+    ): Promise<(Response$repos$get$code$frequency$stats$Status$200 | Response$repos$get$code$frequency$stats$Status$202)["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/stats/code_frequency`;
       const headers = {
         Accept: "application/json",
       };
@@ -32858,10 +31444,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
     repos$get$commit$activity$stats: (
       params: Params$repos$get$commit$activity$stats,
       option?: RequestOption,
-    ): Promise<
-      (Response$repos$get$commit$activity$stats$Status$200 | Response$repos$get$commit$activity$stats$Status$202)["application/json"]
-    > => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/stats/commit_activity`;
+    ): Promise<(Response$repos$get$commit$activity$stats$Status$200 | Response$repos$get$commit$activity$stats$Status$202)["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/stats/commit_activity`;
       const headers = {
         Accept: "application/json",
       };
@@ -32883,7 +31467,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$get$contributors$stats,
       option?: RequestOption,
     ): Promise<(Response$repos$get$contributors$stats$Status$200 | Response$repos$get$contributors$stats$Status$202)["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/stats/contributors`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/stats/contributors`;
       const headers = {
         Accept: "application/json",
       };
@@ -32897,11 +31481,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-participation-stats
      * Request URI: /repos/{owner}/{repo}/stats/participation
      */
-    repos$get$participation$stats: (
-      params: Params$repos$get$participation$stats,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$participation$stats$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/stats/participation`;
+    repos$get$participation$stats: (params: Params$repos$get$participation$stats, option?: RequestOption): Promise<Response$repos$get$participation$stats$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/stats/participation`;
       const headers = {
         Accept: "application/json",
       };
@@ -32919,11 +31500,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-punch-card-stats
      * Request URI: /repos/{owner}/{repo}/stats/punch_card
      */
-    repos$get$punch$card$stats: (
-      params: Params$repos$get$punch$card$stats,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$punch$card$stats$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/stats/punch_card`;
+    repos$get$punch$card$stats: (params: Params$repos$get$punch$card$stats, option?: RequestOption): Promise<Response$repos$get$punch$card$stats$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/stats/punch_card`;
       const headers = {
         Accept: "application/json",
       };
@@ -32937,11 +31515,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/create-commit-status
      * Request URI: /repos/{owner}/{repo}/statuses/{sha}
      */
-    repos$create$commit$status: (
-      params: Params$repos$create$commit$status,
-      option?: RequestOption,
-    ): Promise<Response$repos$create$commit$status$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/statuses/${params.parameter.sha}`;
+    repos$create$commit$status: (params: Params$repos$create$commit$status, option?: RequestOption): Promise<Response$repos$create$commit$status$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/statuses/${params.parameter.sha}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -32954,11 +31529,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: activity/list-watchers-for-repo
      * Request URI: /repos/{owner}/{repo}/subscribers
      */
-    activity$list$watchers$for$repo: (
-      params: Params$activity$list$watchers$for$repo,
-      option?: RequestOption,
-    ): Promise<Response$activity$list$watchers$for$repo$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/subscribers`;
+    activity$list$watchers$for$repo: (params: Params$activity$list$watchers$for$repo, option?: RequestOption): Promise<Response$activity$list$watchers$for$repo$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/subscribers`;
       const headers = {
         Accept: "application/json",
       };
@@ -32973,11 +31545,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: activity/get-repo-subscription
      * Request URI: /repos/{owner}/{repo}/subscription
      */
-    activity$get$repo$subscription: (
-      params: Params$activity$get$repo$subscription,
-      option?: RequestOption,
-    ): Promise<Response$activity$get$repo$subscription$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/subscription`;
+    activity$get$repo$subscription: (params: Params$activity$get$repo$subscription, option?: RequestOption): Promise<Response$activity$get$repo$subscription$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/subscription`;
       const headers = {
         Accept: "application/json",
       };
@@ -32989,11 +31558,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: activity/set-repo-subscription
      * Request URI: /repos/{owner}/{repo}/subscription
      */
-    activity$set$repo$subscription: (
-      params: Params$activity$set$repo$subscription,
-      option?: RequestOption,
-    ): Promise<Response$activity$set$repo$subscription$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/subscription`;
+    activity$set$repo$subscription: (params: Params$activity$set$repo$subscription, option?: RequestOption): Promise<Response$activity$set$repo$subscription$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/subscription`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -33007,7 +31573,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/subscription
      */
     activity$delete$repo$subscription: (params: Params$activity$delete$repo$subscription, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/subscription`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/subscription`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -33016,11 +31582,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-tags
      * Request URI: /repos/{owner}/{repo}/tags
      */
-    repos$list$tags: (
-      params: Params$repos$list$tags,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$tags$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/tags`;
+    repos$list$tags: (params: Params$repos$list$tags, option?: RequestOption): Promise<Response$repos$list$tags$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/tags`;
       const headers = {
         Accept: "application/json",
       };
@@ -33040,7 +31603,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/tarball/{ref}
      */
     repos$download$tarball$archive: (params: Params$repos$download$tarball$archive, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/tarball/${params.parameter.ref}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/tarball/${params.parameter.ref}`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -33049,11 +31612,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-teams
      * Request URI: /repos/{owner}/{repo}/teams
      */
-    repos$list$teams: (
-      params: Params$repos$list$teams,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$teams$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/teams`;
+    repos$list$teams: (params: Params$repos$list$teams, option?: RequestOption): Promise<Response$repos$list$teams$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/teams`;
       const headers = {
         Accept: "application/json",
       };
@@ -33068,11 +31628,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/get-all-topics
      * Request URI: /repos/{owner}/{repo}/topics
      */
-    repos$get$all$topics: (
-      params: Params$repos$get$all$topics,
-      option?: RequestOption,
-    ): Promise<Response$repos$get$all$topics$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/topics`;
+    repos$get$all$topics: (params: Params$repos$get$all$topics, option?: RequestOption): Promise<Response$repos$get$all$topics$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/topics`;
       const headers = {
         Accept: "application/json",
       };
@@ -33087,11 +31644,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/replace-all-topics
      * Request URI: /repos/{owner}/{repo}/topics
      */
-    repos$replace$all$topics: (
-      params: Params$repos$replace$all$topics,
-      option?: RequestOption,
-    ): Promise<Response$repos$replace$all$topics$Status$200["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/topics`;
+    repos$replace$all$topics: (params: Params$repos$replace$all$topics, option?: RequestOption): Promise<Response$repos$replace$all$topics$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/topics`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -33104,11 +31658,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/transfer
      * Request URI: /repos/{owner}/{repo}/transfer
      */
-    repos$transfer: (
-      params: Params$repos$transfer,
-      option?: RequestOption,
-    ): Promise<Response$repos$transfer$Status$202["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/transfer`;
+    repos$transfer: (params: Params$repos$transfer, option?: RequestOption): Promise<Response$repos$transfer$Status$202["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/transfer`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -33125,7 +31676,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repos/{owner}/{repo}/zipball/{ref}
      */
     repos$download$zipball$archive: (params: Params$repos$download$zipball$archive, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/repos/${params.parameter.owner}/${params.parameter.repo}/zipball/${params.parameter.ref}`;
+      const url = `${baseUrl}/repos/${params.parameter.owner}/${params.parameter.repo}/zipball/${params.parameter.ref}`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -33142,11 +31693,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/create-using-template
      * Request URI: /repos/{template_owner}/{template_repo}/generate
      */
-    repos$create$using$template: (
-      params: Params$repos$create$using$template,
-      option?: RequestOption,
-    ): Promise<Response$repos$create$using$template$Status$201["application/json"]> => {
-      const url = baseUrl + `/repos/${params.parameter.template_owner}/${params.parameter.template_repo}/generate`;
+    repos$create$using$template: (params: Params$repos$create$using$template, option?: RequestOption): Promise<Response$repos$create$using$template$Status$201["application/json"]> => {
+      const url = `${baseUrl}/repos/${params.parameter.template_owner}/${params.parameter.template_repo}/generate`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -33163,11 +31711,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-public
      * Request URI: /repositories
      */
-    repos$list$public: (
-      params: Params$repos$list$public,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$public$Status$200["application/json"]> => {
-      const url = baseUrl + `/repositories`;
+    repos$list$public: (params: Params$repos$list$public, option?: RequestOption): Promise<Response$repos$list$public$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repositories`;
       const headers = {
         Accept: "application/json",
       };
@@ -33183,11 +31728,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/list-environment-secrets
      * Request URI: /repositories/{repository_id}/environments/{environment_name}/secrets
      */
-    actions$list$environment$secrets: (
-      params: Params$actions$list$environment$secrets,
-      option?: RequestOption,
-    ): Promise<Response$actions$list$environment$secrets$Status$200["application/json"]> => {
-      const url = baseUrl + `/repositories/${params.parameter.repository_id}/environments/${params.parameter.environment_name}/secrets`;
+    actions$list$environment$secrets: (params: Params$actions$list$environment$secrets, option?: RequestOption): Promise<Response$actions$list$environment$secrets$Status$200["application/json"]> => {
+      const url = `${baseUrl}/repositories/${params.parameter.repository_id}/environments/${params.parameter.environment_name}/secrets`;
       const headers = {
         Accept: "application/json",
       };
@@ -33207,8 +31749,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$get$environment$public$key,
       option?: RequestOption,
     ): Promise<Response$actions$get$environment$public$key$Status$200["application/json"]> => {
-      const url =
-        baseUrl + `/repositories/${params.parameter.repository_id}/environments/${params.parameter.environment_name}/secrets/public-key`;
+      const url = `${baseUrl}/repositories/${params.parameter.repository_id}/environments/${params.parameter.environment_name}/secrets/public-key`;
       const headers = {
         Accept: "application/json",
       };
@@ -33220,13 +31761,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: actions/get-environment-secret
      * Request URI: /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}
      */
-    actions$get$environment$secret: (
-      params: Params$actions$get$environment$secret,
-      option?: RequestOption,
-    ): Promise<Response$actions$get$environment$secret$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repositories/${params.parameter.repository_id}/environments/${params.parameter.environment_name}/secrets/${params.parameter.secret_name}`;
+    actions$get$environment$secret: (params: Params$actions$get$environment$secret, option?: RequestOption): Promise<Response$actions$get$environment$secret$Status$200["application/json"]> => {
+      const url = baseUrl + `/repositories/${params.parameter.repository_id}/environments/${params.parameter.environment_name}/secrets/${params.parameter.secret_name}`;
       const headers = {
         Accept: "application/json",
       };
@@ -33316,9 +31852,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$actions$create$or$update$environment$secret,
       option?: RequestOption,
     ): Promise<Response$actions$create$or$update$environment$secret$Status$201["application/json"]> => {
-      const url =
-        baseUrl +
-        `/repositories/${params.parameter.repository_id}/environments/${params.parameter.environment_name}/secrets/${params.parameter.secret_name}`;
+      const url = baseUrl + `/repositories/${params.parameter.repository_id}/environments/${params.parameter.environment_name}/secrets/${params.parameter.secret_name}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -33332,9 +31866,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}
      */
     actions$delete$environment$secret: (params: Params$actions$delete$environment$secret, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl +
-        `/repositories/${params.parameter.repository_id}/environments/${params.parameter.environment_name}/secrets/${params.parameter.secret_name}`;
+      const url = baseUrl + `/repositories/${params.parameter.repository_id}/environments/${params.parameter.environment_name}/secrets/${params.parameter.secret_name}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -33362,7 +31894,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /search/code
      */
     search$code: (params: Params$search$code, option?: RequestOption): Promise<Response$search$code$Status$200["application/json"]> => {
-      const url = baseUrl + `/search/code`;
+      const url = `${baseUrl}/search/code`;
       const headers = {
         Accept: "application/json",
       };
@@ -33388,11 +31920,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: search/commits
      * Request URI: /search/commits
      */
-    search$commits: (
-      params: Params$search$commits,
-      option?: RequestOption,
-    ): Promise<Response$search$commits$Status$200["application/json"]> => {
-      const url = baseUrl + `/search/commits`;
+    search$commits: (params: Params$search$commits, option?: RequestOption): Promise<Response$search$commits$Status$200["application/json"]> => {
+      const url = `${baseUrl}/search/commits`;
       const headers = {
         Accept: "application/json",
       };
@@ -33422,11 +31951,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: search/issues-and-pull-requests
      * Request URI: /search/issues
      */
-    search$issues$and$pull$requests: (
-      params: Params$search$issues$and$pull$requests,
-      option?: RequestOption,
-    ): Promise<Response$search$issues$and$pull$requests$Status$200["application/json"]> => {
-      const url = baseUrl + `/search/issues`;
+    search$issues$and$pull$requests: (params: Params$search$issues$and$pull$requests, option?: RequestOption): Promise<Response$search$issues$and$pull$requests$Status$200["application/json"]> => {
+      const url = `${baseUrl}/search/issues`;
       const headers = {
         Accept: "application/json",
       };
@@ -33454,7 +31980,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /search/labels
      */
     search$labels: (params: Params$search$labels, option?: RequestOption): Promise<Response$search$labels$Status$200["application/json"]> => {
-      const url = baseUrl + `/search/labels`;
+      const url = `${baseUrl}/search/labels`;
       const headers = {
         Accept: "application/json",
       };
@@ -33483,7 +32009,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /search/repositories
      */
     search$repos: (params: Params$search$repos, option?: RequestOption): Promise<Response$search$repos$Status$200["application/json"]> => {
-      const url = baseUrl + `/search/repositories`;
+      const url = `${baseUrl}/search/repositories`;
       const headers = {
         Accept: "application/json",
       };
@@ -33511,7 +32037,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /search/topics
      */
     search$topics: (params: Params$search$topics, option?: RequestOption): Promise<Response$search$topics$Status$200["application/json"]> => {
-      const url = baseUrl + `/search/topics`;
+      const url = `${baseUrl}/search/topics`;
       const headers = {
         Accept: "application/json",
       };
@@ -33537,7 +32063,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /search/users
      */
     search$users: (params: Params$search$users, option?: RequestOption): Promise<Response$search$users$Status$200["application/json"]> => {
-      const url = baseUrl + `/search/users`;
+      const url = `${baseUrl}/search/users`;
       const headers = {
         Accept: "application/json",
       };
@@ -33567,10 +32093,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-configuration-status
      * Request URI: /setup/api/configcheck
      */
-    enterprise$admin$get$configuration$status: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$configuration$status$Status$200["application/json"]> => {
-      const url = baseUrl + `/setup/api/configcheck`;
+    enterprise$admin$get$configuration$status: (option?: RequestOption): Promise<Response$enterprise$admin$get$configuration$status$Status$200["application/json"]> => {
+      const url = `${baseUrl}/setup/api/configcheck`;
       const headers = {
         Accept: "application/json",
       };
@@ -33583,7 +32107,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /setup/api/configure
      */
     enterprise$admin$start$configuration$process: (option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/setup/api/configure`;
+      const url = `${baseUrl}/setup/api/configure`;
       const headers = {};
       return apiClient.request("POST", url, headers, undefined, undefined, option);
     },
@@ -33593,10 +32117,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-maintenance-status
      * Request URI: /setup/api/maintenance
      */
-    enterprise$admin$get$maintenance$status: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$maintenance$status$Status$200["application/json"]> => {
-      const url = baseUrl + `/setup/api/maintenance`;
+    enterprise$admin$get$maintenance$status: (option?: RequestOption): Promise<Response$enterprise$admin$get$maintenance$status$Status$200["application/json"]> => {
+      const url = `${baseUrl}/setup/api/maintenance`;
       const headers = {
         Accept: "application/json",
       };
@@ -33612,7 +32134,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$enable$or$disable$maintenance$mode,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$enable$or$disable$maintenance$mode$Status$200["application/json"]> => {
-      const url = baseUrl + `/setup/api/maintenance`;
+      const url = `${baseUrl}/setup/api/maintenance`;
       const headers = {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
@@ -33625,7 +32147,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /setup/api/settings
      */
     enterprise$admin$get$settings: (option?: RequestOption): Promise<Response$enterprise$admin$get$settings$Status$200["application/json"]> => {
-      const url = baseUrl + `/setup/api/settings`;
+      const url = `${baseUrl}/setup/api/settings`;
       const headers = {
         Accept: "application/json",
       };
@@ -33640,7 +32162,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /setup/api/settings
      */
     enterprise$admin$set$settings: (params: Params$enterprise$admin$set$settings, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/setup/api/settings`;
+      const url = `${baseUrl}/setup/api/settings`;
       const headers = {
         "Content-Type": "application/x-www-form-urlencoded",
       };
@@ -33651,10 +32173,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/get-all-authorized-ssh-keys
      * Request URI: /setup/api/settings/authorized-keys
      */
-    enterprise$admin$get$all$authorized$ssh$keys: (
-      option?: RequestOption,
-    ): Promise<Response$enterprise$admin$get$all$authorized$ssh$keys$Status$200["application/json"]> => {
-      const url = baseUrl + `/setup/api/settings/authorized-keys`;
+    enterprise$admin$get$all$authorized$ssh$keys: (option?: RequestOption): Promise<Response$enterprise$admin$get$all$authorized$ssh$keys$Status$200["application/json"]> => {
+      const url = `${baseUrl}/setup/api/settings/authorized-keys`;
       const headers = {
         Accept: "application/json",
       };
@@ -33670,7 +32190,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$add$authorized$ssh$key,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$add$authorized$ssh$key$Status$201["application/json"]> => {
-      const url = baseUrl + `/setup/api/settings/authorized-keys`;
+      const url = `${baseUrl}/setup/api/settings/authorized-keys`;
       const headers = {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
@@ -33687,7 +32207,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$enterprise$admin$remove$authorized$ssh$key,
       option?: RequestOption,
     ): Promise<Response$enterprise$admin$remove$authorized$ssh$key$Status$200["application/json"]> => {
-      const url = baseUrl + `/setup/api/settings/authorized-keys`;
+      const url = `${baseUrl}/setup/api/settings/authorized-keys`;
       const headers = {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
@@ -33709,11 +32229,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/create-enterprise-server-license
      * Request URI: /setup/api/start
      */
-    enterprise$admin$create$enterprise$server$license: (
-      params: Params$enterprise$admin$create$enterprise$server$license,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/setup/api/start`;
+    enterprise$admin$create$enterprise$server$license: (params: Params$enterprise$admin$create$enterprise$server$license, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/setup/api/start`;
       const headers = {
         "Content-Type": "application/x-www-form-urlencoded",
       };
@@ -33728,7 +32245,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /setup/api/upgrade
      */
     enterprise$admin$upgrade$license: (params: Params$enterprise$admin$upgrade$license, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/setup/api/upgrade`;
+      const url = `${baseUrl}/setup/api/upgrade`;
       const headers = {
         "Content-Type": "application/x-www-form-urlencoded",
       };
@@ -33740,11 +32257,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/get-legacy
      * Request URI: /teams/{team_id}
      */
-    teams$get$legacy: (
-      params: Params$teams$get$legacy,
-      option?: RequestOption,
-    ): Promise<Response$teams$get$legacy$Status$200["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}`;
+    teams$get$legacy: (params: Params$teams$get$legacy, option?: RequestOption): Promise<Response$teams$get$legacy$Status$200["application/json"]> => {
+      const url = `${baseUrl}/teams/${params.parameter.team_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -33761,7 +32275,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /teams/{team_id}
      */
     teams$delete$legacy: (params: Params$teams$delete$legacy, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -33779,7 +32293,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$update$legacy,
       option?: RequestOption,
     ): Promise<(Response$teams$update$legacy$Status$200 | Response$teams$update$legacy$Status$201)["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -33794,11 +32308,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/list-discussions-legacy
      * Request URI: /teams/{team_id}/discussions
      */
-    teams$list$discussions$legacy: (
-      params: Params$teams$list$discussions$legacy,
-      option?: RequestOption,
-    ): Promise<Response$teams$list$discussions$legacy$Status$200["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/discussions`;
+    teams$list$discussions$legacy: (params: Params$teams$list$discussions$legacy, option?: RequestOption): Promise<Response$teams$list$discussions$legacy$Status$200["application/json"]> => {
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/discussions`;
       const headers = {
         Accept: "application/json",
       };
@@ -33819,11 +32330,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/create-discussion-legacy
      * Request URI: /teams/{team_id}/discussions
      */
-    teams$create$discussion$legacy: (
-      params: Params$teams$create$discussion$legacy,
-      option?: RequestOption,
-    ): Promise<Response$teams$create$discussion$legacy$Status$201["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/discussions`;
+    teams$create$discussion$legacy: (params: Params$teams$create$discussion$legacy, option?: RequestOption): Promise<Response$teams$create$discussion$legacy$Status$201["application/json"]> => {
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/discussions`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -33838,11 +32346,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/get-discussion-legacy
      * Request URI: /teams/{team_id}/discussions/{discussion_number}
      */
-    teams$get$discussion$legacy: (
-      params: Params$teams$get$discussion$legacy,
-      option?: RequestOption,
-    ): Promise<Response$teams$get$discussion$legacy$Status$200["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}`;
+    teams$get$discussion$legacy: (params: Params$teams$get$discussion$legacy, option?: RequestOption): Promise<Response$teams$get$discussion$legacy$Status$200["application/json"]> => {
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}`;
       const headers = {
         Accept: "application/json",
       };
@@ -33857,7 +32362,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /teams/{team_id}/discussions/{discussion_number}
      */
     teams$delete$discussion$legacy: (params: Params$teams$delete$discussion$legacy, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -33869,11 +32374,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/update-discussion-legacy
      * Request URI: /teams/{team_id}/discussions/{discussion_number}
      */
-    teams$update$discussion$legacy: (
-      params: Params$teams$update$discussion$legacy,
-      option?: RequestOption,
-    ): Promise<Response$teams$update$discussion$legacy$Status$200["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}`;
+    teams$update$discussion$legacy: (params: Params$teams$update$discussion$legacy, option?: RequestOption): Promise<Response$teams$update$discussion$legacy$Status$200["application/json"]> => {
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -33892,7 +32394,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$list$discussion$comments$legacy,
       option?: RequestOption,
     ): Promise<Response$teams$list$discussion$comments$legacy$Status$200["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/comments`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/comments`;
       const headers = {
         Accept: "application/json",
       };
@@ -33917,7 +32419,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$create$discussion$comment$legacy,
       option?: RequestOption,
     ): Promise<Response$teams$create$discussion$comment$legacy$Status$201["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/comments`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/comments`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -33936,9 +32438,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$get$discussion$comment$legacy,
       option?: RequestOption,
     ): Promise<Response$teams$get$discussion$comment$legacy$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}`;
+      const url = baseUrl + `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}`;
       const headers = {
         Accept: "application/json",
       };
@@ -33953,9 +32453,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}
      */
     teams$delete$discussion$comment$legacy: (params: Params$teams$delete$discussion$comment$legacy, option?: RequestOption): Promise<void> => {
-      const url =
-        baseUrl +
-        `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}`;
+      const url = baseUrl + `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -33971,9 +32469,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$update$discussion$comment$legacy,
       option?: RequestOption,
     ): Promise<Response$teams$update$discussion$comment$legacy$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}`;
+      const url = baseUrl + `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -33992,9 +32488,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$reactions$list$for$team$discussion$comment$legacy,
       option?: RequestOption,
     ): Promise<Response$reactions$list$for$team$discussion$comment$legacy$Status$200["application/json"]> => {
-      const url =
-        baseUrl +
-        `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}/reactions`;
+      const url = baseUrl + `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}/reactions`;
       const headers = {
         Accept: "application/json",
       };
@@ -34017,9 +32511,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$reactions$create$for$team$discussion$comment$legacy,
       option?: RequestOption,
     ): Promise<Response$reactions$create$for$team$discussion$comment$legacy$Status$201["application/json"]> => {
-      const url =
-        baseUrl +
-        `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}/reactions`;
+      const url = baseUrl + `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/comments/${params.parameter.comment_number}/reactions`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -34038,7 +32530,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$reactions$list$for$team$discussion$legacy,
       option?: RequestOption,
     ): Promise<Response$reactions$list$for$team$discussion$legacy$Status$200["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/reactions`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/reactions`;
       const headers = {
         Accept: "application/json",
       };
@@ -34061,7 +32553,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$reactions$create$for$team$discussion$legacy,
       option?: RequestOption,
     ): Promise<Response$reactions$create$for$team$discussion$legacy$Status$201["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/reactions`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/discussions/${params.parameter.discussion_number}/reactions`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -34076,11 +32568,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/list-members-legacy
      * Request URI: /teams/{team_id}/members
      */
-    teams$list$members$legacy: (
-      params: Params$teams$list$members$legacy,
-      option?: RequestOption,
-    ): Promise<Response$teams$list$members$legacy$Status$200["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/members`;
+    teams$list$members$legacy: (params: Params$teams$list$members$legacy, option?: RequestOption): Promise<Response$teams$list$members$legacy$Status$200["application/json"]> => {
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/members`;
       const headers = {
         Accept: "application/json",
       };
@@ -34102,7 +32591,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /teams/{team_id}/members/{username}
      */
     teams$get$member$legacy: (params: Params$teams$get$member$legacy, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/members/${params.parameter.username}`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/members/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -34123,7 +32612,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /teams/{team_id}/members/{username}
      */
     teams$add$member$legacy: (params: Params$teams$add$member$legacy, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/members/${params.parameter.username}`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/members/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -34142,7 +32631,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /teams/{team_id}/members/{username}
      */
     teams$remove$member$legacy: (params: Params$teams$remove$member$legacy, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/members/${params.parameter.username}`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/members/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -34165,7 +32654,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$get$membership$for$user$legacy,
       option?: RequestOption,
     ): Promise<Response$teams$get$membership$for$user$legacy$Status$200["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/memberships/${params.parameter.username}`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/memberships/${params.parameter.username}`;
       const headers = {
         Accept: "application/json",
       };
@@ -34191,7 +32680,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$add$or$update$membership$for$user$legacy,
       option?: RequestOption,
     ): Promise<Response$teams$add$or$update$membership$for$user$legacy$Status$200["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/memberships/${params.parameter.username}`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/memberships/${params.parameter.username}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -34210,11 +32699,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/remove-membership-for-user-legacy
      * Request URI: /teams/{team_id}/memberships/{username}
      */
-    teams$remove$membership$for$user$legacy: (
-      params: Params$teams$remove$membership$for$user$legacy,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/memberships/${params.parameter.username}`;
+    teams$remove$membership$for$user$legacy: (params: Params$teams$remove$membership$for$user$legacy, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/memberships/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -34226,11 +32712,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/list-projects-legacy
      * Request URI: /teams/{team_id}/projects
      */
-    teams$list$projects$legacy: (
-      params: Params$teams$list$projects$legacy,
-      option?: RequestOption,
-    ): Promise<Response$teams$list$projects$legacy$Status$200["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/projects`;
+    teams$list$projects$legacy: (params: Params$teams$list$projects$legacy, option?: RequestOption): Promise<Response$teams$list$projects$legacy$Status$200["application/json"]> => {
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/projects`;
       const headers = {
         Accept: "application/json",
       };
@@ -34252,7 +32735,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$check$permissions$for$project$legacy,
       option?: RequestOption,
     ): Promise<Response$teams$check$permissions$for$project$legacy$Status$200["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/projects/${params.parameter.project_id}`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/projects/${params.parameter.project_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -34266,11 +32749,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/add-or-update-project-permissions-legacy
      * Request URI: /teams/{team_id}/projects/{project_id}
      */
-    teams$add$or$update$project$permissions$legacy: (
-      params: Params$teams$add$or$update$project$permissions$legacy,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/projects/${params.parameter.project_id}`;
+    teams$add$or$update$project$permissions$legacy: (params: Params$teams$add$or$update$project$permissions$legacy, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/projects/${params.parameter.project_id}`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -34285,7 +32765,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /teams/{team_id}/projects/{project_id}
      */
     teams$remove$project$legacy: (params: Params$teams$remove$project$legacy, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/projects/${params.parameter.project_id}`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/projects/${params.parameter.project_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -34295,11 +32775,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/list-repos-legacy
      * Request URI: /teams/{team_id}/repos
      */
-    teams$list$repos$legacy: (
-      params: Params$teams$list$repos$legacy,
-      option?: RequestOption,
-    ): Promise<Response$teams$list$repos$legacy$Status$200["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/repos`;
+    teams$list$repos$legacy: (params: Params$teams$list$repos$legacy, option?: RequestOption): Promise<Response$teams$list$repos$legacy$Status$200["application/json"]> => {
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/repos`;
       const headers = {
         Accept: "application/json",
       };
@@ -34323,7 +32800,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$check$permissions$for$repo$legacy,
       option?: RequestOption,
     ): Promise<Response$teams$check$permissions$for$repo$legacy$Status$200["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/repos/${params.parameter.owner}/${params.parameter.repo}`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/repos/${params.parameter.owner}/${params.parameter.repo}`;
       const headers = {
         Accept: "application/json",
       };
@@ -34339,11 +32816,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/add-or-update-repo-permissions-legacy
      * Request URI: /teams/{team_id}/repos/{owner}/{repo}
      */
-    teams$add$or$update$repo$permissions$legacy: (
-      params: Params$teams$add$or$update$repo$permissions$legacy,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/repos/${params.parameter.owner}/${params.parameter.repo}`;
+    teams$add$or$update$repo$permissions$legacy: (params: Params$teams$add$or$update$repo$permissions$legacy, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/repos/${params.parameter.owner}/${params.parameter.repo}`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -34358,7 +32832,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /teams/{team_id}/repos/{owner}/{repo}
      */
     teams$remove$repo$legacy: (params: Params$teams$remove$repo$legacy, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/repos/${params.parameter.owner}/${params.parameter.repo}`;
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/repos/${params.parameter.owner}/${params.parameter.repo}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -34368,11 +32842,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: teams/list-child-legacy
      * Request URI: /teams/{team_id}/teams
      */
-    teams$list$child$legacy: (
-      params: Params$teams$list$child$legacy,
-      option?: RequestOption,
-    ): Promise<Response$teams$list$child$legacy$Status$200["application/json"]> => {
-      const url = baseUrl + `/teams/${params.parameter.team_id}/teams`;
+    teams$list$child$legacy: (params: Params$teams$list$child$legacy, option?: RequestOption): Promise<Response$teams$list$child$legacy$Status$200["application/json"]> => {
+      const url = `${baseUrl}/teams/${params.parameter.team_id}/teams`;
       const headers = {
         Accept: "application/json",
       };
@@ -34391,7 +32862,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /user
      */
     users$get$authenticated: (option?: RequestOption): Promise<Response$users$get$authenticated$Status$200["application/json"]> => {
-      const url = baseUrl + `/user`;
+      const url = `${baseUrl}/user`;
       const headers = {
         Accept: "application/json",
       };
@@ -34403,11 +32874,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: users/update-authenticated
      * Request URI: /user
      */
-    users$update$authenticated: (
-      params: Params$users$update$authenticated,
-      option?: RequestOption,
-    ): Promise<Response$users$update$authenticated$Status$200["application/json"]> => {
-      const url = baseUrl + `/user`;
+    users$update$authenticated: (params: Params$users$update$authenticated, option?: RequestOption): Promise<Response$users$update$authenticated$Status$200["application/json"]> => {
+      const url = `${baseUrl}/user`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -34424,7 +32892,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$users$list$emails$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$users$list$emails$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/emails`;
+      const url = `${baseUrl}/user/emails`;
       const headers = {
         Accept: "application/json",
       };
@@ -34444,7 +32912,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$users$add$email$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$users$add$email$for$authenticated$user$Status$201["application/json"]> => {
-      const url = baseUrl + `/user/emails`;
+      const url = `${baseUrl}/user/emails`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -34457,11 +32925,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: users/delete-email-for-authenticated-user
      * Request URI: /user/emails
      */
-    users$delete$email$for$authenticated$user: (
-      params: Params$users$delete$email$for$authenticated$user,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/user/emails`;
+    users$delete$email$for$authenticated$user: (params: Params$users$delete$email$for$authenticated$user, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/user/emails`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -34477,7 +32942,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$users$list$followers$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$users$list$followers$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/followers`;
+      const url = `${baseUrl}/user/followers`;
       const headers = {
         Accept: "application/json",
       };
@@ -34497,7 +32962,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$users$list$followed$by$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$users$list$followed$by$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/following`;
+      const url = `${baseUrl}/user/following`;
       const headers = {
         Accept: "application/json",
       };
@@ -34512,11 +32977,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: users/check-person-is-followed-by-authenticated
      * Request URI: /user/following/{username}
      */
-    users$check$person$is$followed$by$authenticated: (
-      params: Params$users$check$person$is$followed$by$authenticated,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/user/following/${params.parameter.username}`;
+    users$check$person$is$followed$by$authenticated: (params: Params$users$check$person$is$followed$by$authenticated, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/user/following/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -34529,7 +32991,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /user/following/{username}
      */
     users$follow: (params: Params$users$follow, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/user/following/${params.parameter.username}`;
+      const url = `${baseUrl}/user/following/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -34540,7 +33002,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /user/following/{username}
      */
     users$unfollow: (params: Params$users$unfollow, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/user/following/${params.parameter.username}`;
+      const url = `${baseUrl}/user/following/${params.parameter.username}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -34554,7 +33016,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$users$list$gpg$keys$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$users$list$gpg$keys$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/gpg_keys`;
+      const url = `${baseUrl}/user/gpg_keys`;
       const headers = {
         Accept: "application/json",
       };
@@ -34574,7 +33036,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$users$create$gpg$key$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$users$create$gpg$key$for$authenticated$user$Status$201["application/json"]> => {
-      const url = baseUrl + `/user/gpg_keys`;
+      const url = `${baseUrl}/user/gpg_keys`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -34591,7 +33053,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$users$get$gpg$key$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$users$get$gpg$key$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/gpg_keys/${params.parameter.gpg_key_id}`;
+      const url = `${baseUrl}/user/gpg_keys/${params.parameter.gpg_key_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -34603,11 +33065,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: users/delete-gpg-key-for-authenticated-user
      * Request URI: /user/gpg_keys/{gpg_key_id}
      */
-    users$delete$gpg$key$for$authenticated$user: (
-      params: Params$users$delete$gpg$key$for$authenticated$user,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/user/gpg_keys/${params.parameter.gpg_key_id}`;
+    users$delete$gpg$key$for$authenticated$user: (params: Params$users$delete$gpg$key$for$authenticated$user, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/user/gpg_keys/${params.parameter.gpg_key_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -34627,7 +33086,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$apps$list$installations$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$apps$list$installations$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/installations`;
+      const url = `${baseUrl}/user/installations`;
       const headers = {
         Accept: "application/json",
       };
@@ -34653,7 +33112,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$apps$list$installation$repos$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$apps$list$installation$repos$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/installations/${params.parameter.installation_id}/repositories`;
+      const url = `${baseUrl}/user/installations/${params.parameter.installation_id}/repositories`;
       const headers = {
         Accept: "application/json",
       };
@@ -34671,11 +33130,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/add-repo-to-installation-for-authenticated-user
      * Request URI: /user/installations/{installation_id}/repositories/{repository_id}
      */
-    apps$add$repo$to$installation$for$authenticated$user: (
-      params: Params$apps$add$repo$to$installation$for$authenticated$user,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/user/installations/${params.parameter.installation_id}/repositories/${params.parameter.repository_id}`;
+    apps$add$repo$to$installation$for$authenticated$user: (params: Params$apps$add$repo$to$installation$for$authenticated$user, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/user/installations/${params.parameter.installation_id}/repositories/${params.parameter.repository_id}`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -34687,11 +33143,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/remove-repo-from-installation-for-authenticated-user
      * Request URI: /user/installations/{installation_id}/repositories/{repository_id}
      */
-    apps$remove$repo$from$installation$for$authenticated$user: (
-      params: Params$apps$remove$repo$from$installation$for$authenticated$user,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/user/installations/${params.parameter.installation_id}/repositories/${params.parameter.repository_id}`;
+    apps$remove$repo$from$installation$for$authenticated$user: (params: Params$apps$remove$repo$from$installation$for$authenticated$user, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/user/installations/${params.parameter.installation_id}/repositories/${params.parameter.repository_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -34710,7 +33163,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$issues$list$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$issues$list$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/issues`;
+      const url = `${baseUrl}/user/issues`;
       const headers = {
         Accept: "application/json",
       };
@@ -34736,7 +33189,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$users$list$public$ssh$keys$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$users$list$public$ssh$keys$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/keys`;
+      const url = `${baseUrl}/user/keys`;
       const headers = {
         Accept: "application/json",
       };
@@ -34756,7 +33209,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$users$create$public$ssh$key$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$users$create$public$ssh$key$for$authenticated$user$Status$201["application/json"]> => {
-      const url = baseUrl + `/user/keys`;
+      const url = `${baseUrl}/user/keys`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -34773,7 +33226,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$users$get$public$ssh$key$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$users$get$public$ssh$key$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/keys/${params.parameter.key_id}`;
+      const url = `${baseUrl}/user/keys/${params.parameter.key_id}`;
       const headers = {
         Accept: "application/json",
       };
@@ -34785,11 +33238,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: users/delete-public-ssh-key-for-authenticated-user
      * Request URI: /user/keys/{key_id}
      */
-    users$delete$public$ssh$key$for$authenticated$user: (
-      params: Params$users$delete$public$ssh$key$for$authenticated$user,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/user/keys/${params.parameter.key_id}`;
+    users$delete$public$ssh$key$for$authenticated$user: (params: Params$users$delete$public$ssh$key$for$authenticated$user, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/user/keys/${params.parameter.key_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -34802,7 +33252,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$orgs$list$memberships$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$orgs$list$memberships$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/memberships/orgs`;
+      const url = `${baseUrl}/user/memberships/orgs`;
       const headers = {
         Accept: "application/json",
       };
@@ -34822,7 +33272,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$orgs$get$membership$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$orgs$get$membership$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/memberships/orgs/${params.parameter.org}`;
+      const url = `${baseUrl}/user/memberships/orgs/${params.parameter.org}`;
       const headers = {
         Accept: "application/json",
       };
@@ -34837,7 +33287,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$orgs$update$membership$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$orgs$update$membership$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/memberships/orgs/${params.parameter.org}`;
+      const url = `${baseUrl}/user/memberships/orgs/${params.parameter.org}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -34854,7 +33304,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$migrations$list$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$migrations$list$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/migrations`;
+      const url = `${baseUrl}/user/migrations`;
       const headers = {
         Accept: "application/json",
       };
@@ -34874,7 +33324,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$migrations$start$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$migrations$start$for$authenticated$user$Status$201["application/json"]> => {
-      const url = baseUrl + `/user/migrations`;
+      const url = `${baseUrl}/user/migrations`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -34907,11 +33357,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: migrations/get-archive-for-authenticated-user
      * Request URI: /user/migrations/{migration_id}/archive
      */
-    migrations$get$archive$for$authenticated$user: (
-      params: Params$migrations$get$archive$for$authenticated$user,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/user/migrations/${params.parameter.migration_id}/archive`;
+    migrations$get$archive$for$authenticated$user: (params: Params$migrations$get$archive$for$authenticated$user, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/user/migrations/${params.parameter.migration_id}/archive`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -34925,7 +33372,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$migrations$list$repos$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$migrations$list$repos$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/migrations/${params.parameter.migration_id}/repositories`;
+      const url = `${baseUrl}/user/migrations/${params.parameter.migration_id}/repositories`;
       const headers = {
         Accept: "application/json",
       };
@@ -34945,11 +33392,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/list-for-authenticated-user
      * Request URI: /user/orgs
      */
-    orgs$list$for$authenticated$user: (
-      params: Params$orgs$list$for$authenticated$user,
-      option?: RequestOption,
-    ): Promise<Response$orgs$list$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/orgs`;
+    orgs$list$for$authenticated$user: (params: Params$orgs$list$for$authenticated$user, option?: RequestOption): Promise<Response$orgs$list$for$authenticated$user$Status$200["application/json"]> => {
+      const url = `${baseUrl}/user/orgs`;
       const headers = {
         Accept: "application/json",
       };
@@ -34968,7 +33412,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$projects$create$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$projects$create$for$authenticated$user$Status$201["application/json"]> => {
-      const url = baseUrl + `/user/projects`;
+      const url = `${baseUrl}/user/projects`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -34985,7 +33429,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$users$list$public$emails$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$users$list$public$emails$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/public_emails`;
+      const url = `${baseUrl}/user/public_emails`;
       const headers = {
         Accept: "application/json",
       };
@@ -35007,7 +33451,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$list$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$repos$list$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/repos`;
+      const url = `${baseUrl}/user/repos`;
       const headers = {
         Accept: "application/json",
       };
@@ -35041,7 +33485,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$create$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$repos$create$for$authenticated$user$Status$201["application/json"]> => {
-      const url = baseUrl + `/user/repos`;
+      const url = `${baseUrl}/user/repos`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -35058,7 +33502,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$repos$list$invitations$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$repos$list$invitations$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/repository_invitations`;
+      const url = `${baseUrl}/user/repository_invitations`;
       const headers = {
         Accept: "application/json",
       };
@@ -35073,11 +33517,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/decline-invitation-for-authenticated-user
      * Request URI: /user/repository_invitations/{invitation_id}
      */
-    repos$decline$invitation$for$authenticated$user: (
-      params: Params$repos$decline$invitation$for$authenticated$user,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/user/repository_invitations/${params.parameter.invitation_id}`;
+    repos$decline$invitation$for$authenticated$user: (params: Params$repos$decline$invitation$for$authenticated$user, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/user/repository_invitations/${params.parameter.invitation_id}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -35086,11 +33527,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/accept-invitation-for-authenticated-user
      * Request URI: /user/repository_invitations/{invitation_id}
      */
-    repos$accept$invitation$for$authenticated$user: (
-      params: Params$repos$accept$invitation$for$authenticated$user,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/user/repository_invitations/${params.parameter.invitation_id}`;
+    repos$accept$invitation$for$authenticated$user: (params: Params$repos$accept$invitation$for$authenticated$user, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/user/repository_invitations/${params.parameter.invitation_id}`;
       const headers = {};
       return apiClient.request("PATCH", url, headers, undefined, undefined, option);
     },
@@ -35102,13 +33540,11 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: activity/list-repos-starred-by-authenticated-user
      * Request URI: /user/starred
      */
-    activity$list$repos$starred$by$authenticated$user: <
-      ResponseContentType extends ResponseContentType$activity$list$repos$starred$by$authenticated$user,
-    >(
+    activity$list$repos$starred$by$authenticated$user: <ResponseContentType extends ResponseContentType$activity$list$repos$starred$by$authenticated$user>(
       params: Params$activity$list$repos$starred$by$authenticated$user<ResponseContentType>,
       option?: RequestOption,
     ): Promise<Response$activity$list$repos$starred$by$authenticated$user$Status$200[ResponseContentType]> => {
-      const url = baseUrl + `/user/starred`;
+      const url = `${baseUrl}/user/starred`;
       const headers = {
         Accept: params.headers.Accept,
       };
@@ -35125,11 +33561,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: activity/check-repo-is-starred-by-authenticated-user
      * Request URI: /user/starred/{owner}/{repo}
      */
-    activity$check$repo$is$starred$by$authenticated$user: (
-      params: Params$activity$check$repo$is$starred$by$authenticated$user,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/user/starred/${params.parameter.owner}/${params.parameter.repo}`;
+    activity$check$repo$is$starred$by$authenticated$user: (params: Params$activity$check$repo$is$starred$by$authenticated$user, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/user/starred/${params.parameter.owner}/${params.parameter.repo}`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -35139,11 +33572,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: activity/star-repo-for-authenticated-user
      * Request URI: /user/starred/{owner}/{repo}
      */
-    activity$star$repo$for$authenticated$user: (
-      params: Params$activity$star$repo$for$authenticated$user,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/user/starred/${params.parameter.owner}/${params.parameter.repo}`;
+    activity$star$repo$for$authenticated$user: (params: Params$activity$star$repo$for$authenticated$user, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/user/starred/${params.parameter.owner}/${params.parameter.repo}`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -35152,11 +33582,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: activity/unstar-repo-for-authenticated-user
      * Request URI: /user/starred/{owner}/{repo}
      */
-    activity$unstar$repo$for$authenticated$user: (
-      params: Params$activity$unstar$repo$for$authenticated$user,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/user/starred/${params.parameter.owner}/${params.parameter.repo}`;
+    activity$unstar$repo$for$authenticated$user: (params: Params$activity$unstar$repo$for$authenticated$user, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/user/starred/${params.parameter.owner}/${params.parameter.repo}`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -35170,7 +33597,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$activity$list$watched$repos$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$activity$list$watched$repos$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/subscriptions`;
+      const url = `${baseUrl}/user/subscriptions`;
       const headers = {
         Accept: "application/json",
       };
@@ -35190,7 +33617,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$teams$list$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$teams$list$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/user/teams`;
+      const url = `${baseUrl}/user/teams`;
       const headers = {
         Accept: "application/json",
       };
@@ -35209,7 +33636,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /users
      */
     users$list: (params: Params$users$list, option?: RequestOption): Promise<Response$users$list$Status$200["application/json"]> => {
-      const url = baseUrl + `/users`;
+      const url = `${baseUrl}/users`;
       const headers = {
         Accept: "application/json",
       };
@@ -35231,11 +33658,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: users/get-by-username
      * Request URI: /users/{username}
      */
-    users$get$by$username: (
-      params: Params$users$get$by$username,
-      option?: RequestOption,
-    ): Promise<Response$users$get$by$username$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}`;
+    users$get$by$username: (params: Params$users$get$by$username, option?: RequestOption): Promise<Response$users$get$by$username$Status$200["application/json"]> => {
+      const url = `${baseUrl}/users/${params.parameter.username}`;
       const headers = {
         Accept: "application/json",
       };
@@ -35251,7 +33675,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$activity$list$events$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$activity$list$events$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/events`;
+      const url = `${baseUrl}/users/${params.parameter.username}/events`;
       const headers = {
         Accept: "application/json",
       };
@@ -35271,7 +33695,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$activity$list$org$events$for$authenticated$user,
       option?: RequestOption,
     ): Promise<Response$activity$list$org$events$for$authenticated$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/events/orgs/${params.parameter.org}`;
+      const url = `${baseUrl}/users/${params.parameter.username}/events/orgs/${params.parameter.org}`;
       const headers = {
         Accept: "application/json",
       };
@@ -35290,7 +33714,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$activity$list$public$events$for$user,
       option?: RequestOption,
     ): Promise<Response$activity$list$public$events$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/events/public`;
+      const url = `${baseUrl}/users/${params.parameter.username}/events/public`;
       const headers = {
         Accept: "application/json",
       };
@@ -35306,11 +33730,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: users/list-followers-for-user
      * Request URI: /users/{username}/followers
      */
-    users$list$followers$for$user: (
-      params: Params$users$list$followers$for$user,
-      option?: RequestOption,
-    ): Promise<Response$users$list$followers$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/followers`;
+    users$list$followers$for$user: (params: Params$users$list$followers$for$user, option?: RequestOption): Promise<Response$users$list$followers$for$user$Status$200["application/json"]> => {
+      const url = `${baseUrl}/users/${params.parameter.username}/followers`;
       const headers = {
         Accept: "application/json",
       };
@@ -35326,11 +33747,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: users/list-following-for-user
      * Request URI: /users/{username}/following
      */
-    users$list$following$for$user: (
-      params: Params$users$list$following$for$user,
-      option?: RequestOption,
-    ): Promise<Response$users$list$following$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/following`;
+    users$list$following$for$user: (params: Params$users$list$following$for$user, option?: RequestOption): Promise<Response$users$list$following$for$user$Status$200["application/json"]> => {
+      const url = `${baseUrl}/users/${params.parameter.username}/following`;
       const headers = {
         Accept: "application/json",
       };
@@ -35346,7 +33764,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /users/{username}/following/{target_user}
      */
     users$check$following$for$user: (params: Params$users$check$following$for$user, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/users/${params.parameter.username}/following/${params.parameter.target_user}`;
+      const url = `${baseUrl}/users/${params.parameter.username}/following/${params.parameter.target_user}`;
       const headers = {};
       return apiClient.request("GET", url, headers, undefined, undefined, option);
     },
@@ -35356,11 +33774,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: gists/list-for-user
      * Request URI: /users/{username}/gists
      */
-    gists$list$for$user: (
-      params: Params$gists$list$for$user,
-      option?: RequestOption,
-    ): Promise<Response$gists$list$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/gists`;
+    gists$list$for$user: (params: Params$gists$list$for$user, option?: RequestOption): Promise<Response$gists$list$for$user$Status$200["application/json"]> => {
+      const url = `${baseUrl}/users/${params.parameter.username}/gists`;
       const headers = {
         Accept: "application/json",
       };
@@ -35377,11 +33792,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: users/list-gpg-keys-for-user
      * Request URI: /users/{username}/gpg_keys
      */
-    users$list$gpg$keys$for$user: (
-      params: Params$users$list$gpg$keys$for$user,
-      option?: RequestOption,
-    ): Promise<Response$users$list$gpg$keys$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/gpg_keys`;
+    users$list$gpg$keys$for$user: (params: Params$users$list$gpg$keys$for$user, option?: RequestOption): Promise<Response$users$list$gpg$keys$for$user$Status$200["application/json"]> => {
+      const url = `${baseUrl}/users/${params.parameter.username}/gpg_keys`;
       const headers = {
         Accept: "application/json",
       };
@@ -35404,11 +33816,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: users/get-context-for-user
      * Request URI: /users/{username}/hovercard
      */
-    users$get$context$for$user: (
-      params: Params$users$get$context$for$user,
-      option?: RequestOption,
-    ): Promise<Response$users$get$context$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/hovercard`;
+    users$get$context$for$user: (params: Params$users$get$context$for$user, option?: RequestOption): Promise<Response$users$get$context$for$user$Status$200["application/json"]> => {
+      const url = `${baseUrl}/users/${params.parameter.username}/hovercard`;
       const headers = {
         Accept: "application/json",
       };
@@ -35426,11 +33835,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: apps/get-user-installation
      * Request URI: /users/{username}/installation
      */
-    apps$get$user$installation: (
-      params: Params$apps$get$user$installation,
-      option?: RequestOption,
-    ): Promise<Response$apps$get$user$installation$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/installation`;
+    apps$get$user$installation: (params: Params$apps$get$user$installation, option?: RequestOption): Promise<Response$apps$get$user$installation$Status$200["application/json"]> => {
+      const url = `${baseUrl}/users/${params.parameter.username}/installation`;
       const headers = {
         Accept: "application/json",
       };
@@ -35442,11 +33848,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: users/list-public-keys-for-user
      * Request URI: /users/{username}/keys
      */
-    users$list$public$keys$for$user: (
-      params: Params$users$list$public$keys$for$user,
-      option?: RequestOption,
-    ): Promise<Response$users$list$public$keys$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/keys`;
+    users$list$public$keys$for$user: (params: Params$users$list$public$keys$for$user, option?: RequestOption): Promise<Response$users$list$public$keys$for$user$Status$200["application/json"]> => {
+      const url = `${baseUrl}/users/${params.parameter.username}/keys`;
       const headers = {
         Accept: "application/json",
       };
@@ -35464,11 +33867,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: orgs/list-for-user
      * Request URI: /users/{username}/orgs
      */
-    orgs$list$for$user: (
-      params: Params$orgs$list$for$user,
-      option?: RequestOption,
-    ): Promise<Response$orgs$list$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/orgs`;
+    orgs$list$for$user: (params: Params$orgs$list$for$user, option?: RequestOption): Promise<Response$orgs$list$for$user$Status$200["application/json"]> => {
+      const url = `${baseUrl}/users/${params.parameter.username}/orgs`;
       const headers = {
         Accept: "application/json",
       };
@@ -35483,11 +33883,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: projects/list-for-user
      * Request URI: /users/{username}/projects
      */
-    projects$list$for$user: (
-      params: Params$projects$list$for$user,
-      option?: RequestOption,
-    ): Promise<Response$projects$list$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/projects`;
+    projects$list$for$user: (params: Params$projects$list$for$user, option?: RequestOption): Promise<Response$projects$list$for$user$Status$200["application/json"]> => {
+      const url = `${baseUrl}/users/${params.parameter.username}/projects`;
       const headers = {
         Accept: "application/json",
       };
@@ -35508,7 +33905,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$activity$list$received$events$for$user,
       option?: RequestOption,
     ): Promise<Response$activity$list$received$events$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/received_events`;
+      const url = `${baseUrl}/users/${params.parameter.username}/received_events`;
       const headers = {
         Accept: "application/json",
       };
@@ -35527,7 +33924,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$activity$list$received$public$events$for$user,
       option?: RequestOption,
     ): Promise<Response$activity$list$received$public$events$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/received_events/public`;
+      const url = `${baseUrl}/users/${params.parameter.username}/received_events/public`;
       const headers = {
         Accept: "application/json",
       };
@@ -35543,11 +33940,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: repos/list-for-user
      * Request URI: /users/{username}/repos
      */
-    repos$list$for$user: (
-      params: Params$repos$list$for$user,
-      option?: RequestOption,
-    ): Promise<Response$repos$list$for$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/repos`;
+    repos$list$for$user: (params: Params$repos$list$for$user, option?: RequestOption): Promise<Response$repos$list$for$user$Status$200["application/json"]> => {
+      const url = `${baseUrl}/users/${params.parameter.username}/repos`;
       const headers = {
         Accept: "application/json",
       };
@@ -35566,11 +33960,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/promote-user-to-be-site-administrator
      * Request URI: /users/{username}/site_admin
      */
-    enterprise$admin$promote$user$to$be$site$administrator: (
-      params: Params$enterprise$admin$promote$user$to$be$site$administrator,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/users/${params.parameter.username}/site_admin`;
+    enterprise$admin$promote$user$to$be$site$administrator: (params: Params$enterprise$admin$promote$user$to$be$site$administrator, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/users/${params.parameter.username}/site_admin`;
       const headers = {};
       return apiClient.request("PUT", url, headers, undefined, undefined, option);
     },
@@ -35580,11 +33971,8 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * operationId: enterprise-admin/demote-site-administrator
      * Request URI: /users/{username}/site_admin
      */
-    enterprise$admin$demote$site$administrator: (
-      params: Params$enterprise$admin$demote$site$administrator,
-      option?: RequestOption,
-    ): Promise<void> => {
-      const url = baseUrl + `/users/${params.parameter.username}/site_admin`;
+    enterprise$admin$demote$site$administrator: (params: Params$enterprise$admin$demote$site$administrator, option?: RequestOption): Promise<void> => {
+      const url = `${baseUrl}/users/${params.parameter.username}/site_admin`;
       const headers = {};
       return apiClient.request("DELETE", url, headers, undefined, undefined, option);
     },
@@ -35600,7 +33988,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$activity$list$repos$starred$by$user,
       option?: RequestOption,
     ): Promise<Response$activity$list$repos$starred$by$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/starred`;
+      const url = `${baseUrl}/users/${params.parameter.username}/starred`;
       const headers = {
         Accept: "application/json",
       };
@@ -35622,7 +34010,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
       params: Params$activity$list$repos$watched$by$user,
       option?: RequestOption,
     ): Promise<Response$activity$list$repos$watched$by$user$Status$200["application/json"]> => {
-      const url = baseUrl + `/users/${params.parameter.username}/subscriptions`;
+      const url = `${baseUrl}/users/${params.parameter.username}/subscriptions`;
       const headers = {
         Accept: "application/json",
       };
@@ -35643,7 +34031,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /users/{username}/suspended
      */
     enterprise$admin$suspend$user: (params: Params$enterprise$admin$suspend$user, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/users/${params.parameter.username}/suspended`;
+      const url = `${baseUrl}/users/${params.parameter.username}/suspended`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -35656,7 +34044,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /users/{username}/suspended
      */
     enterprise$admin$unsuspend$user: (params: Params$enterprise$admin$unsuspend$user, option?: RequestOption): Promise<void> => {
-      const url = baseUrl + `/users/${params.parameter.username}/suspended`;
+      const url = `${baseUrl}/users/${params.parameter.username}/suspended`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -35669,7 +34057,7 @@ export const createClient = <RequestOption>(apiClient: ApiClient<RequestOption>,
      * Request URI: /zen
      */
     meta$get$zen: (option?: RequestOption): Promise<Response$meta$get$zen$Status$200["text/plain"]> => {
-      const url = baseUrl + `/zen`;
+      const url = `${baseUrl}/zen`;
       const headers = {
         Accept: "text/plain",
       };
