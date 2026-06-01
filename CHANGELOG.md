@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="3.0.1"></a>
+## 3.0.1 (2026-06-01)
+
+
+### Chores
+
+* modernize toolchain (biome, tsup, lefthook, Node 24) ([#14](https://github.com/Himenon/github-api-create-commit/issues/14)) ([a692343](https://github.com/Himenon/github-api-create-commit/commit/a692343))
+
+
+
+
+
 <a name="2.1.3"></a>
 
 ## 2.1.3 (2023-03-20)
