@@ -1,99 +1,100 @@
 {
-  "name": "@himenon/github-api-create-commit",
-  "version": "2.1.3",
-  "description": "Create a Commit to GitHub via WebAPI",
-  "keywords": [
-    "github",
-    "create commit",
-    "api"
-  ],
-  "homepage": "https://github.com/Himenon/github-api-create-commit#readme",
-  "bugs": {
-    "url": "https://github.com/Himenon/github-api-create-commit/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:Himenon/github-api-create-commit.git"
-  },
-  "license": "MIT",
-  "author": {
-    "name": "Himenon",
-    "url": "https://github.com/Himenon"
-  },
-  "sideEffects": false,
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./ApiClientImpl": {
-      "types": "./dist/ApiClientImpl.d.ts",
-      "import": "./dist/ApiClientImpl.js",
-      "require": "./dist/ApiClientImpl.cjs"
-    },
-    "./GitHub": {
-      "types": "./dist/GitHub.d.ts",
-      "import": "./dist/GitHub.js",
-      "require": "./dist/GitHub.cjs"
-    },
-    "./api": {
-      "types": "./dist/api.d.ts",
-      "import": "./dist/api.js",
-      "require": "./dist/api.cjs"
-    },
-    "./types": {
-      "types": "./dist/types.d.ts",
-      "import": "./dist/types.js",
-      "require": "./dist/types.cjs"
-    }
-  },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist",
-    "package.json",
-    "README.md"
-  ],
-  "scripts": {
-    "build": "tsup",
-    "clean": "node --strip-types ./scripts/clean.ts",
-    "depcruise:validate": "depcruise --validate .dependency-cruiser.cjs src",
-    "format": "biome check --write --unsafe .",
-    "lerna:version:up": "lerna version --yes",
-    "lint": "biome check .",
-    "release:github:registry": "pnpm publish --access public --no-git-checks",
-    "release:npm:registry": "pnpm publish --access public --no-git-checks",
-    "test": "pnpm run depcruise:validate",
-    "type-check": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@himenon/openapi-parameter-formatter": "^2.1.0"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^2.4.15",
-    "@commitlint/cli": "21.0.1",
-    "@commitlint/config-conventional": "21.0.1",
-    "@himenon/openapi-typescript-code-generator": "^2.0.6",
-    "@types/node": "25.8.0",
-    "@types/rimraf": "4.0.5",
-    "conventional-changelog-angular-all": "1.7.0",
-    "dependency-cruiser": "17.4.0",
-    "lefthook": "^2.1.6",
-    "lerna": "9.0.7",
-    "npm-run-all": "4.1.5",
-    "rimraf": "6.1.3",
-    "sort-package-json": "3.6.1",
-    "tsup": "^8.5.1",
-    "typescript": "6.0.3"
-  },
-  "packageManager": "pnpm@10.34.1",
-  "engines": {
-    "node": ">=24.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "@himenon/github-api-create-commit",
+	"version": "2.1.3",
+	"description": "Create a Commit to GitHub via WebAPI",
+	"keywords": [
+		"api",
+		"create commit",
+		"github"
+	],
+	"homepage": "https://github.com/Himenon/github-api-create-commit#readme",
+	"bugs": {
+		"url": "https://github.com/Himenon/github-api-create-commit/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:Himenon/github-api-create-commit.git"
+	},
+	"license": "MIT",
+	"author": {
+		"name": "Himenon",
+		"url": "https://github.com/Himenon"
+	},
+	"sideEffects": false,
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		},
+		"./ApiClientImpl": {
+			"types": "./dist/ApiClientImpl.d.ts",
+			"import": "./dist/ApiClientImpl.js",
+			"require": "./dist/ApiClientImpl.cjs"
+		},
+		"./GitHub": {
+			"types": "./dist/GitHub.d.ts",
+			"import": "./dist/GitHub.js",
+			"require": "./dist/GitHub.cjs"
+		},
+		"./api": {
+			"types": "./dist/api.d.ts",
+			"import": "./dist/api.js",
+			"require": "./dist/api.cjs"
+		},
+		"./types": {
+			"types": "./dist/types.d.ts",
+			"import": "./dist/types.js",
+			"require": "./dist/types.cjs"
+		}
+	},
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist",
+		"package.json",
+		"README.md"
+	],
+	"scripts": {
+		"build": "tsup",
+		"clean": "node --strip-types ./scripts/clean.ts",
+		"depcruise:validate": "depcruise --validate .dependency-cruiser.cjs src",
+		"format": "oxfmt .",
+		"lerna:version:up": "lerna version --yes",
+		"lint": "oxlint",
+		"release:github:registry": "pnpm publish --access public --no-git-checks",
+		"release:npm:registry": "pnpm publish --access public --no-git-checks",
+		"test": "pnpm run depcruise:validate"
+	},
+	"dependencies": {
+		"@himenon/openapi-parameter-formatter": "3.1.0"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "21.0.1",
+		"@commitlint/config-conventional": "21.0.1",
+		"@himenon/openapi-typescript-code-generator": "2.0.6",
+		"@types/node": "25.9.1",
+		"@types/rimraf": "4.0.5",
+		"conventional-changelog-angular-all": "1.7.0",
+		"dependency-cruiser": "17.4.2",
+		"lefthook": "2.1.8",
+		"lerna": "9.0.7",
+		"npm-run-all": "4.1.5",
+		"oxfmt": "0.51.0",
+		"oxlint": "1.66.0",
+		"oxlint-tsgolint": "0.23.0",
+		"rimraf": "6.1.3",
+		"sort-package-json": "3.6.1",
+		"tsup": "8.5.1",
+		"typescript": "6.0.3"
+	},
+	"packageManager": "pnpm@10.34.1",
+	"engines": {
+		"node": ">=24.0.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
 }

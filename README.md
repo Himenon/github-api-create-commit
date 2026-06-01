@@ -5,8 +5,6 @@ Create a Commit to GitHub via WebAPI.
 ## Install
 
 ```bash
-yarn add @himenon/github-api-create-commit
-
 pnpm add @himenon/github-api-create-commit
 ```
 

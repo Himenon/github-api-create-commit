@@ -1,4 +1,4 @@
-minimumReleaseAge: 21600
+minimumReleaseAge: 10800
 minimumReleaseAgeExclude:
   - "@himenon/openapi-parameter-formatter"
   - "@himenon/openapi-typescript-code-generator"
